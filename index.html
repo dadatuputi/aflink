@@ -41,7 +41,6 @@
   <!-- Page Content -->
   <section id="search" class="bg-blue text-center">
     <div class="container">
-      <h2>Link Search</h2>
       <div class="form-outline">
         <input type="search" id="search-form" class="form-control" placeholder="Start typing"
         aria-label="Search" autofocus/>
@@ -100,11 +99,18 @@
 
     // Enable search filter of links: https://www.w3schools.com/bootstrap4/bootstrap_filters.asp
     $(document).ready(function(){
-      $("#search-form").on("change keyup paste mouseup search", function() {
+      $("#search-form").on("change keyup paste mouseup search", function( event ) {
         var value = $(this).val().toLowerCase();
         $("#link-list a").filter(function() {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
+
+		// On enter keypress, follow first link
+        if ($(this).val() && event.type === "keyup" && event.originalEvent.key === "Enter") {
+          if ($("#link-list a:visible")[0]) {
+            $("#link-list a:visible")[0].click()
+          }
+        }
       });
     });
   </script>
