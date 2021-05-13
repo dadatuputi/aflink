@@ -9,6 +9,7 @@ jobs:
   Update_Links:
     name: Update Links
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
