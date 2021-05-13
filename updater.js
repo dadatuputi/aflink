@@ -27,7 +27,6 @@ const url = "https://www.my.af.mil/gcss-af/USAF/api/quicklinks/cached?categorize
             console.log("No new data to write")
         }
     } catch (e) {
-        console.log(Object.keys(e))
         console.log(e.message)
         if (e.type === "invalid-json") {
             console.error("Could not parse JSON, likely an error with authentication")
