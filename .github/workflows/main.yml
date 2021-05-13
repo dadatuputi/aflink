@@ -21,3 +21,5 @@ jobs:
         run: npm run build
       - name: Commit New Changes
         uses: EndBug/add-and-commit@v7
+        with:
+          message: Updated Links By GitHub Action
