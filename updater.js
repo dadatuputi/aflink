@@ -34,7 +34,7 @@ const getCurrentData = async () => {
                 aggregate.concat(category.map(item => { return { name: item.title, href: item.link } }))
                 , [])
         } catch (e) {
-            if (attempt > maxAttempts) {
+            if (attempt >= maxAttempts) {
                 console.log(`Failed to get new data after ${maxAttempts} attempts. Aborting.`)
                 throw (e)
             } else {
