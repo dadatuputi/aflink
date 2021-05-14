@@ -1,0 +1,25 @@
+name: Periodic Update
+
+on:
+  schedule:
+    - cron: 0 0 * * 0
+  workflow_dispatch:
+
+jobs:
+  Update_Links:
+    name: Update Links
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+      - name: Install Dependencies
+        run: npm ci
+      - name: Check for Updated Links
+        run: npm run build
+      - name: Commit New Changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          message: Updated Links By GitHub Action
