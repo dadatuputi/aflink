@@ -7,6 +7,14 @@ $(document).ready(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
       });
 
+      // If no links displayed, show alert
+      if (!$("#link-list a:visible")[0]) {
+        $("#list p").removeAttr('hidden');
+        $("#list p em").text($(this).val());
+      } else {
+        $("#list p").attr('hidden','hidden');
+      }
+
       // On enter keypress, follow first link
       if (
         $(this).val() &&
@@ -19,4 +27,10 @@ $(document).ready(function () {
       }
     }
   );
+
+  // Parse URL parameters for search query
+  var searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.has("q") === true) {
+    $("#search-form").val(searchParams.get("q")).change();
+  }
 });
