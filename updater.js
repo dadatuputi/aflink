@@ -50,16 +50,11 @@ const getCurrentData = async () => {
 
 (async () => {
     try {
-        const links = await getCurrentData();
+		// temporary solution to allow building
+		const f = require('./links');
         const newData = pug.renderFile(path.join(__dirname, "index.pug"), { links })
-        const oldData = (await fs.readFile(path.join(__dirname, "docs/index.html"))).toString('utf-8')
-        if (oldData !== newData) {
-            console.log("Writing updated data...")
-            await fs.writeFile(path.join(__dirname, "docs/index.html"), newData)
-            console.log("Done writing updated data.")
-        } else {
-            console.log("No new data to update.")
-        }
+		await fs.writeFile(path.join(__dirname, "docs/index.html"), newData)
+		console.log("Done writing updated data.")
     } catch (e) {
         console.log(e.message)
         process.exit(1)

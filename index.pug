@@ -35,6 +35,8 @@ section#list.bg-gray.text-center
     ul#link-list.list-group
       each item in links
         a.list-group-item.list-group-item-action.border-top(href=item.href title=item.name) #{item.name}
+    p.alert-dark(hidden) No results for 
+      em
 section#about.bg-blue.text-center
   .container
     h2 About
