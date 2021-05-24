@@ -1,4 +1,8 @@
 $(document).ready(function () {
+
+  var searchParams = new URLSearchParams(window.location.search);
+
+  // Filter links based on search query
   $("#search-form").on(
     "change keyup paste mouseup search",
     function (event) {
@@ -7,17 +11,24 @@ $(document).ready(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
       });
 
+      // Update URL with new search params
+      if (value) {
+        searchParams.set("q", $(this).val());
+        var newurl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`
+        window.history.replaceState({ path: newurl }, "", newurl);
+      }
+
       // If no links displayed, show alert
       if (!$("#link-list a:visible")[0]) {
         $("#list p").removeAttr('hidden');
-        $("#list p em").text($(this).val());
+        $("#list p em").text(value);
       } else {
         $("#list p").attr('hidden','hidden');
       }
 
       // On enter keypress, follow first link
       if (
-        $(this).val() &&
+        value &&
         event.type === "keyup" &&
         event.originalEvent.key === "Enter"
       ) {
@@ -28,8 +39,7 @@ $(document).ready(function () {
     }
   );
 
-  // Parse URL parameters for search query
-  var searchParams = new URLSearchParams(window.location.search);
+  // Update search field based on parameters
   if (searchParams.has("q") === true) {
     $("#search-form").val(searchParams.get("q")).change();
   }
