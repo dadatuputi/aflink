@@ -7,11 +7,17 @@ head
   meta(name='description' content='')
   meta(name='author' content='')
   title USAF Links
-  link(rel='icon' href='favicon.svg')
-  // CSS
-  link(href='bootstrap.min.css' rel='stylesheet')
-  link(href='site.css' rel='stylesheet')
-// Navigation
+  link(rel='icon' href=USAFIcon)
+  //- CSS
+  link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css", integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l", crossorigin="anonymous")
+  style
+    include docs/site.css
+  //- OpenSearch Description Document
+  //- https://www.chromium.org/tab-to-search
+  //- https://developer.mozilla.org/en-US/docs/Web/OpenSearch
+  link(href="/osdd.xml" type="application/opensearchdescription+xml" title="aflink" rel="search")
+
+//- Navigation
 nav.navbar.navbar-expand-lg.navbar-dark.bg-gray.sticky-top
   .container
     a.navbar-brand(href='#')
@@ -24,7 +30,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-gray.sticky-top
         a.nav-link(aria-current='page' href='#') Home
         a.nav-link(href='#about') About
         a.nav-link(href='#correction') Submit Correction
-// Page Content
+//- Page Content
 section#search.bg-blue.text-center
   .container
     .form-outline
@@ -41,19 +47,21 @@ section#about.bg-blue.text-center
   .container
     h2 About
     p.lead
-      | After a recent change to the AF Portal page that made it even more
-      | diffcult to find a link than before, I realized there had to be a
-      | better way. After an hour of hacking, this is the better way.
+      | I realized that logging into the portal just to get to a list of
+      | links was suboptimal. This is my gift to all the heroes to thank
+      | them for their service and maybe save them a few minutes.
 section#correction.bg-red.text-center
   .container
     h2 Submit Correction
     p.lead
-      | I scripted this to update automatically (based on the available
-      | .json). In the meantime, if you spot a bad link or you would like to
-      | add a new link you may create an issue on GitHub.
+      | If you spot a bad link or if you want to submit one that should
+      | be on this list, please create an issue on GitHub.
       a(href='https://github.com/dadatuputi/aflinks/issues')
         img(width='25' src=GHIcon)
-// JavaScript
-script(src='jquery.slim.min.js')
-script(src='search.js')
-script(src='bootstrap.bundle.min.js')
+//- JavaScript
+script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+  integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+  crossorigin="anonymous")
+script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js", integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF", crossorigin="anonymous")
+script 
+  include docs/search.js
