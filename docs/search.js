@@ -1,6 +1,11 @@
 $(document).ready(function () {
-
+  
   var searchParams = new URLSearchParams(window.location.search);
+
+  // Update search field based on parameters
+  if (searchParams.has("q") === true) {
+    $("#search-form").val(searchParams.get("q")).change();
+  }
 
   // Filter links based on search query
   $("#search-form").on(
@@ -12,11 +17,13 @@ $(document).ready(function () {
       });
 
       // Update URL with new search params
+      searchParamsString = ""
       if (value) {
         searchParams.set("q", $(this).val());
-        var newurl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`
-        window.history.replaceState({ path: newurl }, "", newurl);
+        searchParamsString = `?${searchParams.toString()}`
       }
+      var newurl = `${window.location.origin}${window.location.pathname}${searchParamsString}`
+      window.history.replaceState({ path: newurl }, "", newurl);
 
       // If no links displayed, show alert
       if (!$("#link-list a:visible")[0]) {
@@ -39,8 +46,4 @@ $(document).ready(function () {
     }
   );
 
-  // Update search field based on parameters
-  if (searchParams.has("q") === true) {
-    $("#search-form").val(searchParams.get("q")).change();
-  }
 });
