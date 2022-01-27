@@ -12,9 +12,16 @@ $(document).ready(function () {
     "change keyup paste mouseup search",
     function (event) {
       var value = $(this).val().toLowerCase();
-      $("#link-list a").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-      });
+      
+      // Hide everything
+      $('#link-list a, #link-list .category').toggle(false);
+      // Show links that contain text
+      var links = $('#link-list a').filter(function(){
+        return $(this).text().toLowerCase().indexOf(value) > -1;
+      })
+      links.toggle(true);
+      // Show link category
+      links.siblings('.category').toggle(true);
 
       // Update URL with new search params
       searchParamsString = ""
