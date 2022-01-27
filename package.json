@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.1",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "sugar-date": "^2.0.6"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.10",
-    "@types/pug": "^2.0.4"
+    "@types/node-fetch": "^2.5.12",
+    "@types/pug": "^2.0.6"
   }
 }
