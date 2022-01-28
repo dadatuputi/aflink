@@ -11,6 +11,14 @@
         {
             "title": "ID Card Office Online (Appointments, Update GAL)",
             "link": "https://idco.dmdc.osd.mil/idco/"
+        },
+        {
+            "title": "myFitness (myFSS)",
+            "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management"
+        },
+        {
+            "title": "My Force Support Squadron / myFSS",
+            "link": "https://myfss.us.af.mil/"
         }
     ]
 }
