@@ -11,7 +11,7 @@ body:
       label: Link Title
       description: A short, descriptive title for the link
       placeholder: e.g., AF Portal
-      validators:
+      validations:
         required: true
   - type: input
     id: url
@@ -19,13 +19,13 @@ body:
       label: Link URL
       description: The complete link URL
       placeholder: e.g., https://www.my.af.mil
-      validators:
+      validations:
         required: true
   - type: textarea
     id: comment
     attributes:
       label: Comment
       description: A comment about the link and a reason why it should be added.
-      validators:
+      validations:
         required: false
   
