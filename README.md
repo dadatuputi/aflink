@@ -10,4 +10,4 @@ You may submit a request for a link in one of two ways, both of which require a 
 
 1. [Expert] Fork the repo, add your link to `links/links_other.json`, and create a pull request
 
-2. Submit a link request by [filling out this Github issue form](https://github.com/dadatuputi/aflinks/issues/new/choose)
+2. Submit a link request by [filling out this Github issue form](https://github.com/dadatuputi/aflinks/issues/new?assignees=dadatuputi&labels=link+request&template=request_link.yaml&title=%5BLINK%5D%3A+)
