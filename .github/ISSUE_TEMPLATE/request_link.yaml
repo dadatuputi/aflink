@@ -1,0 +1,31 @@
+name: Link Request
+description: Submit a request to add a link
+title: "[LINK]: "
+labels: ["link request"]
+assignees:
+  - dadatuputi
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Link Title
+      description: A short, descriptive title for the link
+      placeholder: e.g., AF Portal
+      validators:
+        required: true
+  - type: input
+    id: url
+    attributes:
+      label: Link URL
+      description: The complete link URL
+      placeholder: e.g., https://www.my.af.mil
+      validators:
+        required: true
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: A comment about the link and a reason why it should be added.
+      validators:
+        required: false
+  
