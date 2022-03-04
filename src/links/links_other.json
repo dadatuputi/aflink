@@ -21,8 +21,16 @@
             "link": "https://myfss.us.af.mil/"
         },
         {
-            "title": "Webmail / OWA / E-mail",
+            "title": "Webmail / OWA / E-mail / email",
             "link": "https://webmail.apps.mil/"
+        },
+        {
+            "title": "USAF Publications and Forms (epubs)",
+            "link": "https://www.e-publishing.af.mil/Product-Index/"
+        },
+        {
+            "title": "Talent Marketplace (MyVector)",
+            "link": "https://myvector.us.af.mil/myvector"
         }
     ]
 }
