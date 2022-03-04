@@ -2,11 +2,6 @@ $(document).ready(function () {
   
   var searchParams = new URLSearchParams(window.location.search);
 
-  // Update search field based on parameters
-  if (searchParams.has("q") === true) {
-    $("#search-form").val(searchParams.get("q")).change();
-  }
-
   // Filter links based on search query
   $("#search-form").on(
     "change keyup paste mouseup search",
@@ -52,5 +47,10 @@ $(document).ready(function () {
       }
     }
   );
+
+  // Update search field based on parameters
+  if (searchParams.has("q") === true) {
+    $("#search-form").val(searchParams.get("q")).change();
+  }
 
 });
