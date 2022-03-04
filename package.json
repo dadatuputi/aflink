@@ -2,7 +2,7 @@
   "name": "aflinkupdater",
   "private": "true",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple page to display USAF links without needing to mess with the portal.",
   "main": "updater.js",
   "author": "hattmo",
   "license": "MIT",
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "git-date-extractor": "^4.0.1",
+    "jstransformer-clean-css": "^2.1.0",
+    "jstransformer-uglify-es": "^0.2.1",
     "node-fetch": "^2.6.1",
     "pug": "^3.0.2",
     "sugar-date": "^2.0.6"
@@ -18,5 +20,16 @@
   "devDependencies": {
     "@types/node-fetch": "^2.5.12",
     "@types/pug": "^2.0.6"
-  }
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dadatuputi/aflinks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dadatuputi/aflinks/issues"
+  },
+  "homepage": "https://github.com/dadatuputi/aflinks#readme"
 }
