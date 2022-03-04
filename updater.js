@@ -6,8 +6,8 @@ const fs = require("fs").promises
 const sugar_date = require("sugar-date")
 const gitDateExtractor = require('git-date-extractor');
 
-const file_links_af = 'links/links_af.json';
-const file_links_other = 'links/links_other.json';
+const file_links_af = 'src/links/links_af.json';
+const file_links_other = 'src/links/links_other.json';
 
 // Until there is a way to get the list of links from USAF without a CAC/logging in, this won't work
 /* 
@@ -75,7 +75,7 @@ const getCurrentData = async () => {
         const date_other = dates[file_links_other].modified
         const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
 
-        const newData = pug.renderFile(path.join(__dirname, "index.pug"), { links, date })
+        const newData = pug.renderFile(path.join(__dirname, "src/index.pug"), { links, date })
 		await fs.writeFile(path.join(__dirname, "docs/index.html"), newData)
 		console.log("Done writing updated data.")
     } catch (e) {
