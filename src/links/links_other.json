@@ -1,6 +1,10 @@
 {
     "OTHER": [
         {
+            "title": "milSuite",
+            "link": "https://milsuite.mil/"
+        },
+        {
             "title": "Defense Personal Property System (DPS)",
             "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
         },
