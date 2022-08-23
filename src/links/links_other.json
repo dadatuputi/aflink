@@ -39,6 +39,10 @@
         {
             "title": "Air Force Portal",
             "link": "https://my.af.mil"
+        },
+        {
+            "title": "Foreign Clearance Guide (FCG)",
+            "link": "https://www.fcg.pentagon.mil/"
         }
     ]
 }
