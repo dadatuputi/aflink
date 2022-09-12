@@ -1,6 +1,14 @@
 {
     "OTHER": [
         {
+            "title": "myEval (myFSS)",
+            "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-evaluation-management"
+        },
+        {
+            "title": "milSuite",
+            "link": "https://milsuite.mil/"
+        },
+        {
             "title": "Defense Personal Property System (DPS)",
             "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
         },
@@ -17,10 +25,6 @@
             "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management"
         },
         {
-            "title": "My Force Support Squadron / myFSS",
-            "link": "https://myfss.us.af.mil/"
-        },
-        {
             "title": "Webmail / OWA / E-mail / email",
             "link": "https://webmail.apps.mil/"
         },
@@ -31,8 +35,18 @@
         {
             "title": "Talent Marketplace (MyVector)",
             "link": "https://myvector.us.af.mil/myvector"
+        },
+        {
+            "title": "GAL Information Update (Update Outlook GAL Profile)",
+            "link": "https://esd.us.af.mil"
+        },
+        {
+            "title": "Air Force Portal",
+            "link": "https://my.af.mil"
+        },
+        {
+            "title": "Foreign Clearance Guide (FCG)",
+            "link": "https://www.fcg.pentagon.mil/"
         }
     ]
 }
-
-        
