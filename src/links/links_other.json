@@ -6,7 +6,7 @@
         },
         {
             "title": "milSuite",
-            "link": "https://milsuite.mil/"
+            "link": "https://www.milsuite.mil"
         },
         {
             "title": "Defense Personal Property System (DPS)",
@@ -47,6 +47,10 @@
         {
             "title": "Foreign Clearance Guide (FCG)",
             "link": "https://www.fcg.pentagon.mil/"
+        },
+        {
+            "title": "Air Force myLearning (Computer Based Training/CBTs)",
+            "link": "https://www.my.af.mil/gcss-af/USAF/content/mylearning"
         }
     ]
 }
