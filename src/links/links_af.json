@@ -95,6 +95,15 @@
                     "renderedAsFile": false
                 },
                 {
+                    "title": "Air Force Forces Generation Connect (AFFORGEN Connect)",
+                    "link": "https://tmis.us.af.mil/afforgenconnect",
+                    "type": "application",
+                    "contentId": "cEF1DF99C8442F4660184431D0F220000",
+                    "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cEF1DF99C8442F4660184431D0F220000&channelPageId=sD22E5184744EFC540174558CFFA50008",
+                    "url": true,
+                    "renderedAsFile": false
+                },
+                {
                     "title": "Air Force Information Assurance (Cybersecurity) Collaborative Environment",
                     "link": "https://cs2.eis.af.mil/sites/10060/default.aspx",
                     "type": "portalFavorite",
@@ -158,8 +167,17 @@
                     "renderedAsFile": false
                 },
                 {
-                    "title": "Certified Workforce Improvement Program (CWIP) - 8570 Exam Vouchers/Maintenance Fees",
-                    "link": "https://cyss.us.af.mil/cyss/CertifiedWorkForce/",
+                    "title": "Cloud One Kickstart",
+                    "link": "https://www.my.af.mil/gcss-af/USAF/ep/globalTab.do?channelPageId=sE3494DD05EF785CA016166ADE8FF2A85",
+                    "type": "portalFavorite",
+                    "contentId": "cA07285AC6833453301683373C02A0007",
+                    "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cA07285AC6833453301683373C02A0007&channelPageId=sD22E5184744EFC540174558CFFA50008",
+                    "url": true,
+                    "renderedAsFile": false
+                },
+                {
+                    "title": "Cybersecurity Workforce Improvement Program (CWIP) - 8570/8140 Exam Vouchers/Maintenance Fees",
+                    "link": "https://cwip.cce.af.mil/",
                     "type": "portalFavorite",
                     "contentId": "c22794EF377829A69017782C40D7A000F",
                     "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c22794EF377829A69017782C40D7A000F&channelPageId=sD22E5184744EFC540174558CFFA50008",
@@ -167,11 +185,11 @@
                     "renderedAsFile": false
                 },
                 {
-                    "title": "Cloud One Kickstart",
-                    "link": "https://www.my.af.mil/gcss-af/USAF/ep/globalTab.do?channelPageId=sE3494DD05EF785CA016166ADE8FF2A85",
-                    "type": "portalFavorite",
-                    "contentId": "cA07285AC6833453301683373C02A0007",
-                    "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cA07285AC6833453301683373C02A0007&channelPageId=sD22E5184744EFC540174558CFFA50008",
+                    "title": "FES-IMS (The Fire and Emergency Services Information Management System)",
+                    "link": "https://acesfos.csd.disa.mil/",
+                    "type": "application",
+                    "contentId": "c44C00E3C84432B1E0184434307CD0000",
+                    "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c44C00E3C84432B1E0184434307CD0000&channelPageId=sD22E5184744EFC540174558CFFA50008",
                     "url": true,
                     "renderedAsFile": false
                 },
@@ -1482,6 +1500,15 @@
                     "renderedAsFile": false
                 },
                 {
+                    "title": "SEHT (Support Equipment Health Tracker)",
+                    "link": "https://smart14bis-pipeline.apps.dso.mil",
+                    "type": "application",
+                    "contentId": "c742E16CC84C3EA160184C4077B7A0000",
+                    "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c742E16CC84C3EA160184C4077B7A0000&channelPageId=sD22E5184744EFC540174558CFFA50008",
+                    "url": true,
+                    "renderedAsFile": false
+                },
+                {
                     "title": "TBA - Training Business Area Community of Practice (CoP) [.mil/.com]",
                     "link": "https://cs2.eis.af.mil/sites/11319",
                     "type": "portalFavorite",
@@ -1860,7 +1887,7 @@
                 },
                 {
                     "title": "MUSTT (Motorcycle Unit Safety Tracking Tool)",
-                    "link": "https://afsas.safety.af.mil/my.policy",
+                    "link": "https://www.my.af.mil/gcss-af/USAF/content/J4pqn",
                     "type": "portalFavorite",
                     "contentId": "cE3494DD05A4B0E17015A8BFFE6EE0344",
                     "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE3494DD05A4B0E17015A8BFFE6EE0344&channelPageId=sD22E5184744EFC540174558CFFA50008",
