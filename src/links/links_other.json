@@ -1,64 +1,68 @@
 {
-    "OTHER": [
-        {
-            "title": "myEval (myFSS)",
-            "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-evaluation-management"
-        },
-        {
-            "title": "milSuite",
-            "link": "https://www.milsuite.mil"
-        },
-        {
-            "title": "Defense Personal Property System (DPS)",
-            "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
-        },
-        {
-            "title": "DEERS",
-            "link": "https://milconnect.dmdc.osd.mil/milconnect/"
-        },
-        {
-            "title": "ID Card Office Online (Appointments, Update GAL)",
-            "link": "https://idco.dmdc.osd.mil/idco/"
-        },
-        {
-            "title": "myFitness (myFSS)",
-            "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management"
-        },
-        {
-            "title": "Webmail / OWA / E-mail / email",
-            "link": "https://webmail.apps.mil/"
-        },
-        {
-            "title": "USAF Publications and Forms (epubs)",
-            "link": "https://www.e-publishing.af.mil/Product-Index/"
-        },
-        {
-            "title": "Talent Marketplace (MyVector)",
-            "link": "https://myvector.us.af.mil/myvector"
-        },
-        {
-            "title": "GAL Information Update (Update Outlook GAL Profile)",
-            "link": "https://esd.us.af.mil"
-        },
-        {
-            "title": "Air Force Portal",
-            "link": "https://my.af.mil"
-        },
-        {
-            "title": "Foreign Clearance Guide (FCG)",
-            "link": "https://www.fcg.pentagon.mil/"
-        },
-        {
-            "title": "Air Force myLearning (Computer Based Training/CBTs)",
-            "link": "https://www.my.af.mil/gcss-af/USAF/content/mylearning"
-        },
-        {
-            "title": "Automatic Key Recovery Agent (mil only / CAC PKI Cert Recovery for old e-mails)",
-            "link": "https://ara-6.csd.disa.mil"
-        },
-        {
-            "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
-            "link": "https://portal.apps.mil"
-        }
-    ]
+  "OTHER": [
+    {
+      "title": "myEval (myFSS)",
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-evaluation-management"
+    },
+    {
+      "title": "milSuite",
+      "link": "https://www.milsuite.mil"
+    },
+    {
+      "title": "Defense Personal Property System (DPS)",
+      "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
+    },
+    {
+      "title": "DEERS",
+      "link": "https://milconnect.dmdc.osd.mil/milconnect/"
+    },
+    {
+      "title": "ID Card Office Online (Appointments, Update GAL)",
+      "link": "https://idco.dmdc.osd.mil/idco/"
+    },
+    {
+      "title": "myFitness (myFSS)",
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management"
+    },
+    {
+      "title": "Webmail / OWA / E-mail / email",
+      "link": "https://webmail.apps.mil/"
+    },
+    {
+      "title": "USAF Publications and Forms (epubs)",
+      "link": "https://www.e-publishing.af.mil/Product-Index/"
+    },
+    {
+      "title": "Talent Marketplace (MyVector)",
+      "link": "https://myvector.us.af.mil/myvector"
+    },
+    {
+      "title": "GAL Information Update (Update Outlook GAL Profile)",
+      "link": "https://esd.us.af.mil"
+    },
+    {
+      "title": "Air Force Portal",
+      "link": "https://my.af.mil"
+    },
+    {
+      "title": "Foreign Clearance Guide (FCG)",
+      "link": "https://www.fcg.pentagon.mil/"
+    },
+    {
+      "title": "Air Force myLearning (Computer Based Training/CBTs)",
+      "link": "https://www.my.af.mil/gcss-af/USAF/content/mylearning"
+    },
+    {
+      "title": "Automatic Key Recovery Agent (mil only / CAC PKI Cert Recovery for old e-mails)",
+      "link": "https://ara-6.csd.disa.mil"
+    },
+    {
+      "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
+      "link": "https://portal.apps.mil"
+    },
+    {
+      "title": "Aircraft and Personnel Automated Clearance System (APACS)",
+      "link": "https://apacs.milcloud.mil/apacs"
+    }
+  ]
 }
