@@ -1,0 +1,15 @@
+name: Append Link from Approved Link Request
+
+on:
+  issues:
+    types: [closed]
+  
+jobs:
+  get_fields:
+    runs-on: ubuntu-latest
+    if: github.event.issues.issue.labels.name == 'link request'
+    steps:
+    - name: $github
+      run:   echo "$GITHUB_CONTEXT"
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
