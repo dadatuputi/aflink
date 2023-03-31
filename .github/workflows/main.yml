@@ -10,6 +10,10 @@ on:
       - '.github/**'
       - '.git/**'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Append Link from Approved Link Request"]
+    types:
+      - completed
 
 jobs:
   Update_Links:
