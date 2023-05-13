@@ -11,7 +11,7 @@ html.bg-spice-brown(lang='en')
     link(rel='icon' href=USAFIcon)
     //- CSS
     style
-      include:clean-css bootstrap.4.6.0.min.css 
+      include bootstrap.4.6.0.min.css 
       include:clean-css site.css
 
     //- OpenSearch Description Document
@@ -69,6 +69,6 @@ html.bg-spice-brown(lang='en')
       | Links synced #{date}  
 
   script 
-    include:uglify-js(compress=true, mangle=true) bootstrap.4.6.0.min.js
     include:uglify-js(compress=true, mangle=true) jquery-3.5.1.slim.min.js
+    include:uglify-js(compress=true, mangle=true) bootstrap.4.6.0.min.js
     include:uglify-js(compress=true, mangle=true) search.js

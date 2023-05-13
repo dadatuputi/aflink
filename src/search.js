@@ -7,7 +7,7 @@ $(document).ready(function () {
 
   function updateSearchParams(newParams) {
     searchParams.set("q", newParams);
-    let newurl = `${window.location.origin}${window.location.pathname}${`?${searchParams.toString()}`}`
+    var newurl = window.location.origin+window.location.pathname+'?'+searchParams.toString()
     window.history.replaceState({ path: newurl }, "", newurl);
   }
 
