@@ -1,6 +1,15 @@
 $(document).ready(function () {
   
   var searchParams = new URLSearchParams(window.location.search);
+  // If search string has a newline at the end, it comes from autocomplete, so automatically go to the first result
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
+  const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '\n')
+
+  function updateSearchParams(newParams) {
+    searchParams.set("q", newParams);
+    let newurl = `${window.location.origin}${window.location.pathname}${`?${searchParams.toString()}`}`
+    window.history.replaceState({ path: newurl }, "", newurl);
+  }
 
   // Filter links based on search query
   $("#search-form").on(
@@ -19,13 +28,7 @@ $(document).ready(function () {
       links.siblings('.category').toggle(true);
 
       // Update URL with new search params
-      searchParamsString = ""
-      if (value) {
-        searchParams.set("q", $(this).val());
-        searchParamsString = `?${searchParams.toString()}`
-      }
-      var newurl = `${window.location.origin}${window.location.pathname}${searchParamsString}`
-      window.history.replaceState({ path: newurl }, "", newurl);
+      updateSearchParams($(this).val())
 
       // If no links displayed, show alert
       if (!$("#link-list a:visible")[0]) {
@@ -48,9 +51,18 @@ $(document).ready(function () {
     }
   );
 
-  // Update search field based on parameters
+  // Update search field based on parameters on pageload
   if (searchParams.has("q") === true) {
+    if (autocompleted) {
+      updateSearchParams(searchParams.get("q").trimEnd()) // remove newline before adding search query to textbox
+    }
+
     $("#search-form").val(searchParams.get("q")).change();
+
+    // Handle autocomplete
+    if (autocompleted && $("#link-list a:visible")[0]) {
+      $("#link-list a:visible")[0].click();
+    }
   }
 
 });
