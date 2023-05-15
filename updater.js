@@ -13,7 +13,7 @@ const file_links_other = 'src/links/links_other.json';
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
 let locals = null; 
-if (environment === 'development') {
+if (environment === 'production') {
     locals = {
         baseurl: "https://aflink.us",
         suggesturl: "https://aflinks-autocomplete.aswang.workers.dev/search/{searchTerms}"
