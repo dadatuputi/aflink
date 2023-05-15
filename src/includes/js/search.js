@@ -29,7 +29,12 @@ $(document).ready(function () {
       var links = $('#link-list a').filter(function(){
         return $(this).text().toLowerCase().indexOf(value) > -1;
       })
+      // Go to first link if autocomplete
+      if (autocompleted && links[0]) {
+        links[0].click();
+      }
       links.toggle(true);
+
       // Show link category
       links.siblings('.category').toggle(true);
 
@@ -64,11 +69,6 @@ $(document).ready(function () {
     }
 
     $("#search-form").val(searchParams.get("q")).change();
-
-    // Handle autocomplete
-    if (autocompleted && $("#link-list a:visible")[0]) {
-      $("#link-list a:visible")[0].click();
-    }
   }
 
 });
