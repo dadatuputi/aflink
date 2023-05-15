@@ -6,8 +6,14 @@ $(document).ready(function () {
   const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '\n')
 
   function updateSearchParams(newParams) {
-    searchParams.set("q", newParams);
-    var newurl = window.location.origin+window.location.pathname+'?'+searchParams.toString()
+    var params = ""
+    if (newParams) {
+      searchParams.set("q", newParams);
+      params = '?'+searchParams.toString()
+    } else {
+      searchParams.delete("q")
+    }
+    var newurl = window.location.origin+window.location.pathname+params
     window.history.replaceState({ path: newurl }, "", newurl);
   }
 
@@ -28,7 +34,7 @@ $(document).ready(function () {
       links.siblings('.category').toggle(true);
 
       // Update URL with new search params
-      if (value) updateSearchParams($(this).val())
+      updateSearchParams($(this).val())
 
       // If no links displayed, show alert
       if (!$("#link-list a:visible")[0]) {
