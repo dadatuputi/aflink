@@ -1,0 +1,29 @@
+head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description' content='')
+    meta(name='author' content='')
+    title USAF Links
+    link(rel='icon' href=USAFIcon)
+    //- CSS
+    style
+      include:clean-css css/bootstrap.5.2.3.min.css
+      include:clean-css css/site.css
+
+    //- OpenSearch Description Document
+    //- https://www.chromium.org/tab-to-search
+    //- https://developer.mozilla.org/en-US/docs/Web/OpenSearch
+    link(href="/osdd.xml" type="application/opensearchdescription+xml" title="aflink" rel="search")
+
+mixin navigation
+  nav.navbar.navbar-expand-lg.navbar-dark.bg-spice-brown.sticky-top
+    .container
+      a.navbar-brand(href='#')
+        img.d-inline-block.align-text-top(height='30' src=USAFIcon)
+        |           USAF Links
+      button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarResponsive.collapse.navbar-collapse
+        .navbar-nav.ms-auto
+          a.nav-link(aria-current='page' href='/') Home
+          block
