@@ -1,38 +1,22 @@
-- var USAFIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiCiAgIHdpZHRoPSIyMDQwIiBoZWlnaHQ9IjEwODAiIHZpZXdCb3g9IjAgMCAyMDQgMTA4Ij4KICA8dGl0bGU+Um91bmRlbCBvZiB0aGUgVVNBRjwvdGl0bGU+CiAgPG1ldGFkYXRhPjxyZGY6UkRGPjxjYzpXb3JrIHJkZjphYm91dD0iIj4KICAgIDxkYzpmb3JtYXQ+aW1hZ2Uvc3ZnK3htbDwvZGM6Zm9ybWF0PgogICAgPGRjOnR5cGUgcmRmOnJlc291cmNlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvU3RpbGxJbWFnZSIvPgogICAgPGRjOnRpdGxlPlJvdW5kZWwgb2YgdGhlIFVTQUY8L2RjOnRpdGxlPgogICAgPC9jYzpXb3JrPjwvcmRmOlJERj48L21ldGFkYXRhPgogIDxyZWN0IHN0eWxlPSJmaWxsOiMxYTFlM2IiCiAgICAgeD0iMi4zNDkyOCIgeT0iMzMuMTciIGhlaWdodD0iMzYiIHdpZHRoPSIxOTkuMzAxNDQiLz4KICA8Y2lyY2xlIGZpbGw9IiMxYTFlM2IiIGN4PSIxMDIiIGN5PSI1NCIgcj0iNTQiLz4KICA8cmVjdCBzdHlsZT0iZmlsbDojZmZmZmZmIgogICAgIHg9IjguMzQ5MjgiIHk9IjM5LjE3IiBoZWlnaHQ9IjI0IiB3aWR0aD0iMTg3LjMwMTQ0Ii8+CiAgPHJlY3Qgc3R5bGU9ImZpbGw6IzhmMTcwMCIKICAgICB4PSI4LjM0OTI4IiB5PSI0Ny4xNyIgaGVpZ2h0PSI4IiB3aWR0aD0iMTg3LjMwMTQ0Ii8+CiAgPGNpcmNsZSBmaWxsPSIjMWExZTNiIiBjeD0iMTAyIiBjeT0iNTQiIHI9IjQ4Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAyLDU0KXNjYWxlKDQ4KSIgZmlsbD0iI2ZmZiI+CiAgICA8ZyBpZD0iY29uZSI+CiAgICAgIDxwb2x5Z29uIGlkPSJ0cmlhbmdsZSIgcG9pbnRzPSIwLDAgMCwxIC41LDEiCiAgICAgICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsLTEpcm90YXRlKDE4KSIvPgogICAgICA8dXNlIHhsaW5rOmhyZWY9IiN0cmlhbmdsZSIgdHJhbnNmb3JtPSJzY2FsZSgtMSwxKSIvPgogICAgPC9nPgogICAgPHVzZSB4bGluazpocmVmPSIjY29uZSIgdHJhbnNmb3JtPSJyb3RhdGUoNzIpIi8+CiAgICA8dXNlIHhsaW5rOmhyZWY9IiNjb25lIiB0cmFuc2Zvcm09InJvdGF0ZSgtNzIpIi8+CiAgICA8dXNlIHhsaW5rOmhyZWY9IiNjb25lIiB0cmFuc2Zvcm09InJvdGF0ZSgxNDQpIi8+CiAgICA8dXNlIHhsaW5rOmhyZWY9IiNjb25lIiB0cmFuc2Zvcm09InJvdGF0ZSgtMTQ0KSIvPgogIDwvZz4KPC9zdmc+'
-- var GHIcon = 'data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+'
+include includes/static.pug
+
 doctype html
 html.bg-spice-brown(lang='en')
-  head
-    meta(charset='utf-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-    meta(name='description' content='')
-    meta(name='author' content='')
-    title USAF Links
-    link(rel='icon' href=USAFIcon)
-    //- CSS
-    style
-      include bootstrap.4.6.0.min.css 
-      include:clean-css site.css
-
-    //- OpenSearch Description Document
-    //- https://www.chromium.org/tab-to-search
-    //- https://developer.mozilla.org/en-US/docs/Web/OpenSearch
-    link(href="/osdd.xml" type="application/opensearchdescription+xml" title="aflink" rel="search")
+  include includes/head.pug
 
   //- Navigation
-  nav.navbar.navbar-expand-lg.navbar-dark.bg-spice-brown.sticky-top
-    .container
-      a.navbar-brand(href='#')
-        img.d-inline-block.align-text-top(height='30' src=USAFIcon)
-        |           USAF Links
-      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-      #navbarResponsive.collapse.navbar-collapse
-        .navbar-nav.ml-auto
-          a.nav-link(aria-current='page' href='#') Home
-          a.nav-link(href='#about') About
-          a.nav-link(href='#correction') Add Link
+  +navigation
+    a.nav-link(href='#about') About
+    a.nav-link(href='#correction') Add Link
+    a.nav-link(href='/tutorial') Tutorial
+
   //- Page Content
+  section#alert.bg-sage.text-center
+    a.no-dec(href='/tutorial')
+      .container.alert.alert-primary.bg-cannes-blue.no-border(role='alert')
+        strong Hey! 
+        |
+        | Click here to learn how to search aflinks from your browser address bar 
   section#search.bg-sage.text-center
     .container
       .form-outline
@@ -64,11 +48,8 @@ html.bg-spice-brown(lang='en')
         | If you want to add a link, submit one through GitHub: 
         a(href='https://github.com/dadatuputi/aflinks/blob/master/README.md')
           img(width='25' src=GHIcon)
-  section#footer.bg-spice-brown.py-1.text-right 
+  section#footer.bg-spice-brown.py-1.text-end
     em
       | Links synced #{date}  
 
-  script 
-    include:uglify-js(compress=true, mangle=true) jquery-3.5.1.slim.min.js
-    include:uglify-js(compress=true, mangle=true) bootstrap.4.6.0.min.js
-    include:uglify-js(compress=true, mangle=true) search.js
+  include includes/foot.pug
