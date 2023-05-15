@@ -3,7 +3,7 @@ $(document).ready(function () {
   var searchParams = new URLSearchParams(window.location.search);
   // If search string has a newline at the end, it comes from autocomplete, so automatically go to the first result
   // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
-  const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '\n')
+  const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '​')
 
   function updateSearchParams(newParams) {
     var params = ""
@@ -65,9 +65,9 @@ $(document).ready(function () {
   // Update search field based on parameters on pageload
   if (searchParams.has("q") === true) {
     if (autocompleted) {
-      updateSearchParams(searchParams.get("q").trimEnd()) // remove newline before adding search query to textbox
+      updateSearchParams(searchParams.get("q").slice(0,-1)) // remove newline before adding search query to textbox
     }
-
+    
     $("#search-form").val(searchParams.get("q")).change();
   }
 

@@ -10,6 +10,21 @@ const imageType = require('image-type')
 const file_links_af = 'src/links/links_af.json';
 const file_links_other = 'src/links/links_other.json';
 
+const environment = process.env.NODE_ENV;
+console.log("Node environment is: " + environment)
+let locals = null; 
+if (environment === 'development') {
+    locals = {
+        baseurl: "https://aflink.us",
+        suggesturl: "https://aflinks-autocomplete.aswang.workers.dev/search/{searchTerms}"
+    }
+} else {
+    locals = {
+        baseurl: "http://dev.lan",
+        suggesturl: "http://aflinks-autocomplete.aswang.workers.dev/search/{searchTerms}"
+    }
+}
+
 // Until there is a way to get the list of links from USAF without a CAC/logging in, this won't work
 /* 
 const url = "https://www.my.af.mil/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=p7F11BC9F789430190178946F7E140005&siteId=sD22E5184744EFC540174558CFFA50008";
@@ -99,10 +114,15 @@ const getCurrentData = async () => {
         console.log("Wrote homepage")
 
         // write browser tutorial homepage
-        const pageTutorial = pug.renderFile(path.join(__dirname, "src/tutorial.pug"), options)
+        const pageTutorial = pug.renderFile(path.join(__dirname, "src/tutorial.pug"), { ...options })
         fs.mkdirSync('docs/tutorial', { recursive: true})
         fs.writeFileSync(path.join(__dirname, "docs/tutorial/index.html"), pageTutorial)
         console.log("Wrote tutorial")
+
+        // write osdd.xml
+        const osdd = pug.renderFile(path.join(__dirname, "src/osdd.xml.pug"), { ...options, ...locals })
+        fs.writeFileSync(path.join(__dirname, "docs/osdd.xml"), osdd)
+        console.log("Wrote osdd")
 
 		console.log("Done writing updated data.")
     } catch (e) {
