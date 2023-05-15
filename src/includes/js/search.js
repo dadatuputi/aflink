@@ -28,7 +28,7 @@ $(document).ready(function () {
       links.siblings('.category').toggle(true);
 
       // Update URL with new search params
-      updateSearchParams($(this).val())
+      if (value) updateSearchParams($(this).val())
 
       // If no links displayed, show alert
       if (!$("#link-list a:visible")[0]) {
