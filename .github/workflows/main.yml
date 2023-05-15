@@ -22,7 +22,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -34,6 +34,6 @@ jobs:
           NODE_ENV: production
         run: npm run build
       - name: Commit New Changes
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v9
         with:
           message: Updated Links By GitHub Action
