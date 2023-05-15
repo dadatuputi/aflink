@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "git-date-extractor": "^4.0.1",
+    "image-type": "^4.1.0",
     "jstransformer-clean-css": "^2.1.0",
     "jstransformer-uglify-js": "^1.2.0",
     "node-fetch": "^2.6.1",

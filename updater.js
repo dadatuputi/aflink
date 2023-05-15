@@ -2,9 +2,10 @@ const fetch = require("node-fetch")
 const path = require("path")
 const pug = require("pug")
 const https = require("https")
-const fs = require("fs").promises
+const fs = require("fs")
 const sugar_date = require("sugar-date")
 const gitDateExtractor = require('git-date-extractor');
+const imageType = require('image-type')
 
 const file_links_af = 'src/links/links_af.json';
 const file_links_other = 'src/links/links_other.json';
@@ -75,8 +76,34 @@ const getCurrentData = async () => {
         const date_other = dates[file_links_other].modified
         const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
 
-        const newData = pug.renderFile(path.join(__dirname, "src/index.pug"), { links, date })
-		await fs.writeFile(path.join(__dirname, "docs/index.html"), newData)
+
+        // pug filter for base64-encoding images
+        let options = {}
+        options.filters = {
+            'base64me': function(text, options) {
+                if (options.filename) {
+                    // getting file from includes filter
+                    text = options.filename
+                } 
+                const contents = fs.readFileSync(text)
+                const type = imageType(contents)
+                const b64 = contents.toString('base64')
+                const tag = `<img ${options.class? `class="${options.class}` : ""}" src="data:${type.mime};base64,${b64}" />`
+                return tag; 
+            }
+        }
+
+        // write homepage
+        const pageHome = pug.renderFile(path.join(__dirname, "src/index.pug"), { ...options, links, date })
+        fs.writeFileSync(path.join(__dirname, "docs/index.html"), pageHome)
+        console.log("Wrote homepage")
+
+        // write browser tutorial homepage
+        const pageTutorial = pug.renderFile(path.join(__dirname, "src/tutorial.pug"), options)
+        fs.mkdirSync('docs/tutorial', { recursive: true})
+        fs.writeFileSync(path.join(__dirname, "docs/tutorial/index.html"), pageTutorial)
+        console.log("Wrote tutorial")
+
 		console.log("Done writing updated data.")
     } catch (e) {
         console.log(e.message)
