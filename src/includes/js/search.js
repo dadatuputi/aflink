@@ -70,5 +70,12 @@ $(document).ready(function () {
     
     $("#search-form").val(searchParams.get("q")).change();
   }
-
+  
+  // Show modal after clicking a link
+  const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'));
+  $("#link-list a").on('click', function(event) {
+    $('#exit-modal .modal-header .title').text($(this).prop('title'));
+    // $('#exit-modal .link').text($(this).prop('href'));
+    my_modal.toggle();
+  });
 });
