@@ -28,3 +28,7 @@ ul {
     padding: 0;
     background-color: #efefef;
 }
+
+.modal-header .link {
+  font-size: .75rem !important;
+}

@@ -62,10 +62,10 @@ html.bg-spice-brown(lang='en')
 div#exit-modal.modal(tabindex=-1 style="display: none")
   .modal-dialog 
     .modal-content
-      .modal-header.text-center.mx-auto
-        span Going to&nbsp;
-        strong.title 
-        span ...
+      .modal-header.vstack.gap-1
+        .text-center.mx-auto
+          span Going to #[strong.title]...
+        .link.text-center
       .modal-body
         .progress
           .progress-bar.progress-bar-striped.progress-bar-animated(role=progressbar aria-label="Animated striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
