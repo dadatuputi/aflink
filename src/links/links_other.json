@@ -71,6 +71,10 @@
     {
       "title": "Government Travel Card (GTC)",
       "link": "https://home.cards.citidirect.com/CommercialCard/login?locale=en"
+    },
+    {
+      "title": "DoD SAFE (Secure Access File Exchange)",
+      "link": "https://safe.apps.mil/"
     }
   ]
 }
