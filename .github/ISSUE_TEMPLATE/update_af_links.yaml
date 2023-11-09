@@ -1,0 +1,25 @@
+name: Update AF Links
+description: Submit a new copy of AF Links from the portal
+title: "[Update AF Links]"
+labels: ["update af links"]
+assignees:
+  - dadatuputi
+body:
+  - type: markdown
+    attributes:
+      value: |
+        1. Open a tab in Chrome or Edge
+        2. Open developer tools (F12) and select the Network tab and select the `Fetch/XHR` filter
+        3. Go to [Quick Links on the AF Portal Page](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p7F11BC9F789430190178946F7E140005&channelPageId=sD22E5184744EFC540174558CFFA50008) <- is this a unique session link?
+        4. Look for a request that starts with `cached?categorized=true&id=`
+        5. Copy the contents of the `Response` window on the right into the form below.
+        6. When the issue is closed/approved, it will be rolled in and built using GitHub actions.
+  - type: input
+    id: json
+    attributes:
+      label: json
+      description: A JSON object from the AF Portal
+      placeholder: |
+        {"afpCategorizedLinksDto":{"links":{...
+    validations:
+      required: true  
