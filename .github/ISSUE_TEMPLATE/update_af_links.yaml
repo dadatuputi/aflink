@@ -17,8 +17,8 @@ body:
   - type: input
     id: json
     attributes:
-      label: json
-      description: A JSON object from the AF Portal
+      label: JSON
+      description: The JSON list of links from the AF Portal
       placeholder: |
         {"afpCategorizedLinksDto":{"links":{...
     validations:
