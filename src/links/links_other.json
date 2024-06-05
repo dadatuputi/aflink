@@ -87,6 +87,10 @@
     {
       "title": "Sharepoint Sites",
       "link": "https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p88B4F00B408E088F01419EEE5C3D1C7F&channelPageId=s6925EC1350340FB5E044080020E329A9"
+    },
+    {
+      "title": "PRMS (Personnel Recovery Mission Software) (.mil only)\r",
+      "link": "https://prmsglobal.prms.af.mil/\r"
     }
   ]
 }
