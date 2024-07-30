@@ -91,6 +91,10 @@
     {
       "title": "PRMS (Personnel Recovery Mission Software) (.mil only)\r",
       "link": "https://prmsglobal.prms.af.mil/\r"
+    },
+    {
+      "title": "NIPRGPT (NIPR ChatGPT)",
+      "link": "https://niprgpt.mil/"
     }
   ]
 }
