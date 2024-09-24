@@ -27,7 +27,9 @@ html.bg-spice-brown(lang='en')
         input#search-form.form-control(type='search' placeholder='Start typing' aria-label='Search' autofocus='')
   section#list.bg-sage.text-center
     .container
-      h2 Link List
+      .offcenter
+        h2 Link List
+        em.d-none.d-md-block Synced #{date}
       div#link-list.list-group
         //- Links json is expanded here
         each category in links
@@ -54,7 +56,7 @@ html.bg-spice-brown(lang='en')
           img(width='25' src=GHIcon)
   section#footer.bg-spice-brown.py-1.text-end
     em
-      | Links synced #{date}  
+      | Synced with AF portal #{date} 
 
   include includes/foot.pug
 

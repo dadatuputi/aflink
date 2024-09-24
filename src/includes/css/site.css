@@ -32,3 +32,14 @@ ul {
 .modal-header .link {
   font-size: .75rem !important;
 }
+
+.offcenter {
+  position: relative;
+}
+
+.offcenter em {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-25%);
+}
