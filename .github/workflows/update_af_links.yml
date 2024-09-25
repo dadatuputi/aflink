@@ -21,6 +21,8 @@ jobs:
       uses: actions/checkout@v3
     - name: Overwrite links with new link list
       run: |
+        echo "B64:"
+        echo "$env.B64"
         JSON=$(echo "$env.B64" | base64 -d | gzip -dc)
         echo "Decompressed data:"
         echo "$JSON" | tee src/links/links_af.json
