@@ -11,18 +11,21 @@ jobs:
     steps:
     - name: get_fields
       run: |
-        JSON=$(echo "$BODY" | sed -n 3p)
-        [[ -z $JSON ]] && exit 1
-        JSON="JSON=$JSON"
-        echo $JSON | tee -a $GITHUB_ENV
+        B64=$(echo "$BODY" | sed -n 3p)
+        [[ -z $B64 ]] && exit 1
+        B64="B64=$B64"
+        echo $B64 | tee -a $GITHUB_ENV
       env:
         BODY: ${{ github.event.issue.body }}
     - name: Checkout Repository
       uses: actions/checkout@v3
     - name: Overwrite links with new link list
       run: |
-        echo ${{ env.JSON }} | tee src/links/links_af.json
-    - name: Commit New Changes
-      uses: EndBug/add-and-commit@v7
-      with:
-        message: Updated af links from Issue
+        COMPRESSED_DATA=$(echo "$env.B64" | tr -d '[:space:]')
+        DECOMPRESSED_DATA=$(echo "$COMPRESSED_DATA" | base64 -d | gzip -dc)
+        echo "Decompressed data:"
+        echo "$DECOMPRESSED_DATA" | tee src/links/links_af.json
+    # - name: Commit New Changes
+    #   uses: EndBug/add-and-commit@v7
+    #   with:
+    #     message: Updated af links from Issue

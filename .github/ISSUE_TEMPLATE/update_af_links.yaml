@@ -8,18 +8,17 @@ body:
   - type: markdown
     attributes:
       value: |
-        1. Open a tab in Chrome or Edge
-        2. Open developer tools (F12) and select the Network tab and select the `Fetch/XHR` filter
-        3. Go to [Quick Links on the AF Portal Page](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p7F11BC9F789430190178946F7E140005&channelPageId=sD22E5184744EFC540174558CFFA50008) <- is this a unique session link?
-        4. Look for a request that starts with `cached?categorized=true&id=`
-        5. Copy the contents of the `Response` window on the right into the form below.
-        6. When the issue is closed/approved, it will be rolled in and built using GitHub actions.
+        1. Go to [Quick Links on the AF Portal Page](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p7F11BC9F789430190178946F7E140005&channelPageId=sD22E5184744EFC540174558CFFA50008) <- is this a unique session link?
+        1. Open developer tools (F12) and select the `Console` tab
+        1. Paste the contents of [`getlinks.js`](https://raw.githubusercontent.com/dadatuputi/aflink/refs/heads/master/getlinks.js) into the console command line and hit return.
+        1. Copy the contents of the modal and paste into the field below.
+        1. When the issue is closed/approved, it will be rolled in and built using GitHub actions.
   - type: input
-    id: json
+    id: b64json
     attributes:
-      label: JSON
-      description: The JSON list of links from the AF Portal
+      label: Compressed JSON
+      description: A base64 encoded zlib compressed JSON list of links from the AF Portal
       placeholder: |
-        {"afpCategorizedLinksDto":{"links":{...
+        d1wEG+DYYYu1Pi5xr3Oq40...
     validations:
       required: true  

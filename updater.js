@@ -16,12 +16,12 @@ let locals = null;
 if (environment === 'production') {
     locals = {
         baseurl: "https://aflink.us",
-        suggesturl: "https://aflinks-autocomplete.aswang.workers.dev/search/{searchTerms}"
+        suggesturl: "https://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}"
     }
 } else {
     locals = {
         baseurl: "http://dev.lan",
-        suggesturl: "http://aflinks-autocomplete.aswang.workers.dev/search/{searchTerms}"
+        suggesturl: "http://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}"
     }
 }
 

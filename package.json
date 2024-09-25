@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dadatuputi/aflinks.git"
+    "url": "git+https://github.com/dadatuputi/aflink.git"
   },
   "bugs": {
-    "url": "https://github.com/dadatuputi/aflinks/issues"
+    "url": "https://github.com/dadatuputi/aflink/issues"
   },
-  "homepage": "https://github.com/dadatuputi/aflinks#readme"
+  "homepage": "https://github.com/dadatuputi/aflink#readme"
 }
