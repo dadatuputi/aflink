@@ -89,8 +89,8 @@ const getCurrentData = async () => {
         const dates = await gitDateExtractor.getStamps({files: [file_links_af, file_links_other]})
         const date_af = dates[file_links_af].modified
         const date_other = dates[file_links_other].modified
-        const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
-
+        // const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
+        const date = sugar_date.Date.format(new Date(date_af * 1000), '{d} {Month} {yyyy}')
 
         // pug filter for base64-encoding images
         let options = {}
