@@ -109,19 +109,24 @@ const getCurrentData = async () => {
         }
 
         // write homepage
-        const pageHome = pug.renderFile(path.join(__dirname, "src/index.pug"), { ...options, links, date })
-        fs.writeFileSync(path.join(__dirname, "docs/index.html"), pageHome)
+	// make docs dir to place them in
+	const docsDir = path.resolve(__dirname, 'docs');
+  	fs.mkdirSync(docsDir, { recursive: true });
+	const srcDir = path.resolve(__dirname, 'src');
+	    
+        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
+        fs.writeFileSync(path.resolve(docsDir, "index.html"), pageHome)
         console.log("Wrote homepage")
 
         // write browser tutorial homepage
-        const pageTutorial = pug.renderFile(path.join(__dirname, "src/tutorial.pug"), { ...options })
+        const pageTutorial = pug.renderFile(path.resolve(srcDir, "tutorial.pug"), { ...options })
         fs.mkdirSync('docs/tutorial', { recursive: true})
-        fs.writeFileSync(path.join(__dirname, "docs/tutorial/index.html"), pageTutorial)
+        fs.writeFileSync(path.resolve(docsDir, "tutorial/index.html"), pageTutorial)
         console.log("Wrote tutorial")
 
         // write osdd.xml
-        const osdd = pug.renderFile(path.join(__dirname, "src/osdd.xml.pug"), { ...options, ...locals })
-        fs.writeFileSync(path.join(__dirname, "docs/osdd.xml"), osdd)
+        const osdd = pug.renderFile(path.resolve(srcDir, "osdd.xml.pug"), { ...options, ...locals })
+        fs.writeFileSync(path.resolve(docsDir, "osdd.xml"), osdd)
         console.log("Wrote osdd")
 
 		console.log("Done writing updated data.")
