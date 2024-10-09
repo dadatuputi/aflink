@@ -1,4 +1,4 @@
-name: Combine links
+name: Build Site
 
 on:
   push:
@@ -11,13 +11,15 @@ on:
       - '.git/**'
   workflow_dispatch:
   workflow_run:
-    workflows: ["Append Link from Approved Link Request"]
+    workflows: 
+      - "Append Link from Approved Link Request"
+      - "Update AF Links from Approved Issue"
     types:
       - completed
 
 jobs:
   Update_Links:
-    name: Update Links
+    name: Update & Combine Links Links
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
