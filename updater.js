@@ -110,23 +110,23 @@ const getCurrentData = async () => {
 
         // write homepage
 	// make docs dir to place them in
-	const docsDir = path.resolve(__dirname, 'docs');
-  	fs.mkdirSync(docsDir, { recursive: true });
+	const outputDir = process.env.DOCS_DIR; 
+  	fs.mkdirSync(outputDir, { recursive: true });
 	const srcDir = path.resolve(__dirname, 'src');
 	    
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
-        fs.writeFileSync(path.resolve(docsDir, "index.html"), pageHome)
+        fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
         console.log("Wrote homepage")
 
         // write browser tutorial homepage
         const pageTutorial = pug.renderFile(path.resolve(srcDir, "tutorial.pug"), { ...options })
         fs.mkdirSync('docs/tutorial', { recursive: true})
-        fs.writeFileSync(path.resolve(docsDir, "tutorial/index.html"), pageTutorial)
+        fs.writeFileSync(path.resolve(outputDir, "tutorial/index.html"), pageTutorial)
         console.log("Wrote tutorial")
 
         // write osdd.xml
         const osdd = pug.renderFile(path.resolve(srcDir, "osdd.xml.pug"), { ...options, ...locals })
-        fs.writeFileSync(path.resolve(docsDir, "osdd.xml"), osdd)
+        fs.writeFileSync(path.resolve(outputDir, "osdd.xml"), osdd)
         console.log("Wrote osdd")
 
 		console.log("Done writing updated data.")
