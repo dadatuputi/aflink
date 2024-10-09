@@ -31,7 +31,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DOCS_DIR: ${{ github.workspace }}/docs
+  DOCS_DIR: docs
 
 jobs:
   # Build site with pug
@@ -44,19 +44,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - name: Install Dependencies
         run: npm ci
       - name: Build page with pug
         env:
           NODE_ENV: production
-          DOCS_DIR: ${{ env.DOCS_DIR }}
+          DOCS_DIR: ${{ github.workspace }}/${{ env.DOCS_DIR }}
         run: npm run build
       - name: Upload docs artifact
         uses: actions/upload-artifact@v3
         with:
           name: docs
-          path: ${{ env.DOCS_DIR }}
+          path: ${{ github.workspace }}/${{ env.DOCS_DIR }}
           
   # Build site with jekyll
   jekyll:
@@ -68,13 +68,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: docs
-          path: ${{ env.DOCS_DIR }}
+          path: ./${{ env.DOCS_DIR }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ${{ env.DOCS_DIR }}
+          source: ./${{ env.DOCS_DIR }}
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
