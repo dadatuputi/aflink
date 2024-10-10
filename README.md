@@ -1,6 +1,6 @@
 # [aflink.us](https://aflink.us)
 
-![Recording 2024-10-10 at 14 39 36](https://github.com/user-attachments/assets/55004158-af06-4de9-a310-d2eb6539f92f)
+[![Recording 2024-10-10 at 14 39 36](https://github.com/user-attachments/assets/55004158-af06-4de9-a310-d2eb6539f92f)](https://aflink.us)
 
 An accessible & simple page to find USAF links without needing to mess with the portal. 
 
