@@ -1,8 +1,12 @@
-# aflink.us
+# [aflink.us](https://aflink.us)
 
-A simple page to display USAF links without needing to mess with the portal. 
+![Recording 2024-10-10 at 14 39 36](https://github.com/user-attachments/assets/55004158-af06-4de9-a310-d2eb6539f92f)
+
+An accessible & simple page to find USAF links without needing to mess with the portal. 
 
 Built using PUG templating, Github actions, and node. 
+
+> _Saved XXXk Airmen over XXk hours by eliminating USAF portal logins! Promote now!_
 
 # Link Requests
 
