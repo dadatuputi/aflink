@@ -4,7 +4,16 @@ head
     meta(name='description' content='')
     meta(name='author' content='')
     title USAF Links
-    link(rel='icon' href=USAFIcon)
+
+    //- SVG favicon for modern browsers
+    link(rel='icon' type='image/svg+xml' href='/static/usaf.svg')
+    link(rel='icon' type='image/svg+xml' href='/favicon.svg')
+    //- Alternative PNG favicon
+    link(rel='icon' type='image/png' sizes='32x32' href='/favicon.png')
+    //- Traditional favicon for search engines and older browsers
+    link(rel='icon' type='image/x-icon' href='/favicon.ico')
+
+    
     //- CSS
     style
       include css/bootstrap.5.2.3.min.css
@@ -20,7 +29,7 @@ mixin navigation
   nav.navbar.navbar-expand-lg.navbar-dark.bg-spice-brown.sticky-top
     .container
       a.navbar-brand(href='/')
-        img.d-inline-block.align-text-top(height='30' src=USAFIcon)
+        img.d-inline-block.align-text-top(height='30' src='/static/usaf.svg')
         |           USAF Links
       button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon

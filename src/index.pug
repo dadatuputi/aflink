@@ -1,5 +1,3 @@
-include includes/static.pug
-
 doctype html
 html.bg-spice-brown(lang='en')
 
@@ -50,10 +48,13 @@ html.bg-spice-brown(lang='en')
   section#correction.bg-olive-drab.text-center
     .container
       h2 Request Link Addition
-      p.lead
-        | If you want to add a link, submit one through GitHub: 
-        a(href='https://github.com/dadatuputi/aflink/blob/master/README.md')
-          img(width='25' src=GHIcon)
+      .lead.d-flex.justify-content-center.align-items-center
+        p.m-0
+          | If you want to add a link, 
+          a(href='https://github.com/dadatuputi/aflink/blob/master/README.md').text-decoration-none.text-reset
+            | submit one through GitHub: 
+        a(href='https://github.com/dadatuputi/aflink/blob/master/README.md').ps-4.d-flex.align-items-center
+          img(width='48' src='/static/github.svg' alt='GitHub')
   section#footer.bg-spice-brown.py-1.text-end
     em
       | Synced with AF portal #{date} 
