@@ -6,22 +6,23 @@
   "main": "updater.js",
   "author": "hattmo",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "node ./updater.js"
-  },
-  "dependencies": {
-    "git-date-extractor": "^4.0.1",
-    "image-type": "^4.1.0",
-    "jstransformer-clean-css": "^2.1.0",
-    "jstransformer-uglify-js": "^1.2.0",
-    "node-fetch": "^2.6.1",
-    "pug": "^3.0.2",
-    "sugar-date": "^2.0.6",
-    "uglify-js": "^3.17.4"
+    "build": "NODE_ENV=production node ./updater.js",
+    "dev": "NODE_ENV=development DOCS_DIR=docs node ./updater.js"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.12",
-    "@types/pug": "^2.0.6"
+    "@types/pug": "^2.0.6",
+    "git-date-extractor": "^4.0.1",
+    "glob": "^11.0.0",
+    "image-type": "^5.2.0",
+    "jstransformer-clean-css": "^2.1.0",
+    "jstransformer-uglify-js": "^1.2.0",
+    "node-fetch": "^3.3.2",
+    "pug": "^3.0.3",
+    "sugar-date": "^2.0.6",
+    "uglify-js": "^3.19.3"
   },
   "directories": {
     "doc": "docs"

@@ -1,14 +1,13 @@
-const fetch = require("node-fetch")
-const path = require("path")
-const pug = require("pug")
-const https = require("https")
-const fs = require("fs")
-const sugar_date = require("sugar-date")
-const gitDateExtractor = require('git-date-extractor');
-const imageType = require('image-type')
-
-const file_links_af = 'src/links/links_af.json';
-const file_links_other = 'src/links/links_other.json';
+// const fetch = require("node-fetch")
+// const https = require("https")
+import path from 'path';
+import pug from 'pug'
+import fs from 'fs'
+import { glob } from 'glob'
+import sugar_date from 'sugar-date'
+import gitDateExtractor from 'git-date-extractor'
+import imageType from 'image-type'
+import process from 'process'
 
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
@@ -70,10 +69,15 @@ const getCurrentData = async () => {
 
 (async () => {
     try {
+        const srcDir = path.resolve(process.cwd(), 'src');
+
         // Build links
         // combine links from the USAF and our own links
-        const links_af = require(`./${file_links_af}`);
-        const links_other = require(`./${file_links_other}`);
+        const linksDir = path.resolve(srcDir, 'links')
+        const linksAfPath = path.resolve(linksDir, 'links_af.json')
+        const linksOtherPath = path.resolve(linksDir, 'links_other.json')
+        const links_af = JSON.parse(fs.readFileSync(linksAfPath));
+        const links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         let links = links_af.afpCategorizedLinksDto.links;
         links.OTHER = links_other.OTHER;
         // reformat links to an array, e.g.
@@ -84,13 +88,16 @@ const getCurrentData = async () => {
             cat['links'] = links[category]
             return cat
         });
+        console.log(`Combined ${links.length} links`)
 
         // Get links last modified date
-        const dates = await gitDateExtractor.getStamps({files: [file_links_af, file_links_other]})
-        const date_af = dates[file_links_af].modified
-        const date_other = dates[file_links_other].modified
+        const dates = await gitDateExtractor.getStamps({files: [linksAfPath, linksOtherPath]})
+        const date_af = dates[path.relative(process.cwd(), linksAfPath)].modified
+        // const date_other = dates[path.relative(process.cwd(), linksOtherPath)].modified
         // const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
         const date = sugar_date.Date.format(new Date(date_af * 1000), '{d} {Month} {yyyy}')
+        console.log(`Latest update: ${date}`)
+
 
         // pug filter for base64-encoding images
         let options = {}
@@ -109,10 +116,9 @@ const getCurrentData = async () => {
         }
 
         // write homepage
-	// make docs dir to place them in
-	const outputDir = process.env.DOCS_DIR; 
-  	fs.mkdirSync(outputDir, { recursive: true });
-	const srcDir = path.resolve(__dirname, 'src');
+        // make docs dir to place them in
+        const outputDir = process.env.DOCS_DIR; 
+        fs.mkdirSync(outputDir, { recursive: true });
 	    
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
@@ -120,14 +126,31 @@ const getCurrentData = async () => {
 
         // write browser tutorial homepage
         const pageTutorial = pug.renderFile(path.resolve(srcDir, "tutorial.pug"), { ...options })
-        fs.mkdirSync('docs/tutorial', { recursive: true})
-        fs.writeFileSync(path.resolve(outputDir, "tutorial/index.html"), pageTutorial)
+        const tutorialDir = path.resolve(outputDir, "tutorial")
+        fs.mkdirSync(tutorialDir, { recursive: true });
+        fs.writeFileSync(path.resolve(tutorialDir, "index.html"), pageTutorial)
         console.log("Wrote tutorial")
 
         // write osdd.xml
         const osdd = pug.renderFile(path.resolve(srcDir, "osdd.xml.pug"), { ...options, ...locals })
         fs.writeFileSync(path.resolve(outputDir, "osdd.xml"), osdd)
         console.log("Wrote osdd")
+
+        // copy static dir recursively
+        const staticDestDir = path.resolve(outputDir, "static");
+        const staticSrcDir = path.resolve(srcDir, "static");
+        fs.cpSync(staticSrcDir, staticDestDir, { recursive: true })
+        console.log("Wrote static directory")
+
+        // copy favicons
+        const favicons = glob.sync(path.resolve(srcDir, "favicon*"));
+        favicons.forEach(favicon => {
+            const faviconFileName = path.basename(favicon)
+            const faviconDestFile = path.resolve(outputDir, faviconFileName)
+            fs.cpSync(favicon, faviconDestFile)
+        })
+        console.log("Wrote favicons")
+        
 
 		console.log("Done writing updated data.")
     } catch (e) {
