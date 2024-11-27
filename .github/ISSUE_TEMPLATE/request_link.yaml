@@ -1,7 +1,7 @@
 name: Link Request
 description: Submit a request to add a link
 title: "[LINK]: "
-labels: ["link request"]
+labels: ["link request", "protected"]
 assignees:
   - dadatuputi
 body:
