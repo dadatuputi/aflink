@@ -1,7 +1,7 @@
 name: Update AF Links
 description: Submit a new copy of AF Links from the portal
 title: "[Update AF Links]"
-labels: ["update af links"]
+labels: ["update af links", "protected"]
 assignees:
   - dadatuputi
 body:
