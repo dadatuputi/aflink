@@ -19,7 +19,7 @@ if (environment === 'production') {
     }
 } else {
     locals = {
-        baseurl: "http://dev.lan",
+        baseurl: "http://dev.lan:4000",
         suggesturl: "http://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}"
     }
 }
