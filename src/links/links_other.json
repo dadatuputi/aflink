@@ -115,6 +115,10 @@
     {
       "title": "Legal Assistance Locator (JAG)",
       "link": "https://legalassistance.law.af.mil/"
+    },
+    {
+      "title": "EITaaS / Enterprise Service Desk (ESD) / Help Desk",
+      "link": "https://eitaas.servicecenter.af.mil/esc"
     }
   ]
 }
