@@ -5,6 +5,14 @@ $(document).ready(function () {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
   const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '​')
 
+  // Show modal after clicking a link
+  const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
+  $("#link-list a").on('click', function(event) {
+    $('#exit-modal .modal-header .title').text($(this).prop('title'));
+    $('#exit-modal .link').text($(this).prop('href'));
+    my_modal.toggle();
+  });
+
   function updateSearchParams(newParams) {
     var params = ""
     if (newParams) {
@@ -70,12 +78,5 @@ $(document).ready(function () {
     
     $("#search-form").val(searchParams.get("q")).change();
   }
-  
-  // Show modal after clicking a link
-  const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
-  $("#link-list a").on('click', function(event) {
-    $('#exit-modal .modal-header .title').text($(this).prop('title'));
-    $('#exit-modal .link').text($(this).prop('href'));
-    my_modal.toggle();
-  });
+
 });
