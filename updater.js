@@ -78,6 +78,14 @@ const getCurrentData = async () => {
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         const links_other = JSON.parse(fs.readFileSync(linksOtherPath));
+        const links_other_sorted = {
+            OTHER: links_other.OTHER.sort((a,b) => {
+                a = a.title.toLowerCase();
+                b = b.title.toLowerCase();
+                return a < b ? -1 : a > b ? 1 : 0;
+            })
+        }
+        
         let links = links_af.afpCategorizedLinksDto.links;
         links.OTHER = links_other.OTHER;
         // reformat links to an array, e.g.
