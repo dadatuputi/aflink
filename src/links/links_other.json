@@ -135,6 +135,10 @@
     {
       "title": "MyCare Overseas (Tricare Overseas Referrals)",
       "link": "https://top.my.site.com/beneficiary/BENE_Portal#/home"
+    },
+    {
+      "title": "Tricare Overseas Portal (Claims)",
+      "link": "https://portal.tricare-overseas.com"
     }
   ]
 }
