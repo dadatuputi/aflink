@@ -131,6 +131,10 @@
     {
       "title": "myPay | Leave and Earnings Statements (LES)",
       "link": "https://mypay.dfas.mil/"
+    },
+    {
+      "title": "MyCare Overseas (Tricare Overseas Referrals)",
+      "link": "https://top.my.site.com/beneficiary/BENE_Portal#/home"
     }
   ]
 }
