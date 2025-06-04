@@ -147,6 +147,10 @@
     {
       "title": "vPSC (Virtual Personnel Services Center / PRDA)",
       "link": "https://vpscrba.us.af.mil"
+    },
+    {
+      "title": "STARS RAW (Air National Guard Manning Tool, .mil only)",
+      "link": "https://starsraw2.a1vdc.us.af.mil/"
     }
   ]
 }
