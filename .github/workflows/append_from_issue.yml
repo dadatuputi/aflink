@@ -5,9 +5,43 @@ on:
     types: [closed]
   
 jobs:
-  get_fields:
+
+  check_authorization:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'link request')
+    steps:
+    - name: Check if authorized user closed the issue
+      if: github.event.sender.login == 'dadatuputi'
+      run: |
+        echo "✅ Issue closed by authorized user: ${{ github.event.sender.login }}"
+        echo "AUTHORIZED=true" >> $GITHUB_ENV
+        
+    - name: Add comment if unauthorized user closed issue
+      if: github.event.sender.login != 'dadatuputi'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚫 **Link not added** - This issue was closed by @${{ github.event.sender.login }} but only @dadatuputi can approve link requests.
+            
+            If this link should be added, please have @dadatuputi review and close this issue.`
+          })
+          
+    - name: Stop workflow if unauthorized
+      if: github.event.sender.login != 'dadatuputi'
+      run: |
+        echo "❌ Unauthorized user closed issue. Stopping workflow."
+        exit 0
+        
+  get_fields:
+    runs-on: ubuntu-latest
+    needs: check_authorization
+    if: |
+      contains(github.event.issue.labels.*.name, 'link request') && 
+      github.event.sender.login == 'dadatuputi'
     steps:
     - name: get_fields
       run: |
@@ -21,17 +55,35 @@ jobs:
         echo $URL | tee -a $GITHUB_ENV
       env:
         BODY: ${{ github.event.issue.body }}
+        
     - name: Checkout Repository
       uses: actions/checkout@v2
+      
     - name: Install jq & sponge
       run: |
         sudo apt-get update
         sudo apt-get install --yes jq moreutils
+        
     - name: Add link to end of list
       run: |
-        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" '.OTHER += [{"title": $TITLE,"link": $URL}]' src/links/links_other.json | sponge src/links/links_other.json
-        cat src/links/links_other.json
+        # Generate a UUID for contentId
+        CONTENT_ID=$(uuidgen)
+        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENT_ID "$CONTENT_ID" '.OTHER += [{"title": $TITLE,"link": $URL, "contentId": $CONTENT_ID}]' src/links/links_other.json | sponge src/links/links_other.json
+    
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v7
       with:
         message: Updated links from Issue
+
+    - name: Add success comment
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ **Link added successfully!** 
+            
+            The link "${{ env.TITLE }}" has been added to the site and will be available soon, pending site rebuild.`
+          })
