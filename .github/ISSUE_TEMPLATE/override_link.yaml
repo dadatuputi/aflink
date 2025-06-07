@@ -27,23 +27,23 @@ body:
     id: match
     attributes:
       label: Match String
-      placeholder: AF Portal
+      description: The string to match, depends on Match Method above.
     validations:
       required: true
   - type: input
     id: new_title
     attributes:
       label: Link Title
-      description: A new title for this link
-      placeholder: e.g., AF Portal
+      description: "**At least one of 'Link Title' or 'Link URL' must be provided**"
+      placeholder: AF Portal
     validations:
       required: false
   - type: input
     id: new_url
     attributes:
       label: Link URL
-      description: A jnew URL for this link
-      placeholder: e.g., https://www.my.af.mil
+      description: "**At least one of 'Link Title' or 'Link URL' must be provided**"
+      placeholder: https://www.my.af.mil
     validations:
       required: false
   - type: textarea
