@@ -1,0 +1,159 @@
+name: Override Link from Approved Override Link Request
+
+on:
+  issues:
+    types: [closed]
+  
+jobs:
+
+  check_authorization:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'override request')
+    steps:
+    - name: Check if authorized user closed the issue
+      if: github.event.sender.login == 'dadatuputi'
+      run: |
+        echo "✅ Issue closed by authorized user: ${{ github.event.sender.login }}"
+        echo "AUTHORIZED=true" >> $GITHUB_ENV
+        
+    - name: Add comment if unauthorized user closed issue
+      if: github.event.sender.login != 'dadatuputi'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚫 **Link not overidden** - This issue was closed by @${{ github.event.sender.login }} but only @dadatuputi can approve link override requests.
+            
+            If this link should be overidden, please have @dadatuputi review and close this issue.`
+          })
+          
+    - name: Stop workflow if unauthorized
+      if: github.event.sender.login != 'dadatuputi'
+      run: |
+        echo "❌ Unauthorized user closed issue. Stopping workflow."
+        exit 0
+        
+  get_fields:
+    runs-on: ubuntu-latest
+    needs: check_authorization
+    if: |
+      contains(github.event.issue.labels.*.name, 'link request') && 
+      github.event.sender.login == 'dadatuputi'
+    steps:
+    - name: get_fields
+      run: |
+        # Parse the override issue body format
+        MATCH_METHOD=$(echo "$BODY" | grep -A1 "### Override Match Method" | tail -n1 | xargs)
+        MATCH_STRING=$(echo "$BODY" | grep -A1 "### Match String" | tail -n1 | xargs)
+        NEW_TITLE=$(echo "$BODY" | grep -A1 "### Link Title" | tail -n1 | xargs)
+        NEW_URL=$(echo "$BODY" | grep -A1 "### Link URL" | tail -n1 | xargs)
+
+        # Validate required fields
+        if [[ -z "$MATCH_METHOD" ]]; then
+          echo "VALIDATION_ERROR=Missing match method" >> $GITHUB_ENV
+          exit 1
+        fi
+        
+        if [[ -z "$MATCH_STRING" ]]; then
+          echo "VALIDATION_ERROR=Missing match string" >> $GITHUB_ENV
+          exit 1
+        fi
+        
+        # Validate at least one of new_title or new_url is provided
+        if [[ -z "$NEW_TITLE" && -z "$NEW_URL" ]]; then
+          echo "VALIDATION_ERROR=At least one of 'Link Title' or 'Link URL' must be provided" >> $GITHUB_ENV
+          exit 1
+        fi
+
+        # Handle empty values (convert to null for JSON)
+        [[ -z "$NEW_TITLE" ]] && NEW_TITLE="null" || NEW_TITLE="\"$NEW_TITLE\""
+        [[ -z "$NEW_URL" ]] && NEW_URL="null" || NEW_URL="\"$NEW_URL\""
+        
+        # Export to environment
+        echo "MATCH_METHOD=$MATCH_METHOD" >> $GITHUB_ENV
+        echo "MATCH_STRING=$MATCH_STRING" >> $GITHUB_ENV
+        echo "NEW_TITLE=$NEW_TITLE" >> $GITHUB_ENV
+        echo "NEW_URL=$NEW_URL" >> $GITHUB_ENV
+
+        echo "✅ Parsed values:"
+        echo "  Match Method: $MATCH_METHOD"
+        echo "  Match String: $MATCH_STRING"
+        echo "  New Title: $NEW_TITLE"
+        echo "  New URL: $NEW_URL"
+        
+      env:
+        BODY: ${{ github.event.issue.body }}
+
+    - name: Add validation error comment
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `❌ **Override request failed validation**
+            
+            **Error:** ${{ env.VALIDATION_ERROR || 'Unknown validation error' }}
+            
+            Please check your issue form and ensure all required fields are completed correctly. At least one of 'Link Title' or 'Link URL' must be provided.
+            
+            You can edit this issue and close it again once the problems are fixed.`
+          })
+          
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: Install jq & sponge
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes jq moreutils
+        
+    - name: Add override to file
+      run: |
+        # Generate a UUID for the override entry
+        OVERRIDE_ID=$(uuidgen)
+        
+        # Add override entry to flat JSON array (handle null values properly)
+        jq --arg MATCH_METHOD "${{ env.MATCH_METHOD }}" \
+           --arg MATCH_STRING "${{ env.MATCH_STRING }}" \
+           --argjson NEW_TITLE "${{ env.NEW_TITLE }}" \
+           --argjson NEW_URL "${{ env.NEW_URL }}" \
+           --arg OVERRIDE_ID "$OVERRIDE_ID" \
+           '. += [{
+             "id": $OVERRIDE_ID,
+             "match_method": $MATCH_METHOD,
+             "match": $MATCH_STRING,
+             "new_title": $NEW_TITLE,
+             "new_url": $NEW_URL
+           }]' src/links/links_override.json | sponge src/links/links_override.json
+        
+        echo "✅ Override added to links_override.json"
+        
+    - name: Commit New Changes
+      uses: EndBug/add-and-commit@v9
+      with:
+        message: Updated links from Issue
+        
+    - name: Add success comment
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ **Override added successfully!** 
+            
+            The override for "${{ env.MATCH_STRING }}" → "${{ env.NEW_TITLE }}" has been added and will be active on the next site deployment.
+            
+            **Override Details:**
+            - Match Method: ${{ env.MATCH_METHOD }}
+            - Match String: ${{ env.MATCH_STRING }}
+            - New Title: ${{ env.NEW_TITLE }}
+            - New URL: ${{ env.NEW_URL }}`
+          })
