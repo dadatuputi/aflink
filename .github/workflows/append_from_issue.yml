@@ -57,7 +57,7 @@ jobs:
         BODY: ${{ github.event.issue.body }}
         
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Install jq & sponge
       run: |
@@ -71,7 +71,7 @@ jobs:
         jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENT_ID "$CONTENT_ID" '.OTHER += [{"title": $TITLE,"link": $URL, "contentId": $CONTENT_ID}]' src/links/links_other.json | sponge src/links/links_other.json
     
     - name: Commit New Changes
-      uses: EndBug/add-and-commit@v7
+      uses: EndBug/add-and-commit@v9
       with:
         message: Updated links from Issue
 
