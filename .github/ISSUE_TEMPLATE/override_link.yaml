@@ -11,14 +11,14 @@ body:
       label: Override Match Method
       description: >
         How to match this override to the original link:
+        ContentID: Match this ContentID to target ContentID (unique to link)
         Title: Match this title to target link title
         URL: Match this URL to target link URL
-        ContentID: Match this ContentID to target ContentID (only visible in HTML)
         Fuzzy Title: Partially match this title to target link title
       options:
+        - ContentID
         - Title
         - URL
-        - ContentID
         - Fuzzy Title
       default: 0
     validations:
