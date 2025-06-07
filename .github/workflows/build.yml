@@ -34,6 +34,21 @@ env:
   DOCS_DIR: docs
 
 jobs:
+
+  # Only run if the triggering workflow was successful AND made changes
+  check_trigger:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    outputs:
+      should_build: ${{ steps.check.outputs.should_build }}
+    steps:
+    - name: Check if workflow actually did work
+      id: check
+      run: |
+        echo "Triggered by: ${{ github.event.workflow_run.name }}"
+        echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+        echo "should_build=true" >> $GITHUB_OUTPUT
+
   # Build site with pug
   pug:
     name: Pug Build
