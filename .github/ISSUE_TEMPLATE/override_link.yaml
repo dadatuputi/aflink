@@ -31,18 +31,18 @@ body:
     validations:
       required: true
   - type: input
-    id: title
+    id: new_title
     attributes:
       label: Link Title
-      description: A short, descriptive title for the link
+      description: A new title for this link
       placeholder: e.g., AF Portal
     validations:
       required: false
   - type: input
-    id: url
+    id: new_url
     attributes:
       label: Link URL
-      description: The complete link URL
+      description: A jnew URL for this link
       placeholder: e.g., https://www.my.af.mil
     validations:
       required: false
