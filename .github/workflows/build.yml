@@ -53,6 +53,7 @@ jobs:
   pug:
     name: Pug Build
     runs-on: ubuntu-latest
+    needs: check_trigger
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
