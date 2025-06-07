@@ -1,0 +1,56 @@
+name: Override Link
+description: Submit a request to override an existing link
+title: "[Override Request]: "
+labels: ["override request"]
+assignees:
+  - dadatuputi
+body:
+  - type: dropdown
+    id: match_method
+    attributes:
+      label: Override Match Method
+      description: >
+        How to match this override to the original link:
+        Title: Match this title to target link title
+        URL: Match this URL to target link URL
+        ContentID: Match this ContentID to target ContentID (only visible in HTML)
+        Fuzzy Title: Partially match this title to target link title
+      options:
+        - Title
+        - URL
+        - ContentID
+        - Fuzzy Title
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: match
+    attributes:
+      label: Match String
+      placeholder: AF Portal
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: Link Title
+      description: A short, descriptive title for the link
+      placeholder: e.g., AF Portal
+    validations:
+      required: false
+  - type: input
+    id: url
+    attributes:
+      label: Link URL
+      description: The complete link URL
+      placeholder: e.g., https://www.my.af.mil
+    validations:
+      required: false
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: A comment about the override and a reason why it should be added.
+    validations:
+      required: false
+  
