@@ -1,7 +1,7 @@
 name: Override Link
 description: Submit a request to override an existing link
 title: "[Override Request]: "
-labels: ["override request"]
+labels: ["override link"]
 assignees:
   - dadatuputi
 body:
