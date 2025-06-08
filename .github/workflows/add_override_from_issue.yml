@@ -39,9 +39,6 @@ jobs:
   get_fields:
     runs-on: ubuntu-latest
     needs: check_authorization
-    if: |
-      contains(github.event.issue.labels.*.name, 'link request') && 
-      github.event.sender.login == 'dadatuputi'
     steps:
     - name: get_fields
       run: |
