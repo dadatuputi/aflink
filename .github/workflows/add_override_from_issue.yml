@@ -43,10 +43,10 @@ jobs:
     - name: get_fields
       run: |
         # Parse the override issue body format
-        MATCH_METHOD=$(echo "$BODY" | grep -A1 "### Override Match Method" | tail -n1 | xargs)
-        MATCH_STRING=$(echo "$BODY" | grep -A1 "### Match String" | tail -n1 | xargs)
-        NEW_TITLE=$(echo "$BODY" | grep -A1 "### Link Title" | tail -n1 | xargs)
-        NEW_URL=$(echo "$BODY" | grep -A1 "### Link URL" | tail -n1 | xargs)
+        MATCH_METHOD=$(echo "$BODY" | grep -A2 "### Override Match Method" | tail -n1 | xargs)
+        MATCH_STRING=$(echo "$BODY" | grep -A2 "### Match String" | tail -n1 | xargs)
+        NEW_TITLE=$(echo "$BODY" | grep -A2 "### Link Title" | tail -n1 | xargs)
+        NEW_URL=$(echo "$BODY" | grep -A2 "### Link URL" | tail -n1 | xargs)
 
         # Validate required fields
         if [[ -z "$MATCH_METHOD" ]]; then
