@@ -9,7 +9,11 @@
   "type": "module",
   "scripts": {
     "build": "NODE_ENV=production node ./updater.js",
-    "dev": "NODE_ENV=development DOCS_DIR=docs node ./updater.js"
+    "dev": "NODE_ENV=development DOCS_DIR=_site node ./updater.js",
+    "serve": "npx serve _site -p 4000",
+    "dev:serve": "npm run dev && npm run serve",
+    "dev:watch": "npm run dev && npx serve _site -p 4000 & npx nodemon --watch src --ext pug,json,js --exec \"npm run dev\"",
+    "host": "npx http-server _site -p 4000 -o"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.12",
@@ -20,7 +24,9 @@
     "jstransformer-clean-css": "^2.1.0",
     "jstransformer-uglify-js": "^1.2.0",
     "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.10",
     "pug": "^3.0.3",
+    "serve": "^14.2.4",
     "sugar-date": "^2.0.6",
     "uglify-js": "^3.19.3"
   },
