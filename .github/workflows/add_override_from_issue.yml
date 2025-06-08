@@ -114,6 +114,22 @@ jobs:
       run: |
         # Generate a UUID for the override entry
         OVERRIDE_ID=$(uuidgen)
+
+        # Handle empty values for jq (use proper JSON)
+        if [[ -z "${{ env.NEW_TITLE }}" || "${{ env.NEW_TITLE }}" == "_No response_" ]]; then
+          NEW_TITLE_JSON="null"
+        else
+          NEW_TITLE_JSON=$(echo "${{ env.NEW_TITLE }}" | jq -R .)
+        fi
+        
+        if [[ -z "${{ env.NEW_URL }}" || "${{ env.NEW_URL }}" == "_No response_" ]]; then
+          NEW_URL_JSON="null"
+        else
+          NEW_URL_JSON=$(echo "${{ env.NEW_URL }}" | jq -R .)
+        fi
+        
+        echo "DEBUG: NEW_TITLE_JSON = $NEW_TITLE_JSON"
+        echo "DEBUG: NEW_URL_JSON = $NEW_URL_JSON"
         
         # Add override entry to flat JSON array (handle null values properly)
         jq --arg MATCH_METHOD "${{ env.MATCH_METHOD }}" \
