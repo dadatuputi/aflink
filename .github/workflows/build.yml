@@ -35,18 +35,21 @@ env:
 
 jobs:
 
-  # Only run if the triggering workflow was successful AND made changes
+  # Only run if manually triggered, push, or workflow was successful
   check_trigger:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     outputs:
       should_build: ${{ steps.check.outputs.should_build }}
     steps:
-    - name: Check if workflow actually did work
+    - name: Always proceed if we got this far
       id: check
       run: |
-        echo "Triggered by: ${{ github.event.workflow_run.name }}"
-        echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+        echo "Event: ${{ github.event_name }}"
+        if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+          echo "Triggered by: ${{ github.event.workflow_run.name }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+        fi
         echo "should_build=true" >> $GITHUB_OUTPUT
 
   # Build site with pug
