@@ -8,7 +8,7 @@ jobs:
 
   check_authorization:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'override request')
+    if: contains(github.event.issue.labels.*.name, 'override link')
     steps:
     - name: Check if authorized user closed the issue
       if: github.event.sender.login == 'dadatuputi'
