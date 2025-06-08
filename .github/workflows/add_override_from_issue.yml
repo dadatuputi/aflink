@@ -5,42 +5,16 @@ on:
     types: [closed]
   
 jobs:
-  debug_always:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Debug all issue information
-      run: |
-        echo "=== ALWAYS DEBUG INFORMATION ==="
-        echo "Event name: ${{ github.event_name }}"
-        echo "Action: ${{ github.event.action }}"
-        echo "Issue labels:"
-        echo '${{ toJSON(github.event.issue.labels) }}'
-        echo ""
-        echo "Label names only:"
-        echo '${{ toJSON(github.event.issue.labels.*.name) }}'
-        echo ""
-        echo "Issue title: ${{ github.event.issue.title }}"
-        echo "Event sender: ${{ github.event.sender.login }}"
-        echo "Issue number: ${{ github.event.issue.number }}"
-        echo "=========================="
 
   check_authorization:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'override request')
     steps:
-    - name: Debug issue information
+    - name: Check if authorized user closed the issue
+      if: github.event.sender.login == 'dadatuputi'
       run: |
-        echo "=== DEBUG INFORMATION ==="
-        echo "Issue labels:"
-        echo '${{ toJSON(github.event.issue.labels) }}'
-        echo ""
-        echo "Label names only:"
-        echo '${{ toJSON(github.event.issue.labels.*.name) }}'
-        echo ""
-        echo "Event sender: ${{ github.event.sender.login }}"
-        echo "Issue number: ${{ github.event.issue.number }}"
-        echo "Issue title: ${{ github.event.issue.title }}"
-        echo "=========================="
+        echo "✅ Issue closed by authorized user: ${{ github.event.sender.login }}"
+        echo "AUTHORIZED=true" >> $GITHUB_ENV
         
     - name: Add comment if unauthorized user closed issue
       if: github.event.sender.login != 'dadatuputi'
