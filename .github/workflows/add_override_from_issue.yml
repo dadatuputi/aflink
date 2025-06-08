@@ -112,7 +112,7 @@ jobs:
         
     - name: Add override to file
       run: |
-        # Generate a UUID for the override entry
+        set -o pipefail
         OVERRIDE_ID=$(uuidgen)
        
         # Add override entry to flat JSON array (handle null values properly)
