@@ -108,7 +108,7 @@ jobs:
     - name: Install jq & sponge
       run: |
         sudo apt-get update
-        sudo apt-get install --yes jq moreutils
+        sudo apt-get install --yes --no-install-recommends jq moreutils
         
     - name: Add override to file
       run: |
@@ -118,8 +118,8 @@ jobs:
         # Add override entry to flat JSON array (handle null values properly)
         jq --arg MATCH_METHOD "${{ env.MATCH_METHOD }}" \
            --arg MATCH_STRING "${{ env.MATCH_STRING }}" \
-           --argjson NEW_TITLE "${{ env.NEW_TITLE }}" \
-           --argjson NEW_URL "${{ env.NEW_URL }}" \
+           --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
+           --arg NEW_URL "${{ env.NEW_URL }}" \
            --arg OVERRIDE_ID "$OVERRIDE_ID" \
            '. += [{
              "id": $OVERRIDE_ID,
