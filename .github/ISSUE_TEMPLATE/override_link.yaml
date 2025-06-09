@@ -1,0 +1,56 @@
+name: Override or Remove Link
+description: Submit a request to override or remove an existing link
+title: "[Override Request]: "
+labels: ["override link"]
+assignees:
+  - dadatuputi
+body:
+  - type: dropdown
+    id: match_method
+    attributes:
+      label: Match Method
+      description: >
+        How to match this override to the original link:
+        ContentID: Match this ContentID to target ContentID (unique to link)
+        Title: Match this title to target link title
+        URL: Match this URL to target link URL
+        Fuzzy Title: Partially match this title to target link title
+      options:
+        - Content ID
+        - Title
+        - URL
+        - Fuzzy Title
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: match
+    attributes:
+      label: Match String
+      description: The string to match, depends on Match Method above.
+    validations:
+      required: true
+  - type: input
+    id: new_title
+    attributes:
+      label: Link Title
+      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
+      placeholder: AF Portal
+    validations:
+      required: false
+  - type: input
+    id: new_url
+    attributes:
+      label: Link URL
+      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
+      placeholder: https://www.my.af.mil
+    validations:
+      required: false
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: A comment about the override and a reason why it should be approved.
+    validations:
+      required: false
+  
