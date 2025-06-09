@@ -125,8 +125,8 @@ jobs:
              "id": $OVERRIDE_ID,
              "match_method": $MATCH_METHOD,
              "match": $MATCH_STRING,
-             "new_title": $NEW_TITLE,
-             "new_url": $NEW_URL
+             "title": $NEW_TITLE,
+             "link": $NEW_URL
            }]' src/links/links_override.json | sponge src/links/links_override.json
         
         echo "✅ Override added to links_override.json"
