@@ -46,7 +46,7 @@ jobs:
         MATCH_METHOD=$(echo "$BODY" | grep -A2 "### Override Match Method" | tail -n1 | xargs)
         MATCH_STRING=$(echo "$BODY" | grep -A2 "### Match String" | tail -n1 | xargs)
         NEW_TITLE=$(echo "$BODY" | grep -A2 "### Link Title" | tail -n1 | xargs)
-        NEW_URL=$(echo "$BODY" | grep -A2 "### Link URL" | tail -n1 | xargs)
+        NEW_LINK=$(echo "$BODY" | grep -A2 "### Link URL" | tail -n1 | xargs)
 
         # Validate required fields
         if [[ -z "$MATCH_METHOD" ]]; then
@@ -59,27 +59,17 @@ jobs:
           exit 1
         fi
         
-        # Validate at least one of new_title or new_url is provided
-        if [[ -z "$NEW_TITLE" && -z "$NEW_URL" ]]; then
-          echo "VALIDATION_ERROR=At least one of 'Link Title' or 'Link URL' must be provided" >> $GITHUB_ENV
-          exit 1
-        fi
-
-        # Handle empty values and "_No response_" (convert to null for JSON)
-        [[ -z "$NEW_TITLE" || "$NEW_TITLE" == "_No response_" ]] && NEW_TITLE="null"
-        [[ -z "$NEW_URL" || "$NEW_URL" == "_No response_" ]] && NEW_URL="null"
-        
         # Export to environment
         echo "MATCH_METHOD=$MATCH_METHOD" >> $GITHUB_ENV
         echo "MATCH_STRING=$MATCH_STRING" >> $GITHUB_ENV
         echo "NEW_TITLE=$NEW_TITLE" >> $GITHUB_ENV
-        echo "NEW_URL=$NEW_URL" >> $GITHUB_ENV
+        echo "NEW_LINK=$NEW_LINK" >> $GITHUB_ENV
 
         echo "✅ Parsed values:"
         echo "  Match Method: $MATCH_METHOD"
         echo "  Match String: $MATCH_STRING"
         echo "  New Title: $NEW_TITLE"
-        echo "  New URL: $NEW_URL"
+        echo "  New URL: $NEW_LINK"
         
       env:
         BODY: ${{ github.event.issue.body }}
@@ -119,14 +109,14 @@ jobs:
         jq --arg MATCH_METHOD "${{ env.MATCH_METHOD }}" \
            --arg MATCH_STRING "${{ env.MATCH_STRING }}" \
            --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
-           --arg NEW_URL "${{ env.NEW_URL }}" \
+           --arg NEW_LINK "${{ env.NEW_LINK }}" \
            --arg OVERRIDE_ID "$OVERRIDE_ID" \
            '. += [{
              "id": $OVERRIDE_ID,
              "match_method": $MATCH_METHOD,
              "match": $MATCH_STRING,
-             "title": $NEW_TITLE,
-             "link": $NEW_URL
+             "title": (if $NEW_TITLE == "" or $NEW_TITLE == "null" or $NEW_TITLE == "_No response_" then null else $NEW_TITLE end),
+             "link": (if $NEW_LINK == "" or $NEW_LINK == "null" or $NEW_LINK == "_No response_" then null else $NEW_LINK end)
            }]' src/links/links_override.json | sponge src/links/links_override.json
         
         echo "✅ Override added to links_override.json"
@@ -152,5 +142,5 @@ jobs:
             - Match Method: ${{ env.MATCH_METHOD }}
             - Match String: ${{ env.MATCH_STRING }}
             - New Title: ${{ env.NEW_TITLE }}
-            - New URL: ${{ env.NEW_URL }}`
+            - New URL: ${{ env.NEW_LINK }}`
           })
