@@ -19,7 +19,7 @@ jobs:
         echo "Issue body: ${{ github.event.client_payload.issue_body }}"
          
         # Parse the override issue body format
-        MATCH_METHOD=$(echo "$BODY" | grep -A2 "### Override Match Method" | tail -n1 | xargs)
+        MATCH_METHOD=$(echo "$BODY" | grep -A2 "### Match Method" | tail -n1 | xargs)
         MATCH_STRING=$(echo "$BODY" | grep -A2 "### Match String" | tail -n1 | xargs)
         NEW_TITLE=$(echo "$BODY" | grep -A2 "### Link Title" | tail -n1 | xargs)
         NEW_LINK=$(echo "$BODY" | grep -A2 "### Link URL" | tail -n1 | xargs)
