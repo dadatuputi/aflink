@@ -16,7 +16,7 @@ body:
         URL: Match this URL to target link URL
         Fuzzy Title: Partially match this title to target link title
       options:
-        - ContentID
+        - Content ID
         - Title
         - URL
         - Fuzzy Title
