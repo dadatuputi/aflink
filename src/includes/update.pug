@@ -1,0 +1,40 @@
+section#update.bg-olive-drab.text-center
+  .container
+    h2 Link Requests
+    .row.justify-content-center
+      .col-lg-10
+        p.lead.mb-4 Help maintain this list with the following update requests using a free GitHub account:
+        
+        .row.g-4
+          .col-md-4
+            .card.h-100.bg-dark.text-white.border-secondary
+              .card-body.d-flex.flex-column
+                h5.card-title Add New Link
+                p.card-text.flex-grow-1 Add a link to the OTHER category
+                a(href='https://github.com/dadatuputi/aflink/issues/new?template=01_link_add.yaml').btn.btn-outline-light.mt-auto.d-flex.align-items-center.justify-content-center
+                  img(width='20' src='/static/github.svg' alt='GitHub').me-2
+                  | Submit Request
+          
+          .col-md-4
+            .card.h-100.bg-dark.text-white.border-secondary
+              .card-body.d-flex.flex-column
+                h5.card-title Override Existing Link
+                p.card-text.flex-grow-1 
+                  | Click the 
+                  span.badge.bg-secondary 📝
+                  |  icon when hovering over any existing link to modify its title, URL, or to remove it completely.
+                .text-muted.small.mt-auto
+                  | Available on links pulled from the AF Portal 
+                  br
+                  a.text-reset.text-decoration-none(href='/overrides') View existing overrides
+          
+          .col-md-4
+            .card.h-100.bg-dark.text-white.border-secondary
+              .card-body.d-flex.flex-column
+                h5.card-title Delete Custom Link
+                p.card-text.flex-grow-1 
+                  | Click the 
+                  span.badge.bg-secondary 🗑️
+                  |  icon when hovering over links in the OTHER category to delete them
+                .text-muted.small.mt-auto
+                  | Available on links added to the OTHER category
