@@ -1,0 +1,23 @@
+name: Delete a Link
+description: Submit a request to delete a link
+title: "[LINK]: "
+labels: ["delete link"]
+assignees:
+  - dadatuputi
+body:
+  - type: input
+    id: link_id
+    attributes:
+      label: Link ID
+      description: The unique ID of the link to delete. This can be found in the link's URL or by searching for the link.
+      placeholder: e.g., 1234567890
+    validations:
+      required: true
+  - type: textarea
+    id: comment
+    attributes:
+      label: Comment
+      description: A comment about the link and a reason why it should be deleted.
+    validations:
+      required: false
+  

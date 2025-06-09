@@ -104,3 +104,21 @@ jobs:
               triggered_by: context.actor
             }
           });
+
+    - name: Dispatch workflow - DELETE LINK
+      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'delete link')
+      env:
+        BODY: ${{ github.event.issue.body }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'link_delete',
+            client_payload: {
+              original_issue: context.issue.number,
+              issue_body: process.env.BODY,
+              triggered_by: context.actor
+            }
+          });

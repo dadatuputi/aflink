@@ -36,7 +36,7 @@ html.bg-spice-brown(lang='en')
             each link in category.links
               .list-group-item.list-group-item-action.border-top.link-container
                 a.main-link(href=link.link class={'overridden': link.isOverridden} title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
-                a.correction-link(target="_blank" title="Submit a correction" href=link.correction) 📝
+                a.correction-link(target="_blank" title=(category.name === 'OTHER' ? "Delete link" : "Submit a correction") href=link.correction) #{category.name === 'OTHER' ? '🗑️' : '📝'}
       p.alert-dark(hidden) No results for 
         em
   section#about.bg-olive-drab.text-center
@@ -51,9 +51,9 @@ html.bg-spice-brown(lang='en')
       .lead.d-flex.justify-content-center.align-items-center
         p.m-0
           | If you want to add a link, 
-          a(href='https://github.com/dadatuputi/aflink/issues/new?template=request_link.yaml').text-decoration-none.text-reset
+          a(href='https://github.com/dadatuputi/aflink/issues/new?template=01_link_add.yaml').text-decoration-none.text-reset
             | submit one through GitHub: 
-        a(href='https://github.com/dadatuputi/aflink/issues/new?template=request_link.yaml').ps-4.d-flex.align-items-center
+        a(href='https://github.com/dadatuputi/aflink/issues/new?template=01_link_add.yaml').ps-4.d-flex.align-items-center
           img(width='48' src='/static/github.svg' alt='GitHub')
   section#footer.bg-spice-brown.py-1
     .row
