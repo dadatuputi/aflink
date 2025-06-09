@@ -6,7 +6,7 @@ html.bg-spice-brown(lang='en')
   //- Navigation
   +navigation
     a.nav-link(href='#about') About
-    a.nav-link(href='#add') Add Link
+    a.nav-link(href='#update') Update Links
     a.nav-link(href='/tutorial') Tutorial
 
 
@@ -29,14 +29,16 @@ html.bg-spice-brown(lang='en')
       div#link-list.list-group
         //- Links json is expanded here
         each category in links
-          div.list-group
-            //- Put a category here
-            div.list-group-item.list-group-item-action.border-top.disabled.category #{category.name}
-            //- Put each link in the category here
-            each link in category.links
-              .list-group-item.list-group-item-action.border-top.link-container
-                a.main-link(href=link.link class={'overridden': link.isOverridden} title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
-                a.correction-link(target="_blank" title=(category.name === 'OTHER' ? "Delete link" : "Submit a correction") href=link.correction) #{category.name === 'OTHER' ? '🗑️' : '📝'}
+          - var links_not_deleted = category.links.filter(link => !link.isDeleted)
+          if links_not_deleted.length > 0
+            div.list-group
+              //- Put a category here
+              div.list-group-item.list-group-item-action.border-top.disabled.category #{category.name}
+              //- Put each link in the category here
+              each link in links_not_deleted
+                .list-group-item.list-group-item-action.border-top.link-container
+                  a.main-link(href=link.link class={'overridden': link.isOverridden} title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
+                  a.correction-link(target="_blank" title=(category.name === 'OTHER' ? "Delete link" : "Submit a correction") href=link.correction) #{category.name === 'OTHER' ? '🗑️' : '📝'}
       p.alert-dark(hidden) No results for 
         em
   section#about.bg-olive-drab.text-center
@@ -45,16 +47,9 @@ html.bg-spice-brown(lang='en')
       p.lead
         | These links are mirrored from the USAF Quick Links page to be 
         | quickly and easily accessible from anywhere
-  section#add.bg-olive-drab.text-center
-    .container
-      h2 Request Link Addition
-      .lead.d-flex.justify-content-center.align-items-center
-        p.m-0
-          | If you want to add a link, 
-          a(href='https://github.com/dadatuputi/aflink/issues/new?template=01_link_add.yaml').text-decoration-none.text-reset
-            | submit one through GitHub: 
-        a(href='https://github.com/dadatuputi/aflink/issues/new?template=01_link_add.yaml').ps-4.d-flex.align-items-center
-          img(width='48' src='/static/github.svg' alt='GitHub')
+
+  include includes/update.pug
+
   section#footer.bg-spice-brown.py-1
     .row
       .col

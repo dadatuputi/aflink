@@ -1,6 +1,6 @@
 name: Delete a Link
 description: Submit a request to delete a link
-title: "[LINK]: "
+title: "[DELETE]: "
 labels: ["delete link"]
 assignees:
   - dadatuputi

@@ -125,28 +125,22 @@ async function getNewestDate(files) {
                     console.log(`Found override for link: ${links[category][linkIndex].title} (${links[category][linkIndex].link}) in category: ${category}`);
                     const originalLink = links[category][linkIndex];
 
-                    // If no title or url provided in override, completely remove the link
-                    if (!override.title && !override.link) {
-                        console.log(`Removing link: ${originalLink.title} (${originalLink.link}) from category: ${category}`);
-                        links[category].splice(linkIndex, 1); // Remove the link
-                    } else {
-                        
-                        links[category][linkIndex] = {
-                            title: override.title || originalLink.title, // Use override title if provided, otherwise keep original
-                            link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
-                            isOverridden: true,
-                            overridden: [override.title? originalLink.title: null, override.link? originalLink.link: null].filter(Boolean).join(', ') , // Preserve originals
-                            overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
-                            // Preserve other AF link properties
-                            originalTitle: originalLink.title,
-                            originalLink: originalLink.link,
-                            type: originalLink.type,
-                            contentId: originalLink.contentId,
-                            exitLinkReferrer: originalLink.exitLinkReferrer,
-                            renderedAsFile: originalLink.renderedAsFile,
-                            url: originalLink.url
-                        };
-                    }
+                    links[category][linkIndex] = {
+                        title: override.title || originalLink.title, // Use override title if provided, otherwise keep original
+                        link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
+                        isDeleted: !override.title && !override.link, // If neither title nor link is provided, mark as deleted
+                        isOverridden: true,
+                        overridden: [override.title? originalLink.title: null, override.link? originalLink.link: null].filter(Boolean).join(', ') , // Preserve originals
+                        overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
+                        // Preserve other AF link properties
+                        originalTitle: originalLink.title,
+                        originalLink: originalLink.link,
+                        type: originalLink.type,
+                        contentId: originalLink.contentId,
+                        exitLinkReferrer: originalLink.exitLinkReferrer,
+                        renderedAsFile: originalLink.renderedAsFile,
+                        url: originalLink.url
+                    };
 
                     override_count++;
                     break; // Exit the loop once we found a match
@@ -174,6 +168,7 @@ async function getNewestDate(files) {
                 const url = new URL(correctionTemplateURL);
                 if (category.name === 'OTHER') {
                     url.searchParams.append('template', '03_link_delete.yaml');
+                    url.searchParams.append('title', `[DELETE]: ${link.title}`);
                     url.searchParams.append('link_id', link.contentId);
                 } else {
                     url.searchParams.append('template', '02_link_override.yaml');
