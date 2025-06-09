@@ -4,3 +4,11 @@ script
   include js/bootstrap.bundle.5.2.3.min.js
 script 
   include:uglify-js js/search.js
+//- Google tag (gtag.js)
+script(async src="https://www.googletagmanager.com/gtag/js?id=G-M8SEVTFLFK")
+script.
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  
+  gtag('config', 'G-M8SEVTFLFK');
