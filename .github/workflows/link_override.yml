@@ -109,8 +109,8 @@ jobs:
       with:
         script: |
           github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
+            issue_number: github.event.client_payload.original_issue,
+            owner: github.event.client_payload.triggered_by,
             repo: context.repo.repo,
             body: `✅ **Override added successfully!** 
             
