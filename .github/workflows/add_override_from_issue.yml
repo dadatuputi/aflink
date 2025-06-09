@@ -116,7 +116,8 @@ jobs:
              "match_method": $MATCH_METHOD,
              "match": $MATCH_STRING,
              "title": (if $NEW_TITLE == "" or $NEW_TITLE == "null" or $NEW_TITLE == "_No response_" then null else $NEW_TITLE end),
-             "link": (if $NEW_LINK == "" or $NEW_LINK == "null" or $NEW_LINK == "_No response_" then null else $NEW_LINK end)
+             "link": (if $NEW_LINK == "" or $NEW_LINK == "null" or $NEW_LINK == "_No response_" then null else $NEW_LINK end),
+             "timestamp": now
            }]' src/links/links_override.json | sponge src/links/links_override.json
         
         echo "✅ Override added to links_override.json"
