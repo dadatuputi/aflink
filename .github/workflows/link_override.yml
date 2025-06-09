@@ -1,4 +1,4 @@
-name: Override Link from Approved Override Link Request
+name: Link Override from Issue
 
 on:
   repository_dispatch:
