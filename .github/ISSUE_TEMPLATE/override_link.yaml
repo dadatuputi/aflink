@@ -19,7 +19,7 @@ body:
         - ContentID
         - Title
         - URL
-        - Fuzzy Title
+        - Fuzzy
       default: 0
     validations:
       required: true
