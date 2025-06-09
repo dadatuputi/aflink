@@ -1,7 +1,7 @@
 name: Add a Link
 description: Submit a request to add a link
 title: "[LINK]: "
-labels: ["add link"]
+labels: ["add link", "workflow"]
 assignees:
   - dadatuputi
 body:

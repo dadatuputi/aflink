@@ -1,7 +1,7 @@
 name: Delete a Link
 description: Submit a request to delete a link
 title: "[DELETE]: "
-labels: ["delete link"]
+labels: ["delete link", "workflow"]
 assignees:
   - dadatuputi
 body:
