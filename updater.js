@@ -168,15 +168,22 @@ async function getNewestDate(files) {
         });
 
         // Add correction url to each link
-        const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new?template=override_link.yaml"
+        const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new"
         links.forEach(category => {
             category.links.forEach(link => {
                 const url = new URL(correctionTemplateURL);
-                url.searchParams.append('title', `[Override Request]: ${link.title}`);
-                url.searchParams.append('match_method', 'ContentID');   // Can't actually use parameters to populate dropdown
-                url.searchParams.append('match', link.contentId);
-                // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
-                // url.searchParams.append('new_url', link.link);
+                if (category.name === 'OTHER') {
+                    url.searchParams.append('template', '03_link_delete.yaml');
+                    url.searchParams.append('link_id', link.contentId);
+                } else {
+                    url.searchParams.append('template', '02_link_override.yaml');
+                    url.searchParams.append('title', `[Override Request]: ${link.title}`);
+                    url.searchParams.append('match_method', 'ContentID');   // Can't actually use parameters to populate dropdown
+                    url.searchParams.append('match', link.contentId);
+                    // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
+                    // url.searchParams.append('new_url', link.link);
+                }
+
                 link.correction = url.toString();
             });
         });

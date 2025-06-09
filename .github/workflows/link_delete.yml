@@ -1,0 +1,106 @@
+name: Link Delete from Issue
+
+on:
+  repository_dispatch:
+    types: [link_delete]
+  
+jobs:
+  delete_link:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: parse_fields
+      env:
+        BODY: ${{ github.event.client_payload.issue_body }}
+      run: |
+
+        echo "Original issue: ${{ github.event.client_payload.original_issue }}"
+        echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
+        echo "Issue body: ${{ github.event.client_payload.issue_body }}"
+
+        # Parse the override issue body format
+        LINK_ID=$(echo "$BODY" | grep -A2 "### Link ID" | tail -n1 | xargs)
+
+        if [ -z "$LINK_ID" ]; then
+          echo "Error: LINK_ID not found in issue body"
+          exit 1
+        fi
+
+        echo "LINK_ID=$LINK_ID" >> $GITHUB_ENV
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Install jq & sponge
+      run: |
+        # Skip installing pacakge docs {makes the man-db trigger much faster) 
+        # (I disabled `/doc` and `/info` too, just in case.)
+        sudo tee /etc/dpkg/dpkg.cfg.d/01_nodoc > /dev/null << 'EOF'
+        path-exclude /usr/share/doc/*
+        path-exclude /usr/share/man/*
+        path-exclude /usr/share/info/*
+        EOF
+
+        sudo apt-get update
+        sudo apt-get install --yes jq moreutils
+
+    - name: Add link to end of list
+      run: |
+        BEFORE_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
+
+        jq -r --arg LINK_ID "${{ env.LINK_ID }}" '.OTHER |= map(select(.contentId != $LINK_ID))' src/links/links_other.json | sponge src/links/links_other.json
+
+        AFTER_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
+
+        if [ "$BEFORE_COUNT" -eq "$AFTER_COUNT" ]; then
+          echo "Warning: No items were removed. LINK_ID '${{ env.LINK_ID }}' may not exist."
+          exit 1
+        else
+          echo "Successfully removed 1 item. Count: $BEFORE_COUNT -> $AFTER_COUNT"
+        fi
+
+        cat src/links/links_other.json
+
+    - name: Add failure comment
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: ❌ Failed to remove link with ID `${{ env.LINK_ID }}` - it may not exist in the list.'
+          })
+
+    - name: Commit New Changes
+      uses: EndBug/add-and-commit@v7
+      with:
+        message: Updated links from Issue
+
+    - name: Trigger next workflow
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'build',
+            client_payload: {
+              commit_sha: context.sha,
+              message: 'Updated links from Issue'
+            }
+          });
+
+    - name: Add success comment
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ **Link deleted successfully!** 
+            
+            The link has been deleted and will be removed on the next site deployment.
+          })
