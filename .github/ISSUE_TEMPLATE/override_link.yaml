@@ -1,5 +1,5 @@
-name: Override Link
-description: Submit a request to override an existing link
+name: Override or Remove Link
+description: Submit a request to override or remove an existing link
 title: "[Override Request]: "
 labels: ["override link"]
 assignees:
@@ -8,7 +8,7 @@ body:
   - type: dropdown
     id: match_method
     attributes:
-      label: Override Match Method
+      label: Match Method
       description: >
         How to match this override to the original link:
         ContentID: Match this ContentID to target ContentID (unique to link)
@@ -34,7 +34,7 @@ body:
     id: new_title
     attributes:
       label: Link Title
-      description: "**At least one of 'Link Title' or 'Link URL' must be provided**"
+      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
       placeholder: AF Portal
     validations:
       required: false
@@ -42,7 +42,7 @@ body:
     id: new_url
     attributes:
       label: Link URL
-      description: "**At least one of 'Link Title' or 'Link URL' must be provided**"
+      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
       placeholder: https://www.my.af.mil
     validations:
       required: false
@@ -50,7 +50,7 @@ body:
     id: comment
     attributes:
       label: Comment
-      description: A comment about the override and a reason why it should be added.
+      description: A comment about the override and a reason why it should be approved.
     validations:
       required: false
   
