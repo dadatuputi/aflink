@@ -1,47 +1,23 @@
 name: Override Link from Approved Override Link Request
 
 on:
-  issues:
-    types: [closed]
+  repository_dispatch:
+    types: [link_override]
   
 jobs:
+  override_link:
+    runs-on: ubuntu-latest
+    steps:
+      
+    - name: parse_fields
+      env:
+        BODY: ${{ github.event.client_payload.issue_body }}
+      run: |
 
-  check_authorization:
-    runs-on: ubuntu-latest
-    if: contains(github.event.issue.labels.*.name, 'override link')
-    steps:
-    - name: Check if authorized user closed the issue
-      if: github.event.sender.login == 'dadatuputi'
-      run: |
-        echo "✅ Issue closed by authorized user: ${{ github.event.sender.login }}"
-        echo "AUTHORIZED=true" >> $GITHUB_ENV
-        
-    - name: Add comment if unauthorized user closed issue
-      if: github.event.sender.login != 'dadatuputi'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `🚫 **Link not overidden** - This issue was closed by @${{ github.event.sender.login }} but only @dadatuputi can approve link override requests.
-            
-            If this link should be overidden, please have @dadatuputi review and close this issue.`
-          })
-          
-    - name: Stop workflow if unauthorized
-      if: github.event.sender.login != 'dadatuputi'
-      run: |
-        echo "❌ Unauthorized user closed issue. Stopping workflow."
-        exit 0
-        
-  get_fields:
-    runs-on: ubuntu-latest
-    needs: check_authorization
-    steps:
-    - name: get_fields
-      run: |
+        echo "Original issue: ${{ github.event.client_payload.original_issue }}"
+        echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
+        echo "Issue body: ${{ github.event.client_payload.issue_body }}"
+         
         # Parse the override issue body format
         MATCH_METHOD=$(echo "$BODY" | grep -A2 "### Override Match Method" | tail -n1 | xargs)
         MATCH_STRING=$(echo "$BODY" | grep -A2 "### Match String" | tail -n1 | xargs)
@@ -70,35 +46,22 @@ jobs:
         echo "  Match String: $MATCH_STRING"
         echo "  New Title: $NEW_TITLE"
         echo "  New URL: $NEW_LINK"
-        
-      env:
-        BODY: ${{ github.event.issue.body }}
-
-    - name: Add validation error comment
-      if: failure()
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `❌ **Override request failed validation**
-            
-            **Error:** ${{ env.VALIDATION_ERROR || 'Unknown validation error' }}
-            
-            Please check your issue form and ensure all required fields are completed correctly. At least one of 'Link Title' or 'Link URL' must be provided.
-            
-            You can edit this issue and close it again once the problems are fixed.`
-          })
           
     - name: Checkout Repository
       uses: actions/checkout@v4
-      
+
     - name: Install jq & sponge
       run: |
+        # Skip installing pacakge docs {makes the man-db trigger much faster) 
+        # (I disabled `/doc` and `/info` too, just in case.)
+        sudo tee /etc/dpkg/dpkg.cfg.d/01_nodoc > /dev/null << 'EOF'
+        path-exclude /usr/share/doc/*
+        path-exclude /usr/share/man/*
+        path-exclude /usr/share/info/*
+        EOF
+
         sudo apt-get update
-        sudo apt-get install --yes --no-install-recommends jq moreutils
+        sudo apt-get install --yes jq moreutils
         
     - name: Add override to file
       run: |
@@ -126,6 +89,20 @@ jobs:
       uses: EndBug/add-and-commit@v9
       with:
         message: Updated links from Issue
+
+    - name: Trigger next workflow
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'build',
+            client_payload: {
+              commit_sha: context.sha,
+              message: 'Updated links from Issue'
+            }
+          });
         
     - name: Add success comment
       uses: actions/github-script@v6
@@ -137,7 +114,7 @@ jobs:
             repo: context.repo.repo,
             body: `✅ **Override added successfully!** 
             
-            The override for "${{ env.MATCH_STRING }}" → "${{ env.NEW_TITLE }}" has been added and will be active on the next site deployment.
+            The override for "${{ env.MATCH_STRING }}" has been added and will be active on the next site deployment.
             
             **Override Details:**
             - Match Method: ${{ env.MATCH_METHOD }}

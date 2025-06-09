@@ -11,12 +11,8 @@ on:
       - '.git/**'
     branches: ["master"]
   workflow_dispatch:
-  workflow_run:
-    workflows: 
-      - "Append Link from Approved Link Request"
-      - "Update AF Links from Approved Issue"
-    types:
-      - completed
+  repository_dispatch:
+    types: [add_link]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
