@@ -31,6 +31,10 @@ ul {
 
 .modal-header .link {
   font-size: .75rem !important;
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .offcenter {
@@ -43,4 +47,61 @@ ul {
   right: 0;
   transform: translateY(-25%);
   color: #ffffffad
+}
+
+/* Correction link styling */
+.link-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.main-link {
+  flex: 1;
+  padding: 0.75rem 1.25rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.main-link:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+.correction-link {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Show correction link on hover of the container */
+.link-container:hover .correction-link {
+  opacity: 1;
+}
+
+.correction-link:hover {
+  transform: scale(1.1);
+  color: #333;
+}
+
+/* Hide correction links when JavaScript is disabled */
+.no-js .correction-link {
+  display: none;
+}
+
+.overridden {
+  text-decoration: underline dotted #ff0000 1px;
 }

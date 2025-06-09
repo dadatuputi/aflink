@@ -27,15 +27,15 @@ $(document).ready(function () {
 
   // Filter links based on search query
   $("#search-form").on(
-    "change keyup paste mouseup search",
+    "change keyup paste search",
     function (event) {
       var value = $(this).val().toLowerCase();
       
       // Hide everything
-      $('#link-list a, #link-list .category').toggle(false);
+      $('#link-list .category, #link-list .link-container').toggle(false);
       // Show links that contain text
-      var links = $('#link-list a').filter(function(){
-        return $(this).text().toLowerCase().indexOf(value) > -1;
+      var links = $('#link-list .link-container').filter(function(){
+        return $(this).find('a:first-child').text().toLowerCase().indexOf(value) > -1;
       })
       // Go to first link if autocomplete
       if (autocompleted && links[0]) {

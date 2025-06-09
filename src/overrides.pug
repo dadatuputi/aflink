@@ -1,0 +1,71 @@
+doctype html
+html.bg-spice-brown(lang='en')
+
+  include includes/head.pug
+
+  //- Navigation
+  +navigation
+    a.nav-link(href='#about') About
+    a.nav-link(href='#add') Add Link
+    a.nav-link(href='../tutorial') Tutorial
+
+  //- Page Content
+  section#list.bg-sage.text-center
+    .container
+      .offcenter
+        h2 Active Link Overrides
+        em.d-none.d-md-block Updated #{override_date}
+      
+      - var overrideCount = 0
+      each category in links
+        - var categoryOverrides = category.links.filter(link => link.isOverridden)
+        if categoryOverrides.length > 0
+          - overrideCount += categoryOverrides.length
+          
+      if overrideCount > 0
+        p #{overrideCount} override#{overrideCount !== 1 ? 's' : ''} currently active
+        
+        div#link-list.list-group
+          //- Show only categories that have overridden links
+          each category in links
+            - var categoryOverrides = category.links.filter(link => link.isOverridden)
+            if categoryOverrides.length > 0
+              div.list-group
+                //- Category header
+                div.list-group-item.list-group-item-action.border-top.disabled.category #{category.name}
+                //- Only show overridden links in this category
+                each link in categoryOverrides
+                    .list-group-item.list-group-item-action.border-top.link-container
+                        .col
+                            .overridden-title #{link.originalTitle}
+                            .overridden-link.small.text-muted.font-italic #{link.originalLink}
+                        .col-1.text-center
+                            | →
+                            .overridden-date.small.text-muted.font-italic #{link.overriddenTimestamp}
+                        .col
+                            .overridden-title #{link.title}
+                            .overridden-link.small.text-muted.font-italic #{link.link}
+
+      else
+        .no-overrides.alert.alert-info
+          p No overrides are currently active.
+          p All links are showing their original Air Force portal values.
+
+  section#about.bg-olive-drab.text-center
+    .container
+      h2 About
+      p.lead
+        | This list shows active link overrides for the Air Force portal. Sometimes the USAF is slow to update broken or bad links, so they can be overridden.
+  section#add.bg-olive-drab.text-center
+    .container
+      h2 Request Override or Deletion
+      .lead.d-flex.justify-content-center.align-items-center
+        p.m-0
+          | If you want to override a link, hover over a link in the main list and click on the 📝 icon to submit a correction.
+          | If you want to request a link deletion, make sure to not include a new link or title in your request.
+          | To submit directly, go to GitHub:
+        a(href='https://github.com/dadatuputi/aflink/issues/new?template=override_link.yaml').ps-4.d-flex.align-items-center
+          img(width='48' src='/static/github.svg' alt='GitHub')
+  section#footer.bg-spice-brown.py-1.text-end
+  
+  include includes/foot.pug

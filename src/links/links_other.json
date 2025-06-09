@@ -2,155 +2,193 @@
   "OTHER": [
     {
       "title": "myEval (myFSS)",
-      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-evaluation-management"
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-evaluation-management",
+      "contentId": "05dddf39-d01b-4f78-86e0-fea3346c1ce9"
     },
     {
       "title": "milSuite",
-      "link": "https://www.milsuite.mil"
+      "link": "https://www.milsuite.mil",
+      "contentId": "d4354ab6-8f1a-4c12-b79c-96292cf29bcd"
     },
     {
       "title": "Defense Personal Property System (DPS)",
-      "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
+      "link": "https://dps.move.mil/cust/standard/user/home.xhtml",
+      "contentId": "41de8009-05c1-4f2f-a909-47290bcbea1f"
     },
     {
       "title": "DEERS",
-      "link": "https://milconnect.dmdc.osd.mil/milconnect/"
+      "link": "https://milconnect.dmdc.osd.mil/milconnect/",
+      "contentId": "3e441b0c-69f0-4b00-9947-d3dfbf3afb7f"
     },
     {
       "title": "ID Card Office Online (Appointments, Update GAL)",
-      "link": "https://idco.dmdc.osd.mil/idco/"
+      "link": "https://idco.dmdc.osd.mil/idco/",
+      "contentId": "b2fa039d-e021-428e-b1e1-349174c9d967"
     },
     {
       "title": "myFitness (myFSS)",
-      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management"
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/usaf-fitness-management",
+      "contentId": "1634814a-52a8-48a4-a814-73f2428e9f0e"
     },
     {
       "title": "Webmail / OWA / E-mail / email",
-      "link": "https://webmail.apps.mil/"
+      "link": "https://webmail.apps.mil/",
+      "contentId": "00d05b78-8a73-43cf-8720-0493df56944d"
     },
     {
       "title": "USAF Publications and Forms (epubs)",
-      "link": "https://www.e-publishing.af.mil/Product-Index/"
+      "link": "https://www.e-publishing.af.mil/Product-Index/",
+      "contentId": "a171a74d-7a26-4b56-bd59-955f5be0d7fe"
     },
     {
       "title": "Talent Marketplace (MyVector)",
-      "link": "https://myvector.us.af.mil/myvector"
+      "link": "https://myvector.us.af.mil/myvector",
+      "contentId": "a7681434-b2f8-48b8-88ea-6025dfdf5ab9"
     },
     {
       "title": "GAL Information Update (Update Outlook GAL Profile)",
-      "link": "https://esd.us.af.mil"
+      "link": "https://esd.us.af.mil",
+      "contentId": "af6575d0-7310-4da8-ba16-ff434682c75f"
     },
     {
       "title": "Air Force Portal",
-      "link": "https://www.my.af.mil"
+      "link": "https://www.my.af.mil",
+      "contentId": "40e55dfc-d999-40c8-a909-6fd3b5ed1e23"
     },
     {
       "title": "Foreign Clearance Guide (FCG)",
-      "link": "https://apacs.milcloud.mil/fcg/fcg.cfm"
+      "link": "https://apacs.milcloud.mil/fcg/fcg.cfm",
+      "contentId": "8741976f-c12b-4694-8f25-459aafeff887"
     },
     {
       "title": "Air Force myLearning (Computer Based Training/CBTs)",
-      "link": "https://www.my.af.mil/gcss-af/USAF/content/mylearning"
+      "link": "https://www.my.af.mil/gcss-af/USAF/content/mylearning",
+      "contentId": "64b0db2c-19a1-4d95-b689-5cf8d4bedb70"
     },
     {
       "title": "Automatic Key Recovery Agent (mil only / CAC PKI Cert Recovery for old e-mails)",
-      "link": "https://ara-6.csd.disa.mil"
+      "link": "https://ara-6.csd.disa.mil",
+      "contentId": "53a622a6-f6a7-4044-aef1-628de6a0c203"
     },
     {
       "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
-      "link": "https://portal.apps.mil"
+      "link": "https://portal.apps.mil",
+      "contentId": "3c28f7d2-96d7-46fb-b625-e3bec00bbea9"
     },
     {
       "title": "Aircraft and Personnel Automated Clearance System (APACS)",
-      "link": "https://apacs.milcloud.mil/apacs"
+      "link": "https://apacs.milcloud.mil/apacs",
+      "contentId": "0465fffd-b7b2-4d82-8033-7511d53e7d53"
     },
     {
       "title": "Airfield Driving",
-      "link": "https://core-integration.affsa.aws.solidstatescientific.com/AirfieldDriving"
+      "link": "https://core-integration.affsa.aws.solidstatescientific.com/AirfieldDriving",
+      "contentId": "3c6e28c5-9c4f-485d-9402-255877e3a22d"
     },
     {
       "title": "Government Travel Card (GTC)",
-      "link": "https://home.cards.citidirect.com/CommercialCard/login?locale=en"
+      "link": "https://home.cards.citidirect.com/CommercialCard/login?locale=en",
+      "contentId": "d0dd4e6c-def8-4971-b242-200e13281f8a"
     },
     {
       "title": "DoD SAFE (Secure Access File Exchange)",
-      "link": "https://safe.apps.mil/"
+      "link": "https://safe.apps.mil/",
+      "contentId": "77efc173-dd2a-47c7-b8bb-64be42f7ff66"
     },
     {
       "title": "Digital University",
-      "link": "https://digitalu.af.mil/app"
+      "link": "https://digitalu.af.mil/app",
+      "contentId": "0d23bca0-f31c-427a-9ad1-1dcc65aab117"
     },
     {
       "title": "Foreign Travel Briefs System (FTBS) (.mil only)",
-      "link": "https://usaf.dps.mil/teams/foreigntravel"
+      "link": "https://usaf.dps.mil/teams/foreigntravel",
+      "contentId": "b53ca766-4357-4e93-b49a-4ca2605292f4"
     },
     {
       "title": "Sharepoint Sites",
-      "link": "https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p88B4F00B408E088F01419EEE5C3D1C7F&channelPageId=s6925EC1350340FB5E044080020E329A9"
+      "link": "https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p88B4F00B408E088F01419EEE5C3D1C7F&channelPageId=s6925EC1350340FB5E044080020E329A9",
+      "contentId": "562107f2-d2c0-4846-8f25-bd596a2acd95"
     },
     {
       "title": "PRMS (Personnel Recovery Mission Software) (.mil only)",
-      "link": "https://prmsglobal.prms.af.mil/"
+      "link": "https://prmsglobal.prms.af.mil/",
+      "contentId": "09f201d5-c92f-4d49-904b-10a9600933ef"
     },
     {
       "title": "NIPRGPT (NIPR ChatGPT)",
-      "link": "https://niprgpt.mil/"
+      "link": "https://niprgpt.mil/",
+      "contentId": "4319388e-de20-4162-845a-a0cce9a911c9"
     },
     {
       "title": "Procurement Integrated Enterprise Environment (PIEE)",
-      "link": "https://piee.eb.mil/"
+      "link": "https://piee.eb.mil/",
+      "contentId": "f34449ce-533e-4705-8c3e-937b7ce8aa60"
     },
     {
       "title": "AROWS-R",
-      "link": "https://arowsr.afrc.af.mil/arows-r/"
+      "link": "https://arowsr.afrc.af.mil/arows-r/",
+      "contentId": "df6e266b-d836-4687-9656-602d214cd4e2"
     },
     {
       "title": "Okta Portal (USAF Apps, e.g. PRDA, AMS, MyVector, etc.",
-      "link": "https://af.okta.mil"
+      "link": "https://af.okta.mil",
+      "contentId": "e72a0cd4-2411-4c0a-b4c1-a4277edb646e"
     },
     {
       "title": "Reserve Management Vacancy System (RMVS)",
-      "link": "https://afmilpers.us.af.mil/RMVSNet40/SelectVacancies.aspx"
+      "link": "https://afmilpers.us.af.mil/RMVSNet40/SelectVacancies.aspx",
+      "contentId": "561966fe-e90d-485a-85f5-5df945ef85d7"
     },
     {
       "title": "Legal Assistance Locator (JAG)",
-      "link": "https://legalassistance.law.af.mil/"
+      "link": "https://legalassistance.law.af.mil/",
+      "contentId": "4d27d77b-4d4d-4dbb-8406-81fafa89b93a"
     },
     {
       "title": "EITaaS / Enterprise Service Desk (ESD) / Help Desk",
-      "link": "https://eitaas.servicecenter.af.mil/esc"
+      "link": "https://eitaas.servicecenter.af.mil/esc",
+      "contentId": "a5105d4f-c4f3-4007-91fa-d484d77dcf08"
     },
     {
       "title": "DAF Executive Order Implementation",
-      "link": "https://www.af.mil/DAF-Executive-Order-Implementation/"
+      "link": "https://www.af.mil/DAF-Executive-Order-Implementation/",
+      "contentId": "3471cb76-e56f-443b-8d93-a3542c0a6ab9"
     },
     {
       "title": "Personnel Services Delivery Memorandums (PSDM) (.mil only?)",
-      "link": "https://myfss.us.af.mil/USAFCommunity/s/knowledge-detail?pid=kA0t0000000LI14CAG"
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/knowledge-detail?pid=kA0t0000000LI14CAG",
+      "contentId": "016534e8-5c9c-4166-9a0d-9a9620c59853"
     },
     {
       "title": "myPay | Leave and Earnings Statements (LES)",
-      "link": "https://mypay.dfas.mil/"
+      "link": "https://mypay.dfas.mil/",
+      "contentId": "7d045b27-7f56-4019-80a1-18802fb8ec8f"
     },
     {
       "title": "MyCare Overseas (Tricare Overseas Referrals)",
-      "link": "https://top.my.site.com/beneficiary/BENE_Portal#/home"
+      "link": "https://top.my.site.com/beneficiary/BENE_Portal#/home",
+      "contentId": "8f3d50ff-0f72-4a86-8392-eca383118240"
     },
     {
       "title": "Tricare Overseas Portal (Claims)",
-      "link": "https://portal.tricare-overseas.com"
+      "link": "https://portal.tricare-overseas.com",
+      "contentId": "4f0ad81e-aa82-47fe-92be-050e1b6a437a"
     },
     {
       "title": "Azure Virtual Desktop (AVD) / Remote Desktop Anywhere / Sonic Boom",
-      "link": "https://usaf.dps.mil/sites/SBVP/SitePages/AVD---FAQs.aspx"
+      "link": "https://usaf.dps.mil/sites/SBVP/SitePages/AVD---FAQs.aspx",
+      "contentId": "578022f2-4396-4eb6-8852-9e494715d87e"
     },
     {
       "title": "vPSC (Virtual Personnel Services Center / PRDA)",
-      "link": "https://vpscrba.us.af.mil"
+      "link": "https://vpscrba.us.af.mil",
+      "contentId": "1d4bde45-c6d2-4dd8-88cf-322dd9e11744"
     },
     {
       "title": "STARS RAW (Air National Guard Manning Tool, .mil only)",
-      "link": "https://starsraw2.a1vdc.us.af.mil/"
+      "link": "https://starsraw2.a1vdc.us.af.mil/",
+      "contentId": "fa167ae6-0af3-4969-b0d1-491eec80438d"
     }
   ]
 }
