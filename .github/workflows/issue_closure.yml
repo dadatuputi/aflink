@@ -1,0 +1,106 @@
+name: Run the appropriate workflow based on issue closure
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+
+  check_authorization:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'override link')
+    steps:
+
+    - name: Get authorization info
+      id: auth
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { data: collaborators } = await github.rest.repos.listCollaborators({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            permission: 'push'
+          });
+          
+          const authorizedUsers = collaborators.map(user => user.login);
+          const currentUser = context.payload.sender.login;
+          const isAuthorized = authorizedUsers.includes(currentUser);
+          
+          // Set multiple outputs
+          core.setOutput('authorized', isAuthorized);
+          core.setOutput('user', currentUser);
+          core.setOutput('authorized-users', authorizedUsers.join(','));
+          
+          return isAuthorized;
+
+    - name: Add comment if unauthorized
+      if: steps.auth.outputs.authorized == 'false'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚫 **Action not taken** - This issue was closed by @${{ steps.auth.outputs.user }} but only authorized users can approve link requests.
+            
+            If this action should still be taken, please have an authorized user review and close this issue.`
+          });
+
+    - name: Exit workflow if unauthorized
+      if: steps.auth.outputs.authorized == 'false'
+      run: exit 1
+
+    - name: Dispatch workflow - ADD LINK
+      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'link request')
+      env:
+        BODY: ${{ github.event.issue.body }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'link_add',
+            client_payload: {
+              original_issue: context.issue.number,
+              issue_body: process.env.BODY,
+              triggered_by: context.actor
+            }
+          });
+
+    - name: Dispatch workflow - OVERRIDE LINK
+      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'override link')
+      env:
+        BODY: ${{ github.event.issue.body }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'link_override',
+            client_payload: {
+              original_issue: context.issue.number,
+              issue_body: process.env.BODY,
+              triggered_by: context.actor
+            }
+          });
+
+    - name: Dispatch workflow - UPDATE LINKS FROM AF PORTAL
+      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'update af links')
+      env:
+        BODY: ${{ github.event.issue.body }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'link_update_af',
+            client_payload: {
+              original_issue: context.issue.number,
+              issue_body: process.env.BODY,
+              triggered_by: context.actor
+            }
+          });

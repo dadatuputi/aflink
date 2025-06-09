@@ -1,0 +1,47 @@
+name: Update AF Links from Approved Issue
+
+on:
+  repository_dispatch:
+    types: [link_update_af]
+  
+jobs:
+  update_af_links:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: parse_fields
+      env:
+        BODY: ${{ github.event.client_payload.issue_body }}
+      run: |
+        B64=$(echo "$BODY" | sed -n 3p)
+        [[ -z $B64 ]] && exit 1
+        B64="B64=$B64"
+        echo $B64 | tr -d '[:space:]' | tee -a $GITHUB_ENV
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Overwrite links with new link list
+      run: |
+        JSON=$(echo ${{ env.B64 }} | base64 -d | gzip -dc)
+        echo "Decompressed data:"
+        echo "$JSON" | tee src/links/links_af.json
+
+    - name: Commit New Changes
+      uses: EndBug/add-and-commit@v9
+      with:
+        message: Updated af links from Issue
+
+    - name: Trigger next workflow
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.repos.createDispatchEvent({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            event_type: 'build',
+            client_payload: {
+              commit_sha: context.sha,
+              message: 'Updated links from Issue'
+            }
+          });
