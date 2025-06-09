@@ -1,19 +1,5 @@
 [
   {
-    "id": "a783ecad-a252-4a8e-8c1b-515f5d4b28bb",
-    "match_method": "ContentID",
-    "match": "c330D98A15EF785FE01622FA6F30A3E8C",
-    "title": "",
-    "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
-  },
-  {
-    "id": "6643af6a-5689-4d73-8ed8-3eb8563dd804",
-    "match_method": "ContentID",
-    "match": "c330D98A15EF785FE01622FA6F30A3E8C",
-    "title": null,
-    "link": "https://dps.move.mil/cust/standard/user/home.xhtml"
-  },
-  {
     "id": "5097418b-12b6-4307-a212-255c3dd6450b",
     "match_method": "Content ID",
     "match": "c330D98A15EF785FE01622FA6F30A3E8C",
