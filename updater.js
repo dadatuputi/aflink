@@ -175,8 +175,8 @@ async function getNewestDate(files) {
                 url.searchParams.append('title', `[Override Request]: ${link.title}`);
                 url.searchParams.append('match_method', 'ContentID');   // Can't actually use parameters to populate dropdown
                 url.searchParams.append('match', link.contentId);
-                url.searchParams.append('new_title', link.title);
-                url.searchParams.append('new_url', link.link);
+                // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
+                // url.searchParams.append('new_url', link.link);
                 link.correction = url.toString();
             });
         });
