@@ -65,7 +65,13 @@ const getCurrentData = async () => {
     } 
 }*/
 
-
+async function getNewestDate(files) {
+    // Get links last modified date
+    const dates = await gitDateExtractor.getStamps({files: files})
+    const newest = Math.max(...Object.values(dates).map(obj => obj.modified));
+    const date = sugar_date.Date.format(new Date(newest * 1000), '{d} {Month} {yyyy}')
+    return date;
+}
 
 (async () => {
     try {
@@ -76,8 +82,13 @@ const getCurrentData = async () => {
         const linksDir = path.resolve(srcDir, 'links')
         const linksAfPath = path.resolve(linksDir, 'links_af.json')
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
+        const linksOverridePath = path.resolve(linksDir, 'links_override.json')
+
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         const links_other = JSON.parse(fs.readFileSync(linksOtherPath));
+        const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
+        
+        // Sort other links
         const links_other_sorted = {
             OTHER: links_other.OTHER.sort((a,b) => {
                 a = a.title.toLowerCase();
@@ -87,7 +98,66 @@ const getCurrentData = async () => {
         }
         
         let links = links_af.afpCategorizedLinksDto.links;
+
+        // Apply overrides to AF links - iterate through overrides looking for matches in links
+        let override_count = 0;
+        for (const override of links_override) {
+            // Search through all categories and links to find matches
+            console.log(`Applying override: ${override.title || override.link} (${override.match})`);
+            for (const category of Object.keys(links)) {
+                const linkIndex = links[category].findIndex(link => {
+                    switch (override.match_method) {
+                        case 'Title':
+                            return override.match === link.title;
+                        case 'URL':
+                            return override.match === link.link;
+                        case 'Content ID':
+                            return override.match === link.contentId;
+                        case 'Fuzzy Title':
+                            return link.title.toLowerCase().includes(override.match.toLowerCase());
+                        default:
+                            return false; // No match method specified
+                    }
+                });
+
+                // If we found a match, replace it with the overridden version
+                if (linkIndex !== -1) {
+                    console.log(`Found override for link: ${links[category][linkIndex].title} (${links[category][linkIndex].link}) in category: ${category}`);
+                    const originalLink = links[category][linkIndex];
+
+                    // If no title or url provided in override, completely remove the link
+                    if (!override.title && !override.link) {
+                        console.log(`Removing link: ${originalLink.title} (${originalLink.link}) from category: ${category}`);
+                        links[category].splice(linkIndex, 1); // Remove the link
+                    } else {
+                        
+                        links[category][linkIndex] = {
+                            title: override.title || originalLink.title, // Use override title if provided, otherwise keep original
+                            link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
+                            isOverridden: true,
+                            overridden: [override.title? originalLink.title: null, override.link? originalLink.link: null].filter(Boolean).join(', ') , // Preserve originals
+                            overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
+                            // Preserve other AF link properties
+                            originalTitle: originalLink.title,
+                            originalLink: originalLink.link,
+                            type: originalLink.type,
+                            contentId: originalLink.contentId,
+                            exitLinkReferrer: originalLink.exitLinkReferrer,
+                            renderedAsFile: originalLink.renderedAsFile,
+                            url: originalLink.url
+                        };
+                    }
+
+                    override_count++;
+                    break; // Exit the loop once we found a match
+                }
+            };
+        };
+
+        // Add other links
         links.OTHER = links_other.OTHER;
+        const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
+
         // reformat links to an array, e.g.
         //[ { name: "ACQUISITION", links: [..]}, {...}, ...]
         links = Object.keys(links).map(category => {
@@ -96,14 +166,29 @@ const getCurrentData = async () => {
             cat['links'] = links[category]
             return cat
         });
-        console.log(`Combined ${links.length} links`)
+
+        // Add correction url to each link
+        const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new?template=override_link.yaml"
+        links.forEach(category => {
+            category.links.forEach(link => {
+                const url = new URL(correctionTemplateURL);
+                url.searchParams.append('title', `[Override Request]: ${link.title}`);
+                url.searchParams.append('match_method', 'ContentID');   // Can't actually use parameters to populate dropdown
+                url.searchParams.append('match', link.contentId);
+                url.searchParams.append('new_title', link.title);
+                url.searchParams.append('new_url', link.link);
+                link.correction = url.toString();
+            });
+        });
+            
+        console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
 
         // Get links last modified date
-        const dates = await gitDateExtractor.getStamps({files: [linksAfPath, linksOtherPath]})
-        const date_af = dates[path.relative(process.cwd(), linksAfPath)].modified
-        // const date_other = dates[path.relative(process.cwd(), linksOtherPath)].modified
-        // const date = sugar_date.Date.format(new Date(Math.max(date_af, date_other) * 1000), '{d} {Month} {yyyy}')
-        const date = sugar_date.Date.format(new Date(date_af * 1000), '{d} {Month} {yyyy}')
+        const dateFiles = [linksAfPath, linksOtherPath];
+        if (override_count > 0) {
+            dateFiles.push(linksOverridePath);
+        }
+        const date = await getNewestDate(dateFiles);
         console.log(`Latest update: ${date}`)
 
 
@@ -138,6 +223,18 @@ const getCurrentData = async () => {
         fs.mkdirSync(tutorialDir, { recursive: true });
         fs.writeFileSync(path.resolve(tutorialDir, "index.html"), pageTutorial)
         console.log("Wrote tutorial")
+
+        // write overrides page
+        const override_date = await getNewestDate([linksOverridePath]);
+        const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), { 
+            ...options, 
+            links,  // Pass the full links object
+            override_date 
+        })
+        const overridesDir = path.resolve(outputDir, "overrides")
+        fs.mkdirSync(overridesDir, { recursive: true });
+        fs.writeFileSync(path.resolve(overridesDir, "index.html"), pageOverrides)
+        console.log("Wrote overrides page")
 
         // write osdd.xml
         const osdd = pug.renderFile(path.resolve(srcDir, "osdd.xml.pug"), { ...options, ...locals })
