@@ -1,4 +1,4 @@
-name: Update AF Links from Approved Issue
+name: Link Bulk Update from Issue
 
 on:
   repository_dispatch:

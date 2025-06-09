@@ -1,4 +1,4 @@
-name: Append Link from Approved Link Request
+name: Link Add from Issue
 
 on:
   repository_dispatch:
