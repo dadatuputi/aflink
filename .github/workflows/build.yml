@@ -12,7 +12,7 @@ on:
     branches: ["master"]
   workflow_dispatch:
   repository_dispatch:
-    types: [add_link]
+    types: [build]
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
