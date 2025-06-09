@@ -1,7 +1,7 @@
 name: Override or Remove a Link
 description: Submit a request to override or remove an existing link
 title: "[Override Request]: "
-labels: ["override link"]
+labels: ["override link", "workflow"]
 assignees:
   - dadatuputi
 body:
