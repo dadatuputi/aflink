@@ -50,7 +50,7 @@ body:
     id: comment
     attributes:
       label: Comment
-      description: A comment about the override and a reason why it should be approved.
+      description: Please explain why the override or deletion should be approved.
     validations:
-      required: false
+      required: true
   
