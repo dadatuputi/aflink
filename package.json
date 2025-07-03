@@ -9,10 +9,10 @@
   "type": "module",
   "scripts": {
     "build": "NODE_ENV=production node ./updater.js",
-    "dev": "NODE_ENV=development DOCS_DIR=_site node ./updater.js",
+    "dev:build": "NODE_ENV=development DOCS_DIR=_site node ./updater.js",
     "serve": "npx serve _site -p 4000",
-    "dev:serve": "npm run dev && npm run serve",
-    "dev:watch": "npm run dev && npx serve _site -p 4000 & npx nodemon --watch src --ext pug,json,js,css --exec \"npm run dev\"",
+    "dev:serve": "npm run dev:build && npm run serve",
+    "dev:watch": "npm run dev:build && npx serve _site -p 4000 & npx nodemon --watch src --ext pug,json,js,css --exec \"npm run dev:build\"",
     "host": "npx http-server _site -p 4000 -o"
   },
   "devDependencies": {
