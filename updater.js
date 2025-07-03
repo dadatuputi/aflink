@@ -84,6 +84,8 @@ async function getNewestDate(files) {
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
         const linksOverridePath = path.resolve(linksDir, 'links_override.json')
 
+        const outputDir = process.env.DOCS_DIR;
+
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
@@ -174,10 +176,11 @@ async function getNewestDate(files) {
         });
 
 
+        // Write links to JSON for publishing
         const links_published = {
             metadata: {
                 generated: new Date().toISOString(),
-                lastModified: null, // Will be set later
+                lastModified: date,
                 numLinks: links_length,
                 numCategories: links.length,
                 overridesApplied: override_count,
@@ -185,6 +188,9 @@ async function getNewestDate(files) {
             },
             links: links
         }
+        fs.writeFileSync(path.resolve(outputDir, "links.json"), JSON.stringify(links_published, null, 2));
+        console.log(`Wrote links.json`);
+
 
         // Add correction url to each link
         const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new"
@@ -228,7 +234,6 @@ async function getNewestDate(files) {
 
         // write homepage
         // make docs dir to place them in
-        const outputDir = process.env.DOCS_DIR;
         fs.mkdirSync(outputDir, { recursive: true });
 
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
