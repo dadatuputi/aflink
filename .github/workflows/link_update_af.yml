@@ -30,7 +30,7 @@ jobs:
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v9
       with:
-        message: Updated af links from Issue
+        message: "Updated AF Links from issue"
 
     - name: Trigger next workflow
       uses: actions/github-script@v6

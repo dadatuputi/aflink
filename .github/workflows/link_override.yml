@@ -88,7 +88,7 @@ jobs:
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v9
       with:
-        message: Updated links from Issue
+        message: "Overrode link from issue: ${{ env.MATCH_STRING }}"
 
     - name: Trigger next workflow
       uses: actions/github-script@v6
