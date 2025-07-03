@@ -1,0 +1,11 @@
+  {
+    "name": "aflink-autocomplete",
+    "compatibility_date": "2025-07-03",
+    "main": "src/index.js",
+    "kv_namespaces": [
+    {
+      "binding": "LINKS",
+      "id": "32636ebd2ef14adc9d6e034e918600ec"
+    }
+  ]
+  }
