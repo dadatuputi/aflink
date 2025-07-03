@@ -77,14 +77,16 @@ async function getNewestDate(files) {
     try {
         const srcDir = path.resolve(process.cwd(), 'src');
 
+        // create docs dir for output
+        const outputDir = process.env.DOCS_DIR;
+        fs.mkdirSync(outputDir, { recursive: true });
+
         // Build links
         // combine links from the USAF and our own links
         const linksDir = path.resolve(srcDir, 'links')
         const linksAfPath = path.resolve(linksDir, 'links_af.json')
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
         const linksOverridePath = path.resolve(linksDir, 'links_override.json')
-
-        const outputDir = process.env.DOCS_DIR;
 
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
@@ -233,9 +235,6 @@ async function getNewestDate(files) {
         }
 
         // write homepage
-        // make docs dir to place them in
-        fs.mkdirSync(outputDir, { recursive: true });
-
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
         console.log("Wrote homepage")
