@@ -11,7 +11,7 @@ import process from 'process'
 
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
-let locals = null; 
+let locals = null;
 if (environment === 'production') {
     locals = {
         baseurl: "https://aflink.us",
@@ -67,7 +67,7 @@ const getCurrentData = async () => {
 
 async function getNewestDate(files) {
     // Get links last modified date
-    const dates = await gitDateExtractor.getStamps({files: files})
+    const dates = await gitDateExtractor.getStamps({ files: files })
     const newest = Math.max(...Object.values(dates).map(obj => obj.modified));
     const date = sugar_date.Date.format(new Date(newest * 1000), '{d} {Month} {yyyy}')
     return date;
@@ -85,18 +85,18 @@ async function getNewestDate(files) {
         const linksOverridePath = path.resolve(linksDir, 'links_override.json')
 
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
-        const links_other = JSON.parse(fs.readFileSync(linksOtherPath));
+        let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
-        
+
         // Sort other links
-        const links_other_sorted = {
-            OTHER: links_other.OTHER.sort((a,b) => {
+        links_other = {
+            OTHER: links_other.OTHER.sort((a, b) => {
                 a = a.title.toLowerCase();
                 b = b.title.toLowerCase();
                 return a < b ? -1 : a > b ? 1 : 0;
             })
         }
-        
+
         let links = links_af.afpCategorizedLinksDto.links;
 
         // Apply overrides to AF links - iterate through overrides looking for matches in links
@@ -130,7 +130,7 @@ async function getNewestDate(files) {
                         link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
                         isDeleted: !override.title && !override.link, // If neither title nor link is provided, mark as deleted
                         isOverridden: true,
-                        overridden: [override.title? originalLink.title: null, override.link? originalLink.link: null].filter(Boolean).join(', ') , // Preserve originals
+                        overridden: [override.title ? originalLink.title : null, override.link ? originalLink.link : null].filter(Boolean).join(', '), // Preserve originals
                         overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
                         // Preserve other AF link properties
                         originalTitle: originalLink.title,
@@ -148,25 +148,50 @@ async function getNewestDate(files) {
             };
         };
 
+
         // Add other links
         links.OTHER = links_other.OTHER;
         const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
+        console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
+
+
+        // Get links last modified date
+        const dateFiles = [linksAfPath, linksOtherPath];
+        if (override_count > 0) {
+            dateFiles.push(linksOverridePath);
+        }
+        const date = await getNewestDate(dateFiles);
+        console.log(`Latest update: ${date}`)
+
 
         // reformat links to an array, e.g.
         //[ { name: "ACQUISITION", links: [..]}, {...}, ...]
         links = Object.keys(links).map(category => {
-            let cat = {}
-            cat['name'] = category
-            cat['links'] = links[category]
-            return cat
+            return {
+                category: category,
+                links: links[category]
+            }
         });
+
+
+        const links_published = {
+            metadata: {
+                generated: new Date().toISOString(),
+                lastModified: null, // Will be set later
+                numLinks: links_length,
+                numCategories: links.length,
+                overridesApplied: override_count,
+                version: "1.0"
+            },
+            links: links
+        }
 
         // Add correction url to each link
         const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new"
         links.forEach(category => {
             category.links.forEach(link => {
                 const url = new URL(correctionTemplateURL);
-                if (category.name === 'OTHER') {
+                if (category.category === 'OTHER') {
                     url.searchParams.append('template', '03_link_delete.yaml');
                     url.searchParams.append('title', `[DELETE]: ${link.title}`);
                     url.searchParams.append('link_id', link.contentId);
@@ -182,39 +207,30 @@ async function getNewestDate(files) {
                 link.correction = url.toString();
             });
         });
-            
+
         console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
-
-        // Get links last modified date
-        const dateFiles = [linksAfPath, linksOtherPath];
-        if (override_count > 0) {
-            dateFiles.push(linksOverridePath);
-        }
-        const date = await getNewestDate(dateFiles);
-        console.log(`Latest update: ${date}`)
-
 
         // pug filter for base64-encoding images
         let options = {}
         options.filters = {
-            'base64me': function(text, options) {
+            'base64me': function (text, options) {
                 if (options.filename) {
                     // getting file from includes filter
                     text = options.filename
-                } 
+                }
                 const contents = fs.readFileSync(text)
                 const type = imageType(contents)
                 const b64 = contents.toString('base64')
-                const tag = `<img ${options.class? `class="${options.class}` : ""}" src="data:${type.mime};base64,${b64}" />`
-                return tag; 
+                const tag = `<img ${options.class ? `class="${options.class}` : ""}" src="data:${type.mime};base64,${b64}" />`
+                return tag;
             }
         }
 
         // write homepage
         // make docs dir to place them in
-        const outputDir = process.env.DOCS_DIR; 
+        const outputDir = process.env.DOCS_DIR;
         fs.mkdirSync(outputDir, { recursive: true });
-	    
+
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
         console.log("Wrote homepage")
@@ -228,10 +244,10 @@ async function getNewestDate(files) {
 
         // write overrides page
         const override_date = await getNewestDate([linksOverridePath]);
-        const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), { 
-            ...options, 
+        const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), {
+            ...options,
             links,  // Pass the full links object
-            override_date 
+            override_date
         })
         const overridesDir = path.resolve(outputDir, "overrides")
         fs.mkdirSync(overridesDir, { recursive: true });
@@ -257,9 +273,9 @@ async function getNewestDate(files) {
             fs.cpSync(favicon, faviconDestFile)
         })
         console.log("Wrote favicons")
-        
 
-		console.log("Done writing updated data.")
+
+        console.log("Done writing updated data.")
     } catch (e) {
         console.log(e.message)
         process.exit(1)
