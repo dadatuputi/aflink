@@ -1,9 +1,15 @@
 script 
-  include:uglify-js js/jquery-3.5.1.slim.min.js
+  if isDev
+    include js/jquery-3.5.1.slim.min.js
+  else
+    include:uglify-js js/jquery-3.5.1.slim.min.js
 script 
   include js/bootstrap.bundle.5.2.3.min.js
 script 
-  include:uglify-js js/search.js
+  if isDev
+    include js/search.js
+  else
+    include:uglify-js js/search.js
 //- Google tag (gtag.js)
 script(async src="https://www.googletagmanager.com/gtag/js?id=G-M8SEVTFLFK")
 script.

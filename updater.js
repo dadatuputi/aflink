@@ -14,13 +14,15 @@ console.log("Node environment is: " + environment)
 let locals = null;
 if (environment === 'production') {
     locals = {
-        baseurl: "https://aflink.us",
-        suggesturl: "https://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}"
+        baseURL: "https://aflink.us",
+        suggestedURL: "https://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}",
+        osddShortName: "aflink",
     }
 } else {
     locals = {
-        baseurl: "http://127.0.0.1:4000",
-        suggesturl: "http://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}"
+        baseURL: "http://localhost:4000",
+        suggestedURL: "http://localhost:8787/search/{searchTerms}",
+        osddShortName: "aflink-dev",
     }
 }
 
@@ -235,12 +237,20 @@ async function getNewestDate(files) {
         }
 
         // write homepage
-        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { ...options, links, date })
+        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { 
+            ...options, 
+            links, 
+            date,
+            isDev: environment !== 'production'
+        })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
         console.log("Wrote homepage")
 
         // write browser tutorial homepage
-        const pageTutorial = pug.renderFile(path.resolve(srcDir, "tutorial.pug"), { ...options })
+        const pageTutorial = pug.renderFile(path.resolve(srcDir, "tutorial.pug"), { 
+            ...options,
+            isDev: environment !== 'production'
+         })
         const tutorialDir = path.resolve(outputDir, "tutorial")
         fs.mkdirSync(tutorialDir, { recursive: true });
         fs.writeFileSync(path.resolve(tutorialDir, "index.html"), pageTutorial)
@@ -251,7 +261,8 @@ async function getNewestDate(files) {
         const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), {
             ...options,
             links,  // Pass the full links object
-            override_date
+            override_date,
+            isDev: environment !== 'production'
         })
         const overridesDir = path.resolve(outputDir, "overrides")
         fs.mkdirSync(overridesDir, { recursive: true });
