@@ -1,17 +1,6 @@
 $(document).ready(function () {
-  
-  var searchParams = new URLSearchParams(window.location.search);
-  // If search string has a newline at the end, it comes from autocomplete, so automatically go to the first result
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
-  const autocompleted = (searchParams.has("q") && searchParams.get("q").at(-1) === '​')
 
-  // Show modal after clicking a link
-  const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
-  $("#link-list .list-group-item a:first-child").on('click', function(event) {
-    $('#exit-modal .modal-header .title').text($(this).text());
-    $('#exit-modal .link').text($(this).prop('href'));
-    my_modal.toggle();
-  });
+  const searchParams = new URLSearchParams(window.location.search);
 
   function updateSearchParams(newParams) {
     var params = ""
@@ -25,6 +14,18 @@ $(document).ready(function () {
     window.history.replaceState({ path: newurl }, "", newurl);
   }
 
+  // If search string has a hidden space anywhere inside it, it comes from autocomplete, so automatically go to the first result
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
+  const autocompleted = (searchParams.has("q") && searchParams.get("q").includes('​'));
+  
+  // Show modal after clicking a link
+  const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
+  $("#link-list .list-group-item a:first-child").on('click', function(event) {
+    $('#exit-modal .modal-header .title').text($(this).text());
+    $('#exit-modal .link').text($(this).prop('href'));
+    my_modal.toggle();
+  });
+
   // Filter links based on search query
   $("#search-form").on(
     "change keyup paste search",
@@ -33,13 +34,15 @@ $(document).ready(function () {
       
       // Hide everything
       $('#link-list .category, #link-list .link-container').toggle(false);
+
       // Show links that contain text
       var links = $('#link-list .link-container').filter(function(){
         return $(this).find('a:first-child').text().toLowerCase().indexOf(value) > -1;
       })
+
       // Go to first link if autocomplete
       if (autocompleted && links[0]) {
-        links[0].click();
+        $(links[0]).find('a.main-link')[0].click();
       }
       links.toggle(true);
 
@@ -73,9 +76,12 @@ $(document).ready(function () {
   // Update search field based on parameters on pageload
   if (searchParams.has("q") === true) {
     if (autocompleted) {
-      updateSearchParams(searchParams.get("q").slice(0,-1)) // remove newline before adding search query to textbox
+      // Remove all the characters after the hidden space, inclusive
+      const query = searchParams.get("q");
+      const cleanQuery = query.slice(0, query.indexOf('​'));
+      searchParams.set("q", cleanQuery);
     }
-    
+
     $("#search-form").val(searchParams.get("q")).change();
   }
 

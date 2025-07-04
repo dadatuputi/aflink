@@ -13,7 +13,7 @@ async function update_links(env) {
     // Convert to the format expected by the search logic
     const links = linksData.links.flatMap(category => 
       category.links.map(link => ({
-        title: link.title + "​", // Include a zero-width space to indicate traffic is from autocomplete
+        title: link.title,
         link: link.link,
         cat: category.category
       }))
@@ -46,11 +46,11 @@ async function handleRequest(request, env) {
       let links = await env.LINKS.get(LINKS_KEY, { type: "json" }) || await update_links(env);
 
       let results = links.filter(link => link.title.toLowerCase().includes(term))
-      let titles = results.map( result => result.title)
 
       console.log('responding with results for ' + term)
 
-      let suggestions = results.map(result => `${result.title} {${result.cat}}`)
+      // Compose suggestions with a hidden space for the page javascript to parse
+      let suggestions = results.map(result => `${result.title}​ {${result.cat}}`)
       return new Response(JSON.stringify([term, suggestions]), {
         status: 200,
         headers: {
