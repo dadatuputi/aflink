@@ -45,3 +45,16 @@ jobs:
               message: 'Updated links from Issue'
             }
           });
+
+    - name: Add success comment
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `✅ **AF Links updated successfully!**
+            
+            The AF links have been updated successfully. Nicely done.`
+          })
