@@ -52,7 +52,7 @@ jobs:
       run: exit 1
 
     - name: Dispatch workflow - ADD LINK
-      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'link request')
+      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'add link')
       env:
         BODY: ${{ github.event.issue.body }}
       uses: actions/github-script@v6
