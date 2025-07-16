@@ -179,6 +179,10 @@
       "title": "STARS RAW (Air National Guard Manning Tool, .mil only)",
       "link": "https://starsraw2.a1vdc.us.af.mil/",
       "contentId": "fa167ae6-0af3-4969-b0d1-491eec80438d"
+    },
+    {
+      "title": "EODIMS - Explosive Ordnance Disposal Information Management System",
+      "link": "https://eodims.af.mil"
     }
   ]
 }
