@@ -96,11 +96,11 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '✅ **Link deleted successfully!**'
+            body: `✅ **Link deleted successfully!**
             
-            The link has been deleted and will be removed on the next site deployment.
+            The link has been deleted and will be removed on the next site deployment.`
           })
