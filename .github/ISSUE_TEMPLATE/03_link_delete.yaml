@@ -19,5 +19,5 @@ body:
       label: Comment
       description: A comment about the link and a reason why it should be deleted.
     validations:
-      required: false
+      required: true
   
