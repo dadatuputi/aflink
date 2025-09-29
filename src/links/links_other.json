@@ -187,6 +187,10 @@
     {
       "title": "EODIMS - Explosive Ordnance Disposal Information Management System",
       "link": "https://eodims.af.mil"
+    },
+    {
+      "title": "myFSS (non-CAC login)",
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/login/?inst=Rw"
     }
   ]
 }
