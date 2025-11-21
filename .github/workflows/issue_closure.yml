@@ -11,8 +11,37 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'workflow')
     steps:
 
-    - name: Get authorization info
+    - name: Check closure reason
+      id: check
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const stateReason = context.payload.issue.state_reason;
+          const notPlanned = stateReason === 'not_planned';
+          core.setOutput('state-reason', stateReason);
+          core.setOutput('is-not-planned', notPlanned);
+          
+          if (notPlanned) {
+            core.notice('Issue closed as "Not Planned" - workflow will halt');
+          } else {
+            core.notice(`Issue closed as ${stateReason || 'completed'} - workflow will continue`);
+          }
+
+    - name: Add comment if not planned
+      if: steps.check.outputs.is-not-planned == 'true'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `🚫 **Action not taken** - This issue was closed as "not planned". No further action will be taken.`
+          });
+
+    - name: Check authorization
       id: auth
+      if: steps.check.outputs.is-not-planned == 'false'
       uses: actions/github-script@v6
       with:
         script: |
@@ -30,6 +59,12 @@ jobs:
           core.setOutput('authorized', isAuthorized);
           core.setOutput('user', currentUser);
           core.setOutput('authorized-users', authorizedUsers.join(','));
+
+          if (isAuthorized) {
+            core.notice(`User ${currentUser} is authorized - workflow will continue`);
+          } else {
+            core.notice(`User ${currentUser} is unauthorized - workflow will halt`);
+          }
           
           return isAuthorized;
 
@@ -48,7 +83,7 @@ jobs:
           });
 
     - name: Exit workflow if unauthorized
-      if: steps.auth.outputs.authorized == 'false'
+      if: steps.auth.outputs.authorized == 'false' || steps.check.outputs.is-not-planned == 'true'
       run: exit 1
 
     - name: Dispatch workflow - ADD LINK
