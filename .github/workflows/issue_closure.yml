@@ -23,21 +23,17 @@ jobs:
           
           if (notPlanned) {
             core.notice('Issue closed as "Not Planned" - workflow will halt');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚫 **Action not taken** - This issue was closed as "not planned". No further action will be taken.`
+            });
+            
           } else {
             core.notice(`Issue closed as ${stateReason || 'completed'} - workflow will continue`);
           }
-
-    - name: Add comment if not planned
-      if: steps.check.outputs.is-not-planned == 'true'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `🚫 **Action not taken** - This issue was closed as "not planned". No further action will be taken.`
-          });
 
     - name: Check authorization
       id: auth
@@ -64,27 +60,18 @@ jobs:
             core.notice(`User ${currentUser} is authorized - workflow will continue`);
           } else {
             core.notice(`User ${currentUser} is unauthorized - workflow will halt`);
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚫 **Action not taken** - This issue was closed by @${{ steps.auth.outputs.user }} but only authorized users can approve link requests.
+              
+              If this action should still be taken, please have an authorized user review and close this issue.`
+            });
           }
           
           return isAuthorized;
-
-    - name: Add comment if unauthorized
-      if: steps.auth.outputs.authorized == 'false'
-      uses: actions/github-script@v6
-      with:
-        script: |
-          await github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `🚫 **Action not taken** - This issue was closed by @${{ steps.auth.outputs.user }} but only authorized users can approve link requests.
-            
-            If this action should still be taken, please have an authorized user review and close this issue.`
-          });
-
-    - name: Exit workflow if unauthorized
-      if: steps.auth.outputs.authorized == 'false' || steps.check.outputs.is-not-planned == 'true'
-      run: exit 1
 
     - name: Dispatch workflow - ADD LINK
       if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'add link')
