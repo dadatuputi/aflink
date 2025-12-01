@@ -26,6 +26,8 @@ jobs:
           exit 1
         fi
 
+        echo "ISSUE_NUMBER=${{ github.event.client_payload.original_issue }}" >> $GITHUB_ENV
+        echo "TRIGGERED_BY=${{ github.event.client_payload.triggered_by }}" >> $GITHUB_ENV
         echo "LINK_ID=$LINK_ID" >> $GITHUB_ENV
 
     - name: Checkout Repository
@@ -44,7 +46,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install --yes jq moreutils
 
-    - name: Add link to end of list
+    - name: Remove link from links_other.json
       run: |
         BEFORE_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
 
@@ -70,13 +72,13 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: ❌ Failed to remove link with ID `${{ env.LINK_ID }}` - it may not exist in the list.'
+            body: ❌ Failed to remove link with Content ID `${{ env.LINK_ID }}` - it may not exist in the list.'
           })
 
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v7
       with:
-        message: "Deleted link from issue: ${{ env.LINK_ID }}"
+        message: "Deleted link (${{ env.LINK_ID }}) from issue ${{ env.ISSUE_NUMBER }}, closed by ${{ env.TRIGGERED_BY }}"
 
     - name: Trigger next workflow
       uses: actions/github-script@v6
