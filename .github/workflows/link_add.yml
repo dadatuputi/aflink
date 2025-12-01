@@ -30,10 +30,10 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Install jq & sponge
+    - name: Install dependencies
       run: |
         # Skip installing pacakge docs {makes the man-db trigger much faster) 
-        # (I disabled `/doc` and `/info` too, just in case.)
+        # disabled `/doc` and `/info` as well to speed up apt operations further
         sudo tee /etc/dpkg/dpkg.cfg.d/01_nodoc > /dev/null << 'EOF'
         path-exclude /usr/share/doc/*
         path-exclude /usr/share/man/*
@@ -41,11 +41,12 @@ jobs:
         EOF
 
         sudo apt-get update
-        sudo apt-get install --yes jq moreutils
+        sudo apt-get install --yes jq moreutils uuid-runtime
 
-    - name: Add link to end of list
+    - name: Add link to end of list with an auto-generated contentId
       run: |
-        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" '.OTHER += [{"title": $TITLE,"link": $URL}]' src/links/links_other.json | sponge src/links/links_other.json
+        UUID=$(uuidgen)
+        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "${{ UUID }}" '.OTHER += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' src/links/links_other.json | sponge src/links/links_other.json
         cat src/links/links_other.json
 
     - name: Commit New Changes
