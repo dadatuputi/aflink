@@ -46,7 +46,7 @@ jobs:
     - name: Add link to end of list with an auto-generated contentId
       run: |
         UUID=$(uuidgen)
-        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "${{ UUID }}" '.OTHER += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' src/links/links_other.json | sponge src/links/links_other.json
+        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "$UUID" '.OTHER += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' src/links/links_other.json | sponge src/links/links_other.json
         cat src/links/links_other.json
 
     - name: Commit New Changes
