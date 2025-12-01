@@ -182,19 +182,23 @@
     },
     {
       "title": "EODIMS - Explosive Ordnance Disposal Information Management System",
-      "link": "https://eodims.af.mil"
+      "link": "https://eodims.af.mil",
+      "contentId": "765553eb-6b4b-41e1-8746-fd340782dfdc"
     },
     {
       "title": "EODIMS - Explosive Ordnance Disposal Information Management System",
-      "link": "https://eodims.af.mil"
+      "link": "https://eodims.af.mil",
+      "contentId": "684719e5-8a7a-4d6f-a04b-238537d33877"
     },
     {
       "title": "myFSS (non-CAC login)",
-      "link": "https://myfss.us.af.mil/USAFCommunity/s/login/?inst=Rw"
+      "link": "https://myfss.us.af.mil/USAFCommunity/s/login/?inst=Rw",
+      "contentId": "85a471aa-e338-4de8-8ddb-55b0cdd24775"
     },
     {
       "title": "Field Maintenance Command & Control Maintenance Information System.",
-      "link": "https://webg081.csd.disa.mil/WebG081/default.aspx"
+      "link": "https://webg081.csd.disa.mil/WebG081/default.aspx",
+      "contentId": "7ad6db36-3b64-42fe-b55c-810a639a53b6"
     }
   ]
 }
