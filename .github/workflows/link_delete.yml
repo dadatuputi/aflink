@@ -46,7 +46,31 @@ jobs:
         sudo apt-get update
         sudo apt-get install --yes jq moreutils
 
+    - name: Search links_other.json and links_af.json for Link ID
+      run: |
+        echo "Searching for LINK_ID: $LINK_ID"
+
+        # Check links_other.json first (this is the file we normally remove from)
+        if jq -e --arg id "$LINK_ID" '.OTHER[]? | select(.contentId == $id)' src/links/links_other.json >/dev/null 2>&1; then
+          echo "FOUND_IN=links_other.json" >> $GITHUB_ENV
+          echo "ACTION=remove" >> $GITHUB_ENV
+          echo "Found LINK_ID in src/links/links_other.json; will remove."
+
+        # If not there, check links_af.json (AF categorized links) — we will create an override instead
+        elif jq -e --arg id "$LINK_ID" '.afpCategorizedLinksDto.links[]? | .[]? | select(.contentId == $id)' src/links/links_af.json >/dev/null 2>&1; then
+          echo "FOUND_IN=links_af.json" >> $GITHUB_ENV
+          echo "ACTION=override" >> $GITHUB_ENV
+          echo "Found LINK_ID in src/links/links_af.json; will create override entry."
+
+        else
+          echo "FOUND_IN=none" >> $GITHUB_ENV
+          echo "ACTION=none" >> $GITHUB_ENV
+          echo "Error: LINK_ID '$LINK_ID' not found in either links_other.json or links_af.json"
+          exit 1
+        fi
+
     - name: Remove link from links_other.json
+      if: env.ACTION == 'remove'
       run: |
         BEFORE_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
 
@@ -62,6 +86,27 @@ jobs:
         fi
 
         cat src/links/links_other.json
+
+    - name: Add override entry for links_af.json
+      if: env.ACTION == 'override'
+      run: |
+        set -o pipefail
+        OVERRIDE_ID=$(uuidgen)
+
+        jq --arg MATCH_METHOD "Content ID" \
+           --arg MATCH_STRING "${{ env.LINK_ID }}" \
+           --arg OVERRIDE_ID "$OVERRIDE_ID" \
+           '. += [{
+             "id": $OVERRIDE_ID,
+             "match_method": $MATCH_METHOD,
+             "match": $MATCH_STRING,
+             "title": null,
+             "link": null,
+             "timestamp": now
+           }]' src/links/links_override.json | sponge src/links/links_override.json
+
+        echo "✅ Added override entry for LINK_ID '${{ env.LINK_ID }}' (override id: $OVERRIDE_ID)"
+        cat src/links/links_override.json
 
     - name: Add failure comment
       if: failure()
