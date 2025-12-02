@@ -96,7 +96,7 @@ jobs:
           exit 1
         fi
 
-    - name: Update entry in links_other.json
+    - name: "Case: Overriding an OTHER link in links_other.json"
       if: env.ACTION == 'edit_other'
       run: |
         set -o pipefail
@@ -104,31 +104,36 @@ jobs:
            --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
            --arg NEW_LINK "${{ env.NEW_LINK }}" \
            '.OTHER |= map( if .contentId == $id then
-               .title = (if $NEW_TITLE == "" or $NEW_TITLE == "null" or $NEW_TITLE == "_No response_" then null else $NEW_TITLE end) |
-               .link = (if $NEW_LINK == "" or $NEW_LINK == "null" or $NEW_LINK == "_No response_" then null else $NEW_LINK end)
+               (if $NEW_TITLE != "" and $NEW_TITLE != "null" and $NEW_TITLE != "_No response_" then .title = $NEW_TITLE else . end) |
+               (if $NEW_LINK != "" and $NEW_LINK != "null" and $NEW_LINK != "_No response_" then .link = $NEW_LINK else . end)
              else . end )' src/links/links_other.json | sponge src/links/links_other.json
 
         echo "✅ Updated src/links/links_other.json for LINK_ID '${{ env.LINK_ID }}'"
 
-    - name: Add override to file (for links_af.json)
+    - name: "Case: Overriding an AF Portal link in links_af.json via links_override.json"
       if: env.ACTION == 'override'
       run: |
         set -o pipefail
         OVERRIDE_ID=$(uuidgen)
 
-        # Add override entry to flat JSON array (handle null values properly)
-        jq --arg LINK_ID "${{ env.LINK_ID }}" \
-           --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
-           --arg NEW_LINK "${{ env.NEW_LINK }}" \
-           --arg OVERRIDE_ID "$OVERRIDE_ID" \
-           '. += [{
-             "id": $OVERRIDE_ID,
-             "match_method": "Content ID",
-             "match": $LINK_ID,
-             "title": (if $NEW_TITLE == "" or $NEW_TITLE == "null" or $NEW_TITLE == "_No response_" then null else $NEW_TITLE end),
-             "link": (if $NEW_LINK == "" or $NEW_LINK == "null" or $NEW_LINK == "_No response_" then null else $NEW_LINK end),
-             "timestamp": now
-           }]' src/links/links_override.json | sponge src/links/links_override.json
+        # Build override entry, only including title/link if provided
+        OVERRIDE_ENTRY=$(jq -n \
+          --arg OVERRIDE_ID "$OVERRIDE_ID" \
+          --arg LINK_ID "${{ env.LINK_ID }}" \
+          --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
+          --arg NEW_LINK "${{ env.NEW_LINK }}" \
+          '{
+            "id": $OVERRIDE_ID,
+            "match_method": "Content ID",
+            "match": $LINK_ID,
+            "timestamp": now
+          } | 
+          if ($NEW_TITLE != "" and $NEW_TITLE != "null" and $NEW_TITLE != "_No response_") then .title = $NEW_TITLE else . end |
+          if ($NEW_LINK != "" and $NEW_LINK != "null" and $NEW_LINK != "_No response_") then .link = $NEW_LINK else . end'
+        )
+
+        # Append to links_override.json
+        jq --argjson ENTRY "$OVERRIDE_ENTRY" '. += [$ENTRY]' src/links/links_override.json | sponge src/links/links_override.json
 
         echo "✅ Override added to links_override.json"
         

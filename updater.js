@@ -133,14 +133,14 @@ async function getNewestDate(files) {
                         overridden: [override.title ? originalLink.title : null, override.link ? originalLink.link : null].filter(Boolean).join(', '), // Preserve originals
                         overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
                         
-                        // Preserve other AF link properties
+                        // Preserve original AF link properties
                         originalTitle: originalLink.title,
                         originalLink: originalLink.link,
-                        type: originalLink.type,
+                        // type: originalLink.type,
                         contentId: originalLink.contentId,
-                        exitLinkReferrer: originalLink.exitLinkReferrer,
-                        renderedAsFile: originalLink.renderedAsFile,
-                        url: originalLink.url
+                        // exitLinkReferrer: originalLink.exitLinkReferrer,
+                        // renderedAsFile: originalLink.renderedAsFile,
+                        // url: originalLink.url
                     };
 
                     console.log(`Applied override: ${override.title || override.link || "Deletion"} (${override.match}) to link "${originalLink.title}"`);
@@ -202,8 +202,8 @@ async function getNewestDate(files) {
                 correction.searchParams.append('template', '02_link_override.yaml');
                 correction.searchParams.append('title', `[MODIFY]: ${link.title}`);
                 correction.searchParams.append('match', link.contentId);
-                // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
-                // url.searchParams.append('new_url', link.link);
+                correction.searchParams.append('new_title', link.title);
+                correction.searchParams.append('new_url', link.link);
                 link.correction = correction.toString();
 
                 const deletion = new URL(githubIssueBase);
