@@ -109,35 +109,30 @@ async function getNewestDate(files) {
         let override_count = 0;
         for (const override of links_override) {
             // Search through all categories and links to find matches
-            console.log(`Applying override: ${override.title || override.link} (${override.match})`);
-            for (const category of Object.keys(links)) {
-                const linkIndex = links[category].findIndex(link => {
-                    switch (override.match_method) {
-                        case 'Title':
-                            return override.match === link.title;
-                        case 'URL':
-                            return override.match === link.link;
-                        case 'Content ID':
-                            return override.match === link.contentId;
-                        case 'Fuzzy Title':
-                            return link.title.toLowerCase().includes(override.match.toLowerCase());
-                        default:
-                            return false; // No match method specified
-                    }
-                });
+            const matches = Object.entries(links).flatMap(([category, items]) => 
+                 items
+                    .map((link, index) => ({ category, linkIndex: index, link }))
+                    .filter(result => result.link.contentId === override.match)
+            );
 
-                // If we found a match, replace it with the overridden version
-                if (linkIndex !== -1) {
-                    console.log(`Found override for link: ${links[category][linkIndex].title} (${links[category][linkIndex].link}) in category: ${category}`);
-                    const originalLink = links[category][linkIndex];
+            switch (true) {
+                case matches.length == 0:
+                    console.log(`Warning: No matches found for override: ${override.title || override.link || "Deletion"} (${override.match})`);
+                    break;
 
-                    links[category][linkIndex] = {
+                case matches.length == 1:
+                    override_count += 1;
+                    const match = matches[0];
+                    const originalLink = match.link;
+
+                    links[match.category][match.linkIndex] = {
                         title: override.title || originalLink.title, // Use override title if provided, otherwise keep original
                         link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
                         isDeleted: !override.title && !override.link, // If neither title nor link is provided, mark as deleted
                         isOverridden: true,
                         overridden: [override.title ? originalLink.title : null, override.link ? originalLink.link : null].filter(Boolean).join(', '), // Preserve originals
                         overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
+                        
                         // Preserve other AF link properties
                         originalTitle: originalLink.title,
                         originalLink: originalLink.link,
@@ -148,10 +143,13 @@ async function getNewestDate(files) {
                         url: originalLink.url
                     };
 
-                    override_count++;
-                    break; // Exit the loop once we found a match
-                }
-            };
+                    console.log(`Applied override: ${override.title || override.link || "Deletion"} (${override.match}) to link "${originalLink.title}"`);
+                    break;
+                    
+                case matches.length > 1:
+                    console.log(`Error: Found ${matches.length} matches. There should only be one. Exiting.`);
+                    process.exit(1); // Fail job to prevent undefined behavior
+            }
         };
 
 
@@ -197,24 +195,22 @@ async function getNewestDate(files) {
 
 
         // Add correction url to each link
-        const correctionTemplateURL = "https://github.com/dadatuputi/aflink/issues/new"
+        const githubIssueBase = "https://github.com/dadatuputi/aflink/issues/new"
         links.forEach(category => {
             category.links.forEach(link => {
-                const url = new URL(correctionTemplateURL);
-                if (category.category === 'OTHER') {
-                    url.searchParams.append('template', '03_link_delete.yaml');
-                    url.searchParams.append('title', `[DELETE]: ${link.title}`);
-                    url.searchParams.append('link_id', link.contentId);
-                } else {
-                    url.searchParams.append('template', '02_link_override.yaml');
-                    url.searchParams.append('title', `[Override Request]: ${link.title}`);
-                    url.searchParams.append('match_method', 'ContentID');   // Can't actually use parameters to populate dropdown
-                    url.searchParams.append('match', link.contentId);
-                    // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
-                    // url.searchParams.append('new_url', link.link);
-                }
+                const correction = new URL(githubIssueBase);
+                correction.searchParams.append('template', '02_link_override.yaml');
+                correction.searchParams.append('title', `[MODIFY]: ${link.title}`);
+                correction.searchParams.append('match', link.contentId);
+                // url.searchParams.append('new_title', link.title); // Don't use this, require user to supply new title or url
+                // url.searchParams.append('new_url', link.link);
+                link.correction = correction.toString();
 
-                link.correction = url.toString();
+                const deletion = new URL(githubIssueBase);
+                deletion.searchParams.append('template', '03_link_delete.yaml');
+                deletion.searchParams.append('title', `[DELETE]: ${link.title}`);
+                deletion.searchParams.append('match', link.contentId);
+                link.deletion = deletion.toString();
             });
         });
 

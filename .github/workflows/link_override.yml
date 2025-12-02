@@ -41,6 +41,11 @@ jobs:
         echo "NEW_TITLE=$NEW_TITLE" >> $GITHUB_ENV
         echo "NEW_LINK=$NEW_LINK" >> $GITHUB_ENV
 
+        # If both title and link are empty, mark validation error for a later step to comment + fail
+        if [[ -z "$NEW_TITLE" && -z "$NEW_LINK" ]]; then
+          echo "VALIDATION_ERROR=Missing both title and url" >> $GITHUB_ENV
+        fi
+
         echo "✅ Parsed values:"
         echo "  Match Method: $MATCH_METHOD"
         echo "  Match String: $MATCH_STRING"
@@ -53,7 +58,7 @@ jobs:
     - name: Install jq & sponge
       run: |
         # Skip installing pacakge docs {makes the man-db trigger much faster) 
-        # (I disabled `/doc` and `/info` too, just in case.)
+        # disabled `/doc` and `/info` as well to speed up apt operations further
         sudo tee /etc/dpkg/dpkg.cfg.d/01_nodoc > /dev/null << 'EOF'
         path-exclude /usr/share/doc/*
         path-exclude /usr/share/man/*
@@ -61,7 +66,20 @@ jobs:
         EOF
 
         sudo apt-get update
-        sudo apt-get install --yes jq moreutils
+        sudo apt-get install --yes jq moreutils uuid-runtime
+
+    - name: Fail if no link and no url provided
+      if: env.VALIDATION_ERROR != ''
+      uses: actions/github-script@v6
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `❌ Failed to add override: no Link Title or Link URL provided. Please include at least one of 'Link Title' or 'Link URL' in the issue body so the override can be created.`
+          });
+          throw new Error('Validation error: missing title and url');
         
     - name: Add override to file
       run: |

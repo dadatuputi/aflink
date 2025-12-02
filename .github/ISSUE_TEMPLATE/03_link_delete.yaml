@@ -6,18 +6,18 @@ assignees:
   - dadatuputi
 body:
   - type: input
-    id: link_id
+    id: match
     attributes:
       label: Link ID
-      description: The unique ID of the link to delete. This can be found in the link's URL or by searching for the link.
-      placeholder: e.g., 1234567890
+      description: The unique ID of the link to delete. This should be auto-filled but is also present in the html for each link as data-content-id.
+      placeholder: 037a5a53-db87-48f5-8c6e-017d65bf8b3c
     validations:
       required: true
   - type: textarea
     id: comment
     attributes:
       label: Comment
-      description: A comment about the link and a reason why it should be deleted.
+      description: Please explain why the link changes should be approved.
     validations:
       required: true
   

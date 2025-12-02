@@ -37,8 +37,9 @@ html.bg-spice-brown(lang='en')
               //- Put each link in the category here
               each link in links_not_deleted
                 .list-group-item.list-group-item-action.border-top.link-container
-                  a.main-link(href=link.link class={'overridden': link.isOverridden} title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
-                  a.correction-link(target="_blank" title=(category.name === 'OTHER' ? "Delete link" : "Submit a correction") href=link.correction) #{category.name === 'OTHER' ? '🗑️' : '📝'}
+                  a.main-link(href=link.link class={'overridden': link.isOverridden} data-content-id=(link.contentId) title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
+                  a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
+                  a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
       p.alert-dark(hidden) No results for 
         em
   section#about.bg-olive-drab.text-center
