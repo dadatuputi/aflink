@@ -5,36 +5,19 @@ labels: ["override link", "workflow"]
 assignees:
   - dadatuputi
 body:
-  - type: dropdown
-    id: match_method
-    attributes:
-      label: Match Method
-      description: >
-        How to match this override to the original link:
-        ContentID: Match this ContentID to target ContentID (unique to link)
-        Title: Match this title to target link title
-        URL: Match this URL to target link URL
-        Fuzzy Title: Partially match this title to target link title
-      options:
-        - Content ID
-        - Title
-        - URL
-        - Fuzzy Title
-      default: 0
-    validations:
-      required: true
   - type: input
     id: match
     attributes:
-      label: Match String
-      description: The string to match, depends on Match Method above.
+      label: Link ID
+      description: The unique ID of the link to delete. This should be auto-filled but is also present in the html for each link as data-content-id.
+      placeholder: 037a5a53-db87-48f5-8c6e-017d65bf8b3c
     validations:
       required: true
   - type: input
     id: new_title
     attributes:
       label: Link Title
-      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
+      description: "New title for the link. This and / or the Link URL field must be provided."
       placeholder: AF Portal
     validations:
       required: false
@@ -42,7 +25,7 @@ body:
     id: new_url
     attributes:
       label: Link URL
-      description: "If neither Link Title nor Link URL are provided, the target link will be removed."
+      description: "New URL for the link. This and / or the Link Title field must be provided."
       placeholder: https://www.my.af.mil
     validations:
       required: false
@@ -50,7 +33,6 @@ body:
     id: comment
     attributes:
       label: Comment
-      description: Please explain why the override or deletion should be approved.
+      description: Please explain why the link changes should be approved.
     validations:
       required: true
-  
