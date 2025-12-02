@@ -93,20 +93,19 @@ jobs:
         set -o pipefail
         OVERRIDE_ID=$(uuidgen)
 
-        jq --arg MATCH_METHOD "Content ID" \
-           --arg MATCH_STRING "${{ env.LINK_ID }}" \
+        # Create override entry with title and link set to null to hide the AF Portal link
+        jq --arg LINK_ID "${{ env.LINK_ID }}" \
            --arg OVERRIDE_ID "$OVERRIDE_ID" \
            '. += [{
              "id": $OVERRIDE_ID,
-             "match_method": $MATCH_METHOD,
-             "match": $MATCH_STRING,
+             "match_method": "Content ID",
+             "match": $LINK_ID,
              "title": null,
              "link": null,
              "timestamp": now
            }]' src/links/links_override.json | sponge src/links/links_override.json
 
         echo "✅ Added override entry for LINK_ID '${{ env.LINK_ID }}' (override id: $OVERRIDE_ID)"
-        cat src/links/links_override.json
 
     - name: Add failure comment
       if: failure()
