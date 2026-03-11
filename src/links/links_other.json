@@ -209,6 +209,11 @@
       "title": "UTAPSWeb - Reserve Unit Training Assembly Participation System- IDT",
       "link": "https://utapsweb.afrc.af.mil/utapsweb/",
       "contentId": "3a767706-5ddb-4398-ba51-a3664105c564"
+    },
+    {
+      "title": "ARIS - Automated Readiness Information System",
+      "link": "https://aris.cce.af.mil/mod/",
+      "contentId": "5d93a849-1f5e-4d51-b2d3-16d9d19e1262"
     }
   ]
 }
