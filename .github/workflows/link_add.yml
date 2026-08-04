@@ -18,14 +18,29 @@ jobs:
         echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
         echo "Issue body: ${{ github.event.client_payload.issue_body }}"
 
-        TITLE=$(echo "$BODY" | sed -n 3p)
-        URL=$(echo "$BODY" | sed -n 7p)
-        [[ -z $TITLE ]] && exit 1
-        [[ -z $URL ]] && exit 1
-        TITLE="TITLE=$TITLE"
-        URL="URL=$URL"
-        echo $TITLE | tee -a $GITHUB_ENV
-        echo $URL | tee -a $GITHUB_ENV
+        # Extract the first non-blank line after a "### <header>" line, trimmed.
+        # Anchoring on the header (rather than sed line numbers) survives blank-line
+        # shifts, CRLF payloads, and leading/trailing whitespace; avoiding xargs
+        # survives values containing quotes/apostrophes.
+        field() {
+          printf '%s' "$BODY" | awk -v H="### $1" '
+            index($0, H) == 1 { found = 1; next }
+            found && $0 ~ /[^[:space:]]/ {
+              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
+            }'
+        }
+
+        TITLE=$(field "Link Title")
+        URL=$(field "Link URL")
+        [[ -z "$TITLE" ]] && { echo "Missing Link Title"; exit 1; }
+        [[ -z "$URL" ]] && { echo "Missing Link URL"; exit 1; }
+
+        {
+          echo "TITLE=$TITLE"
+          echo "URL=$URL"
+        } >> "$GITHUB_ENV"
+        echo "Parsed TITLE=$TITLE"
+        echo "Parsed URL=$URL"
 
     - name: Checkout Repository
       uses: actions/checkout@v4
