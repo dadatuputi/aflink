@@ -68,6 +68,12 @@ $(document).ready(function () {
     $a.html(html + escapeHtml(text.slice(pos)));
   }
 
+  // Remember pristine header text: search decorates headers with a highlight
+  // and a CATEGORY MATCH pill, and matching must read the original text
+  $('#link-list .category, #unofficial h2').each(function () {
+    $(this).data('orig-text', $(this).text());
+  });
+
   // Filter links based on search query
   $("#search-form").on(
     "change keyup paste search",
@@ -96,6 +102,11 @@ $(document).ready(function () {
         var text = $a.text();
         var title = normalize(text);
         var url = normalize(($a.attr('href') || "").replace(/^https?:\/\//, "")).norm;
+        // Tokens can also match the row's category name ("education" shows the
+        // whole category); unofficial rows have no .category sibling and match
+        // as "unofficial"
+        var $cat = $(this).siblings('.category');
+        var cat = normalize($cat.length ? $cat.data('orig-text') : "unofficial").norm;
         var ranges = [];
         var ok = words.every(function (w) {
           var p = title.norm.indexOf(w.whole);
@@ -103,7 +114,7 @@ $(document).ready(function () {
             ranges.push([title.map[p], title.map[p + w.whole.length - 1]]);
             return true;
           }
-          if (url.indexOf(w.whole) > -1) return true;
+          if (url.indexOf(w.whole) > -1 || cat.indexOf(w.whole) > -1) return true;
           if (!w.parts.length) return false;
           var partRanges = [];
           var all = w.parts.every(function (t) {
@@ -112,7 +123,7 @@ $(document).ready(function () {
               partRanges.push([title.map[q], title.map[q + t.length - 1]]);
               return true;
             }
-            return url.indexOf(t) > -1;
+            return url.indexOf(t) > -1 || cat.indexOf(t) > -1;
           });
           if (all) {
             ranges.push.apply(ranges, partRanges);
@@ -134,8 +145,43 @@ $(document).ready(function () {
       // Show link category
       links.siblings('.category').toggle(true);
 
-      // Hide the unofficial section entirely when none of its links match
-      $('#unofficial').toggle($('#unofficial-list .link-container:visible').length > 0);
+      // Decorate headers whose name matched a query word: highlight the
+      // matched text and append a CATEGORY MATCH pill
+      $('#link-list .category, #unofficial h2').each(function () {
+        var $h = $(this);
+        var htext = $h.data('orig-text');
+        var n = normalize(htext);
+        var hranges = [];
+        words.forEach(function (w) {
+          var p = n.norm.indexOf(w.whole);
+          if (p > -1) {
+            hranges.push([n.map[p], n.map[p + w.whole.length - 1]]);
+            return;
+          }
+          if (!w.parts.length) return;
+          var pr = [];
+          var all = w.parts.every(function (t) {
+            var q = n.norm.indexOf(t);
+            if (q > -1) {
+              pr.push([n.map[q], n.map[q + t.length - 1]]);
+              return true;
+            }
+            return false;
+          });
+          if (all) hranges.push.apply(hranges, pr);
+        });
+        if (hranges.length) {
+          highlight($h, htext, hranges);
+          $h.append('<span class="category-match-pill">Category match</span>');
+        } else {
+          $h.text(htext);
+        }
+      });
+
+      // Hide the unofficial section entirely when none of its links match.
+      // Count matches from the filter result, not :visible — rows inside the
+      // hidden section always measure invisible, which would latch it hidden.
+      $('#unofficial').toggle(links.filter('#unofficial-list .link-container').length > 0);
 
       // Update URL with new search params
       updateSearchParams($(this).val())
