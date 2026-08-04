@@ -1,0 +1,94 @@
+doctype html
+html.bg-spice-brown(lang='en')
+
+  include includes/head.pug
+
+  //- Navigation
+  +navigation
+    a.nav-link(href='/overrides') Overrides
+    a.nav-link(href='/tutorial') Tutorial
+
+  //- Server-rendered 30-day view; the preset buttons are hidden until the
+  //- client script takes over and re-renders from the embedded JSON.
+  - var r30 = analytics.ranges['30']
+  - var d30 = analytics.daily.slice(-30)
+  - var maxUsers = Math.max.apply(null, d30.map(d => d.users).concat([1]))
+  - var maxIdx = d30.map(d => d.users).indexOf(maxUsers)
+  - var maxLink = r30.topLinks.length ? r30.topLinks[0].clicks : 1
+  - var maxCat = r30.categories.length ? r30.categories[0].clicks : 1
+  - var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  - var fmtDate = s => Number(s.slice(6,8)) + ' ' + months[Number(s.slice(4,6)) - 1]
+  - var fmtNum = n => n.toLocaleString('en-US')
+
+  section#usage.bg-sage.text-center
+    .container
+      .offcenter
+        h2 Usage
+        em.d-none.d-md-block(title=analytics_utc) Updated #{analytics_date}
+
+      .btn-group.mb-3#range-presets(hidden role='group' aria-label='Date range')
+        button.btn.btn-sm.btn-outline-dark.active(type='button' data-range='30') 30 days
+        button.btn.btn-sm.btn-outline-dark(type='button' data-range='90') 90 days
+        button.btn.btn-sm.btn-outline-dark(type='button' data-range='365') 1 year
+
+      .usage-stack
+        .row.g-3
+          .col-4
+            .card.stat-tile
+              .num#stat-users #{fmtNum(r30.totals.users)}
+              .lbl Visitors
+          .col-4
+            .card.stat-tile
+              .num#stat-pageviews #{fmtNum(r30.totals.pageviews)}
+              .lbl Pageviews
+          .col-4
+            .card.stat-tile
+              .num#stat-clicks #{fmtNum(r30.totals.linkClicks)}
+              .lbl Link clicks
+
+        .card.chart-card.mt-3
+          .chart-title#trend-title Daily visitors
+          .trend#trend-chart
+            each d, i in d30
+              i(class=(i === maxIdx ? 'hi' : '') style=`height:${Math.max(2, Math.round(d.users / maxUsers * 100))}%` title=`${fmtDate(d.date)}: ${fmtNum(d.users)}${i === maxIdx ? ' (busiest day)' : ''}`)
+          .axis#trend-axis
+            span #{d30.length ? fmtDate(d30[0].date) : ''}
+            span #{d30.length ? fmtDate(d30[d30.length - 1].date) : ''}
+
+        .card.chart-card.mt-3
+          .chart-title Most-clicked links
+          if r30.topLinks.length
+            .rank#rank-links
+              each l in r30.topLinks.slice(0, 10)
+                .r
+                  span.t #{l.title}
+                    span.cat #{l.category}
+                  span.bar(style=`width:${Math.max(2, Math.round(l.clicks / maxLink * 100))}%`)
+                  span.n #{fmtNum(l.clicks)}
+          else
+            p.small.text-muted.mb-0#rank-links No click data collected yet.
+
+        .card.chart-card.mt-3.mb-1
+          .chart-title Clicks by category
+          if r30.categories.length
+            .rank#rank-cats
+              each c in r30.categories
+                .r
+                  span.t #{c.category}
+                  span.bar(style=`width:${Math.max(2, Math.round(c.clicks / maxCat * 100))}%`)
+                  span.n #{fmtNum(c.clicks)}
+          else
+            p.small.text-muted.mb-0#rank-cats No click data collected yet.
+
+  section#footer.bg-spice-brown.py-1.text-end
+    .container
+      em Anonymized aggregates from Google Analytics, refreshed nightly.
+
+  script#analytics-data(type='application/json') !{JSON.stringify(analytics).replace(/</g, '\\u003c')}
+  script
+    if isDev
+      include includes/js/analytics.js
+    else
+      include:uglify-js includes/js/analytics.js
+
+  include includes/foot.pug
