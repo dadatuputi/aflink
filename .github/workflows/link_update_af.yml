@@ -13,19 +13,41 @@ jobs:
       env:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
-        B64=$(echo "$BODY" | sed -n 3p)
-        [[ -z $B64 ]] && exit 1
-        B64="B64=$B64"
-        echo $B64 | tr -d '[:space:]' | tee -a $GITHUB_ENV
+        # Extract the first non-blank line after the "### Compressed JSON"
+        # header, trimmed. Anchoring on the header (rather than sed line
+        # numbers) survives blank-line shifts and CRLF payloads.
+        field() {
+          printf '%s' "$BODY" | awk -v H="### $1" '
+            index($0, H) == 1 { found = 1; next }
+            found && $0 ~ /[^[:space:]]/ {
+              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
+            }'
+        }
+
+        B64=$(field "Compressed JSON" | tr -d '[:space:]')
+        [[ -z "$B64" ]] && { echo "Missing Compressed JSON"; exit 1; }
+        echo "B64=$B64" >> $GITHUB_ENV
 
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Overwrite links with new link list
+    - name: Decode new link list
       run: |
-        JSON=$(echo ${{ env.B64 }} | base64 -d | gzip -dc)
-        echo "Decompressed data:"
-        echo "$JSON" | tee src/links/links_af.json
+        # Prettify so commits to links_af.json produce readable diffs
+        echo "${{ env.B64 }}" | base64 -d | gzip -dc | jq . > /tmp/links_af_new.json
+        echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_new.json) links"
+
+    - name: Compute import statistics
+      run: |
+        node scripts/af-import-stats.js src/links/links_af.json /tmp/links_af_new.json | tee /tmp/stats.txt
+        {
+          echo 'STATS<<STATS_EOF'
+          cat /tmp/stats.txt
+          echo 'STATS_EOF'
+        } >> $GITHUB_ENV
+
+    - name: Overwrite links with new link list
+      run: mv /tmp/links_af_new.json src/links/links_af.json
 
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v9
@@ -55,6 +77,8 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: `✅ **AF Links updated successfully!**
-            
-            The AF links have been updated successfully. Nicely done.`
+
+            \`\`\`
+            ${{ env.STATS }}
+            \`\`\``
           })
