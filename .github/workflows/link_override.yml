@@ -169,6 +169,23 @@ jobs:
 
         echo "✅ Override added to links_override.json"
         
+    - name: Trust check
+      id: trust
+      run: node scripts/check-trust.js
+
+    - name: Warn on non-official domains
+      if: fromJSON(steps.trust.outputs.findings || '0') > 0
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: fs.readFileSync('/tmp/trust_warning.md', 'utf8'),
+          });
+
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
