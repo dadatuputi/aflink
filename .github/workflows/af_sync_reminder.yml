@@ -1,0 +1,93 @@
+name: AF Sync Staleness Reminder
+
+on:
+  schedule:
+    - cron: '47 9 * * 1'   # Mondays 09:47 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so the file's last commit date is real
+
+      - name: Measure links_af.json age
+        run: |
+          LAST=$(git log -1 --format=%ct -- src/links/links_af.json)
+          NOW=$(date +%s)
+          AGE_DAYS=$(( (NOW - LAST) / 86400 ))
+          # Repository variable AF_SYNC_STALE_DAYS overrides the 90-day default
+          THRESHOLD=${{ vars.AF_SYNC_STALE_DAYS || 90 }}
+          {
+            echo "AGE_DAYS=$AGE_DAYS"
+            echo "THRESHOLD=$THRESHOLD"
+            echo "LAST_SYNC=$(date -u -d @$LAST '+%-d %B %Y')"
+          } >> $GITHUB_ENV
+          echo "AF links last synced $AGE_DAYS days ago (threshold: $THRESHOLD days)"
+
+      - name: Open or close the reminder issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const stale = Number(process.env.AGE_DAYS) >= Number(process.env.THRESHOLD);
+            const TITLE = '🔄 AF Portal links sync overdue';
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = open.find(i => !i.pull_request && i.title === TITLE);
+
+            if (!stale) {
+              if (existing) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: existing.number,
+                  body: `✅ AF links were synced ${process.env.AGE_DAYS} days ago — under the ${process.env.THRESHOLD}-day threshold. Closing.`,
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: existing.number,
+                  state: 'closed',
+                });
+                core.info(`Closed reminder #${existing.number}; links are fresh.`);
+              } else {
+                core.info('Links are fresh; nothing to do.');
+              }
+              return;
+            }
+
+            if (existing) {
+              core.info(`Reminder already open: #${existing.number}`);
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: TITLE,
+              assignees: ['dadatuputi'],
+              body: [
+                `The AF Portal links were last synced **${process.env.AGE_DAYS} days ago** (${process.env.LAST_SYNC}) — past the ${process.env.THRESHOLD}-day threshold.`,
+                '',
+                'To re-sync (~60 seconds, requires CAC):',
+                '',
+                '1. Open [Quick Links on the AF Portal](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=p7F11BC9F789430190178946F7E140005&channelPageId=sD22E5184744EFC540174558CFFA50008)',
+                '2. Open developer tools (F12) → Console, and paste the contents of [`getlinks.js`](https://raw.githubusercontent.com/dadatuputi/aflink/refs/heads/master/getlinks.js)',
+                '3. Copy the modal contents into a new [Update AF Links issue](https://github.com/dadatuputi/aflink/issues/new?template=04_link_update_af.yaml)',
+                '4. Close that issue to run the import — its success comment will show exactly what changed',
+                '',
+                '_This reminder closes itself on the next weekly check after the sync lands._',
+              ].join('\n'),
+            });
+            core.info('Opened a new sync reminder issue.');
