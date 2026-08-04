@@ -1,0 +1,19 @@
+{
+  "comment": "Non-.mil/.gov hosts that are known-legitimate. The weekly link checker flags any official-list domain not ending in .mil/.gov and not listed here.",
+  "allowed_hosts": [
+    "core-integration.affsa.aws.solidstatescientific.com",
+    "top.my.site.com",
+    "portal.tricare-overseas.com",
+    "www.afacpo.com",
+    "www.dau.edu",
+    "www.airuniversity.af.edu",
+    "www.afit.edu",
+    "usaf.percipio.com",
+    "www.enterprisetraining.com",
+    "home.cards.citidirect.com",
+    "www.usafmarathon.com",
+    "dpassupport.golearnportal.org",
+    "fss.emap-web.com",
+    "daf.dodmwrlibraries.org"
+  ]
+}
