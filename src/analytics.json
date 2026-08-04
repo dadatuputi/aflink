@@ -1,0 +1,1864 @@
+{
+  "generated": "2026-08-04T06:24:59.926Z",
+  "daily": [
+    {
+      "date": "20250803",
+      "users": 1252,
+      "pageviews": 5360
+    },
+    {
+      "date": "20250804",
+      "users": 2520,
+      "pageviews": 10349
+    },
+    {
+      "date": "20250805",
+      "users": 2469,
+      "pageviews": 10228
+    },
+    {
+      "date": "20250806",
+      "users": 2351,
+      "pageviews": 9470
+    },
+    {
+      "date": "20250807",
+      "users": 2455,
+      "pageviews": 9758
+    },
+    {
+      "date": "20250808",
+      "users": 1877,
+      "pageviews": 7894
+    },
+    {
+      "date": "20250809",
+      "users": 535,
+      "pageviews": 2519
+    },
+    {
+      "date": "20250810",
+      "users": 746,
+      "pageviews": 3356
+    },
+    {
+      "date": "20250811",
+      "users": 2766,
+      "pageviews": 11508
+    },
+    {
+      "date": "20250812",
+      "users": 2788,
+      "pageviews": 12062
+    },
+    {
+      "date": "20250813",
+      "users": 2737,
+      "pageviews": 11214
+    },
+    {
+      "date": "20250814",
+      "users": 2465,
+      "pageviews": 9904
+    },
+    {
+      "date": "20250815",
+      "users": 1751,
+      "pageviews": 6909
+    },
+    {
+      "date": "20250816",
+      "users": 489,
+      "pageviews": 1772
+    },
+    {
+      "date": "20250817",
+      "users": 699,
+      "pageviews": 2717
+    },
+    {
+      "date": "20250818",
+      "users": 2545,
+      "pageviews": 10286
+    },
+    {
+      "date": "20250819",
+      "users": 2611,
+      "pageviews": 10231
+    },
+    {
+      "date": "20250820",
+      "users": 2612,
+      "pageviews": 10758
+    },
+    {
+      "date": "20250821",
+      "users": 2294,
+      "pageviews": 9316
+    },
+    {
+      "date": "20250822",
+      "users": 1930,
+      "pageviews": 7933
+    },
+    {
+      "date": "20250823",
+      "users": 493,
+      "pageviews": 2000
+    },
+    {
+      "date": "20250824",
+      "users": 720,
+      "pageviews": 2876
+    },
+    {
+      "date": "20250825",
+      "users": 2800,
+      "pageviews": 10403
+    },
+    {
+      "date": "20250826",
+      "users": 2788,
+      "pageviews": 11049
+    },
+    {
+      "date": "20250827",
+      "users": 2445,
+      "pageviews": 9648
+    },
+    {
+      "date": "20250828",
+      "users": 1978,
+      "pageviews": 7714
+    },
+    {
+      "date": "20250829",
+      "users": 977,
+      "pageviews": 3830
+    },
+    {
+      "date": "20250830",
+      "users": 308,
+      "pageviews": 1275
+    },
+    {
+      "date": "20250831",
+      "users": 251,
+      "pageviews": 790
+    },
+    {
+      "date": "20250901",
+      "users": 635,
+      "pageviews": 2794
+    },
+    {
+      "date": "20250902",
+      "users": 2862,
+      "pageviews": 11785
+    },
+    {
+      "date": "20250903",
+      "users": 2575,
+      "pageviews": 10511
+    },
+    {
+      "date": "20250904",
+      "users": 2452,
+      "pageviews": 9871
+    },
+    {
+      "date": "20250905",
+      "users": 2005,
+      "pageviews": 8902
+    },
+    {
+      "date": "20250906",
+      "users": 862,
+      "pageviews": 4465
+    },
+    {
+      "date": "20250907",
+      "users": 1119,
+      "pageviews": 4910
+    },
+    {
+      "date": "20250908",
+      "users": 2494,
+      "pageviews": 20616
+    },
+    {
+      "date": "20250909",
+      "users": 2593,
+      "pageviews": 11369
+    },
+    {
+      "date": "20250910",
+      "users": 2216,
+      "pageviews": 9232
+    },
+    {
+      "date": "20250911",
+      "users": 1963,
+      "pageviews": 8059
+    },
+    {
+      "date": "20250912",
+      "users": 1648,
+      "pageviews": 7209
+    },
+    {
+      "date": "20250913",
+      "users": 526,
+      "pageviews": 2522
+    },
+    {
+      "date": "20250914",
+      "users": 711,
+      "pageviews": 3986
+    },
+    {
+      "date": "20250915",
+      "users": 2465,
+      "pageviews": 10963
+    },
+    {
+      "date": "20250916",
+      "users": 2489,
+      "pageviews": 10970
+    },
+    {
+      "date": "20250917",
+      "users": 2326,
+      "pageviews": 10144
+    },
+    {
+      "date": "20250918",
+      "users": 1969,
+      "pageviews": 8298
+    },
+    {
+      "date": "20250919",
+      "users": 1563,
+      "pageviews": 7114
+    },
+    {
+      "date": "20250920",
+      "users": 327,
+      "pageviews": 1628
+    },
+    {
+      "date": "20250921",
+      "users": 525,
+      "pageviews": 2257
+    },
+    {
+      "date": "20250922",
+      "users": 2087,
+      "pageviews": 9835
+    },
+    {
+      "date": "20250923",
+      "users": 2128,
+      "pageviews": 9415
+    },
+    {
+      "date": "20250924",
+      "users": 2172,
+      "pageviews": 9622
+    },
+    {
+      "date": "20250925",
+      "users": 1922,
+      "pageviews": 8265
+    },
+    {
+      "date": "20250926",
+      "users": 1512,
+      "pageviews": 6303
+    },
+    {
+      "date": "20250927",
+      "users": 384,
+      "pageviews": 1690
+    },
+    {
+      "date": "20250928",
+      "users": 596,
+      "pageviews": 2562
+    },
+    {
+      "date": "20250929",
+      "users": 2679,
+      "pageviews": 12111
+    },
+    {
+      "date": "20250930",
+      "users": 2610,
+      "pageviews": 11950
+    },
+    {
+      "date": "20251001",
+      "users": 3069,
+      "pageviews": 12089
+    },
+    {
+      "date": "20251002",
+      "users": 2058,
+      "pageviews": 8292
+    },
+    {
+      "date": "20251003",
+      "users": 1580,
+      "pageviews": 7066
+    },
+    {
+      "date": "20251004",
+      "users": 631,
+      "pageviews": 2611
+    },
+    {
+      "date": "20251005",
+      "users": 643,
+      "pageviews": 2836
+    },
+    {
+      "date": "20251006",
+      "users": 2311,
+      "pageviews": 10110
+    },
+    {
+      "date": "20251007",
+      "users": 1986,
+      "pageviews": 9124
+    },
+    {
+      "date": "20251008",
+      "users": 1880,
+      "pageviews": 8397
+    },
+    {
+      "date": "20251009",
+      "users": 1544,
+      "pageviews": 6814
+    },
+    {
+      "date": "20251010",
+      "users": 964,
+      "pageviews": 4250
+    },
+    {
+      "date": "20251011",
+      "users": 263,
+      "pageviews": 1071
+    },
+    {
+      "date": "20251012",
+      "users": 303,
+      "pageviews": 1367
+    },
+    {
+      "date": "20251013",
+      "users": 640,
+      "pageviews": 2867
+    },
+    {
+      "date": "20251014",
+      "users": 2195,
+      "pageviews": 9734
+    },
+    {
+      "date": "20251015",
+      "users": 2275,
+      "pageviews": 9148
+    },
+    {
+      "date": "20251016",
+      "users": 1927,
+      "pageviews": 8701
+    },
+    {
+      "date": "20251017",
+      "users": 1364,
+      "pageviews": 6589
+    },
+    {
+      "date": "20251018",
+      "users": 395,
+      "pageviews": 1602
+    },
+    {
+      "date": "20251019",
+      "users": 481,
+      "pageviews": 2345
+    },
+    {
+      "date": "20251020",
+      "users": 1876,
+      "pageviews": 8611
+    },
+    {
+      "date": "20251021",
+      "users": 1929,
+      "pageviews": 8418
+    },
+    {
+      "date": "20251022",
+      "users": 1757,
+      "pageviews": 7712
+    },
+    {
+      "date": "20251023",
+      "users": 1746,
+      "pageviews": 8327
+    },
+    {
+      "date": "20251024",
+      "users": 1237,
+      "pageviews": 5525
+    },
+    {
+      "date": "20251025",
+      "users": 359,
+      "pageviews": 1728
+    },
+    {
+      "date": "20251026",
+      "users": 545,
+      "pageviews": 2765
+    },
+    {
+      "date": "20251027",
+      "users": 2227,
+      "pageviews": 10056
+    },
+    {
+      "date": "20251028",
+      "users": 1965,
+      "pageviews": 8793
+    },
+    {
+      "date": "20251029",
+      "users": 1899,
+      "pageviews": 8573
+    },
+    {
+      "date": "20251030",
+      "users": 1764,
+      "pageviews": 7832
+    },
+    {
+      "date": "20251031",
+      "users": 1673,
+      "pageviews": 7439
+    },
+    {
+      "date": "20251101",
+      "users": 717,
+      "pageviews": 3654
+    },
+    {
+      "date": "20251102",
+      "users": 876,
+      "pageviews": 4528
+    },
+    {
+      "date": "20251103",
+      "users": 2255,
+      "pageviews": 10886
+    },
+    {
+      "date": "20251104",
+      "users": 2906,
+      "pageviews": 13155
+    },
+    {
+      "date": "20251105",
+      "users": 2597,
+      "pageviews": 11459
+    },
+    {
+      "date": "20251106",
+      "users": 2251,
+      "pageviews": 10199
+    },
+    {
+      "date": "20251107",
+      "users": 1787,
+      "pageviews": 7537
+    },
+    {
+      "date": "20251108",
+      "users": 332,
+      "pageviews": 1469
+    },
+    {
+      "date": "20251109",
+      "users": 482,
+      "pageviews": 2090
+    },
+    {
+      "date": "20251110",
+      "users": 856,
+      "pageviews": 3911
+    },
+    {
+      "date": "20251111",
+      "users": 594,
+      "pageviews": 2628
+    },
+    {
+      "date": "20251112",
+      "users": 2290,
+      "pageviews": 9785
+    },
+    {
+      "date": "20251113",
+      "users": 2565,
+      "pageviews": 12004
+    },
+    {
+      "date": "20251114",
+      "users": 2020,
+      "pageviews": 9014
+    },
+    {
+      "date": "20251115",
+      "users": 490,
+      "pageviews": 2419
+    },
+    {
+      "date": "20251116",
+      "users": 789,
+      "pageviews": 3325
+    },
+    {
+      "date": "20251117",
+      "users": 2694,
+      "pageviews": 13227
+    },
+    {
+      "date": "20251118",
+      "users": 2045,
+      "pageviews": 8743
+    },
+    {
+      "date": "20251119",
+      "users": 2336,
+      "pageviews": 10640
+    },
+    {
+      "date": "20251120",
+      "users": 2131,
+      "pageviews": 9411
+    },
+    {
+      "date": "20251121",
+      "users": 1629,
+      "pageviews": 6850
+    },
+    {
+      "date": "20251122",
+      "users": 378,
+      "pageviews": 1523
+    },
+    {
+      "date": "20251123",
+      "users": 493,
+      "pageviews": 2134
+    },
+    {
+      "date": "20251124",
+      "users": 2489,
+      "pageviews": 11339
+    },
+    {
+      "date": "20251125",
+      "users": 2092,
+      "pageviews": 8829
+    },
+    {
+      "date": "20251126",
+      "users": 1362,
+      "pageviews": 5996
+    },
+    {
+      "date": "20251127",
+      "users": 265,
+      "pageviews": 1087
+    },
+    {
+      "date": "20251128",
+      "users": 349,
+      "pageviews": 1548
+    },
+    {
+      "date": "20251129",
+      "users": 334,
+      "pageviews": 1485
+    },
+    {
+      "date": "20251130",
+      "users": 616,
+      "pageviews": 2909
+    },
+    {
+      "date": "20251201",
+      "users": 2486,
+      "pageviews": 12202
+    },
+    {
+      "date": "20251202",
+      "users": 2389,
+      "pageviews": 11649
+    },
+    {
+      "date": "20251203",
+      "users": 2475,
+      "pageviews": 11681
+    },
+    {
+      "date": "20251204",
+      "users": 2402,
+      "pageviews": 11470
+    },
+    {
+      "date": "20251205",
+      "users": 2232,
+      "pageviews": 10578
+    },
+    {
+      "date": "20251206",
+      "users": 1558,
+      "pageviews": 6973
+    },
+    {
+      "date": "20251207",
+      "users": 1562,
+      "pageviews": 7439
+    },
+    {
+      "date": "20251208",
+      "users": 2483,
+      "pageviews": 11508
+    },
+    {
+      "date": "20251209",
+      "users": 2610,
+      "pageviews": 11333
+    },
+    {
+      "date": "20251210",
+      "users": 2346,
+      "pageviews": 11210
+    },
+    {
+      "date": "20251211",
+      "users": 2395,
+      "pageviews": 10402
+    },
+    {
+      "date": "20251212",
+      "users": 1816,
+      "pageviews": 7923
+    },
+    {
+      "date": "20251213",
+      "users": 345,
+      "pageviews": 1490
+    },
+    {
+      "date": "20251214",
+      "users": 548,
+      "pageviews": 2375
+    },
+    {
+      "date": "20251215",
+      "users": 2881,
+      "pageviews": 12603
+    },
+    {
+      "date": "20251216",
+      "users": 2385,
+      "pageviews": 11367
+    },
+    {
+      "date": "20251217",
+      "users": 2303,
+      "pageviews": 10922
+    },
+    {
+      "date": "20251218",
+      "users": 2265,
+      "pageviews": 10242
+    },
+    {
+      "date": "20251219",
+      "users": 1983,
+      "pageviews": 7892
+    },
+    {
+      "date": "20251220",
+      "users": 423,
+      "pageviews": 2091
+    },
+    {
+      "date": "20251221",
+      "users": 810,
+      "pageviews": 3258
+    },
+    {
+      "date": "20251222",
+      "users": 4191,
+      "pageviews": 18006
+    },
+    {
+      "date": "20251223",
+      "users": 1468,
+      "pageviews": 6547
+    },
+    {
+      "date": "20251224",
+      "users": 387,
+      "pageviews": 1521
+    },
+    {
+      "date": "20251225",
+      "users": 219,
+      "pageviews": 827
+    },
+    {
+      "date": "20251226",
+      "users": 417,
+      "pageviews": 1559
+    },
+    {
+      "date": "20251227",
+      "users": 309,
+      "pageviews": 1399
+    },
+    {
+      "date": "20251228",
+      "users": 533,
+      "pageviews": 2343
+    },
+    {
+      "date": "20251229",
+      "users": 1908,
+      "pageviews": 8642
+    },
+    {
+      "date": "20251230",
+      "users": 1569,
+      "pageviews": 6979
+    },
+    {
+      "date": "20251231",
+      "users": 974,
+      "pageviews": 4442
+    },
+    {
+      "date": "20260101",
+      "users": 377,
+      "pageviews": 1478
+    },
+    {
+      "date": "20260102",
+      "users": 711,
+      "pageviews": 2768
+    },
+    {
+      "date": "20260103",
+      "users": 390,
+      "pageviews": 1637
+    },
+    {
+      "date": "20260104",
+      "users": 779,
+      "pageviews": 3287
+    },
+    {
+      "date": "20260105",
+      "users": 3556,
+      "pageviews": 15938
+    },
+    {
+      "date": "20260106",
+      "users": 3353,
+      "pageviews": 15141
+    },
+    {
+      "date": "20260107",
+      "users": 3339,
+      "pageviews": 13923
+    },
+    {
+      "date": "20260108",
+      "users": 3029,
+      "pageviews": 13060
+    },
+    {
+      "date": "20260109",
+      "users": 2505,
+      "pageviews": 10792
+    },
+    {
+      "date": "20260110",
+      "users": 1800,
+      "pageviews": 7891
+    },
+    {
+      "date": "20260111",
+      "users": 1938,
+      "pageviews": 8472
+    },
+    {
+      "date": "20260112",
+      "users": 3306,
+      "pageviews": 14162
+    },
+    {
+      "date": "20260113",
+      "users": 3133,
+      "pageviews": 13613
+    },
+    {
+      "date": "20260114",
+      "users": 3128,
+      "pageviews": 13169
+    },
+    {
+      "date": "20260115",
+      "users": 2983,
+      "pageviews": 12478
+    },
+    {
+      "date": "20260116",
+      "users": 1893,
+      "pageviews": 8292
+    },
+    {
+      "date": "20260117",
+      "users": 448,
+      "pageviews": 1708
+    },
+    {
+      "date": "20260118",
+      "users": 466,
+      "pageviews": 2172
+    },
+    {
+      "date": "20260119",
+      "users": 943,
+      "pageviews": 4426
+    },
+    {
+      "date": "20260120",
+      "users": 3534,
+      "pageviews": 16100
+    },
+    {
+      "date": "20260121",
+      "users": 3555,
+      "pageviews": 15287
+    },
+    {
+      "date": "20260122",
+      "users": 3411,
+      "pageviews": 15070
+    },
+    {
+      "date": "20260123",
+      "users": 2809,
+      "pageviews": 11577
+    },
+    {
+      "date": "20260124",
+      "users": 662,
+      "pageviews": 2813
+    },
+    {
+      "date": "20260125",
+      "users": 848,
+      "pageviews": 3712
+    },
+    {
+      "date": "20260126",
+      "users": 3258,
+      "pageviews": 13572
+    },
+    {
+      "date": "20260127",
+      "users": 3160,
+      "pageviews": 13209
+    },
+    {
+      "date": "20260128",
+      "users": 3156,
+      "pageviews": 13664
+    },
+    {
+      "date": "20260129",
+      "users": 3050,
+      "pageviews": 12699
+    },
+    {
+      "date": "20260130",
+      "users": 2426,
+      "pageviews": 10576
+    },
+    {
+      "date": "20260131",
+      "users": 957,
+      "pageviews": 4634
+    },
+    {
+      "date": "20260201",
+      "users": 1357,
+      "pageviews": 5977
+    },
+    {
+      "date": "20260202",
+      "users": 3105,
+      "pageviews": 13305
+    },
+    {
+      "date": "20260203",
+      "users": 3041,
+      "pageviews": 13169
+    },
+    {
+      "date": "20260204",
+      "users": 2905,
+      "pageviews": 12247
+    },
+    {
+      "date": "20260205",
+      "users": 3072,
+      "pageviews": 13166
+    },
+    {
+      "date": "20260206",
+      "users": 2513,
+      "pageviews": 10478
+    },
+    {
+      "date": "20260207",
+      "users": 1489,
+      "pageviews": 7056
+    },
+    {
+      "date": "20260208",
+      "users": 1345,
+      "pageviews": 5788
+    },
+    {
+      "date": "20260209",
+      "users": 3112,
+      "pageviews": 13852
+    },
+    {
+      "date": "20260210",
+      "users": 3041,
+      "pageviews": 13298
+    },
+    {
+      "date": "20260211",
+      "users": 2436,
+      "pageviews": 10754
+    },
+    {
+      "date": "20260212",
+      "users": 2538,
+      "pageviews": 10877
+    },
+    {
+      "date": "20260213",
+      "users": 1465,
+      "pageviews": 6091
+    },
+    {
+      "date": "20260214",
+      "users": 586,
+      "pageviews": 2473
+    },
+    {
+      "date": "20260215",
+      "users": 687,
+      "pageviews": 2891
+    },
+    {
+      "date": "20260216",
+      "users": 1007,
+      "pageviews": 4243
+    },
+    {
+      "date": "20260217",
+      "users": 3776,
+      "pageviews": 15554
+    },
+    {
+      "date": "20260218",
+      "users": 3906,
+      "pageviews": 15406
+    },
+    {
+      "date": "20260219",
+      "users": 3718,
+      "pageviews": 15589
+    },
+    {
+      "date": "20260220",
+      "users": 2866,
+      "pageviews": 12296
+    },
+    {
+      "date": "20260221",
+      "users": 1003,
+      "pageviews": 4163
+    },
+    {
+      "date": "20260222",
+      "users": 1078,
+      "pageviews": 4760
+    },
+    {
+      "date": "20260223",
+      "users": 3559,
+      "pageviews": 14690
+    },
+    {
+      "date": "20260224",
+      "users": 3375,
+      "pageviews": 14565
+    },
+    {
+      "date": "20260225",
+      "users": 3594,
+      "pageviews": 15054
+    },
+    {
+      "date": "20260226",
+      "users": 2773,
+      "pageviews": 11924
+    },
+    {
+      "date": "20260227",
+      "users": 1966,
+      "pageviews": 8721
+    },
+    {
+      "date": "20260228",
+      "users": 789,
+      "pageviews": 3254
+    },
+    {
+      "date": "20260301",
+      "users": 742,
+      "pageviews": 3374
+    },
+    {
+      "date": "20260302",
+      "users": 2548,
+      "pageviews": 12188
+    },
+    {
+      "date": "20260303",
+      "users": 2966,
+      "pageviews": 13422
+    },
+    {
+      "date": "20260304",
+      "users": 2351,
+      "pageviews": 11394
+    },
+    {
+      "date": "20260305",
+      "users": 3665,
+      "pageviews": 16033
+    },
+    {
+      "date": "20260306",
+      "users": 2808,
+      "pageviews": 12909
+    },
+    {
+      "date": "20260307",
+      "users": 1464,
+      "pageviews": 7025
+    },
+    {
+      "date": "20260308",
+      "users": 1547,
+      "pageviews": 7601
+    },
+    {
+      "date": "20260309",
+      "users": 3378,
+      "pageviews": 15044
+    },
+    {
+      "date": "20260310",
+      "users": 3668,
+      "pageviews": 15128
+    },
+    {
+      "date": "20260311",
+      "users": 3150,
+      "pageviews": 13343
+    },
+    {
+      "date": "20260312",
+      "users": 2817,
+      "pageviews": 11861
+    },
+    {
+      "date": "20260313",
+      "users": 1723,
+      "pageviews": 8117
+    },
+    {
+      "date": "20260314",
+      "users": 755,
+      "pageviews": 3084
+    },
+    {
+      "date": "20260315",
+      "users": 1046,
+      "pageviews": 4515
+    },
+    {
+      "date": "20260316",
+      "users": 3512,
+      "pageviews": 14657
+    },
+    {
+      "date": "20260317",
+      "users": 2990,
+      "pageviews": 12946
+    },
+    {
+      "date": "20260318",
+      "users": 3162,
+      "pageviews": 13513
+    },
+    {
+      "date": "20260319",
+      "users": 3070,
+      "pageviews": 12516
+    },
+    {
+      "date": "20260320",
+      "users": 2555,
+      "pageviews": 10884
+    },
+    {
+      "date": "20260321",
+      "users": 607,
+      "pageviews": 2417
+    },
+    {
+      "date": "20260322",
+      "users": 839,
+      "pageviews": 3680
+    },
+    {
+      "date": "20260323",
+      "users": 3668,
+      "pageviews": 15827
+    },
+    {
+      "date": "20260324",
+      "users": 3372,
+      "pageviews": 13461
+    },
+    {
+      "date": "20260325",
+      "users": 3394,
+      "pageviews": 14505
+    },
+    {
+      "date": "20260326",
+      "users": 3004,
+      "pageviews": 12166
+    },
+    {
+      "date": "20260327",
+      "users": 2231,
+      "pageviews": 8524
+    },
+    {
+      "date": "20260328",
+      "users": 661,
+      "pageviews": 2904
+    },
+    {
+      "date": "20260329",
+      "users": 1101,
+      "pageviews": 4712
+    },
+    {
+      "date": "20260330",
+      "users": 3770,
+      "pageviews": 15827
+    },
+    {
+      "date": "20260331",
+      "users": 4453,
+      "pageviews": 18742
+    },
+    {
+      "date": "20260401",
+      "users": 3934,
+      "pageviews": 17063
+    },
+    {
+      "date": "20260402",
+      "users": 3440,
+      "pageviews": 15334
+    },
+    {
+      "date": "20260403",
+      "users": 2337,
+      "pageviews": 9806
+    },
+    {
+      "date": "20260404",
+      "users": 682,
+      "pageviews": 2643
+    },
+    {
+      "date": "20260405",
+      "users": 823,
+      "pageviews": 3776
+    },
+    {
+      "date": "20260406",
+      "users": 3617,
+      "pageviews": 15257
+    },
+    {
+      "date": "20260407",
+      "users": 3633,
+      "pageviews": 15241
+    },
+    {
+      "date": "20260408",
+      "users": 3396,
+      "pageviews": 14809
+    },
+    {
+      "date": "20260409",
+      "users": 3474,
+      "pageviews": 15658
+    },
+    {
+      "date": "20260410",
+      "users": 2905,
+      "pageviews": 12284
+    },
+    {
+      "date": "20260411",
+      "users": 2008,
+      "pageviews": 9534
+    },
+    {
+      "date": "20260412",
+      "users": 2297,
+      "pageviews": 10400
+    },
+    {
+      "date": "20260413",
+      "users": 4305,
+      "pageviews": 18620
+    },
+    {
+      "date": "20260414",
+      "users": 4293,
+      "pageviews": 17016
+    },
+    {
+      "date": "20260415",
+      "users": 3799,
+      "pageviews": 15418
+    },
+    {
+      "date": "20260416",
+      "users": 3336,
+      "pageviews": 13187
+    },
+    {
+      "date": "20260417",
+      "users": 2848,
+      "pageviews": 12659
+    },
+    {
+      "date": "20260418",
+      "users": 870,
+      "pageviews": 3701
+    },
+    {
+      "date": "20260419",
+      "users": 1165,
+      "pageviews": 5538
+    },
+    {
+      "date": "20260420",
+      "users": 5036,
+      "pageviews": 22825
+    },
+    {
+      "date": "20260421",
+      "users": 5053,
+      "pageviews": 21713
+    },
+    {
+      "date": "20260422",
+      "users": 4315,
+      "pageviews": 19200
+    },
+    {
+      "date": "20260423",
+      "users": 3703,
+      "pageviews": 16655
+    },
+    {
+      "date": "20260424",
+      "users": 2789,
+      "pageviews": 11990
+    },
+    {
+      "date": "20260425",
+      "users": 954,
+      "pageviews": 4682
+    },
+    {
+      "date": "20260426",
+      "users": 1181,
+      "pageviews": 5591
+    },
+    {
+      "date": "20260427",
+      "users": 4646,
+      "pageviews": 20683
+    },
+    {
+      "date": "20260428",
+      "users": 4289,
+      "pageviews": 18182
+    },
+    {
+      "date": "20260429",
+      "users": 4285,
+      "pageviews": 18828
+    },
+    {
+      "date": "20260430",
+      "users": 5968,
+      "pageviews": 25473
+    },
+    {
+      "date": "20260501",
+      "users": 3471,
+      "pageviews": 15209
+    },
+    {
+      "date": "20260502",
+      "users": 2378,
+      "pageviews": 10706
+    },
+    {
+      "date": "20260503",
+      "users": 2877,
+      "pageviews": 12744
+    },
+    {
+      "date": "20260504",
+      "users": 4570,
+      "pageviews": 20044
+    },
+    {
+      "date": "20260505",
+      "users": 4430,
+      "pageviews": 18550
+    },
+    {
+      "date": "20260506",
+      "users": 4369,
+      "pageviews": 18869
+    },
+    {
+      "date": "20260507",
+      "users": 4104,
+      "pageviews": 18146
+    },
+    {
+      "date": "20260508",
+      "users": 2995,
+      "pageviews": 12871
+    },
+    {
+      "date": "20260509",
+      "users": 710,
+      "pageviews": 3216
+    },
+    {
+      "date": "20260510",
+      "users": 1083,
+      "pageviews": 5007
+    },
+    {
+      "date": "20260511",
+      "users": 4510,
+      "pageviews": 19117
+    },
+    {
+      "date": "20260512",
+      "users": 4555,
+      "pageviews": 20023
+    },
+    {
+      "date": "20260513",
+      "users": 4462,
+      "pageviews": 18050
+    },
+    {
+      "date": "20260514",
+      "users": 4157,
+      "pageviews": 17346
+    },
+    {
+      "date": "20260515",
+      "users": 3074,
+      "pageviews": 13007
+    },
+    {
+      "date": "20260516",
+      "users": 963,
+      "pageviews": 4274
+    },
+    {
+      "date": "20260517",
+      "users": 1206,
+      "pageviews": 5242
+    },
+    {
+      "date": "20260518",
+      "users": 4337,
+      "pageviews": 18366
+    },
+    {
+      "date": "20260519",
+      "users": 4466,
+      "pageviews": 20277
+    },
+    {
+      "date": "20260520",
+      "users": 4257,
+      "pageviews": 18160
+    },
+    {
+      "date": "20260521",
+      "users": 3637,
+      "pageviews": 15656
+    },
+    {
+      "date": "20260522",
+      "users": 1440,
+      "pageviews": 5895
+    },
+    {
+      "date": "20260523",
+      "users": 587,
+      "pageviews": 2518
+    },
+    {
+      "date": "20260524",
+      "users": 573,
+      "pageviews": 2608
+    },
+    {
+      "date": "20260525",
+      "users": 1248,
+      "pageviews": 5501
+    },
+    {
+      "date": "20260526",
+      "users": 5231,
+      "pageviews": 22120
+    },
+    {
+      "date": "20260527",
+      "users": 5011,
+      "pageviews": 21862
+    },
+    {
+      "date": "20260528",
+      "users": 4277,
+      "pageviews": 18386
+    },
+    {
+      "date": "20260529",
+      "users": 3478,
+      "pageviews": 14722
+    },
+    {
+      "date": "20260530",
+      "users": 792,
+      "pageviews": 3376
+    },
+    {
+      "date": "20260531",
+      "users": 1239,
+      "pageviews": 5160
+    },
+    {
+      "date": "20260601",
+      "users": 5104,
+      "pageviews": 22691
+    },
+    {
+      "date": "20260602",
+      "users": 4934,
+      "pageviews": 21871
+    },
+    {
+      "date": "20260603",
+      "users": 4521,
+      "pageviews": 19263
+    },
+    {
+      "date": "20260604",
+      "users": 4811,
+      "pageviews": 21580
+    },
+    {
+      "date": "20260605",
+      "users": 3748,
+      "pageviews": 16322
+    },
+    {
+      "date": "20260606",
+      "users": 2820,
+      "pageviews": 12693
+    },
+    {
+      "date": "20260607",
+      "users": 3198,
+      "pageviews": 14289
+    },
+    {
+      "date": "20260608",
+      "users": 5056,
+      "pageviews": 21916
+    },
+    {
+      "date": "20260609",
+      "users": 4828,
+      "pageviews": 20838
+    },
+    {
+      "date": "20260610",
+      "users": 5004,
+      "pageviews": 22362
+    },
+    {
+      "date": "20260611",
+      "users": 4275,
+      "pageviews": 20541
+    },
+    {
+      "date": "20260612",
+      "users": 3241,
+      "pageviews": 14314
+    },
+    {
+      "date": "20260613",
+      "users": 997,
+      "pageviews": 4464
+    },
+    {
+      "date": "20260614",
+      "users": 1197,
+      "pageviews": 5688
+    },
+    {
+      "date": "20260615",
+      "users": 4757,
+      "pageviews": 21541
+    },
+    {
+      "date": "20260616",
+      "users": 4725,
+      "pageviews": 21702
+    },
+    {
+      "date": "20260617",
+      "users": 4264,
+      "pageviews": 19196
+    },
+    {
+      "date": "20260618",
+      "users": 3262,
+      "pageviews": 14130
+    },
+    {
+      "date": "20260619",
+      "users": 888,
+      "pageviews": 4144
+    },
+    {
+      "date": "20260620",
+      "users": 617,
+      "pageviews": 2289
+    },
+    {
+      "date": "20260621",
+      "users": 959,
+      "pageviews": 4086
+    },
+    {
+      "date": "20260622",
+      "users": 3821,
+      "pageviews": 17145
+    },
+    {
+      "date": "20260623",
+      "users": 4611,
+      "pageviews": 19633
+    },
+    {
+      "date": "20260624",
+      "users": 4491,
+      "pageviews": 20089
+    },
+    {
+      "date": "20260625",
+      "users": 4503,
+      "pageviews": 20848
+    },
+    {
+      "date": "20260626",
+      "users": 3268,
+      "pageviews": 14353
+    },
+    {
+      "date": "20260627",
+      "users": 777,
+      "pageviews": 3995
+    },
+    {
+      "date": "20260628",
+      "users": 1198,
+      "pageviews": 5258
+    },
+    {
+      "date": "20260629",
+      "users": 4947,
+      "pageviews": 21666
+    },
+    {
+      "date": "20260630",
+      "users": 4614,
+      "pageviews": 19472
+    },
+    {
+      "date": "20260701",
+      "users": 4212,
+      "pageviews": 18134
+    },
+    {
+      "date": "20260702",
+      "users": 2941,
+      "pageviews": 12704
+    },
+    {
+      "date": "20260703",
+      "users": 764,
+      "pageviews": 3327
+    },
+    {
+      "date": "20260704",
+      "users": 461,
+      "pageviews": 2041
+    },
+    {
+      "date": "20260705",
+      "users": 667,
+      "pageviews": 2946
+    },
+    {
+      "date": "20260706",
+      "users": 2626,
+      "pageviews": 11017
+    },
+    {
+      "date": "20260707",
+      "users": 5246,
+      "pageviews": 23347
+    },
+    {
+      "date": "20260708",
+      "users": 5251,
+      "pageviews": 24135
+    },
+    {
+      "date": "20260709",
+      "users": 4916,
+      "pageviews": 21316
+    },
+    {
+      "date": "20260710",
+      "users": 3861,
+      "pageviews": 16507
+    },
+    {
+      "date": "20260711",
+      "users": 1340,
+      "pageviews": 5812
+    },
+    {
+      "date": "20260712",
+      "users": 1677,
+      "pageviews": 7765
+    },
+    {
+      "date": "20260713",
+      "users": 5353,
+      "pageviews": 24047
+    },
+    {
+      "date": "20260714",
+      "users": 5165,
+      "pageviews": 23009
+    },
+    {
+      "date": "20260715",
+      "users": 4842,
+      "pageviews": 21608
+    },
+    {
+      "date": "20260716",
+      "users": 4631,
+      "pageviews": 19974
+    },
+    {
+      "date": "20260717",
+      "users": 3540,
+      "pageviews": 15452
+    },
+    {
+      "date": "20260718",
+      "users": 863,
+      "pageviews": 3431
+    },
+    {
+      "date": "20260719",
+      "users": 1283,
+      "pageviews": 5328
+    },
+    {
+      "date": "20260720",
+      "users": 5347,
+      "pageviews": 23376
+    },
+    {
+      "date": "20260721",
+      "users": 5382,
+      "pageviews": 23819
+    },
+    {
+      "date": "20260722",
+      "users": 5165,
+      "pageviews": 23589
+    },
+    {
+      "date": "20260723",
+      "users": 5013,
+      "pageviews": 22023
+    },
+    {
+      "date": "20260724",
+      "users": 3993,
+      "pageviews": 17514
+    },
+    {
+      "date": "20260725",
+      "users": 979,
+      "pageviews": 4056
+    },
+    {
+      "date": "20260726",
+      "users": 1767,
+      "pageviews": 7576
+    },
+    {
+      "date": "20260727",
+      "users": 6256,
+      "pageviews": 27548
+    },
+    {
+      "date": "20260728",
+      "users": 5650,
+      "pageviews": 24917
+    },
+    {
+      "date": "20260729",
+      "users": 4888,
+      "pageviews": 21687
+    },
+    {
+      "date": "20260730",
+      "users": 4936,
+      "pageviews": 21766
+    },
+    {
+      "date": "20260731",
+      "users": 3849,
+      "pageviews": 17040
+    },
+    {
+      "date": "20260801",
+      "users": 2424,
+      "pageviews": 11051
+    },
+    {
+      "date": "20260802",
+      "users": 2595,
+      "pageviews": 11690
+    },
+    {
+      "date": "20260803",
+      "users": 4749,
+      "pageviews": 21463
+    }
+  ],
+  "ranges": {
+    "30": {
+      "totals": {
+        "users": 114254,
+        "pageviews": 504809,
+        "linkClicks": 0
+      },
+      "topLinks": [],
+      "categories": []
+    },
+    "90": {
+      "totals": {
+        "users": 304829,
+        "pageviews": 1339169,
+        "linkClicks": 0
+      },
+      "topLinks": [],
+      "categories": []
+    },
+    "365": {
+      "totals": {
+        "users": 874951,
+        "pageviews": 3822044,
+        "linkClicks": 0
+      },
+      "topLinks": [],
+      "categories": []
+    }
+  }
+}
