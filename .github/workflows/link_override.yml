@@ -31,8 +31,13 @@ jobs:
         }
 
         LINK_ID=$(field "Link ID")
-        NEW_TITLE=$(field "Link Title")
-        NEW_LINK=$(field "Link URL")
+        NEW_TITLE=$(field "New Link Title")
+        NEW_LINK=$(field "New Link URL")
+        CHANGE_TYPE=$(field "What are you updating?")
+
+        # Blank optional form fields arrive as the literal "_No response_"
+        [[ "$NEW_TITLE" == "_No response_" ]] && NEW_TITLE=""
+        [[ "$NEW_LINK" == "_No response_" ]] && NEW_LINK=""
 
         # Validate required fields
         if [[ -z "$LINK_ID" ]]; then
@@ -45,9 +50,14 @@ jobs:
         echo "NEW_TITLE=$NEW_TITLE" >> $GITHUB_ENV
         echo "NEW_LINK=$NEW_LINK" >> $GITHUB_ENV
 
-        # If both title and link are empty, mark validation error for a later step to comment + fail
-        if [[ -z "$NEW_TITLE" && -z "$NEW_LINK" ]]; then
-          echo "VALIDATION_ERROR=Missing both title and url" >> $GITHUB_ENV
+        # The selected change type dictates which new-value fields must be present;
+        # a later step comments the error back on the issue and fails the job.
+        if [[ "$CHANGE_TYPE" == *"Title"* && -z "$NEW_TITLE" ]]; then
+          echo "VALIDATION_ERROR=the change type includes the title, but no New Link Title was provided" >> $GITHUB_ENV
+        elif [[ "$CHANGE_TYPE" == *"URL"* && -z "$NEW_LINK" ]]; then
+          echo "VALIDATION_ERROR=the change type includes the URL, but no New Link URL was provided" >> $GITHUB_ENV
+        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" ]]; then
+          echo "VALIDATION_ERROR=no New Link Title or New Link URL was provided" >> $GITHUB_ENV
         fi
 
         echo "✅ Parsed values:"
@@ -71,7 +81,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install --yes jq moreutils uuid-runtime
 
-    - name: Fail if no link and no url provided
+    - name: Fail on validation error
       if: env.VALIDATION_ERROR != ''
       uses: actions/github-script@v6
       with:
@@ -80,9 +90,9 @@ jobs:
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `❌ Failed to add override: no Link Title or Link URL provided. Please include at least one of 'Link Title' or 'Link URL' in the issue body so the override can be created.`
+            body: `❌ Failed to add override: ${{ env.VALIDATION_ERROR }}. Please edit the issue so the override can be created.`
           });
-          throw new Error('Validation error: missing title and url');
+          throw new Error('Validation error: ${{ env.VALIDATION_ERROR }}');
         
     - name: Determine target for override/update
       run: |
