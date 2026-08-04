@@ -5,11 +5,21 @@
 // cached copy. The cache is only read when the network fails — offline users
 // get the last successfully loaded version.
 
-const CACHE = 'aflink-v2';
+const CACHE = 'aflink-v3';
 
 // The first page load is never service-worker-controlled, so the shell must
-// be cached at install time or offline fails until the second visit.
-const PRECACHE = ['/', '/static/usaf.svg', '/static/github.svg', '/favicon.svg'];
+// be cached at install time or offline fails until the second visit. The
+// manifest and icons are re-requested by the browser on load/install, so
+// they belong here too.
+const PRECACHE = [
+  '/',
+  '/static/usaf.svg',
+  '/static/github.svg',
+  '/favicon.svg',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
