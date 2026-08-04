@@ -5,6 +5,8 @@ html.bg-spice-brown(lang='en')
 
   //- Navigation
   +navigation
+    a.nav-link(href='#list') Official
+    a.nav-link(href='#unofficial') Unofficial
     a.nav-link(href='#about') About
     a.nav-link(href='#update') Update Links
     a.nav-link(href='/tutorial') Tutorial
@@ -24,7 +26,7 @@ html.bg-spice-brown(lang='en')
   section#list.bg-sage.text-center
     .container
       .offcenter
-        h2 Link List
+        h2 Official Links
         em.d-none.d-md-block Synced #{date}
       div#link-list.list-group
         //- Links json is expanded here
@@ -46,7 +48,7 @@ html.bg-spice-brown(lang='en')
     section#unofficial.bg-bagby-green.text-center
       .container
         .offcenter
-          h2 Unofficial
+          h2 Unofficial Links
         p.small.fst-italic.mb-2 Community-curated third-party tools. Not official DoD/USAF sites — not endorsed; use your own judgment.
         div#unofficial-list.list-group
           each link in unofficial

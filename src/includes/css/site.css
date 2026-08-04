@@ -110,6 +110,16 @@ ul {
   text-decoration: underline dotted #ff0000 1px;
 }
 
+/* In-page navigation: smooth jumps from the sticky navbar, with scroll
+   offset so section headings clear the bar */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 4rem;
+}
+
 /* Search-match highlighting. Zero padding: Bootstrap's default mark padding
    visually splits words mid-highlight. Cannes blue tint: the palette's one
    cool accent, complementary to the OCP earth tones around the white cards. */
