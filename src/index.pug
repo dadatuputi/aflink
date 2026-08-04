@@ -71,8 +71,10 @@ html.bg-spice-brown(lang='en')
   section#footer.bg-spice-brown.py-1
     .row
       .col
-        .text-start 
+        .text-start.d-flex.gap-3
           a.nav-link(href='/overrides') Overrides
+          if hasAnalytics
+            a.nav-link(href='/analytics') Usage
       .col
         .text-end
           em

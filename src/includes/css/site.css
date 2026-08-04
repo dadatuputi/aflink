@@ -177,6 +177,115 @@ section[id] {
   }
 }
 
+/* Analytics page: stat tiles, column trend, horizontal ranking bars.
+   Single-series charts in steel blue with a Cannes-blue peak accent. */
+.stat-tile {
+  padding: 0.8rem 0.5rem;
+  border: 0;
+}
+
+.stat-tile .num {
+  font-size: 1.55rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  color: #212529;
+}
+
+.stat-tile .lbl {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #6c757d;
+}
+
+.chart-card {
+  padding: 0.9rem 1rem;
+  border: 0;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.chart-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 88px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.trend i {
+  flex: 1;
+  background: #4F7396;
+  border-radius: 3px 3px 0 0;
+  min-width: 2px;
+}
+
+.trend i.hi {
+  background: #7BAFD4;
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.rank {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.rank .r {
+  display: grid;
+  grid-template-columns: 1fr 3.2rem;
+  align-items: center;
+  gap: 0 0.6rem;
+}
+
+.rank .t {
+  grid-column: 1;
+  font-size: 0.82rem;
+  color: #212529;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.rank .cat {
+  font-size: 0.68rem;
+  color: #6c757d;
+  margin-left: 0.4rem;
+}
+
+.rank .bar {
+  grid-column: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: #4F7396;
+  margin-top: 2px;
+}
+
+.rank .n {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 0.8rem;
+  color: #212529;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
 /* Overrides page: truncate long URLs to fit; the full link shows on hover
    via the title attribute */
 .link-container .col {

@@ -267,11 +267,19 @@ async function getNewestDate(files) {
         }
 
         // write homepage
+        // Analytics data exists only after the nightly workflow's first commit;
+        // until then the page and its footer link are simply omitted.
+        const analyticsPath = path.resolve(srcDir, 'analytics.json')
+        const analytics = fs.existsSync(analyticsPath)
+            ? JSON.parse(fs.readFileSync(analyticsPath))
+            : null;
+
         const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), {
             ...options,
             links,
             unofficial: links_unofficial,
             date,
+            hasAnalytics: !!analytics,
             isDev: environment !== 'production'
         })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
@@ -299,6 +307,20 @@ async function getNewestDate(files) {
         fs.mkdirSync(overridesDir, { recursive: true });
         fs.writeFileSync(path.resolve(overridesDir, "index.html"), pageOverrides)
         console.log("Wrote overrides page")
+
+        // write analytics page (only when the nightly pull has produced data)
+        if (analytics) {
+            const pageAnalytics = pug.renderFile(path.resolve(srcDir, "analytics.pug"), {
+                ...options,
+                analytics,
+                analytics_date: sugar_date.Date.format(new Date(analytics.generated), '{d} {Month} {yyyy}'),
+                isDev: environment !== 'production'
+            })
+            const analyticsDir = path.resolve(outputDir, "analytics")
+            fs.mkdirSync(analyticsDir, { recursive: true });
+            fs.writeFileSync(path.resolve(analyticsDir, "index.html"), pageAnalytics)
+            console.log("Wrote analytics page")
+        }
 
         // write osdd.xml
         const osdd = pug.renderFile(path.resolve(srcDir, "osdd.xml.pug"), { ...options, ...locals })
