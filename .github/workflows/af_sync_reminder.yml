@@ -1,0 +1,47 @@
+name: AF Sync Staleness Reminder
+
+on:
+  schedule:
+    - cron: '47 9 * * 1'   # Mondays 09:47 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so the file's last commit date is real
+
+      - name: Check staleness and notify via Pushover
+        env:
+          # Pushover requires both: the application token and the user key
+          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
+          PUSHOVER_USER: ${{ secrets.PUSHOVER_KEY }}
+        run: |
+          LAST=$(git log -1 --format=%ct -- src/links/links_af.json)
+          NOW=$(date +%s)
+          AGE_DAYS=$(( (NOW - LAST) / 86400 ))
+          # Repository variable PORTAL_STALE_SINCE overrides the 90-day default
+          THRESHOLD=${{ vars.PORTAL_STALE_SINCE || 90 }}
+          LAST_SYNC=$(date -u -d @$LAST '+%-d %B %Y')
+          echo "AF links last synced $AGE_DAYS days ago on $LAST_SYNC (threshold: $THRESHOLD days)"
+
+          if [ "$AGE_DAYS" -lt "$THRESHOLD" ]; then
+            echo "Fresh enough; no notification."
+            exit 0
+          fi
+
+          curl -sf \
+            --form-string "token=$PUSHOVER_TOKEN" \
+            --form-string "user=$PUSHOVER_USER" \
+            --form-string "title=aflink: AF Portal sync overdue" \
+            --form-string "message=Links last synced $AGE_DAYS days ago ($LAST_SYNC), past the $THRESHOLD-day threshold. Re-sync: portal Quick Links → getlinks.js in console → paste into an Update AF Links issue and close it." \
+            --form-string "url=https://github.com/dadatuputi/aflink/issues/new?template=04_link_update_af.yaml" \
+            --form-string "url_title=Open Update AF Links issue" \
+            https://api.pushover.net/1/messages.json
+          echo "Pushover notification sent."

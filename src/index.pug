@@ -43,7 +43,7 @@ html.bg-spice-brown(lang='en')
     .container
       .offcenter
         h2 Official Links
-        em.d-none.d-md-block Synced #{date}
+        em.d-none.d-md-block(title=sync_tooltip) Synced #{sync_display}
       div#link-list.list-group
         //- Links json is expanded here
         each category in links
@@ -88,10 +88,6 @@ html.bg-spice-brown(lang='en')
           a.nav-link(href='/overrides') Overrides
           if hasAnalytics
             a.nav-link(href='/analytics') Usage
-      .col
-        .text-end
-          em
-            | Synced with AF portal #{date} 
 
   include includes/foot.pug
 
