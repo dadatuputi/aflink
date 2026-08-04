@@ -1,41 +1,20 @@
-name: Link Trust and Rot Check
+name: Link Trust Audit
 
+# On-demand full scan. The routine checks run inline in the link_add,
+# link_override, and link_update_af workflows, commenting on the issue that
+# introduced a non-official domain.
 on:
-  schedule:
-    - cron: '37 9 * * 3'   # Wednesdays 09:37 UTC
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  check:
+  audit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
 
-      - name: Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-
-      - name: Run link checker
-        id: check
-        run: node scripts/check-links.js | tee -a $GITHUB_STEP_SUMMARY
-
-      - name: Notify via Pushover
-        if: fromJSON(steps.check.outputs.findings) > 0
-        env:
-          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
-          PUSHOVER_USER: ${{ secrets.PUSHOVER_KEY }}
-        run: |
-          curl -sf \
-            --form-string "token=$PUSHOVER_TOKEN" \
-            --form-string "user=$PUSHOVER_USER" \
-            --form-string "title=aflink: link check findings" \
-            --form-string "message=${{ steps.check.outputs.findings }} actionable findings (untrusted domains or broken links). Full table in the run summary." \
-            --form-string "url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            --form-string "url_title=Open run summary" \
-            https://api.pushover.net/1/messages.json
-          echo "Pushover notification sent."
+      - name: Run trust check
+        run: node scripts/check-trust.js | tee -a $GITHUB_STEP_SUMMARY
