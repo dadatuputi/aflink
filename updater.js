@@ -267,6 +267,17 @@ async function getNewestDate(files) {
         }
 
         // write homepage
+        // Announcements active at build time. start/end are optional; no end
+        // means permanent. The nightly analytics build doubles as the clock
+        // that brings date-windowed announcements up and takes them down.
+        const announcementsPath = path.resolve(srcDir, 'announcements.json')
+        const buildNow = Date.now()
+        const announcements = (fs.existsSync(announcementsPath)
+            ? JSON.parse(fs.readFileSync(announcementsPath))
+            : []).filter(a =>
+                (!a.start || new Date(a.start).getTime() <= buildNow) &&
+                (!a.end || buildNow <= new Date(a.end).getTime()));
+
         // Analytics data exists only after the nightly workflow's first commit;
         // until then the page and its footer link are simply omitted.
         const analyticsPath = path.resolve(srcDir, 'analytics.json')
@@ -280,6 +291,7 @@ async function getNewestDate(files) {
             unofficial: links_unofficial,
             date,
             hasAnalytics: !!analytics,
+            announcements,
             isDev: environment !== 'production'
         })
         fs.writeFileSync(path.resolve(outputDir, "index.html"), pageHome)
