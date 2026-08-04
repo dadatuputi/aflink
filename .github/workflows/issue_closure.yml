@@ -13,7 +13,7 @@ jobs:
 
     - name: Check closure reason
       id: check
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           const stateReason = context.payload.issue.state_reason;
@@ -38,7 +38,7 @@ jobs:
     - name: Check authorization
       id: auth
       if: steps.check.outputs.is-not-planned == 'false'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           const { data: collaborators } = await github.rest.repos.listCollaborators({
@@ -77,7 +77,7 @@ jobs:
       if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'add link')
       env:
         BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({
@@ -95,7 +95,7 @@ jobs:
       if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'override link')
       env:
         BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({
@@ -113,7 +113,7 @@ jobs:
       if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'update af links')
       env:
         BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({
@@ -131,7 +131,7 @@ jobs:
       if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'delete link')
       env:
         BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({

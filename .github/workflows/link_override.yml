@@ -66,7 +66,7 @@ jobs:
         echo "  New URL: $NEW_LINK"
           
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Install jq & sponge
       run: |
@@ -83,7 +83,7 @@ jobs:
 
     - name: Fail on validation error
       if: env.VALIDATION_ERROR != ''
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.issues.createComment({
@@ -170,12 +170,12 @@ jobs:
         echo "✅ Override added to links_override.json"
         
     - name: Commit New Changes
-      uses: EndBug/add-and-commit@v9
+      uses: EndBug/add-and-commit@v10
       with:
         message: "Override or update link from issue: ${{ env.LINK_ID }}"
 
     - name: Trigger next workflow
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({
@@ -189,7 +189,7 @@ jobs:
           });
         
     - name: Add success comment
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.issues.createComment({

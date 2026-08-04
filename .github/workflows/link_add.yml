@@ -48,7 +48,7 @@ jobs:
         echo "Parsed LINK_TYPE=$LINK_TYPE"
 
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Install dependencies
       run: |
@@ -77,12 +77,12 @@ jobs:
         cat "$TARGET"
 
     - name: Commit New Changes
-      uses: EndBug/add-and-commit@v7
+      uses: EndBug/add-and-commit@v10
       with:
         message: "Added ${{ env.LINK_TYPE }} link from issue: ${{ env.TITLE }}"
 
     - name: Trigger next workflow
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.repos.createDispatchEvent({
@@ -96,7 +96,7 @@ jobs:
           });
 
     - name: Add success comment
-      uses: actions/github-script@v6
+      uses: actions/github-script@v9
       with:
         script: |
           await github.rest.issues.createComment({
