@@ -32,15 +32,20 @@ jobs:
 
         TITLE=$(field "Link Title")
         URL=$(field "Link URL")
+        LINK_TYPE=$(field "Link Type")
         [[ -z "$TITLE" ]] && { echo "Missing Link Title"; exit 1; }
         [[ -z "$URL" ]] && { echo "Missing Link URL"; exit 1; }
+        # Issues predating the Link Type dropdown have no such field: official
+        [[ "$LINK_TYPE" == "Unofficial" ]] || LINK_TYPE="Official"
 
         {
           echo "TITLE=$TITLE"
           echo "URL=$URL"
+          echo "LINK_TYPE=$LINK_TYPE"
         } >> "$GITHUB_ENV"
         echo "Parsed TITLE=$TITLE"
         echo "Parsed URL=$URL"
+        echo "Parsed LINK_TYPE=$LINK_TYPE"
 
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -61,13 +66,20 @@ jobs:
     - name: Add link to end of list with an auto-generated contentId
       run: |
         UUID=$(uuidgen)
-        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "$UUID" '.OTHER += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' src/links/links_other.json | sponge src/links/links_other.json
-        cat src/links/links_other.json
+        if [[ "${{ env.LINK_TYPE }}" == "Unofficial" ]]; then
+          TARGET=src/links/links_unofficial.json
+          KEY=UNOFFICIAL
+        else
+          TARGET=src/links/links_other.json
+          KEY=OTHER
+        fi
+        jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "$UUID" --arg KEY "$KEY" '.[$KEY] += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' "$TARGET" | sponge "$TARGET"
+        cat "$TARGET"
 
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v7
       with:
-        message: "Added link from issue: ${{ env.TITLE }}"
+        message: "Added ${{ env.LINK_TYPE }} link from issue: ${{ env.TITLE }}"
 
     - name: Trigger next workflow
       uses: actions/github-script@v6
