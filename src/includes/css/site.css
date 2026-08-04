@@ -52,23 +52,23 @@ both directions over the OS preference.
   :root {
     color-scheme: dark;
 
-    --band-sage: #171d24;
-    --band-bagby: #1a2430;
-    --band-olive: #131920;
-    --band-spice: #0f1419;
-    --band-cannes: #24455e;
-    --band-slate: #10161d;
+    --band-sage: #28394d;
+    --band-bagby: #1d2b3d;
+    --band-olive: #1f2c3d;
+    --band-spice: #1a2532;
+    --band-cannes: #38658a;
+    --band-slate: #212f40;
     --band-ink: #cfd9e2;
     --band-ink-faded: #c9d4dead;
 
-    --card-bg: #212932;
+    --card-bg: #2f435b;
     --card-ink: #dfe6ec;
     --card-border: #2a333d;
-    --cat-bg: #29323c;
+    --cat-bg: #364d68;
     --cat-ink: #93a1ae;
     --muted: #93a1ae;
 
-    --input-bg: #212932;
+    --input-bg: #2f435b;
     --input-ink: #dfe6ec;
     --input-border: #33414e;
 
@@ -76,39 +76,39 @@ both directions over the OS preference.
     --icon-hover: #d0dae2;
     --mark-bg: rgba(123, 175, 212, 0.35);
     --overridden-red: #ff8573;
-    --grid-line: #313c47;
+    --grid-line: #476385;
 
-    --unofficial-card-bg: #1b2531;
+    --unofficial-card-bg: #2b3e54;
     --unofficial-card-ink: #d6e2ec;
     --unofficial-card-border: #263241;
 
     --toggle-border: #33414e;
     --toggle-ink: #8fa1b1;
     --toggle-active-bg: #7BAFD4;
-    --toggle-active-ink: #0f1419;
+    --toggle-active-ink: #1a2532;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --band-sage: #171d24;
-  --band-bagby: #1a2430;
-  --band-olive: #131920;
-  --band-spice: #0f1419;
-  --band-cannes: #24455e;
-  --band-slate: #10161d;
+  --band-sage: #28394d;
+  --band-bagby: #1d2b3d;
+  --band-olive: #1f2c3d;
+  --band-spice: #1a2532;
+  --band-cannes: #38658a;
+  --band-slate: #212f40;
   --band-ink: #cfd9e2;
   --band-ink-faded: #c9d4dead;
 
-  --card-bg: #212932;
+  --card-bg: #2f435b;
   --card-ink: #dfe6ec;
   --card-border: #2a333d;
-  --cat-bg: #29323c;
+  --cat-bg: #364d68;
   --cat-ink: #93a1ae;
   --muted: #93a1ae;
 
-  --input-bg: #212932;
+  --input-bg: #2f435b;
   --input-ink: #dfe6ec;
   --input-border: #33414e;
 
@@ -116,16 +116,16 @@ both directions over the OS preference.
   --icon-hover: #d0dae2;
   --mark-bg: rgba(123, 175, 212, 0.35);
   --overridden-red: #ff8573;
-  --grid-line: #313c47;
+  --grid-line: #476385;
 
-  --unofficial-card-bg: #1b2531;
+  --unofficial-card-bg: #2b3e54;
   --unofficial-card-ink: #d6e2ec;
   --unofficial-card-border: #263241;
 
   --toggle-border: #33414e;
   --toggle-ink: #8fa1b1;
   --toggle-active-bg: #7BAFD4;
-  --toggle-active-ink: #0f1419;
+  --toggle-active-ink: #1a2532;
 }
 
 :root[data-theme="light"] {
