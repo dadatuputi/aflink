@@ -1,17 +1,183 @@
-section {padding:2rem;}
-/* 
+/*
 https://usafpatches.com/reference-shelf/palettes/
 https://coolors.co/000000-a09200-695b24-73391d-b0aa7e
+
+Theme tokens: light values match the original palette. Dark values are
+"Night Watch" — the whole site moves into deep slate blue rather than
+keeping the earth-tone hues at low light (that read as mud). Applied three
+ways: prefers-color-scheme for OS-auto/no-JS visitors, and explicit
+[data-theme] overrides (set by the toggle, see theme-toggle.js) that win in
+both directions over the OS preference.
 */
-.bg-sage {background-color:#B0AA7E; color:#fff;}
-.bg-bagby-green {background-color: #A09200; color:#fff;}
-.bg-olive-drab {background-color: #695B24; color: #fff;}
-.bg-spice-brown {background-color: #73391D; color: #fff;}
-.bg-cannes-blue {background-color: #7BAFD4; color: #fff;}
-.bg-slate-blue {background-color: #4F7396; color: #fff;}
+:root {
+  color-scheme: light;
+
+  --band-sage: #B0AA7E;
+  --band-bagby: #A09200;
+  --band-olive: #695B24;
+  --band-spice: #73391D;
+  --band-cannes: #7BAFD4;
+  --band-slate: #4F7396;
+  --band-ink: #fff;
+  --band-ink-faded: #ffffffad;
+
+  --card-bg: #fff;
+  --card-ink: #212529;
+  --card-border: rgba(0, 0, 0, 0.125);
+  --cat-bg: #efefef;
+  --cat-ink: #6c757d;
+  --muted: #6c757d;
+
+  --input-bg: #fff;
+  --input-ink: #212529;
+  --input-border: #ced4da;
+
+  --icon: #666;
+  --icon-hover: #333;
+  --mark-bg: rgba(123, 175, 212, 0.45);
+  --overridden-red: #ff0000;
+  --grid-line: #dee2e6;
+
+  --unofficial-card-bg: #fff;
+  --unofficial-card-ink: #212529;
+  --unofficial-card-border: rgba(0, 0, 0, 0.125);
+
+  --toggle-border: #ffffff55;
+  --toggle-ink: #ffffffb0;
+  --toggle-active-bg: #ffffff;
+  --toggle-active-ink: #73391D;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --band-sage: #171d24;
+    --band-bagby: #1a2430;
+    --band-olive: #131920;
+    --band-spice: #0f1419;
+    --band-cannes: #24455e;
+    --band-slate: #10161d;
+    --band-ink: #cfd9e2;
+    --band-ink-faded: #c9d4dead;
+
+    --card-bg: #212932;
+    --card-ink: #dfe6ec;
+    --card-border: #2a333d;
+    --cat-bg: #29323c;
+    --cat-ink: #93a1ae;
+    --muted: #93a1ae;
+
+    --input-bg: #212932;
+    --input-ink: #dfe6ec;
+    --input-border: #33414e;
+
+    --icon: #93a1ae;
+    --icon-hover: #d0dae2;
+    --mark-bg: rgba(123, 175, 212, 0.35);
+    --overridden-red: #ff8573;
+    --grid-line: #313c47;
+
+    --unofficial-card-bg: #1b2531;
+    --unofficial-card-ink: #d6e2ec;
+    --unofficial-card-border: #263241;
+
+    --toggle-border: #33414e;
+    --toggle-ink: #8fa1b1;
+    --toggle-active-bg: #7BAFD4;
+    --toggle-active-ink: #0f1419;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --band-sage: #171d24;
+  --band-bagby: #1a2430;
+  --band-olive: #131920;
+  --band-spice: #0f1419;
+  --band-cannes: #24455e;
+  --band-slate: #10161d;
+  --band-ink: #cfd9e2;
+  --band-ink-faded: #c9d4dead;
+
+  --card-bg: #212932;
+  --card-ink: #dfe6ec;
+  --card-border: #2a333d;
+  --cat-bg: #29323c;
+  --cat-ink: #93a1ae;
+  --muted: #93a1ae;
+
+  --input-bg: #212932;
+  --input-ink: #dfe6ec;
+  --input-border: #33414e;
+
+  --icon: #93a1ae;
+  --icon-hover: #d0dae2;
+  --mark-bg: rgba(123, 175, 212, 0.35);
+  --overridden-red: #ff8573;
+  --grid-line: #313c47;
+
+  --unofficial-card-bg: #1b2531;
+  --unofficial-card-ink: #d6e2ec;
+  --unofficial-card-border: #263241;
+
+  --toggle-border: #33414e;
+  --toggle-ink: #8fa1b1;
+  --toggle-active-bg: #7BAFD4;
+  --toggle-active-ink: #0f1419;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --band-sage: #B0AA7E;
+  --band-bagby: #A09200;
+  --band-olive: #695B24;
+  --band-spice: #73391D;
+  --band-cannes: #7BAFD4;
+  --band-slate: #4F7396;
+  --band-ink: #fff;
+  --band-ink-faded: #ffffffad;
+
+  --card-bg: #fff;
+  --card-ink: #212529;
+  --card-border: rgba(0, 0, 0, 0.125);
+  --cat-bg: #efefef;
+  --cat-ink: #6c757d;
+  --muted: #6c757d;
+
+  --input-bg: #fff;
+  --input-ink: #212529;
+  --input-border: #ced4da;
+
+  --icon: #666;
+  --icon-hover: #333;
+  --mark-bg: rgba(123, 175, 212, 0.45);
+  --overridden-red: #ff0000;
+  --grid-line: #dee2e6;
+
+  --unofficial-card-bg: #fff;
+  --unofficial-card-ink: #212529;
+  --unofficial-card-border: rgba(0, 0, 0, 0.125);
+
+  --toggle-border: #ffffff55;
+  --toggle-ink: #ffffffb0;
+  --toggle-active-bg: #ffffff;
+  --toggle-active-ink: #73391D;
+}
+
+section {padding:2rem;}
+
+.bg-sage {background-color: var(--band-sage); color: var(--band-ink);}
+.bg-bagby-green {background-color: var(--band-bagby); color: var(--band-ink);}
+.bg-olive-drab {background-color: var(--band-olive); color: var(--band-ink);}
+.bg-spice-brown {background-color: var(--band-spice); color: var(--band-ink);}
+.bg-cannes-blue {background-color: var(--band-cannes); color: var(--band-ink);}
+.bg-slate-blue {background-color: var(--band-slate); color: var(--band-ink);}
 
 ul {
-  list-style-type: none;  
+  list-style-type: none;
 }
 
 .no-border {
@@ -24,10 +190,53 @@ ul {
 .no-dec:hover {
   text-decoration:none;
 }
- 
+
+/* Themed surfaces for Bootstrap components */
+.list-group-item {
+  background-color: var(--card-bg);
+  color: var(--card-ink);
+  border-color: var(--card-border);
+}
+
+#unofficial .list-group-item {
+  background-color: var(--unofficial-card-bg);
+  color: var(--unofficial-card-ink);
+  border-color: var(--unofficial-card-border);
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--card-ink);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  color: var(--card-ink);
+}
+
+.form-control {
+  background-color: var(--input-bg);
+  color: var(--input-ink);
+  border-color: var(--input-border);
+}
+
+.form-control:focus {
+  background-color: var(--input-bg);
+  color: var(--input-ink);
+}
+
+.form-control::placeholder {
+  color: var(--muted);
+}
+
+.text-muted {
+  color: var(--muted) !important;
+}
+
 .container .category {
     padding: 0;
-    background-color: #efefef;
+    background-color: var(--cat-bg);
+    color: var(--cat-ink);
 }
 
 .modal-header .link {
@@ -47,7 +256,7 @@ ul {
   top: 50%;
   right: 0;
   transform: translateY(-25%);
-  color: #ffffffad
+  color: var(--band-ink-faded)
 }
 
 /* Correction link styling */
@@ -82,7 +291,7 @@ ul {
   opacity: 0;
   transition: opacity 0.2s ease;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--icon);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -104,11 +313,11 @@ ul {
 
 .override-link:hover {
   transform: translateY(-50%) scale(1.1);
-  color: #333;
+  color: var(--icon-hover);
 }
 
 .overridden {
-  text-decoration: underline dotted #ff0000 1px;
+  text-decoration: underline dotted var(--overridden-red) 1px;
 }
 
 /* Navbar group separators; only shown on the expanded (horizontal) bar */
@@ -135,8 +344,9 @@ section[id] {
 .category mark,
 #unofficial h2 mark {
   padding: 0;
-  background-color: rgba(123, 175, 212, 0.45);
+  background-color: var(--mark-bg);
   border-radius: 2px;
+  color: inherit;
 }
 
 /* CATEGORY MATCH pill: signals that the category name, not the link titles,
@@ -188,14 +398,14 @@ section[id] {
   font-size: 1.55rem;
   font-weight: 650;
   font-variant-numeric: tabular-nums;
-  color: #212529;
+  color: var(--card-ink);
 }
 
 .stat-tile .lbl {
   font-size: 0.72rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #6c757d;
+  color: var(--muted);
 }
 
 .usage-stack {
@@ -211,7 +421,7 @@ section[id] {
 .chart-title {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #212529;
+  color: var(--card-ink);
   margin-bottom: 0.5rem;
   text-align: left;
 }
@@ -221,7 +431,7 @@ section[id] {
   align-items: flex-end;
   gap: 2px;
   height: 88px;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid var(--grid-line);
 }
 
 .trend i {
@@ -239,7 +449,7 @@ section[id] {
   display: flex;
   justify-content: space-between;
   font-size: 0.7rem;
-  color: #6c757d;
+  color: var(--muted);
   margin-top: 0.25rem;
 }
 
@@ -258,7 +468,7 @@ section[id] {
 .rank .t {
   grid-column: 1;
   font-size: 0.82rem;
-  color: #212529;
+  color: var(--card-ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -267,7 +477,7 @@ section[id] {
 
 .rank .cat {
   font-size: 0.68rem;
-  color: #6c757d;
+  color: var(--muted);
   margin-left: 0.4rem;
 }
 
@@ -283,7 +493,7 @@ section[id] {
   grid-column: 2;
   grid-row: 1 / span 2;
   font-size: 0.8rem;
-  color: #212529;
+  color: var(--card-ink);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -298,4 +508,73 @@ section[id] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Dark-only component exceptions: pieces whose Bootstrap defaults assume a
+   light page and have no token to inherit. Gated on both the OS preference
+   (guarded against an explicit light override) and the explicit dark
+   override, so the toggle and "auto" agree. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .btn-outline-dark {
+    color: var(--card-ink);
+    border-color: var(--muted);
+  }
+
+  :root:not([data-theme="light"]) .btn-outline-dark:hover,
+  :root:not([data-theme="light"]) .btn-outline-dark.active {
+    background-color: var(--card-ink);
+    border-color: var(--card-ink);
+    color: var(--card-bg);
+  }
+
+  :root:not([data-theme="light"]) #list p.alert-dark {
+    color: var(--band-ink);
+  }
+}
+
+:root[data-theme="dark"] .btn-outline-dark {
+  color: var(--card-ink);
+  border-color: var(--muted);
+}
+
+:root[data-theme="dark"] .btn-outline-dark:hover,
+:root[data-theme="dark"] .btn-outline-dark.active {
+  background-color: var(--card-ink);
+  border-color: var(--card-ink);
+  color: var(--card-bg);
+}
+
+:root[data-theme="dark"] #list p.alert-dark {
+  color: var(--band-ink);
+}
+
+/* Theme toggle: light / dark / auto segmented control in the navbar.
+   Hidden until theme-toggle.js reveals it — no-JS visitors get "auto"
+   behavior for free via the prefers-color-scheme rules above. */
+.theme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--toggle-border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-left: 0.75rem;
+}
+
+.theme-toggle button {
+  background: none;
+  border: none;
+  color: var(--toggle-ink);
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+}
+
+.theme-toggle button.active {
+  background-color: var(--toggle-active-bg);
+  color: var(--toggle-active-ink);
+}
+
+.theme-toggle button:focus-visible {
+  outline: 2px solid var(--toggle-active-bg);
+  outline-offset: -2px;
 }
