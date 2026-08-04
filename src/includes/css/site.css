@@ -109,3 +109,15 @@ ul {
 .overridden {
   text-decoration: underline dotted #ff0000 1px;
 }
+
+/* Overrides page: truncate long URLs to fit; the full link shows on hover
+   via the title attribute */
+.link-container .col {
+  min-width: 0;
+}
+
+.overridden-link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

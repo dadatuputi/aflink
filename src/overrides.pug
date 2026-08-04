@@ -25,7 +25,7 @@ html.bg-spice-brown(lang='en')
             .list-group-item.list-group-item-action.border-top.link-container
                 .col
                     .overridden-title #{ev.beforeTitle}
-                    .overridden-link.small.text-muted.font-italic #{ev.beforeLink}
+                    .overridden-link.small.text-muted.font-italic(title=ev.beforeLink) #{ev.beforeLink}
                 if ev.isDeleted
                     .col-1.text-center
                         | ↛
@@ -38,7 +38,7 @@ html.bg-spice-brown(lang='en')
                         .overridden-date.small.text-muted.font-italic #{ev.date}
                     .col
                         .overridden-title #{ev.afterTitle}
-                        .overridden-link.small.text-muted.font-italic #{ev.afterLink}
+                        .overridden-link.small.text-muted.font-italic(title=ev.afterLink) #{ev.afterLink}
 
       else
         .no-overrides.alert.alert-info
