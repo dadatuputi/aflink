@@ -18,10 +18,21 @@ jobs:
         echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
         echo "Issue body: ${{ github.event.client_payload.issue_body }}"
          
-        # Parse the override issue body format (Issue template now supplies Link ID)
-        LINK_ID=$(echo "$BODY" | grep -A2 "### Link ID" | tail -n1 | xargs)
-        NEW_TITLE=$(echo "$BODY" | grep -A2 "### Link Title" | tail -n1 | xargs)
-        NEW_LINK=$(echo "$BODY" | grep -A2 "### Link URL" | tail -n1 | xargs)
+        # Parse the override issue body format (Issue template now supplies Link ID).
+        # Anchor on the "### <header>" line and take the first non-blank line after it,
+        # trimmed in-process. This avoids xargs (which crashes on apostrophes/quotes,
+        # e.g. "Bob's Portal") and tolerates blank-line shifts and CRLF payloads.
+        field() {
+          printf '%s' "$BODY" | awk -v H="### $1" '
+            index($0, H) == 1 { found = 1; next }
+            found && $0 ~ /[^[:space:]]/ {
+              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
+            }'
+        }
+
+        LINK_ID=$(field "Link ID")
+        NEW_TITLE=$(field "Link Title")
+        NEW_LINK=$(field "Link URL")
 
         # Validate required fields
         if [[ -z "$LINK_ID" ]]; then
