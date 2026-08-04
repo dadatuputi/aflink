@@ -41,7 +41,8 @@
       var col = document.createElement('i');
       if (i === maxIdx) col.className = 'hi';
       col.style.height = Math.max(2, Math.round(b.users / max * 100)) + '%';
-      col.title = (bucket > 1 ? 'week of ' : '') + fmtDate(b.date) + ': ' + fmtNum(b.users);
+      col.title = (bucket > 1 ? 'week of ' : '') + fmtDate(b.date) + ': ' + fmtNum(b.users) +
+        (i === maxIdx ? (bucket > 1 ? ' (busiest week)' : ' (busiest day)') : '');
       chart.appendChild(col);
     });
 
