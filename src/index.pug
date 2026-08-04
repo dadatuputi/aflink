@@ -5,8 +5,13 @@ html.bg-spice-brown(lang='en')
 
   //- Navigation
   +navigation
+    a.nav-link(href='#list') Official
+    a.nav-link(href='#unofficial') Unofficial
+    span.nav-separator.d-none.d-lg-inline= '|'
     a.nav-link(href='#about') About
+    span.nav-separator.d-none.d-lg-inline= '|'
     a.nav-link(href='#update') Update Links
+    span.nav-separator.d-none.d-lg-inline= '|'
     a.nav-link(href='/tutorial') Tutorial
 
 
@@ -24,7 +29,7 @@ html.bg-spice-brown(lang='en')
   section#list.bg-sage.text-center
     .container
       .offcenter
-        h2 Link List
+        h2 Official Links
         em.d-none.d-md-block Synced #{date}
       div#link-list.list-group
         //- Links json is expanded here
@@ -40,8 +45,20 @@ html.bg-spice-brown(lang='en')
                   a.main-link(href=link.link class={'overridden': link.isOverridden} data-content-id=(link.contentId) title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
                   a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
                   a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
-      p.alert-dark(hidden) No results for 
+      p.alert-dark(hidden) No results for
         em
+  if unofficial && unofficial.length > 0
+    section#unofficial.bg-slate-blue.text-center
+      .container
+        .offcenter
+          h2 Unofficial Links
+        p.small.fst-italic.mb-2 Community-curated third-party tools. Not official DoD/USAF sites — not endorsed; use your own judgment.
+        div#unofficial-list.list-group
+          each link in unofficial
+            .list-group-item.list-group-item-action.border-top.link-container
+              a.main-link(href=link.link data-content-id=(link.contentId) title=link.title) #{link.title}
+              a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
+              a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
   section#about.bg-olive-drab.text-center
     .container
       h2 About

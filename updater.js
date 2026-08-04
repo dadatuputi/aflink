@@ -90,9 +90,15 @@ async function getNewestDate(files) {
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
         const linksOverridePath = path.resolve(linksDir, 'links_override.json')
 
+        const linksUnofficialPath = path.resolve(linksDir, 'links_unofficial.json')
+
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
+        // Unofficial third-party links stay out of the official links object so
+        // the override/delete workflows and links.json never touch them.
+        const links_unofficial = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
+            .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
 
         // Sort other links
         links_other = {
@@ -216,30 +222,30 @@ async function getNewestDate(files) {
         console.log(`Wrote links.json`);
 
 
-        // Add correction url to each link
+        // Add correction url to each link (official and unofficial)
         const githubIssueBase = "https://github.com/dadatuputi/aflink/issues/new"
-        links.forEach(category => {
-            category.links.forEach(link => {
-                // GitHub's issue form locks any field prefilled via query param to
-                // that value — user edits revert on the form's next re-render.
-                // new_title/new_url must start empty so edits stick; the current
-                // values go in the reference-only current_* fields instead, where
-                // the lock is harmless.
-                const correction = new URL(githubIssueBase);
-                correction.searchParams.append('template', '02_link_override.yaml');
-                correction.searchParams.append('title', `[MODIFY]: ${link.title}`);
-                correction.searchParams.append('match', link.contentId);
-                correction.searchParams.append('current_title', link.title);
-                correction.searchParams.append('current_url', link.link);
-                link.correction = correction.toString();
+        const addIssueUrls = link => {
+            // GitHub's issue form locks any field prefilled via query param to
+            // that value — user edits revert on the form's next re-render.
+            // new_title/new_url must start empty so edits stick; the current
+            // values go in the reference-only current_* fields instead, where
+            // the lock is harmless.
+            const correction = new URL(githubIssueBase);
+            correction.searchParams.append('template', '02_link_override.yaml');
+            correction.searchParams.append('title', `[MODIFY]: ${link.title}`);
+            correction.searchParams.append('match', link.contentId);
+            correction.searchParams.append('current_title', link.title);
+            correction.searchParams.append('current_url', link.link);
+            link.correction = correction.toString();
 
-                const deletion = new URL(githubIssueBase);
-                deletion.searchParams.append('template', '03_link_delete.yaml');
-                deletion.searchParams.append('title', `[DELETE]: ${link.title}`);
-                deletion.searchParams.append('match', link.contentId);
-                link.deletion = deletion.toString();
-            });
-        });
+            const deletion = new URL(githubIssueBase);
+            deletion.searchParams.append('template', '03_link_delete.yaml');
+            deletion.searchParams.append('title', `[DELETE]: ${link.title}`);
+            deletion.searchParams.append('match', link.contentId);
+            link.deletion = deletion.toString();
+        };
+        links.forEach(category => category.links.forEach(addIssueUrls));
+        links_unofficial.forEach(addIssueUrls);
 
         console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
 
@@ -260,9 +266,10 @@ async function getNewestDate(files) {
         }
 
         // write homepage
-        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { 
-            ...options, 
-            links, 
+        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), {
+            ...options,
+            links,
+            unofficial: links_unofficial,
             date,
             isDev: environment !== 'production'
         })
