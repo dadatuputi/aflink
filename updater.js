@@ -230,7 +230,9 @@ async function getNewestDate(files) {
             { stamp: newestOverride ? Math.floor(newestOverride.timestamp) : 0, name: overrideTargetName },
         ].filter(c => c.stamp && c.name).sort((a, b) => b.stamp - a.stamp)[0];
         const utcStamp = s => new Date(s * 1000).toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
-        const sync_display = sugar_date.Date.format(new Date(Math.max(afSyncStamp, lastUpdate ? lastUpdate.stamp : 0) * 1000), '{d} {Month} {yyyy}');
+        // The visible date is the AF portal sync (transparency about source
+        // freshness); community link changes, possibly newer, live in the tooltip
+        const sync_display = sugar_date.Date.format(new Date(afSyncStamp * 1000), '{d} {Month} {yyyy}');
         const sync_tooltip = `AF Portal sync: ${utcStamp(afSyncStamp)}`
             + (lastUpdate ? `\nLast link update: ${lastUpdate.name} — ${utcStamp(lastUpdate.stamp)}` : '');
 
