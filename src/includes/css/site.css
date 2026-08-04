@@ -110,6 +110,12 @@ ul {
   text-decoration: underline dotted #ff0000 1px;
 }
 
+/* Search-match highlighting: Bootstrap gives mark horizontal padding, which
+   visually splits words mid-highlight */
+.main-link mark {
+  padding: 0;
+}
+
 /* Overrides page: truncate long URLs to fit; the full link shows on hover
    via the title attribute */
 .link-container .col {
