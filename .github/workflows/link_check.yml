@@ -1,0 +1,20 @@
+name: Link Trust Audit
+
+# On-demand full scan. The routine checks run inline in the link_add,
+# link_override, and link_update_af workflows, commenting on the issue that
+# introduced a non-official domain.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Run trust check
+        run: node scripts/check-trust.js | tee -a $GITHUB_STEP_SUMMARY
