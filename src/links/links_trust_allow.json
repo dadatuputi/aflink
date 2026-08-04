@@ -1,19 +1,49 @@
 {
-  "comment": "Non-.mil/.gov hosts that are known-legitimate. The weekly link checker flags any official-list domain not ending in .mil/.gov and not listed here.",
-  "allowed_hosts": [
-    "core-integration.affsa.aws.solidstatescientific.com",
-    "top.my.site.com",
-    "portal.tricare-overseas.com",
-    "www.afacpo.com",
-    "www.dau.edu",
-    "www.airuniversity.af.edu",
-    "www.afit.edu",
-    "usaf.percipio.com",
-    "www.enterprisetraining.com",
-    "home.cards.citidirect.com",
-    "www.usafmarathon.com",
-    "dpassupport.golearnportal.org",
-    "fss.emap-web.com",
-    "daf.dodmwrlibraries.org"
+  "comment": "Hosts outside .mil/.gov/.edu that are known-legitimate official services. The trust check warns about any official-list domain not covered here; add an entry with a short reason to acknowledge a new one.",
+  "allowed": [
+    {
+      "host": "core-integration.affsa.aws.solidstatescientific.com",
+      "reason": "Airfield Driving — AFFSA application, software-factory/contractor AWS hosting"
+    },
+    {
+      "host": "top.my.site.com",
+      "reason": "MyCare Overseas — TRICARE Overseas Program referral portal (contractor, Salesforce-hosted)"
+    },
+    {
+      "host": "portal.tricare-overseas.com",
+      "reason": "TRICARE Overseas Program claims portal (International SOS, TOP contractor)"
+    },
+    {
+      "host": "www.afacpo.com",
+      "reason": "MPM (Modernization Process Model) — AF Acquisition Process Office site"
+    },
+    {
+      "host": "usaf.percipio.com",
+      "reason": "DAF e-Learning (DAFeL) — Skillsoft Percipio, USAF tenant"
+    },
+    {
+      "host": "www.enterprisetraining.com",
+      "reason": "Red Vector Program — contracted training platform"
+    },
+    {
+      "host": "home.cards.citidirect.com",
+      "reason": "Citibank Cardholder Access (GTC) — Citi holds the GSA SmartPay travel card contract"
+    },
+    {
+      "host": "www.usafmarathon.com",
+      "reason": "USAF Marathon — official event site"
+    },
+    {
+      "host": "dpassupport.golearnportal.org",
+      "reason": "DPAS support and eLearning portal (contractor-operated)"
+    },
+    {
+      "host": "fss.emap-web.com",
+      "reason": "EMAP (Eagle Modification Action Plan) — FSS portal, contractor-hosted"
+    },
+    {
+      "host": "daf.dodmwrlibraries.org",
+      "reason": "DAF MWR Virtual Library (DoD MWR Libraries program)"
+    }
   ]
 }
