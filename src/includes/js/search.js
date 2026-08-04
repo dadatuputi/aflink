@@ -96,6 +96,10 @@ $(document).ready(function () {
         var text = $a.text();
         var title = normalize(text);
         var url = normalize(($a.attr('href') || "").replace(/^https?:\/\//, "")).norm;
+        // Tokens can also match the row's category name ("education" shows the
+        // whole category); unofficial rows have no .category sibling and match
+        // as "unofficial"
+        var cat = normalize($(this).siblings('.category').text() || "unofficial").norm;
         var ranges = [];
         var ok = words.every(function (w) {
           var p = title.norm.indexOf(w.whole);
@@ -103,7 +107,7 @@ $(document).ready(function () {
             ranges.push([title.map[p], title.map[p + w.whole.length - 1]]);
             return true;
           }
-          if (url.indexOf(w.whole) > -1) return true;
+          if (url.indexOf(w.whole) > -1 || cat.indexOf(w.whole) > -1) return true;
           if (!w.parts.length) return false;
           var partRanges = [];
           var all = w.parts.every(function (t) {
@@ -112,7 +116,7 @@ $(document).ready(function () {
               partRanges.push([title.map[q], title.map[q + t.length - 1]]);
               return true;
             }
-            return url.indexOf(t) > -1;
+            return url.indexOf(t) > -1 || cat.indexOf(t) > -1;
           });
           if (all) {
             ranges.push.apply(ranges, partRanges);
