@@ -101,7 +101,9 @@ jobs:
         # Look in links_other.json for a contentId match
         if jq -e --arg id "$LINK_ID" '.OTHER[]? | select(.contentId == $id)' src/links/links_other.json >/dev/null 2>&1; then
           echo "FOUND_IN=links_other.json" >> $GITHUB_ENV
-          echo "ACTION=edit_other" >> $GITHUB_ENV
+          echo "ACTION=edit_direct" >> $GITHUB_ENV
+          echo "TARGET_FILE=src/links/links_other.json" >> $GITHUB_ENV
+          echo "TARGET_KEY=OTHER" >> $GITHUB_ENV
           echo "Found in src/links/links_other.json; will update that file."
 
         # Else look in links_af.json for a contentId match
@@ -110,26 +112,35 @@ jobs:
           echo "ACTION=override" >> $GITHUB_ENV
           echo "Found in src/links/links_af.json; will add override entry."
 
+        # Else look in links_unofficial.json for a contentId match
+        elif jq -e --arg id "$LINK_ID" '.UNOFFICIAL[]? | select(.contentId == $id)' src/links/links_unofficial.json >/dev/null 2>&1; then
+          echo "FOUND_IN=links_unofficial.json" >> $GITHUB_ENV
+          echo "ACTION=edit_direct" >> $GITHUB_ENV
+          echo "TARGET_FILE=src/links/links_unofficial.json" >> $GITHUB_ENV
+          echo "TARGET_KEY=UNOFFICIAL" >> $GITHUB_ENV
+          echo "Found in src/links/links_unofficial.json; will update that file."
+
         else
           echo "FOUND_IN=none" >> $GITHUB_ENV
           echo "ACTION=none" >> $GITHUB_ENV
-          echo "Error: LINK_ID '$LINK_ID' not found in either links_other.json or links_af.json"
+          echo "Error: LINK_ID '$LINK_ID' not found in links_other.json, links_af.json, or links_unofficial.json"
           exit 1
         fi
 
-    - name: "Case: Overriding an OTHER link in links_other.json"
-      if: env.ACTION == 'edit_other'
+    - name: "Case: Editing a link in place (OTHER or UNOFFICIAL)"
+      if: env.ACTION == 'edit_direct'
       run: |
         set -o pipefail
         jq -r --arg id "${{ env.LINK_ID }}" \
            --arg NEW_TITLE "${{ env.NEW_TITLE }}" \
            --arg NEW_LINK "${{ env.NEW_LINK }}" \
-           '.OTHER |= map( if .contentId == $id then
+           --arg KEY "${{ env.TARGET_KEY }}" \
+           '.[$KEY] |= map( if .contentId == $id then
                (if $NEW_TITLE != "" and $NEW_TITLE != "null" and $NEW_TITLE != "_No response_" then .title = $NEW_TITLE else . end) |
                (if $NEW_LINK != "" and $NEW_LINK != "null" and $NEW_LINK != "_No response_" then .link = $NEW_LINK else . end)
-             else . end )' src/links/links_other.json | sponge src/links/links_other.json
+             else . end )' "${{ env.TARGET_FILE }}" | sponge "${{ env.TARGET_FILE }}"
 
-        echo "✅ Updated src/links/links_other.json for LINK_ID '${{ env.LINK_ID }}'"
+        echo "✅ Updated ${{ env.TARGET_FILE }} for LINK_ID '${{ env.LINK_ID }}'"
 
     - name: "Case: Overriding an AF Portal link in links_af.json via links_override.json"
       if: env.ACTION == 'override'

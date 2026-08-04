@@ -18,8 +18,18 @@ jobs:
         echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
         echo "Issue body: ${{ github.event.client_payload.issue_body }}"
 
-        # Parse the override issue body format
-        LINK_ID=$(echo "$BODY" | grep -A2 "### Link ID" | tail -n1 | xargs)
+        # Extract the first non-blank line after a "### <header>" line, trimmed.
+        # Anchoring on the header (rather than grep|xargs) survives blank-line
+        # shifts, CRLF payloads, and values containing quotes/apostrophes.
+        field() {
+          printf '%s' "$BODY" | awk -v H="### $1" '
+            index($0, H) == 1 { found = 1; next }
+            found && $0 ~ /[^[:space:]]/ {
+              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
+            }'
+        }
+
+        LINK_ID=$(field "Link ID")
 
         if [ -z "$LINK_ID" ]; then
           echo "Error: LINK_ID not found in issue body"
@@ -46,7 +56,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install --yes jq moreutils
 
-    - name: Search links_other.json and links_af.json for Link ID
+    - name: Search link lists for Link ID
       run: |
         echo "Searching for LINK_ID: $LINK_ID"
 
@@ -54,6 +64,8 @@ jobs:
         if jq -e --arg id "$LINK_ID" '.OTHER[]? | select(.contentId == $id)' src/links/links_other.json >/dev/null 2>&1; then
           echo "FOUND_IN=links_other.json" >> $GITHUB_ENV
           echo "ACTION=remove" >> $GITHUB_ENV
+          echo "TARGET_FILE=src/links/links_other.json" >> $GITHUB_ENV
+          echo "TARGET_KEY=OTHER" >> $GITHUB_ENV
           echo "Found LINK_ID in src/links/links_other.json; will remove."
 
         # If not there, check links_af.json (AF categorized links) — we will create an override instead
@@ -62,21 +74,29 @@ jobs:
           echo "ACTION=override" >> $GITHUB_ENV
           echo "Found LINK_ID in src/links/links_af.json; will create override entry."
 
+        # Last, check links_unofficial.json — removed directly like OTHER
+        elif jq -e --arg id "$LINK_ID" '.UNOFFICIAL[]? | select(.contentId == $id)' src/links/links_unofficial.json >/dev/null 2>&1; then
+          echo "FOUND_IN=links_unofficial.json" >> $GITHUB_ENV
+          echo "ACTION=remove" >> $GITHUB_ENV
+          echo "TARGET_FILE=src/links/links_unofficial.json" >> $GITHUB_ENV
+          echo "TARGET_KEY=UNOFFICIAL" >> $GITHUB_ENV
+          echo "Found LINK_ID in src/links/links_unofficial.json; will remove."
+
         else
           echo "FOUND_IN=none" >> $GITHUB_ENV
           echo "ACTION=none" >> $GITHUB_ENV
-          echo "Error: LINK_ID '$LINK_ID' not found in either links_other.json or links_af.json"
+          echo "Error: LINK_ID '$LINK_ID' not found in links_other.json, links_af.json, or links_unofficial.json"
           exit 1
         fi
 
-    - name: Remove link from links_other.json
+    - name: Remove link from its list
       if: env.ACTION == 'remove'
       run: |
-        BEFORE_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
+        BEFORE_COUNT=$(jq --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] | length' "${{ env.TARGET_FILE }}")
 
-        jq -r --arg LINK_ID "${{ env.LINK_ID }}" '.OTHER |= map(select(.contentId != $LINK_ID))' src/links/links_other.json | sponge src/links/links_other.json
+        jq -r --arg LINK_ID "${{ env.LINK_ID }}" --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] |= map(select(.contentId != $LINK_ID))' "${{ env.TARGET_FILE }}" | sponge "${{ env.TARGET_FILE }}"
 
-        AFTER_COUNT=$(jq '.OTHER | length' src/links/links_other.json)
+        AFTER_COUNT=$(jq --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] | length' "${{ env.TARGET_FILE }}")
 
         if [ "$BEFORE_COUNT" -eq "$AFTER_COUNT" ]; then
           echo "Warning: No items were removed. LINK_ID '${{ env.LINK_ID }}' may not exist."
@@ -85,7 +105,7 @@ jobs:
           echo "Successfully removed 1 item. Count: $BEFORE_COUNT -> $AFTER_COUNT"
         fi
 
-        cat src/links/links_other.json
+        cat "${{ env.TARGET_FILE }}"
 
     - name: Add override entry for links_af.json
       if: env.ACTION == 'override'
@@ -112,11 +132,11 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: ❌ Failed to remove link with Content ID `${{ env.LINK_ID }}` - it may not exist in the list.'
+            body: '❌ Failed to remove link with Content ID `${{ env.LINK_ID }}` - it may not exist in the list.'
           })
 
     - name: Commit New Changes
