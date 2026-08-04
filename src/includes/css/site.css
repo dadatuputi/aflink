@@ -198,12 +198,14 @@ section[id] {
   color: #6c757d;
 }
 
+.usage-stack {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
 .chart-card {
   padding: 0.9rem 1rem;
   border: 0;
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .chart-title {

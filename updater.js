@@ -314,6 +314,7 @@ async function getNewestDate(files) {
                 ...options,
                 analytics,
                 analytics_date: sugar_date.Date.format(new Date(analytics.generated), '{d} {Month} {yyyy}'),
+                analytics_utc: new Date(analytics.generated).toISOString().replace('T', ' ').slice(0, 16) + ' UTC',
                 isDev: environment !== 'production'
             })
             const analyticsDir = path.resolve(outputDir, "analytics")
