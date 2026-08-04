@@ -10,6 +10,11 @@ script
     include js/search.js
   else
     include:uglify-js js/search.js
+//- PWA: offline support via network-first service worker (see src/sw.js)
+script.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
 //- Google tag (gtag.js)
 script(async src="https://www.googletagmanager.com/gtag/js?id=G-M8SEVTFLFK")
 script.

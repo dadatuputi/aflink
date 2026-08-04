@@ -8,6 +8,7 @@ import sugar_date from 'sugar-date'
 import gitDateExtractor from 'git-date-extractor'
 import imageType from 'image-type'
 import process from 'process'
+import sharp from 'sharp'
 
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
@@ -318,6 +319,17 @@ async function getNewestDate(files) {
             fs.cpSync(favicon, faviconDestFile)
         })
         console.log("Wrote favicons")
+
+        // PWA: rasterize favicon.svg into the manifest icon sizes, and copy
+        // the manifest and service worker to the site root
+        const faviconSvg = path.resolve(srcDir, "favicon.svg")
+        await Promise.all([192, 512].map(size =>
+            sharp(faviconSvg).resize(size, size).png()
+                .toFile(path.resolve(outputDir, `icon-${size}.png`))
+        ));
+        fs.cpSync(path.resolve(srcDir, "manifest.json"), path.resolve(outputDir, "manifest.json"))
+        fs.cpSync(path.resolve(srcDir, "sw.js"), path.resolve(outputDir, "sw.js"))
+        console.log("Wrote PWA assets")
 
 
         console.log("Done writing updated data.")
