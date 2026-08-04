@@ -1,0 +1,19 @@
+{
+  "UNOFFICIAL": [
+    {
+      "title": "AF Bullet Shaper (pdf-bullets)",
+      "link": "https://af-vcd.github.io/pdf-bullets/",
+      "contentId": "uAFBULLETSHAPER"
+    },
+    {
+      "title": "MilitaryCAC (CAC setup and troubleshooting)",
+      "link": "https://militarycac.com/",
+      "contentId": "uMILITARYCAC"
+    },
+    {
+      "title": "Install DoD Certificates on macOS (governmentmac)",
+      "link": "https://governmentmac.com/install-dod-certificates-mac/",
+      "contentId": "uDODCERTSMAC"
+    }
+  ]
+}
