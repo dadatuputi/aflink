@@ -16,9 +16,30 @@ head
     //- PWA: installable app manifest and home-screen icon
     link(rel='manifest' href='/manifest.json')
     link(rel='apple-touch-icon' href='/icon-192.png')
-    meta(name='theme-color' content='#73391D')
+    //- Single theme-color tag, kept in sync with the resolved theme by both
+    //- the inline script below (first paint) and theme-toggle.js (later
+    //- changes) — simpler and more correct than dueling media-scoped tags,
+    //- which can't express "explicitly light even though the OS is dark".
+    meta#theme-color(name='theme-color' content='#73391D')
 
-    
+    //- Anti-flash: apply a saved theme choice, and match the theme-color
+    //- meta to it, before first paint. Runs synchronously and inline (not
+    //- deferred) so there is no flash of the wrong theme. Absence of a
+    //- saved choice (or "auto") leaves data-theme unset and falls back to
+    //- the OS preference — same resolved appearance as a no-JS visitor.
+    script.
+      (function () {
+        try {
+          var t = localStorage.getItem('aflink-theme');
+          var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (t === 'light' || t === 'dark') {
+            document.documentElement.setAttribute('data-theme', t);
+          }
+          document.getElementById('theme-color').setAttribute('content', dark ? '#0f1419' : '#73391D');
+        } catch (e) {}
+      })();
+
+
     //- CSS
     style
       include css/bootstrap.5.2.3.min.css
@@ -39,6 +60,13 @@ mixin navigation
       button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
       #navbarResponsive.collapse.navbar-collapse
-        .navbar-nav.ms-auto
+        .navbar-nav.ms-auto.align-items-lg-center
           a.nav-link(aria-current='page' href='/') Home
           block
+          //- Light/dark/auto toggle, rightmost in the bar. Hidden until
+          //- theme-toggle.js reveals it — no-JS visitors just follow the
+          //- OS preference (prefers-color-scheme rules in site.css).
+          .theme-toggle#theme-toggle(hidden role='group' aria-label='Theme')
+            button(type='button' data-theme-choice='light' aria-label='Light theme') ☀
+            button(type='button' data-theme-choice='dark' aria-label='Dark theme') ☾
+            button(type='button' data-theme-choice='auto' aria-label='Match system theme') A

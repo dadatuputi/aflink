@@ -3,9 +3,14 @@ script
     include js/jquery-3.5.1.slim.min.js
   else
     include:uglify-js js/jquery-3.5.1.slim.min.js
-script 
+script
   include js/bootstrap.bundle.5.2.3.min.js
-script 
+script
+  if isDev
+    include js/theme-toggle.js
+  else
+    include:uglify-js js/theme-toggle.js
+script
   if isDev
     include js/search.js
   else
