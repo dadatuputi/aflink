@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Hey!",
+    "body": "Click here to learn how to search aflink from your browser address bar",
+    "link": "/tutorial"
+  },
+  {
+    "title": "New!",
+    "body": "See what links people actually use — 30-day, 90-day, and 1-year stats on the new Usage page",
+    "link": "/analytics",
+    "start": "2026-08-04",
+    "end": "2026-11-04"
+  }
+]

@@ -11,17 +11,30 @@ html.bg-spice-brown(lang='en')
     a.nav-link(href='#about') About
     span.nav-separator.d-none.d-lg-inline= '|'
     a.nav-link(href='#update') Update Links
+    if hasAnalytics
+      span.nav-separator.d-none.d-lg-inline= '|'
+      a.nav-link(href='/analytics') Usage
     span.nav-separator.d-none.d-lg-inline= '|'
     a.nav-link(href='/tutorial') Tutorial
 
 
   //- Page Content
-  section#alert.bg-sage.text-center
-    a.no-dec(href='/tutorial')
-      .container.alert.alert-primary.bg-cannes-blue.no-border(role='alert')
-        strong Hey! 
-        |
-        | Click here to learn how to search aflink from your browser address bar 
+  //- Announcements: data-driven from src/announcements.json, filtered to the
+  //- build-time active window in updater.js
+  if announcements.length
+    section#alert.bg-sage.text-center
+      each item in announcements
+        if item.link
+          a.no-dec(href=item.link)
+            .container.alert.alert-primary.bg-cannes-blue.no-border.mb-2(role='alert')
+              strong #{item.title}
+              |
+              | #{item.body}
+        else
+          .container.alert.alert-primary.bg-cannes-blue.no-border.mb-2(role='alert')
+            strong #{item.title}
+            |
+            | #{item.body}
   section#search.bg-sage.text-center
     .container
       .form-outline
