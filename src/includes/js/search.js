@@ -26,18 +26,79 @@ $(document).ready(function () {
     my_modal.toggle();
   });
 
+  // Normalize a string for search: lowercase, accents folded, punctuation and
+  // spaces dropped — so "e-mail" matches "eMail" and "af portal" matches
+  // "AF Portal". Returns the normalized string plus a map from each normalized
+  // character back to its index in the original, for match highlighting.
+  function normalize(s) {
+    var norm = "", map = [];
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i].toLowerCase().normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]/g, "");
+      for (var j = 0; j < c.length; j++) {
+        norm += c[j];
+        map.push(i);
+      }
+    }
+    return { norm: norm, map: map };
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch];
+    });
+  }
+
+  // Rebuild the title anchor's content with <mark> around the given original-
+  // string index ranges (merged, in order). Ranges are [start, end] inclusive.
+  function highlight($a, text, ranges) {
+    ranges.sort(function (x, y) { return x[0] - y[0]; });
+    var merged = [];
+    ranges.forEach(function (r) {
+      var last = merged[merged.length - 1];
+      if (last && r[0] <= last[1] + 1) last[1] = Math.max(last[1], r[1]);
+      else merged.push([r[0], r[1]]);
+    });
+    var html = "", pos = 0;
+    merged.forEach(function (r) {
+      html += escapeHtml(text.slice(pos, r[0])) + "<mark>" + escapeHtml(text.slice(r[0], r[1] + 1)) + "</mark>";
+      pos = r[1] + 1;
+    });
+    $a.html(html + escapeHtml(text.slice(pos)));
+  }
+
   // Filter links based on search query
   $("#search-form").on(
     "change keyup paste search",
     function (event) {
       var value = $(this).val().toLowerCase();
-      
+      var tokens = value.split(/[^a-z0-9]+/).filter(Boolean).map(function (t) {
+        return normalize(t).norm;
+      }).filter(Boolean);
+
       // Hide everything
       $('#link-list .category, #link-list .link-container').toggle(false);
 
-      // Show links that contain text
+      // Show links where every token matches the title or the URL,
+      // highlighting title matches
       var links = $('#link-list .link-container').filter(function(){
-        return $(this).find('a:first-child').text().toLowerCase().indexOf(value) > -1;
+        var $a = $(this).find('a:first-child');
+        var text = $a.text();
+        var title = normalize(text);
+        var url = normalize(($a.attr('href') || "").replace(/^https?:\/\//, "")).norm;
+        var ranges = [];
+        var ok = tokens.every(function (t) {
+          var p = title.norm.indexOf(t);
+          if (p > -1) {
+            ranges.push([title.map[p], title.map[p + t.length - 1]]);
+            return true;
+          }
+          return url.indexOf(t) > -1;
+        });
+        if (ok && ranges.length) highlight($a, text, ranges);
+        else $a.text(text);
+        return ok;
       })
 
       // Go to first link if autocomplete

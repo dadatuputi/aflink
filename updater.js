@@ -105,7 +105,11 @@ async function getNewestDate(files) {
 
         let links = links_af.afpCategorizedLinksDto.links;
 
-        // Apply overrides to AF links - iterate through overrides looking for matches in links
+        // Apply overrides to AF links - iterate through overrides looking for matches in links.
+        // Apply in timestamp order so a link with multiple overrides ends in the newest state,
+        // and record each application as a before/after event for the overrides page.
+        links_override.sort((a, b) => a.timestamp - b.timestamp);
+        const overrideEvents = [];
         let override_count = 0;
         for (const override of links_override) {
             // Search through all categories and links to find matches
@@ -125,17 +129,35 @@ async function getNewestDate(files) {
                     const match = matches[0];
                     const originalLink = match.link;
 
+                    // When overrides chain, originalLink is the already-overridden
+                    // state; the true AF originals ride along on it.
+                    const trueOriginalTitle = originalLink.originalTitle ?? originalLink.title;
+                    const trueOriginalLink = originalLink.originalLink ?? originalLink.link;
+                    const newTitle = override.title || originalLink.title;
+                    const newLink = override.link || originalLink.link;
+
+                    overrideEvents.push({
+                        timestamp: override.timestamp,
+                        date: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
+                        beforeTitle: originalLink.title,
+                        beforeLink: originalLink.link,
+                        afterTitle: newTitle,
+                        afterLink: newLink,
+                        isDeleted: !override.title && !override.link,
+                        contentId: originalLink.contentId,
+                    });
+
                     links[match.category][match.linkIndex] = {
-                        title: override.title || originalLink.title, // Use override title if provided, otherwise keep original
-                        link: override.link || originalLink.link,    // Use override link if provided, otherwise keep original
+                        title: newTitle, // Use override title if provided, otherwise keep original
+                        link: newLink,   // Use override link if provided, otherwise keep original
                         isDeleted: !override.title && !override.link, // If neither title nor link is provided, mark as deleted
                         isOverridden: true,
-                        overridden: [override.title ? originalLink.title : null, override.link ? originalLink.link : null].filter(Boolean).join(', '), // Preserve originals
+                        overridden: [newTitle !== trueOriginalTitle ? trueOriginalTitle : null, newLink !== trueOriginalLink ? trueOriginalLink : null].filter(Boolean).join(', '), // Preserve originals
                         overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
-                        
+
                         // Preserve original AF link properties
-                        originalTitle: originalLink.title,
-                        originalLink: originalLink.link,
+                        originalTitle: trueOriginalTitle,
+                        originalLink: trueOriginalLink,
                         // type: originalLink.type,
                         contentId: originalLink.contentId,
                         // exitLinkReferrer: originalLink.exitLinkReferrer,
@@ -261,7 +283,7 @@ async function getNewestDate(files) {
         const override_date = await getNewestDate([linksOverridePath]);
         const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), {
             ...options,
-            links,  // Pass the full links object
+            overrideEvents: [...overrideEvents].sort((a, b) => b.timestamp - a.timestamp), // newest first
             override_date,
             isDev: environment !== 'production'
         })
