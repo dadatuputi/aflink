@@ -198,12 +198,17 @@ async function getNewestDate(files) {
         const githubIssueBase = "https://github.com/dadatuputi/aflink/issues/new"
         links.forEach(category => {
             category.links.forEach(link => {
+                // GitHub's issue form locks any field prefilled via query param to
+                // that value — user edits revert on the form's next re-render.
+                // new_title/new_url must start empty so edits stick; the current
+                // values go in the reference-only current_* fields instead, where
+                // the lock is harmless.
                 const correction = new URL(githubIssueBase);
                 correction.searchParams.append('template', '02_link_override.yaml');
                 correction.searchParams.append('title', `[MODIFY]: ${link.title}`);
                 correction.searchParams.append('match', link.contentId);
-                correction.searchParams.append('new_title', link.title);
-                correction.searchParams.append('new_url', link.link);
+                correction.searchParams.append('current_title', link.title);
+                correction.searchParams.append('current_url', link.link);
                 link.correction = correction.toString();
 
                 const deletion = new URL(githubIssueBase);
