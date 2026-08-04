@@ -1,0 +1,48 @@
+name: Analytics Pull
+
+on:
+  schedule:
+    - cron: '17 9 * * *'   # daily, 09:17 UTC (off the hour to dodge cron congestion)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch GA4 report
+        env:
+          GA4_CREDENTIALS: ${{ secrets.GA4_CREDENTIALS }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+        run: node scripts/fetch-analytics.js
+
+      - name: Commit analytics.json
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: src/analytics.json
+          message: 'Update analytics data'
+
+      - name: Trigger site build
+        if: github.ref == 'refs/heads/master'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'build',
+              client_payload: {
+                commit_sha: context.sha,
+                message: 'Updated analytics data'
+              }
+            });

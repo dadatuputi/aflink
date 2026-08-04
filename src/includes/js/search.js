@@ -23,6 +23,18 @@ $(document).ready(function () {
   $("#link-list .list-group-item a:first-child, #unofficial-list .list-group-item a:first-child").on('click', function(event) {
     $('#exit-modal .modal-header .title').text($(this).text());
     $('#exit-modal .link').text($(this).prop('href'));
+
+    // Record which link was used so the analytics page can rank resources.
+    // Anonymous event; gtag delivers via sendBeacon so navigation isn't delayed.
+    if (typeof gtag === 'function') {
+      var $cat = $(this).closest('.link-container').siblings('.category');
+      gtag('event', 'link_click', {
+        link_title: $(this).text(),
+        link_url: this.href,
+        link_category: $cat.length ? ($cat.data('orig-text') || $cat.text()) : 'UNOFFICIAL'
+      });
+    }
+
     my_modal.toggle();
   });
 
