@@ -13,6 +13,20 @@ body:
       placeholder: 037a5a53-db87-48f5-8c6e-017d65bf8b3c
     validations:
       required: true
+  - type: input
+    id: current_title
+    attributes:
+      label: 🔒 Current Link Title
+      description: "Auto-filled for reference. Edits to this field are ignored."
+    validations:
+      required: false
+  - type: input
+    id: current_url
+    attributes:
+      label: 🔒 Current Link URL
+      description: "Auto-filled for reference. Edits to this field are ignored."
+    validations:
+      required: false
   - type: textarea
     id: comment
     attributes:

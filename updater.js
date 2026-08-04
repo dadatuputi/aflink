@@ -112,6 +112,14 @@ async function getNewestDate(files) {
 
         let links = links_af.afpCategorizedLinksDto.links;
 
+        // Some AF portal links are relative paths (e.g. /gcss-af/...); make
+        // them absolute before overrides record originals or URLs are built
+        Object.values(links).forEach(items => items.forEach(link => {
+            if (link.link && link.link.startsWith('/')) {
+                link.link = 'https://www.my.af.mil' + link.link;
+            }
+        }));
+
         // Apply overrides to AF links - iterate through overrides looking for matches in links.
         // Apply in timestamp order so a link with multiple overrides ends in the newest state,
         // and record each application as a before/after event for the overrides page.
@@ -243,6 +251,8 @@ async function getNewestDate(files) {
             deletion.searchParams.append('template', '03_link_delete.yaml');
             deletion.searchParams.append('title', `[DELETE]: ${link.title}`);
             deletion.searchParams.append('match', link.contentId);
+            deletion.searchParams.append('current_title', link.title);
+            deletion.searchParams.append('current_url', link.link);
             link.deletion = deletion.toString();
         };
         links.forEach(category => category.links.forEach(addIssueUrls));
