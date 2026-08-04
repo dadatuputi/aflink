@@ -37,6 +37,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history: file dates on the site come from git log
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
