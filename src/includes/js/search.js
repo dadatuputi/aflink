@@ -73,14 +73,23 @@ $(document).ready(function () {
     "change keyup paste search",
     function (event) {
       var value = $(this).val().toLowerCase();
-      var tokens = value.split(/[^a-z0-9]+/).filter(Boolean).map(function (t) {
-        return normalize(t).norm;
-      }).filter(Boolean);
+
+      // Every whitespace-separated word must match. A word matches on its whole
+      // normalized form ("e-mail" → "email"), or failing that on all of its
+      // multi-character punctuation-separated parts ("mail"; the lone "e" is
+      // dropped so single characters never match on their own).
+      var words = value.split(/\s+/).filter(Boolean).map(function (w) {
+        return {
+          whole: normalize(w).norm,
+          parts: w.split(/[^a-z0-9]+/).map(function (p) { return normalize(p).norm; })
+            .filter(function (p) { return p.length > 1; })
+        };
+      }).filter(function (w) { return w.whole; });
 
       // Hide everything
       $('#link-list .category, #link-list .link-container').toggle(false);
 
-      // Show links where every token matches the title or the URL,
+      // Show links where every word matches the title or the URL,
       // highlighting title matches
       var links = $('#link-list .link-container').filter(function(){
         var $a = $(this).find('a:first-child');
@@ -88,13 +97,28 @@ $(document).ready(function () {
         var title = normalize(text);
         var url = normalize(($a.attr('href') || "").replace(/^https?:\/\//, "")).norm;
         var ranges = [];
-        var ok = tokens.every(function (t) {
-          var p = title.norm.indexOf(t);
+        var ok = words.every(function (w) {
+          var p = title.norm.indexOf(w.whole);
           if (p > -1) {
-            ranges.push([title.map[p], title.map[p + t.length - 1]]);
+            ranges.push([title.map[p], title.map[p + w.whole.length - 1]]);
             return true;
           }
-          return url.indexOf(t) > -1;
+          if (url.indexOf(w.whole) > -1) return true;
+          if (!w.parts.length) return false;
+          var partRanges = [];
+          var all = w.parts.every(function (t) {
+            var q = title.norm.indexOf(t);
+            if (q > -1) {
+              partRanges.push([title.map[q], title.map[q + t.length - 1]]);
+              return true;
+            }
+            return url.indexOf(t) > -1;
+          });
+          if (all) {
+            ranges.push.apply(ranges, partRanges);
+            return true;
+          }
+          return false;
         });
         if (ok && ranges.length) highlight($a, text, ranges);
         else $a.text(text);
