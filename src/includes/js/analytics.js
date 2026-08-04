@@ -104,7 +104,11 @@
     renderRank('rank-cats', r.categories, 'category', false);
   }
 
-  presets.hidden = false;
+  // The build renders only the presets the data span supports; with a single
+  // option there is nothing to switch, so the group stays hidden
+  if (presets.querySelectorAll('button[data-range]').length > 1) {
+    presets.hidden = false;
+  }
   presets.addEventListener('click', function (e) {
     var btn = e.target.closest('button[data-range]');
     if (!btn) return;
