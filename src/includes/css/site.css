@@ -110,10 +110,13 @@ ul {
   text-decoration: underline dotted #ff0000 1px;
 }
 
-/* Search-match highlighting: Bootstrap gives mark horizontal padding, which
-   visually splits words mid-highlight */
+/* Search-match highlighting. Zero padding: Bootstrap's default mark padding
+   visually splits words mid-highlight. Cannes blue tint: the palette's one
+   cool accent, complementary to the OCP earth tones around the white cards. */
 .main-link mark {
   padding: 0;
+  background-color: rgba(123, 175, 212, 0.45);
+  border-radius: 2px;
 }
 
 /* Overrides page: truncate long URLs to fit; the full link shows on hover
