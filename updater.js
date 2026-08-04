@@ -98,8 +98,17 @@ async function getNewestDate(files) {
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
         // Unofficial third-party links stay out of the official links object so
         // the override/delete workflows and links.json never touch them.
-        const links_unofficial = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
+        const links_unofficial_raw = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
+        const links_unofficial = [...links_unofficial_raw]
             .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
+
+        // The workflows append new links, so the raw (pre-sort) last element
+        // names each file's most recent addition — used for the sync tooltip.
+        // An in-place edit bumps the file date but keeps the last-added name;
+        // close enough for a tooltip.
+        const lastOtherAdd = links_other.OTHER.length ? links_other.OTHER[links_other.OTHER.length - 1].title : null;
+        const lastUnofficialAdd = links_unofficial_raw.length ? links_unofficial_raw[links_unofficial_raw.length - 1].title : null;
+        const newestOverride = links_override.reduce((a, b) => (!a || b.timestamp > a.timestamp) ? b : a, null);
 
         // Sort other links
         links_other = {
@@ -195,6 +204,35 @@ async function getNewestDate(files) {
         const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
         console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
 
+
+        // Sync display: the AF portal sync and the latest community link
+        // change are different events — the newer one drives the visible
+        // date, and the tooltip breaks out both with UTC timestamps.
+        const fileStamp = async p => {
+            const stamps = await gitDateExtractor.getStamps({ files: [p] });
+            const s = Object.values(stamps)[0];
+            return s ? Number(s.modified) : 0;
+        };
+        let overrideTargetName = newestOverride ? newestOverride.match : null;
+        if (newestOverride) {
+            for (const items of Object.values(links)) {
+                const hit = items.find(l => l.contentId === newestOverride.match);
+                if (hit) {
+                    overrideTargetName = hit.isDeleted ? (hit.originalTitle || hit.title) : hit.title;
+                    break;
+                }
+            }
+        }
+        const afSyncStamp = await fileStamp(linksAfPath);
+        const lastUpdate = [
+            { stamp: await fileStamp(linksOtherPath), name: lastOtherAdd },
+            { stamp: await fileStamp(linksUnofficialPath), name: lastUnofficialAdd },
+            { stamp: newestOverride ? Math.floor(newestOverride.timestamp) : 0, name: overrideTargetName },
+        ].filter(c => c.stamp && c.name).sort((a, b) => b.stamp - a.stamp)[0];
+        const utcStamp = s => new Date(s * 1000).toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
+        const sync_display = sugar_date.Date.format(new Date(Math.max(afSyncStamp, lastUpdate ? lastUpdate.stamp : 0) * 1000), '{d} {Month} {yyyy}');
+        const sync_tooltip = `AF Portal sync: ${utcStamp(afSyncStamp)}`
+            + (lastUpdate ? `\nLast link update: ${lastUpdate.name} — ${utcStamp(lastUpdate.stamp)}` : '');
 
         // Get links last modified date
         const dateFiles = [linksAfPath, linksOtherPath];
@@ -300,6 +338,8 @@ async function getNewestDate(files) {
             links,
             unofficial: links_unofficial,
             date,
+            sync_display,
+            sync_tooltip,
             hasAnalytics: !!analytics,
             announcements,
             isDev: environment !== 'production'
