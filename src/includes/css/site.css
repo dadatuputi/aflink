@@ -88,8 +88,8 @@ both directions over the OS preference.
     --toggle-ink: #8fa1b1;
     --toggle-active-bg: #7BAFD4;
     --toggle-active-ink: #1a2532;
-    --hover-bg: #17202b;
-    --active-bg: #10161e;
+    --hover-bg: #0b0f14;
+    --active-bg: #05070a;
   }
 }
 
@@ -130,8 +130,8 @@ both directions over the OS preference.
   --toggle-ink: #8fa1b1;
   --toggle-active-bg: #7BAFD4;
   --toggle-active-ink: #1a2532;
-  --hover-bg: #17202b;
-  --active-bg: #10161e;
+  --hover-bg: #0b0f14;
+  --active-bg: #05070a;
 }
 
 :root[data-theme="light"] {
