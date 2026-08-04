@@ -111,6 +111,13 @@ ul {
   text-decoration: underline dotted #ff0000 1px;
 }
 
+/* Navbar group separators; only shown on the expanded (horizontal) bar */
+.navbar .nav-separator {
+  color: #ffffff66;
+  padding: 0.5rem 0.25rem;
+  user-select: none;
+}
+
 /* In-page navigation: smooth jumps from the sticky navbar, with scroll
    offset so section headings clear the bar */
 html {
