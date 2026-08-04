@@ -46,6 +46,8 @@ both directions over the OS preference.
   --toggle-ink: #ffffffb0;
   --toggle-active-bg: #ffffff;
   --toggle-active-ink: #73391D;
+  --hover-bg: #f8f9fa;
+  --active-bg: #e9ecef;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -68,9 +70,9 @@ both directions over the OS preference.
     --cat-ink: #93a1ae;
     --muted: #93a1ae;
 
-    --input-bg: #2f435b;
+    --input-bg: #3e5774;
     --input-ink: #dfe6ec;
-    --input-border: #33414e;
+    --input-border: #506f95;
 
     --icon: #93a1ae;
     --icon-hover: #d0dae2;
@@ -86,6 +88,8 @@ both directions over the OS preference.
     --toggle-ink: #8fa1b1;
     --toggle-active-bg: #7BAFD4;
     --toggle-active-ink: #1a2532;
+    --hover-bg: #243142;
+    --active-bg: #1d2835;
   }
 }
 
@@ -108,9 +112,9 @@ both directions over the OS preference.
   --cat-ink: #93a1ae;
   --muted: #93a1ae;
 
-  --input-bg: #2f435b;
+  --input-bg: #3e5774;
   --input-ink: #dfe6ec;
-  --input-border: #33414e;
+  --input-border: #506f95;
 
   --icon: #93a1ae;
   --icon-hover: #d0dae2;
@@ -126,6 +130,8 @@ both directions over the OS preference.
   --toggle-ink: #8fa1b1;
   --toggle-active-bg: #7BAFD4;
   --toggle-active-ink: #1a2532;
+  --hover-bg: #243142;
+  --active-bg: #1d2835;
 }
 
 :root[data-theme="light"] {
@@ -165,6 +171,22 @@ both directions over the OS preference.
   --toggle-ink: #ffffffb0;
   --toggle-active-bg: #ffffff;
   --toggle-active-ink: #73391D;
+  --hover-bg: #f8f9fa;
+  --active-bg: #e9ecef;
+}
+
+/* Route Bootstrap's list-group-action hover/active colors through our
+   tokens instead of its fixed grays — otherwise dark mode hovers flash a
+   near-white bar (Bootstrap's unthemed default), and the hover text color
+   quietly diverges from --card-ink even in light mode. One mapping serves
+   every theme block above, since it only references already-resolved
+   tokens. */
+:root {
+  --bs-list-group-action-color: var(--card-ink);
+  --bs-list-group-action-hover-color: var(--card-ink);
+  --bs-list-group-action-hover-bg: var(--hover-bg);
+  --bs-list-group-action-active-color: var(--card-ink);
+  --bs-list-group-action-active-bg: var(--active-bg);
 }
 
 section {padding:2rem;}
