@@ -54,8 +54,8 @@ html.bg-spice-brown(lang='en')
           each link in unofficial
             .list-group-item.list-group-item-action.border-top.link-container
               a.main-link(href=link.link data-content-id=(link.contentId) title=link.title) #{link.title}
-        p.small.mt-2
-          a.text-reset(href='https://github.com/dadatuputi/aflink/issues/new/choose') Suggest an addition or change
+              a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
+              a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
   section#about.bg-olive-drab.text-center
     .container
       h2 About
