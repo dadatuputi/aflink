@@ -70,9 +70,9 @@ both directions over the OS preference.
     --cat-ink: #93a1ae;
     --muted: #93a1ae;
 
-    --input-bg: #3e5774;
+    --input-bg: #4b688b;
     --input-ink: #dfe6ec;
-    --input-border: #506f95;
+    --input-border: #6d8bb0;
 
     --icon: #93a1ae;
     --icon-hover: #d0dae2;
@@ -88,8 +88,8 @@ both directions over the OS preference.
     --toggle-ink: #8fa1b1;
     --toggle-active-bg: #7BAFD4;
     --toggle-active-ink: #1a2532;
-    --hover-bg: #243142;
-    --active-bg: #1d2835;
+    --hover-bg: #17202b;
+    --active-bg: #10161e;
   }
 }
 
@@ -112,9 +112,9 @@ both directions over the OS preference.
   --cat-ink: #93a1ae;
   --muted: #93a1ae;
 
-  --input-bg: #3e5774;
+  --input-bg: #4b688b;
   --input-ink: #dfe6ec;
-  --input-border: #506f95;
+  --input-border: #6d8bb0;
 
   --icon: #93a1ae;
   --icon-hover: #d0dae2;
@@ -130,8 +130,8 @@ both directions over the OS preference.
   --toggle-ink: #8fa1b1;
   --toggle-active-bg: #7BAFD4;
   --toggle-active-ink: #1a2532;
-  --hover-bg: #243142;
-  --active-bg: #1d2835;
+  --hover-bg: #17202b;
+  --active-bg: #10161e;
 }
 
 :root[data-theme="light"] {
