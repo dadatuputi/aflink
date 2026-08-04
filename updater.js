@@ -90,9 +90,15 @@ async function getNewestDate(files) {
         const linksOtherPath = path.resolve(linksDir, 'links_other.json')
         const linksOverridePath = path.resolve(linksDir, 'links_override.json')
 
+        const linksUnofficialPath = path.resolve(linksDir, 'links_unofficial.json')
+
         const links_af = JSON.parse(fs.readFileSync(linksAfPath));
         let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
+        // Unofficial third-party links stay out of the official links object so
+        // the override/delete workflows and links.json never touch them.
+        const links_unofficial = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
+            .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
 
         // Sort other links
         links_other = {
@@ -260,9 +266,10 @@ async function getNewestDate(files) {
         }
 
         // write homepage
-        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), { 
-            ...options, 
-            links, 
+        const pageHome = pug.renderFile(path.resolve(srcDir, "index.pug"), {
+            ...options,
+            links,
+            unofficial: links_unofficial,
             date,
             isDev: environment !== 'production'
         })
