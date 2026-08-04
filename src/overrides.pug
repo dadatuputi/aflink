@@ -16,42 +16,29 @@ html.bg-spice-brown(lang='en')
         h2 Active Link Overrides
         em.d-none.d-md-block Updated #{override_date}
       
-      - var overrideCount = 0
-      each category in links
-        - var categoryOverrides = category.links.filter(link => link.isOverridden)
-        if categoryOverrides.length > 0
-          - overrideCount += categoryOverrides.length
-          
-      if overrideCount > 0
-        p #{overrideCount} override#{overrideCount !== 1 ? 's' : ''} currently active
-        
+      if overrideEvents.length > 0
+        p #{overrideEvents.length} override#{overrideEvents.length !== 1 ? 's' : ''} currently active
+
+        //- One row per override, newest first; a link changed twice appears twice
         div#link-list.list-group
-          //- Show only categories that have overridden links
-          each category in links
-            - var categoryOverrides = category.links.filter(link => link.isOverridden)
-            if categoryOverrides.length > 0
-              div.list-group
-                //- Category header
-                div.list-group-item.list-group-item-action.border-top.disabled.category #{category.name}
-                //- Only show overridden links in this category
-                each link in categoryOverrides
-                    .list-group-item.list-group-item-action.border-top.link-container
-                        .col
-                            .overridden-title #{link.originalTitle}
-                            .overridden-link.small.text-muted.font-italic #{link.originalLink}
-                        if link.isDeleted
-                            .col-1.text-center
-                                | ↛
-                                .overridden-date.small.text-muted.font-italic #{link.overriddenTimestamp}
-                            .col
-                                .overridden-title.text-muted.font-italic Deleted
-                        else
-                            .col-1.text-center
-                                | →
-                                .overridden-date.small.text-muted.font-italic #{link.overriddenTimestamp}
-                            .col
-                                .overridden-title #{link.title}
-                                .overridden-link.small.text-muted.font-italic #{link.link}
+          each ev in overrideEvents
+            .list-group-item.list-group-item-action.border-top.link-container
+                .col
+                    .overridden-title #{ev.beforeTitle}
+                    .overridden-link.small.text-muted.font-italic #{ev.beforeLink}
+                if ev.isDeleted
+                    .col-1.text-center
+                        | ↛
+                        .overridden-date.small.text-muted.font-italic #{ev.date}
+                    .col
+                        .overridden-title.text-muted.font-italic Deleted
+                else
+                    .col-1.text-center
+                        | →
+                        .overridden-date.small.text-muted.font-italic #{ev.date}
+                    .col
+                        .overridden-title #{ev.afterTitle}
+                        .overridden-link.small.text-muted.font-italic #{ev.afterLink}
 
       else
         .no-overrides.alert.alert-info
