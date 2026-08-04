@@ -138,8 +138,10 @@ $(document).ready(function () {
       // Show link category
       links.siblings('.category').toggle(true);
 
-      // Hide the unofficial section entirely when none of its links match
-      $('#unofficial').toggle($('#unofficial-list .link-container:visible').length > 0);
+      // Hide the unofficial section entirely when none of its links match.
+      // Count matches from the filter result, not :visible — rows inside the
+      // hidden section always measure invisible, which would latch it hidden.
+      $('#unofficial').toggle(links.filter('#unofficial-list .link-container').length > 0);
 
       // Update URL with new search params
       updateSearchParams($(this).val())
