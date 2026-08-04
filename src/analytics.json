@@ -1,11 +1,6 @@
 {
-  "generated": "2026-08-04T06:24:59.926Z",
+  "generated": "2026-08-04T11:33:35.896Z",
   "daily": [
-    {
-      "date": "20250803",
-      "users": 1252,
-      "pageviews": 5360
-    },
     {
       "date": "20250804",
       "users": 2520,
@@ -1828,15 +1823,15 @@
     },
     {
       "date": "20260803",
-      "users": 4749,
-      "pageviews": 21463
+      "users": 5213,
+      "pageviews": 23763
     }
   ],
   "ranges": {
     "30": {
       "totals": {
-        "users": 114254,
-        "pageviews": 504809,
+        "users": 114718,
+        "pageviews": 507109,
         "linkClicks": 0
       },
       "topLinks": [],
@@ -1844,8 +1839,8 @@
     },
     "90": {
       "totals": {
-        "users": 304829,
-        "pageviews": 1339169,
+        "users": 305293,
+        "pageviews": 1341469,
         "linkClicks": 0
       },
       "topLinks": [],
@@ -1853,8 +1848,8 @@
     },
     "365": {
       "totals": {
-        "users": 874951,
-        "pageviews": 3822044,
+        "users": 875415,
+        "pageviews": 3824344,
         "linkClicks": 0
       },
       "topLinks": [],
