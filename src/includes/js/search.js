@@ -20,7 +20,7 @@ $(document).ready(function () {
   
   // Show modal after clicking a link
   const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
-  $("#link-list .list-group-item a:first-child").on('click', function(event) {
+  $("#link-list .list-group-item a:first-child, #unofficial-list .list-group-item a:first-child").on('click', function(event) {
     $('#exit-modal .modal-header .title').text($(this).text());
     $('#exit-modal .link').text($(this).prop('href'));
     my_modal.toggle();
@@ -87,11 +87,11 @@ $(document).ready(function () {
       }).filter(function (w) { return w.whole; });
 
       // Hide everything
-      $('#link-list .category, #link-list .link-container').toggle(false);
+      $('#link-list .category, #link-list .link-container, #unofficial-list .link-container').toggle(false);
 
       // Show links where every word matches the title or the URL,
       // highlighting title matches
-      var links = $('#link-list .link-container').filter(function(){
+      var links = $('#link-list .link-container, #unofficial-list .link-container').filter(function(){
         var $a = $(this).find('a:first-child');
         var text = $a.text();
         var title = normalize(text);
@@ -134,25 +134,29 @@ $(document).ready(function () {
       // Show link category
       links.siblings('.category').toggle(true);
 
+      // Hide the unofficial section entirely when none of its links match
+      $('#unofficial').toggle($('#unofficial-list .link-container:visible').length > 0);
+
       // Update URL with new search params
       updateSearchParams($(this).val())
 
       // If no links displayed, show alert
-      if (!$("#link-list a:visible")[0]) {
+      if (!$("#link-list a:visible, #unofficial-list a:visible")[0]) {
         $("#list p").removeAttr('hidden');
         $("#list p em").text(value);
       } else {
         $("#list p").attr('hidden','hidden');
       }
 
-      // On enter keypress, follow first link
+      // On enter keypress, follow first link (official list first in DOM order)
       if (
         value &&
         event.type === "keyup" &&
         event.originalEvent.key === "Enter"
       ) {
-        if ($("#link-list a:visible")[0]) {
-          $("#link-list a:visible")[0].click();
+        var first = $("#link-list a:visible, #unofficial-list a:visible")[0];
+        if (first) {
+          first.click();
         }
       }
     }
