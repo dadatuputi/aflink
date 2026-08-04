@@ -14,10 +14,24 @@ body:
     validations:
       required: true
   - type: input
+    id: current_title
+    attributes:
+      label: Current Link Title
+      description: "The link's current title, auto-filled for reference. Leave as is."
+    validations:
+      required: false
+  - type: input
+    id: current_url
+    attributes:
+      label: Current Link URL
+      description: "The link's current URL, auto-filled for reference. Leave as is."
+    validations:
+      required: false
+  - type: input
     id: new_title
     attributes:
       label: Link Title
-      description: "New title for the link. This and / or the Link URL field must be provided."
+      description: "New title for the link. Leave blank to keep the current title."
       placeholder: AF Portal
     validations:
       required: false
@@ -25,7 +39,7 @@ body:
     id: new_url
     attributes:
       label: Link URL
-      description: "New URL for the link. This and / or the Link Title field must be provided."
+      description: "New URL for the link. Leave blank to keep the current URL."
       placeholder: https://www.my.af.mil
     validations:
       required: false
