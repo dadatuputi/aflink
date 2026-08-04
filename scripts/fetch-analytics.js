@@ -4,6 +4,11 @@
 // dependencies. Requires env vars:
 //   GA4_CREDENTIALS  - service account JSON key (client_email, private_key)
 //   GA4_PROPERTY_ID  - numeric GA4 property id
+//
+// Output shape:
+//   daily:  365 days of {date, users, pageviews} for the trend chart
+//   ranges: per preset (30/90/365 days) totals, top links, and category
+//           breakdown from link_click events
 import fs from 'fs';
 import { createSign } from 'crypto';
 
@@ -14,6 +19,7 @@ if (!creds.client_email || !creds.private_key || !property) {
     process.exit(1);
 }
 
+const RANGES = [30, 90, 365];
 const b64url = s => Buffer.from(s).toString('base64url');
 
 async function getAccessToken() {
@@ -55,57 +61,80 @@ async function runReport(token, body) {
     return res.json();
 }
 
+const linkClickFilter = {
+    filter: { fieldName: 'eventName', stringFilter: { value: 'link_click' } },
+};
+
 const token = await getAccessToken();
 console.log('✅ token exchange OK');
 
-// Daily visitors and pageviews, last 30 days
-const daily = await runReport(token, {
-    dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+// Daily visitors and pageviews for the full year
+const dailyReport = await runReport(token, {
+    dateRanges: [{ startDate: '365daysAgo', endDate: 'today' }],
     dimensions: [{ name: 'date' }],
     metrics: [{ name: 'activeUsers' }, { name: 'screenPageViews' }],
     orderBys: [{ dimension: { dimensionName: 'date' } }],
+    limit: 400,
 });
-console.log(`✅ daily report: ${daily.rows?.length ?? 0} rows`);
+console.log(`✅ daily report: ${dailyReport.rows?.length ?? 0} rows`);
 
-// Most-clicked links, last 30 days. Requires the link_title/link_category
-// custom dimensions; tolerate absence so the pull works before they exist.
-let clicks = { rows: [] };
-try {
-    clicks = await runReport(token, {
-        dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-        dimensions: [{ name: 'customEvent:link_title' }, { name: 'customEvent:link_category' }],
-        metrics: [{ name: 'eventCount' }],
-        dimensionFilter: {
-            filter: { fieldName: 'eventName', stringFilter: { value: 'link_click' } },
+const daily = (dailyReport.rows ?? []).map(r => ({
+    date: r.dimensionValues[0].value,
+    users: Number(r.metricValues[0].value),
+    pageviews: Number(r.metricValues[1].value),
+}));
+
+// Per-preset link_click reports. Tolerate missing custom dimensions so the
+// pull works before they are registered / collecting.
+const ranges = {};
+for (const days of RANGES) {
+    const dateRanges = [{ startDate: `${days}daysAgo`, endDate: 'today' }];
+    let topLinks = [];
+    let categories = [];
+    try {
+        const links = await runReport(token, {
+            dateRanges,
+            dimensions: [{ name: 'customEvent:link_title' }, { name: 'customEvent:link_category' }],
+            metrics: [{ name: 'eventCount' }],
+            dimensionFilter: linkClickFilter,
+            orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+            limit: 25,
+        });
+        topLinks = (links.rows ?? []).map(r => ({
+            title: r.dimensionValues[0].value,
+            category: r.dimensionValues[1].value,
+            clicks: Number(r.metricValues[0].value),
+        }));
+        const cats = await runReport(token, {
+            dateRanges,
+            dimensions: [{ name: 'customEvent:link_category' }],
+            metrics: [{ name: 'eventCount' }],
+            dimensionFilter: linkClickFilter,
+            orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+            limit: 30,
+        });
+        categories = (cats.rows ?? []).map(r => ({
+            category: r.dimensionValues[0].value,
+            clicks: Number(r.metricValues[0].value),
+        }));
+        console.log(`✅ link_click reports (${days}d): ${topLinks.length} links, ${categories.length} categories`);
+    } catch (e) {
+        console.log(`⚠️  link_click reports unavailable for ${days}d (custom dimensions not registered yet?): ${e.message}`);
+    }
+
+    const window = daily.slice(-days);
+    ranges[days] = {
+        totals: {
+            users: window.reduce((s, d) => s + d.users, 0),
+            pageviews: window.reduce((s, d) => s + d.pageviews, 0),
+            linkClicks: categories.reduce((s, c) => s + c.clicks, 0),
         },
-        orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
-        limit: 50,
-    });
-    console.log(`✅ link_click report: ${clicks.rows?.length ?? 0} rows`);
-} catch (e) {
-    console.log(`⚠️  link_click report unavailable (custom dimensions not registered yet?): ${e.message}`);
+        topLinks,
+        categories,
+    };
 }
 
-const analytics = {
-    generated: new Date().toISOString(),
-    rangeDays: 30,
-    daily: (daily.rows ?? []).map(r => ({
-        date: r.dimensionValues[0].value,
-        users: Number(r.metricValues[0].value),
-        pageviews: Number(r.metricValues[1].value),
-    })),
-    topLinks: (clicks.rows ?? []).map(r => ({
-        title: r.dimensionValues[0].value,
-        category: r.dimensionValues[1].value,
-        clicks: Number(r.metricValues[0].value),
-    })),
-};
-analytics.totals = {
-    users: analytics.daily.reduce((s, d) => s + d.users, 0),
-    pageviews: analytics.daily.reduce((s, d) => s + d.pageviews, 0),
-    linkClicks: analytics.topLinks.reduce((s, l) => s + l.clicks, 0),
-};
-
+const analytics = { generated: new Date().toISOString(), daily, ranges };
 fs.writeFileSync('src/analytics.json', JSON.stringify(analytics, null, 2) + '\n');
-console.log(`✅ wrote src/analytics.json — ${analytics.totals.users} users, ` +
-    `${analytics.totals.pageviews} pageviews, ${analytics.topLinks.length} ranked links`);
+console.log(`✅ wrote src/analytics.json — ${daily.length} daily rows, ` +
+    RANGES.map(d => `${d}d: ${ranges[d].totals.users} users`).join(', '));
