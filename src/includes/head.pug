@@ -20,7 +20,7 @@ head
     //- the inline script below (first paint) and theme-toggle.js (later
     //- changes) — simpler and more correct than dueling media-scoped tags,
     //- which can't express "explicitly light even though the OS is dark".
-    meta#theme-color(name='theme-color' content='#00308F')
+    meta#theme-color(name='theme-color' content='#17171a')
 
     //- Anti-flash: apply a saved theme choice, and match the theme-color
     //- meta to it, before first paint. Runs synchronously and inline (not
@@ -35,7 +35,7 @@ head
           if (t === 'light' || t === 'dark') {
             document.documentElement.setAttribute('data-theme', t);
           }
-          document.getElementById('theme-color').setAttribute('content', dark ? '#091021' : '#00308F');
+          document.getElementById('theme-color').setAttribute('content', dark ? '#0b0b0d' : '#17171a');
         } catch (e) {}
       })();
 

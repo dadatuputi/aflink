@@ -1,12 +1,11 @@
 /*
-"Heraldry" theme: the official USAF service colors — Ultramarine Blue and
-Air Force Yellow — replacing the OCP earth tones. Light is an ice-blue
-document with an ultramarine masthead and gold announcements; dark is a
-deep-navy night sky with gold reserved for points of interest (search
-highlights, active toggle, alert accents). Applied three ways:
-prefers-color-scheme for OS-auto/no-JS visitors, and explicit [data-theme]
-overrides (set by the toggle, see theme-toggle.js) that win in both
-directions over the OS preference.
+"Flightline" theme: warm zinc neutrals with a single afterburner-amber
+accent, replacing the OCP earth tones. Light is warm paper with a
+near-black masthead; dark is near-black zinc with the amber accent
+carrying every point of interest (search highlights, active toggle, alert
+keylines). Applied three ways: prefers-color-scheme for OS-auto/no-JS
+visitors, and explicit [data-theme] overrides (set by the toggle, see
+theme-toggle.js) that win in both directions over the OS preference.
 
 The band classes keep their historical names (.bg-sage etc.) but now map:
 sage → main canvas, slate → unofficial band, olive → about/update band,
@@ -16,223 +15,231 @@ its own ink token since bands are no longer uniformly dark.
 :root {
   color-scheme: light;
 
-  --band-sage: #eef1f7;
-  --band-sage-ink: #1c2a4a;
-  --band-bagby: #dfe7f3;
-  --band-olive: #00308f;
-  --band-olive-ink: #ffffff;
-  --band-spice: #00308f;
-  --band-spice-ink: #ffffff;
-  --band-cannes: #ffcf40;
-  --band-cannes-ink: #212b45;
-  --band-slate: #dfe7f3;
-  --band-slate-ink: #1c2a4a;
-  --band-ink-faded: #1c2a4aad;
-  --alert-edge: 0;
-  --alert-strong: #212b45;
+  --band-sage: #fafaf9;
+  --band-sage-ink: #1b1b1f;
+  --band-bagby: #f3f3f1;
+  --band-olive: #17171a;
+  --band-olive-ink: #f4f4f5;
+  --band-spice: #17171a;
+  --band-spice-ink: #f4f4f5;
+  --band-cannes: #fbf3e0;
+  --band-cannes-ink: #7a4d0b;
+  --band-slate: #f3f3f1;
+  --band-slate-ink: #1b1b1f;
+  --band-ink-faded: #1b1b1fa0;
+  --alert-edge: 4px solid #e0a52e;
+  --alert-strong: #7a4d0b;
 
   --card-bg: #fff;
-  --card-ink: #1d2434;
-  --card-border: #dce3ee;
-  --cat-bg: #e4eaf4;
-  --cat-ink: #51617e;
-  --muted: #5f6b80;
+  --card-ink: #1b1b1f;
+  --card-border: #e5e5e2;
+  --cat-bg: #f0f0ee;
+  --cat-ink: #66666e;
+  --muted: #71717a;
 
   --input-bg: #fff;
-  --input-ink: #1d2434;
-  --input-border: #b9c6da;
+  --input-ink: #1b1b1f;
+  --input-border: #d6d6d2;
+  --input-focus-border: #e0a52e;
+  --input-focus-ring: rgba(217, 119, 6, 0.18);
 
-  --icon: #6b7890;
-  --icon-hover: #1d2434;
-  --mark-bg: rgba(255, 204, 0, 0.45);
+  --icon: #74747c;
+  --icon-hover: #1b1b1f;
+  --mark-bg: rgba(245, 158, 11, 0.35);
   --overridden-red: #d02a10;
-  --grid-line: #d5deec;
+  --grid-line: #e4e4e1;
 
   --unofficial-card-bg: #fff;
-  --unofficial-card-ink: #1d2434;
-  --unofficial-card-border: #dce3ee;
+  --unofficial-card-ink: #1b1b1f;
+  --unofficial-card-border: #e5e5e2;
 
-  --pill-bg: #00308f;
+  --pill-bg: #b45309;
   --pill-ink: #fff;
-  --chart-bar: #35529e;
-  --chart-accent: #dba400;
-  --btn-bg: #00308f;
+  --chart-bar: #52525b;
+  --chart-accent: #d97706;
+  --btn-bg: #17171a;
   --btn-ink: #fff;
   --btn-icon-filter: none;
 
-  --toggle-border: #ffffff55;
-  --toggle-ink: #ffffffb0;
-  --toggle-active-bg: #ffcf40;
-  --toggle-active-ink: #212b45;
-  --hover-bg: #f4f7fb;
-  --active-bg: #e8edf6;
+  --toggle-border: #ffffff40;
+  --toggle-ink: #ffffffa8;
+  --toggle-active-bg: #f5b942;
+  --toggle-active-ink: #17171a;
+  --hover-bg: #f6f6f4;
+  --active-bg: #ececea;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
 
-    --band-sage: #0d1424;
-    --band-sage-ink: #e2e9f8;
-    --band-bagby: #101a30;
-    --band-olive: #091021;
-    --band-olive-ink: #c9d5ec;
-    --band-spice: #091021;
-    --band-spice-ink: #dce4f5;
-    --band-cannes: #1b2d55;
-    --band-cannes-ink: #d5e0f5;
-    --band-slate: #101a30;
-    --band-slate-ink: #dce4f5;
-    --band-ink-faded: #b7c4dfad;
-    --alert-edge: 4px solid #ffd34d;
-    --alert-strong: #ffd34d;
+    --band-sage: #121214;
+    --band-sage-ink: #e9e9ec;
+    --band-bagby: #17171a;
+    --band-olive: #0b0b0d;
+    --band-olive-ink: #d6d6da;
+    --band-spice: #0b0b0d;
+    --band-spice-ink: #e9e9ec;
+    --band-cannes: #221c10;
+    --band-cannes-ink: #ecd9ac;
+    --band-slate: #17171a;
+    --band-slate-ink: #e9e9ec;
+    --band-ink-faded: #b6b6bea0;
+    --alert-edge: 4px solid #f5b942;
+    --alert-strong: #f5b942;
 
-    --card-bg: #16203a;
-    --card-ink: #dce4f5;
-    --card-border: #24304d;
-    --cat-bg: #1d2a49;
-    --cat-ink: #9db0d4;
-    --muted: #8fa0c0;
+    --card-bg: #1b1b1f;
+    --card-ink: #e9e9ec;
+    --card-border: #2a2a30;
+    --cat-bg: #222227;
+    --cat-ink: #a4a4ae;
+    --muted: #9b9ba4;
 
-    --input-bg: #0b1120;
-    --input-ink: #dce4f5;
-    --input-border: #2c3a5c;
+    --input-bg: #0f0f12;
+    --input-ink: #e9e9ec;
+    --input-border: #33333a;
+    --input-focus-border: #f5b942;
+    --input-focus-ring: rgba(245, 185, 66, 0.18);
 
-    --icon: #8fa0c0;
-    --icon-hover: #dce4f5;
-    --mark-bg: rgba(255, 211, 77, 0.28);
+    --icon: #9b9ba4;
+    --icon-hover: #e9e9ec;
+    --mark-bg: rgba(245, 185, 66, 0.28);
     --overridden-red: #ff8573;
-    --grid-line: #2c3a5c;
+    --grid-line: #2e2e34;
 
-    --unofficial-card-bg: #16203a;
-    --unofficial-card-ink: #dce4f5;
-    --unofficial-card-border: #24304d;
+    --unofficial-card-bg: #1b1b1f;
+    --unofficial-card-ink: #e9e9ec;
+    --unofficial-card-border: #2a2a30;
 
-    --pill-bg: #ffd34d;
-    --pill-ink: #091021;
-    --chart-bar: #3b5aa0;
-    --chart-accent: #ffd34d;
-    --btn-bg: #ffd34d;
-    --btn-ink: #091021;
+    --pill-bg: #f5b942;
+    --pill-ink: #0b0b0d;
+    --chart-bar: #4a4a52;
+    --chart-accent: #f5b942;
+    --btn-bg: #f5b942;
+    --btn-ink: #0b0b0d;
     --btn-icon-filter: invert(1);
 
-    --toggle-border: #2c3a5c;
-    --toggle-ink: #8fa0c0;
-    --toggle-active-bg: #ffd34d;
-    --toggle-active-ink: #091021;
-    --hover-bg: #1d2946;
-    --active-bg: #24304d;
+    --toggle-border: #33333a;
+    --toggle-ink: #9b9ba4;
+    --toggle-active-bg: #f5b942;
+    --toggle-active-ink: #0b0b0d;
+    --hover-bg: #24242a;
+    --active-bg: #2a2a30;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --band-sage: #0d1424;
-  --band-sage-ink: #e2e9f8;
-  --band-bagby: #101a30;
-  --band-olive: #091021;
-  --band-olive-ink: #c9d5ec;
-  --band-spice: #091021;
-  --band-spice-ink: #dce4f5;
-  --band-cannes: #1b2d55;
-  --band-cannes-ink: #d5e0f5;
-  --band-slate: #101a30;
-  --band-slate-ink: #dce4f5;
-  --band-ink-faded: #b7c4dfad;
-  --alert-edge: 4px solid #ffd34d;
-  --alert-strong: #ffd34d;
+  --band-sage: #121214;
+  --band-sage-ink: #e9e9ec;
+  --band-bagby: #17171a;
+  --band-olive: #0b0b0d;
+  --band-olive-ink: #d6d6da;
+  --band-spice: #0b0b0d;
+  --band-spice-ink: #e9e9ec;
+  --band-cannes: #221c10;
+  --band-cannes-ink: #ecd9ac;
+  --band-slate: #17171a;
+  --band-slate-ink: #e9e9ec;
+  --band-ink-faded: #b6b6bea0;
+  --alert-edge: 4px solid #f5b942;
+  --alert-strong: #f5b942;
 
-  --card-bg: #16203a;
-  --card-ink: #dce4f5;
-  --card-border: #24304d;
-  --cat-bg: #1d2a49;
-  --cat-ink: #9db0d4;
-  --muted: #8fa0c0;
+  --card-bg: #1b1b1f;
+  --card-ink: #e9e9ec;
+  --card-border: #2a2a30;
+  --cat-bg: #222227;
+  --cat-ink: #a4a4ae;
+  --muted: #9b9ba4;
 
-  --input-bg: #0b1120;
-  --input-ink: #dce4f5;
-  --input-border: #2c3a5c;
+  --input-bg: #0f0f12;
+  --input-ink: #e9e9ec;
+  --input-border: #33333a;
+  --input-focus-border: #f5b942;
+  --input-focus-ring: rgba(245, 185, 66, 0.18);
 
-  --icon: #8fa0c0;
-  --icon-hover: #dce4f5;
-  --mark-bg: rgba(255, 211, 77, 0.28);
+  --icon: #9b9ba4;
+  --icon-hover: #e9e9ec;
+  --mark-bg: rgba(245, 185, 66, 0.28);
   --overridden-red: #ff8573;
-  --grid-line: #2c3a5c;
+  --grid-line: #2e2e34;
 
-  --unofficial-card-bg: #16203a;
-  --unofficial-card-ink: #dce4f5;
-  --unofficial-card-border: #24304d;
+  --unofficial-card-bg: #1b1b1f;
+  --unofficial-card-ink: #e9e9ec;
+  --unofficial-card-border: #2a2a30;
 
-  --pill-bg: #ffd34d;
-  --pill-ink: #091021;
-  --chart-bar: #3b5aa0;
-  --chart-accent: #ffd34d;
-  --btn-bg: #ffd34d;
-  --btn-ink: #091021;
+  --pill-bg: #f5b942;
+  --pill-ink: #0b0b0d;
+  --chart-bar: #4a4a52;
+  --chart-accent: #f5b942;
+  --btn-bg: #f5b942;
+  --btn-ink: #0b0b0d;
   --btn-icon-filter: invert(1);
 
-  --toggle-border: #2c3a5c;
-  --toggle-ink: #8fa0c0;
-  --toggle-active-bg: #ffd34d;
-  --toggle-active-ink: #091021;
-  --hover-bg: #1d2946;
-  --active-bg: #24304d;
+  --toggle-border: #33333a;
+  --toggle-ink: #9b9ba4;
+  --toggle-active-bg: #f5b942;
+  --toggle-active-ink: #0b0b0d;
+  --hover-bg: #24242a;
+  --active-bg: #2a2a30;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --band-sage: #eef1f7;
-  --band-sage-ink: #1c2a4a;
-  --band-bagby: #dfe7f3;
-  --band-olive: #00308f;
-  --band-olive-ink: #ffffff;
-  --band-spice: #00308f;
-  --band-spice-ink: #ffffff;
-  --band-cannes: #ffcf40;
-  --band-cannes-ink: #212b45;
-  --band-slate: #dfe7f3;
-  --band-slate-ink: #1c2a4a;
-  --band-ink-faded: #1c2a4aad;
-  --alert-edge: 0;
-  --alert-strong: #212b45;
+  --band-sage: #fafaf9;
+  --band-sage-ink: #1b1b1f;
+  --band-bagby: #f3f3f1;
+  --band-olive: #17171a;
+  --band-olive-ink: #f4f4f5;
+  --band-spice: #17171a;
+  --band-spice-ink: #f4f4f5;
+  --band-cannes: #fbf3e0;
+  --band-cannes-ink: #7a4d0b;
+  --band-slate: #f3f3f1;
+  --band-slate-ink: #1b1b1f;
+  --band-ink-faded: #1b1b1fa0;
+  --alert-edge: 4px solid #e0a52e;
+  --alert-strong: #7a4d0b;
 
   --card-bg: #fff;
-  --card-ink: #1d2434;
-  --card-border: #dce3ee;
-  --cat-bg: #e4eaf4;
-  --cat-ink: #51617e;
-  --muted: #5f6b80;
+  --card-ink: #1b1b1f;
+  --card-border: #e5e5e2;
+  --cat-bg: #f0f0ee;
+  --cat-ink: #66666e;
+  --muted: #71717a;
 
   --input-bg: #fff;
-  --input-ink: #1d2434;
-  --input-border: #b9c6da;
+  --input-ink: #1b1b1f;
+  --input-border: #d6d6d2;
+  --input-focus-border: #e0a52e;
+  --input-focus-ring: rgba(217, 119, 6, 0.18);
 
-  --icon: #6b7890;
-  --icon-hover: #1d2434;
-  --mark-bg: rgba(255, 204, 0, 0.45);
+  --icon: #74747c;
+  --icon-hover: #1b1b1f;
+  --mark-bg: rgba(245, 158, 11, 0.35);
   --overridden-red: #d02a10;
-  --grid-line: #d5deec;
+  --grid-line: #e4e4e1;
 
   --unofficial-card-bg: #fff;
-  --unofficial-card-ink: #1d2434;
-  --unofficial-card-border: #dce3ee;
+  --unofficial-card-ink: #1b1b1f;
+  --unofficial-card-border: #e5e5e2;
 
-  --pill-bg: #00308f;
+  --pill-bg: #b45309;
   --pill-ink: #fff;
-  --chart-bar: #35529e;
-  --chart-accent: #dba400;
-  --btn-bg: #00308f;
+  --chart-bar: #52525b;
+  --chart-accent: #d97706;
+  --btn-bg: #17171a;
   --btn-ink: #fff;
   --btn-icon-filter: none;
 
-  --toggle-border: #ffffff55;
-  --toggle-ink: #ffffffb0;
-  --toggle-active-bg: #ffcf40;
-  --toggle-active-ink: #212b45;
-  --hover-bg: #f4f7fb;
-  --active-bg: #e8edf6;
+  --toggle-border: #ffffff40;
+  --toggle-ink: #ffffffa8;
+  --toggle-active-bg: #f5b942;
+  --toggle-active-ink: #17171a;
+  --hover-bg: #f6f6f4;
+  --active-bg: #ececea;
 }
 
 /* Route Bootstrap's list-group-action hover/active colors through our
@@ -338,6 +345,8 @@ ul {
 .form-control:focus {
   background-color: var(--input-bg);
   color: var(--input-ink);
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 0.25rem var(--input-focus-ring);
 }
 
 .form-control::placeholder {
