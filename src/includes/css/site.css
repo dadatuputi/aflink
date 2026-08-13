@@ -1,178 +1,238 @@
 /*
-https://usafpatches.com/reference-shelf/palettes/
-https://coolors.co/000000-a09200-695b24-73391d-b0aa7e
+"Heraldry" theme: the official USAF service colors — Ultramarine Blue and
+Air Force Yellow — replacing the OCP earth tones. Light is an ice-blue
+document with an ultramarine masthead and gold announcements; dark is a
+deep-navy night sky with gold reserved for points of interest (search
+highlights, active toggle, alert accents). Applied three ways:
+prefers-color-scheme for OS-auto/no-JS visitors, and explicit [data-theme]
+overrides (set by the toggle, see theme-toggle.js) that win in both
+directions over the OS preference.
 
-Theme tokens: light values match the original palette. Dark values are
-"Night Watch" — the whole site moves into deep slate blue rather than
-keeping the earth-tone hues at low light (that read as mud). Applied three
-ways: prefers-color-scheme for OS-auto/no-JS visitors, and explicit
-[data-theme] overrides (set by the toggle, see theme-toggle.js) that win in
-both directions over the OS preference.
+The band classes keep their historical names (.bg-sage etc.) but now map:
+sage → main canvas, slate → unofficial band, olive → about/update band,
+spice → masthead/footer, cannes → announcement alerts. Each band carries
+its own ink token since bands are no longer uniformly dark.
 */
 :root {
   color-scheme: light;
 
-  --band-sage: #B0AA7E;
-  --band-bagby: #A09200;
-  --band-olive: #695B24;
-  --band-spice: #73391D;
-  --band-cannes: #7BAFD4;
-  --band-slate: #4F7396;
-  --band-ink: #fff;
-  --band-ink-faded: #ffffffad;
+  --band-sage: #eef1f7;
+  --band-sage-ink: #1c2a4a;
+  --band-bagby: #dfe7f3;
+  --band-olive: #00308f;
+  --band-olive-ink: #ffffff;
+  --band-spice: #00308f;
+  --band-spice-ink: #ffffff;
+  --band-cannes: #ffcf40;
+  --band-cannes-ink: #212b45;
+  --band-slate: #dfe7f3;
+  --band-slate-ink: #1c2a4a;
+  --band-ink-faded: #1c2a4aad;
+  --alert-edge: 0;
+  --alert-strong: #212b45;
 
   --card-bg: #fff;
-  --card-ink: #212529;
-  --card-border: rgba(0, 0, 0, 0.125);
-  --cat-bg: #efefef;
-  --cat-ink: #6c757d;
-  --muted: #6c757d;
+  --card-ink: #1d2434;
+  --card-border: #dce3ee;
+  --cat-bg: #e4eaf4;
+  --cat-ink: #51617e;
+  --muted: #5f6b80;
 
   --input-bg: #fff;
-  --input-ink: #212529;
-  --input-border: #ced4da;
+  --input-ink: #1d2434;
+  --input-border: #b9c6da;
 
-  --icon: #666;
-  --icon-hover: #333;
-  --mark-bg: rgba(123, 175, 212, 0.45);
-  --overridden-red: #ff0000;
-  --grid-line: #dee2e6;
+  --icon: #6b7890;
+  --icon-hover: #1d2434;
+  --mark-bg: rgba(255, 204, 0, 0.45);
+  --overridden-red: #d02a10;
+  --grid-line: #d5deec;
 
   --unofficial-card-bg: #fff;
-  --unofficial-card-ink: #212529;
-  --unofficial-card-border: rgba(0, 0, 0, 0.125);
+  --unofficial-card-ink: #1d2434;
+  --unofficial-card-border: #dce3ee;
+
+  --pill-bg: #00308f;
+  --pill-ink: #fff;
+  --chart-bar: #35529e;
+  --chart-accent: #dba400;
+  --btn-bg: #00308f;
+  --btn-ink: #fff;
+  --btn-icon-filter: none;
 
   --toggle-border: #ffffff55;
   --toggle-ink: #ffffffb0;
-  --toggle-active-bg: #ffffff;
-  --toggle-active-ink: #73391D;
-  --hover-bg: #f8f9fa;
-  --active-bg: #e9ecef;
+  --toggle-active-bg: #ffcf40;
+  --toggle-active-ink: #212b45;
+  --hover-bg: #f4f7fb;
+  --active-bg: #e8edf6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
 
-    --band-sage: #28394d;
-    --band-bagby: #1d2b3d;
-    --band-olive: #1f2c3d;
-    --band-spice: #1a2532;
-    --band-cannes: #38658a;
-    --band-slate: #212f40;
-    --band-ink: #cfd9e2;
-    --band-ink-faded: #c9d4dead;
+    --band-sage: #0d1424;
+    --band-sage-ink: #e2e9f8;
+    --band-bagby: #101a30;
+    --band-olive: #091021;
+    --band-olive-ink: #c9d5ec;
+    --band-spice: #091021;
+    --band-spice-ink: #dce4f5;
+    --band-cannes: #1b2d55;
+    --band-cannes-ink: #d5e0f5;
+    --band-slate: #101a30;
+    --band-slate-ink: #dce4f5;
+    --band-ink-faded: #b7c4dfad;
+    --alert-edge: 4px solid #ffd34d;
+    --alert-strong: #ffd34d;
 
-    --card-bg: #2f435b;
-    --card-ink: #dfe6ec;
-    --card-border: #2a333d;
-    --cat-bg: #364d68;
-    --cat-ink: #93a1ae;
-    --muted: #93a1ae;
+    --card-bg: #16203a;
+    --card-ink: #dce4f5;
+    --card-border: #24304d;
+    --cat-bg: #1d2a49;
+    --cat-ink: #9db0d4;
+    --muted: #8fa0c0;
 
-    --input-bg: #4b688b;
-    --input-ink: #dfe6ec;
-    --input-border: #6d8bb0;
+    --input-bg: #0b1120;
+    --input-ink: #dce4f5;
+    --input-border: #2c3a5c;
 
-    --icon: #93a1ae;
-    --icon-hover: #d0dae2;
-    --mark-bg: rgba(123, 175, 212, 0.35);
+    --icon: #8fa0c0;
+    --icon-hover: #dce4f5;
+    --mark-bg: rgba(255, 211, 77, 0.28);
     --overridden-red: #ff8573;
-    --grid-line: #476385;
+    --grid-line: #2c3a5c;
 
-    --unofficial-card-bg: #2b3e54;
-    --unofficial-card-ink: #d6e2ec;
-    --unofficial-card-border: #263241;
+    --unofficial-card-bg: #16203a;
+    --unofficial-card-ink: #dce4f5;
+    --unofficial-card-border: #24304d;
 
-    --toggle-border: #33414e;
-    --toggle-ink: #8fa1b1;
-    --toggle-active-bg: #7BAFD4;
-    --toggle-active-ink: #1a2532;
-    --hover-bg: #0b0f14;
-    --active-bg: #05070a;
+    --pill-bg: #ffd34d;
+    --pill-ink: #091021;
+    --chart-bar: #3b5aa0;
+    --chart-accent: #ffd34d;
+    --btn-bg: #ffd34d;
+    --btn-ink: #091021;
+    --btn-icon-filter: invert(1);
+
+    --toggle-border: #2c3a5c;
+    --toggle-ink: #8fa0c0;
+    --toggle-active-bg: #ffd34d;
+    --toggle-active-ink: #091021;
+    --hover-bg: #1d2946;
+    --active-bg: #24304d;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --band-sage: #28394d;
-  --band-bagby: #1d2b3d;
-  --band-olive: #1f2c3d;
-  --band-spice: #1a2532;
-  --band-cannes: #38658a;
-  --band-slate: #212f40;
-  --band-ink: #cfd9e2;
-  --band-ink-faded: #c9d4dead;
+  --band-sage: #0d1424;
+  --band-sage-ink: #e2e9f8;
+  --band-bagby: #101a30;
+  --band-olive: #091021;
+  --band-olive-ink: #c9d5ec;
+  --band-spice: #091021;
+  --band-spice-ink: #dce4f5;
+  --band-cannes: #1b2d55;
+  --band-cannes-ink: #d5e0f5;
+  --band-slate: #101a30;
+  --band-slate-ink: #dce4f5;
+  --band-ink-faded: #b7c4dfad;
+  --alert-edge: 4px solid #ffd34d;
+  --alert-strong: #ffd34d;
 
-  --card-bg: #2f435b;
-  --card-ink: #dfe6ec;
-  --card-border: #2a333d;
-  --cat-bg: #364d68;
-  --cat-ink: #93a1ae;
-  --muted: #93a1ae;
+  --card-bg: #16203a;
+  --card-ink: #dce4f5;
+  --card-border: #24304d;
+  --cat-bg: #1d2a49;
+  --cat-ink: #9db0d4;
+  --muted: #8fa0c0;
 
-  --input-bg: #4b688b;
-  --input-ink: #dfe6ec;
-  --input-border: #6d8bb0;
+  --input-bg: #0b1120;
+  --input-ink: #dce4f5;
+  --input-border: #2c3a5c;
 
-  --icon: #93a1ae;
-  --icon-hover: #d0dae2;
-  --mark-bg: rgba(123, 175, 212, 0.35);
+  --icon: #8fa0c0;
+  --icon-hover: #dce4f5;
+  --mark-bg: rgba(255, 211, 77, 0.28);
   --overridden-red: #ff8573;
-  --grid-line: #476385;
+  --grid-line: #2c3a5c;
 
-  --unofficial-card-bg: #2b3e54;
-  --unofficial-card-ink: #d6e2ec;
-  --unofficial-card-border: #263241;
+  --unofficial-card-bg: #16203a;
+  --unofficial-card-ink: #dce4f5;
+  --unofficial-card-border: #24304d;
 
-  --toggle-border: #33414e;
-  --toggle-ink: #8fa1b1;
-  --toggle-active-bg: #7BAFD4;
-  --toggle-active-ink: #1a2532;
-  --hover-bg: #0b0f14;
-  --active-bg: #05070a;
+  --pill-bg: #ffd34d;
+  --pill-ink: #091021;
+  --chart-bar: #3b5aa0;
+  --chart-accent: #ffd34d;
+  --btn-bg: #ffd34d;
+  --btn-ink: #091021;
+  --btn-icon-filter: invert(1);
+
+  --toggle-border: #2c3a5c;
+  --toggle-ink: #8fa0c0;
+  --toggle-active-bg: #ffd34d;
+  --toggle-active-ink: #091021;
+  --hover-bg: #1d2946;
+  --active-bg: #24304d;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --band-sage: #B0AA7E;
-  --band-bagby: #A09200;
-  --band-olive: #695B24;
-  --band-spice: #73391D;
-  --band-cannes: #7BAFD4;
-  --band-slate: #4F7396;
-  --band-ink: #fff;
-  --band-ink-faded: #ffffffad;
+  --band-sage: #eef1f7;
+  --band-sage-ink: #1c2a4a;
+  --band-bagby: #dfe7f3;
+  --band-olive: #00308f;
+  --band-olive-ink: #ffffff;
+  --band-spice: #00308f;
+  --band-spice-ink: #ffffff;
+  --band-cannes: #ffcf40;
+  --band-cannes-ink: #212b45;
+  --band-slate: #dfe7f3;
+  --band-slate-ink: #1c2a4a;
+  --band-ink-faded: #1c2a4aad;
+  --alert-edge: 0;
+  --alert-strong: #212b45;
 
   --card-bg: #fff;
-  --card-ink: #212529;
-  --card-border: rgba(0, 0, 0, 0.125);
-  --cat-bg: #efefef;
-  --cat-ink: #6c757d;
-  --muted: #6c757d;
+  --card-ink: #1d2434;
+  --card-border: #dce3ee;
+  --cat-bg: #e4eaf4;
+  --cat-ink: #51617e;
+  --muted: #5f6b80;
 
   --input-bg: #fff;
-  --input-ink: #212529;
-  --input-border: #ced4da;
+  --input-ink: #1d2434;
+  --input-border: #b9c6da;
 
-  --icon: #666;
-  --icon-hover: #333;
-  --mark-bg: rgba(123, 175, 212, 0.45);
-  --overridden-red: #ff0000;
-  --grid-line: #dee2e6;
+  --icon: #6b7890;
+  --icon-hover: #1d2434;
+  --mark-bg: rgba(255, 204, 0, 0.45);
+  --overridden-red: #d02a10;
+  --grid-line: #d5deec;
 
   --unofficial-card-bg: #fff;
-  --unofficial-card-ink: #212529;
-  --unofficial-card-border: rgba(0, 0, 0, 0.125);
+  --unofficial-card-ink: #1d2434;
+  --unofficial-card-border: #dce3ee;
+
+  --pill-bg: #00308f;
+  --pill-ink: #fff;
+  --chart-bar: #35529e;
+  --chart-accent: #dba400;
+  --btn-bg: #00308f;
+  --btn-ink: #fff;
+  --btn-icon-filter: none;
 
   --toggle-border: #ffffff55;
   --toggle-ink: #ffffffb0;
-  --toggle-active-bg: #ffffff;
-  --toggle-active-ink: #73391D;
-  --hover-bg: #f8f9fa;
-  --active-bg: #e9ecef;
+  --toggle-active-bg: #ffcf40;
+  --toggle-active-ink: #212b45;
+  --hover-bg: #f4f7fb;
+  --active-bg: #e8edf6;
 }
 
 /* Route Bootstrap's list-group-action hover/active colors through our
@@ -191,12 +251,23 @@ both directions over the OS preference.
 
 section {padding:2rem;}
 
-.bg-sage {background-color: var(--band-sage); color: var(--band-ink);}
-.bg-bagby-green {background-color: var(--band-bagby); color: var(--band-ink);}
-.bg-olive-drab {background-color: var(--band-olive); color: var(--band-ink);}
-.bg-spice-brown {background-color: var(--band-spice); color: var(--band-ink);}
-.bg-cannes-blue {background-color: var(--band-cannes); color: var(--band-ink);}
-.bg-slate-blue {background-color: var(--band-slate); color: var(--band-ink);}
+.bg-sage {background-color: var(--band-sage); color: var(--band-sage-ink);}
+.bg-bagby-green {background-color: var(--band-bagby); color: var(--band-sage-ink);}
+.bg-olive-drab {background-color: var(--band-olive); color: var(--band-olive-ink);}
+.bg-spice-brown {background-color: var(--band-spice); color: var(--band-spice-ink);}
+.bg-cannes-blue {background-color: var(--band-cannes); color: var(--band-cannes-ink);}
+.bg-slate-blue {background-color: var(--band-slate); color: var(--band-slate-ink);}
+
+/* Announcement alerts: a solid accent surface in light, a quiet surface
+   with an accent keyline and highlighted lead-in when the theme calls for
+   it (both resolved through tokens). */
+.alert.bg-cannes-blue {
+  border-left: var(--alert-edge);
+}
+
+.alert.bg-cannes-blue strong {
+  color: var(--alert-strong);
+}
 
 ul {
   list-style-type: none;
@@ -229,6 +300,28 @@ ul {
 .card {
   background-color: var(--card-bg);
   color: var(--card-ink);
+  border-color: var(--card-border);
+}
+
+/* Link Requests cards: themed surfaces (formerly hardcoded Bootstrap
+   .bg-dark), with a solid brand-colored action button. The GitHub logo is
+   a white SVG; --btn-icon-filter flips it when the button surface is
+   light. */
+.btn-request {
+  background-color: var(--btn-bg);
+  color: var(--btn-ink);
+  border: 1px solid var(--btn-bg);
+}
+
+.btn-request:hover,
+.btn-request:focus {
+  background-color: var(--btn-bg);
+  color: var(--btn-ink);
+  filter: brightness(1.12);
+}
+
+.btn-request img {
+  filter: var(--btn-icon-filter);
 }
 
 .modal-content {
@@ -374,8 +467,8 @@ section[id] {
 /* CATEGORY MATCH pill: signals that the category name, not the link titles,
    is why these rows are showing */
 .category-match-pill {
-  background-color: #4F7396;
-  color: #fff;
+  background-color: var(--pill-bg);
+  color: var(--pill-ink);
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.07em;
@@ -458,13 +551,13 @@ section[id] {
 
 .trend i {
   flex: 1;
-  background: #4F7396;
+  background: var(--chart-bar);
   border-radius: 3px 3px 0 0;
   min-width: 2px;
 }
 
 .trend i.hi {
-  background: #7BAFD4;
+  background: var(--chart-accent);
 }
 
 .axis {
@@ -507,7 +600,7 @@ section[id] {
   grid-column: 1;
   height: 8px;
   border-radius: 4px;
-  background: #4F7396;
+  background: var(--chart-bar);
   margin-top: 2px;
 }
 
@@ -550,7 +643,7 @@ section[id] {
   }
 
   :root:not([data-theme="light"]) #list p.alert-dark {
-    color: var(--band-ink);
+    color: var(--band-sage-ink);
   }
 }
 
@@ -567,7 +660,7 @@ section[id] {
 }
 
 :root[data-theme="dark"] #list p.alert-dark {
-  color: var(--band-ink);
+  color: var(--band-sage-ink);
 }
 
 /* Theme toggle: light / dark / auto segmented control in the navbar.
