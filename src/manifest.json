@@ -4,8 +4,8 @@
   "description": "USAF links mirrored from the Air Force portal for quick access from anywhere",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#B0AA7E",
-  "theme_color": "#73391D",
+  "background_color": "#eef1f7",
+  "theme_color": "#00308F",
   "icons": [
     {
       "src": "/icon-192.png",
