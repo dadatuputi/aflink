@@ -17,6 +17,20 @@ $(document).ready(function () {
   // If search string has a hidden space anywhere inside it, it comes from autocomplete, so automatically go to the first result
   // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
   const autocompleted = (searchParams.has("q") && searchParams.get("q").includes('​'));
+
+  // A suggestion is "<title>​ {CATEGORY}" (see search_worker/src/index.js).
+  // Both halves matter: the title becomes the query, and the category picks the
+  // right row when several links share a title or contain each other's names —
+  // without it, choosing "milSuite" in the address bar can open a different link
+  // that merely matched first.
+  var picked = { title: null, category: null };
+  if (autocompleted) {
+    var raw = searchParams.get("q");
+    var split = raw.indexOf('​');
+    picked.title = raw.slice(0, split);
+    var tail = raw.slice(split).match(/\{(.*)\}\s*$/);
+    picked.category = tail ? tail[1] : null;
+  }
   
   // Show modal after clicking a link
   const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
@@ -50,22 +64,16 @@ $(document).ready(function () {
     my_modal.hide();
   });
 
-  // Normalize a string for search: lowercase, accents folded, punctuation and
-  // spaces dropped — so "e-mail" matches "eMail" and "af portal" matches
-  // "AF Portal". Returns the normalized string plus a map from each normalized
-  // character back to its index in the original, for match highlighting.
-  function normalize(s) {
-    var norm = "", map = [];
-    for (var i = 0; i < s.length; i++) {
-      var c = s[i].toLowerCase().normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, "");
-      for (var j = 0; j < c.length; j++) {
-        norm += c[j];
-        map.push(i);
-      }
-    }
-    return { norm: norm, map: map };
+  // Matching rules live in search-match.js, which the autocomplete worker
+  // imports too — keeping address-bar suggestions and on-page results in
+  // agreement. Change matching there, never here.
+  var parseQuery = AflinkSearch.parseQuery;
+  var matchLink = AflinkSearch.matchLink;
+  var matchRanges = AflinkSearch.matchRanges;
+
+  function sameText(a, b) {
+    return String(a == null ? "" : a).trim().toLowerCase() ===
+      String(b == null ? "" : b).trim().toLowerCase();
   }
 
   function escapeHtml(s) {
@@ -104,17 +112,8 @@ $(document).ready(function () {
     function (event) {
       var value = $(this).val().toLowerCase();
 
-      // Every whitespace-separated word must match. A word matches on its whole
-      // normalized form ("e-mail" → "email"), or failing that on all of its
-      // multi-character punctuation-separated parts ("mail"; the lone "e" is
-      // dropped so single characters never match on their own).
-      var words = value.split(/\s+/).filter(Boolean).map(function (w) {
-        return {
-          whole: normalize(w).norm,
-          parts: w.split(/[^a-z0-9]+/).map(function (p) { return normalize(p).norm; })
-            .filter(function (p) { return p.length > 1; })
-        };
-      }).filter(function (w) { return w.whole; });
+      // Every whitespace-separated word must match; see search-match.js
+      var words = parseQuery(value);
 
       // Hide everything
       $('#link-list .category, #link-list .link-container, #unofficial-list .link-container').toggle(false);
@@ -124,45 +123,32 @@ $(document).ready(function () {
       var links = $('#link-list .link-container, #unofficial-list .link-container').filter(function(){
         var $a = $(this).find('a:first-child');
         var text = $a.text();
-        var title = normalize(text);
-        var url = normalize(($a.attr('href') || "").replace(/^https?:\/\//, "")).norm;
-        // Tokens can also match the row's category name ("education" shows the
+        // Words can also match the row's category name ("education" shows the
         // whole category); unofficial rows have no .category sibling and match
         // as "unofficial"
         var $cat = $(this).siblings('.category');
-        var cat = normalize($cat.length ? $cat.data('orig-text') : "unofficial").norm;
-        var ranges = [];
-        var ok = words.every(function (w) {
-          var p = title.norm.indexOf(w.whole);
-          if (p > -1) {
-            ranges.push([title.map[p], title.map[p + w.whole.length - 1]]);
-            return true;
-          }
-          if (url.indexOf(w.whole) > -1 || cat.indexOf(w.whole) > -1) return true;
-          if (!w.parts.length) return false;
-          var partRanges = [];
-          var all = w.parts.every(function (t) {
-            var q = title.norm.indexOf(t);
-            if (q > -1) {
-              partRanges.push([title.map[q], title.map[q + t.length - 1]]);
-              return true;
-            }
-            return url.indexOf(t) > -1 || cat.indexOf(t) > -1;
-          });
-          if (all) {
-            ranges.push.apply(ranges, partRanges);
-            return true;
-          }
-          return false;
-        });
-        if (ok && ranges.length) highlight($a, text, ranges);
+        var result = matchLink({
+          title: text,
+          url: $a.attr('href'),
+          category: $cat.length ? $cat.data('orig-text') : "unofficial"
+        }, words);
+        if (result.matched && result.ranges.length) highlight($a, text, result.ranges);
         else $a.text(text);
-        return ok;
+        return result.matched;
       })
 
-      // Go to first link if autocomplete
-      if (autocompleted && links[0]) {
-        $(links[0]).find('a.main-link')[0].click();
+      // Follow the suggestion the user actually chose: the row whose title and
+      // category match it, falling back to the first result when the suggestion
+      // came from somewhere else (an older worker, a bookmarked ?q= URL)
+      if (autocompleted && links.length) {
+        var exact = links.filter(function () {
+          var $a = $(this).find('a:first-child');
+          if (!sameText($a.text(), picked.title)) return false;
+          if (!picked.category) return true;
+          var $c = $(this).siblings('.category');
+          return sameText($c.length ? $c.data('orig-text') : AflinkSearch.UNOFFICIAL_CATEGORY, picked.category);
+        });
+        $(exact[0] || links[0]).find('a.main-link')[0].click();
       }
       links.toggle(true);
 
@@ -174,26 +160,7 @@ $(document).ready(function () {
       $('#link-list .category, #unofficial h2').each(function () {
         var $h = $(this);
         var htext = $h.data('orig-text');
-        var n = normalize(htext);
-        var hranges = [];
-        words.forEach(function (w) {
-          var p = n.norm.indexOf(w.whole);
-          if (p > -1) {
-            hranges.push([n.map[p], n.map[p + w.whole.length - 1]]);
-            return;
-          }
-          if (!w.parts.length) return;
-          var pr = [];
-          var all = w.parts.every(function (t) {
-            var q = n.norm.indexOf(t);
-            if (q > -1) {
-              pr.push([n.map[q], n.map[q + t.length - 1]]);
-              return true;
-            }
-            return false;
-          });
-          if (all) hranges.push.apply(hranges, pr);
-        });
+        var hranges = matchRanges(htext, words);
         if (hranges.length) {
           highlight($h, htext, hranges);
           $h.append('<span class="category-match-pill">Category match</span>');
@@ -235,10 +202,9 @@ $(document).ready(function () {
   // Update search field based on parameters on pageload
   if (searchParams.has("q") === true) {
     if (autocompleted) {
-      // Remove all the characters after the hidden space, inclusive
-      const query = searchParams.get("q");
-      const cleanQuery = query.slice(0, query.indexOf('​'));
-      searchParams.set("q", cleanQuery);
+      // Search on the suggestion's title alone — the category suffix after the
+      // hidden space is for picking the row, not for matching
+      searchParams.set("q", picked.title);
     }
 
     $("#search-form").val(searchParams.get("q")).change();
