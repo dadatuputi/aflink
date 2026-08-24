@@ -21,8 +21,13 @@ $(document).ready(function () {
   // Show modal after clicking a link
   const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
   $("#link-list .list-group-item a:first-child, #unofficial-list .list-group-item a:first-child").on('click', function(event) {
+    var href = $(this).prop('href');
     $('#exit-modal .modal-header .title').text($(this).text());
-    $('#exit-modal .link').text($(this).prop('href'));
+    // The URL doubles as a working link: the navigation this click starts can
+    // hang for a long time on a slow destination, and the modal is the only
+    // thing on screen at that point. title= carries the full URL because the
+    // display is truncated with an ellipsis.
+    $('#exit-modal .link a').attr({ href: href, title: href }).text(href);
 
     // Record which link was used so the analytics page can rank resources.
     // Anonymous event; gtag delivers via sendBeacon so navigation isn't delayed.
@@ -35,7 +40,14 @@ $(document).ready(function () {
       });
     }
 
-    my_modal.toggle();
+    my_modal.show();
+  });
+
+  // Coming back (Back button, bfcache restore) can hand us the page with the
+  // modal still up, and toggle() would then hide it on the next click instead
+  // of showing it. Always start from hidden; hide() is a no-op when it is.
+  $(window).on('pageshow', function () {
+    my_modal.hide();
   });
 
   // Normalize a string for search: lowercase, accents folded, punctuation and

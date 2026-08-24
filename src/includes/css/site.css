@@ -263,8 +263,16 @@ ul {
 
 .modal-header .link {
   font-size: .75rem !important;
-  text-overflow: ellipsis;
   width: 100%;
+}
+
+/* The destination URL is a real anchor so a stalled navigation can be
+   retried, but it reads as plain text — same treatment as .main-link. */
+.modal-header .link a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
