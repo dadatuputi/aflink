@@ -97,7 +97,9 @@ async function getNewestDate(files) {
         let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
         const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
         // Unofficial third-party links stay out of the official links object so
-        // the override/delete workflows and links.json never touch them.
+        // the override/delete workflows never walk them. They are still
+        // published in links.json, as their own top-level list, because the
+        // page searches them and the autocomplete worker has to match it.
         const links_unofficial_raw = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
         const links_unofficial = [...links_unofficial_raw]
             .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
@@ -255,17 +257,28 @@ async function getNewestDate(files) {
         });
 
 
-        // Write links to JSON for publishing
+        // Write links to JSON for publishing.
+        // This file is the search worker's only view of the site — whatever the
+        // page shows has to be derivable from here, including the unofficial
+        // section and the isDeleted flag the page filters on.
         const links_published = {
             metadata: {
                 generated: new Date().toISOString(),
                 lastModified: date,
                 numLinks: links_length,
                 numCategories: links.length,
+                numUnofficial: links_unofficial.length,
                 overridesApplied: override_count,
-                version: "1.0"
+                version: "1.1"
             },
-            links: links
+            links: links,
+            // Copied field by field, and before the issue URLs are attached
+            // below, so links.json stays the plain data the worker expects
+            unofficial: links_unofficial.map(link => ({
+                title: link.title,
+                link: link.link,
+                contentId: link.contentId
+            }))
         }
         fs.writeFileSync(path.resolve(outputDir, "links.json"), JSON.stringify(links_published, null, 2));
         console.log(`Wrote links.json`);

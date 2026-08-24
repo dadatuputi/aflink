@@ -9,6 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "NODE_ENV=production node ./updater.js",
+    "test": "node --test \"test/*.test.js\"",
     "dev:build": "NODE_ENV=development DOCS_DIR=_site node ./updater.js",
     "serve": "npx serve _site -p 4000",
     "dev:serve": "npm run dev:build && npm run serve",
