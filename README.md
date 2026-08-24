@@ -6,6 +6,7 @@
 
 ## Changelog
 
+- **Aug 2026** — ⌨️ Address-bar suggestions rebuilt on the page's own search rules: unofficial links are suggested, deleted ones no longer are, and picking a suggestion opens that exact link
 - **Aug 2026** — ✈️ **Heraldry redesign**: new color scheme in the official USAF service colors — Ultramarine Blue & Air Force Yellow — across light and dark themes
 - **Aug 2026** — 🌙 Dark mode, with a light/dark/auto toggle in the navbar; weekly automated link trust & rot checking
 - **Aug 2026** — 📊 [Usage page](https://aflink.us/analytics) with 30-day/90-day/1-year stats; installable PWA with offline support; announcements; search now matches category names

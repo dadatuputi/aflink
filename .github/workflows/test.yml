@@ -1,0 +1,41 @@
+# The page and the autocomplete worker share their matching rules and the
+# links.json contract; these tests are what keeps a change to one from
+# silently breaking the other.
+name: Test
+
+on:
+  push:
+    branches: ["master"]
+    # Analytics data lands on master nightly; only rebuild-worthy paths matter
+    paths:
+      - 'src/**'
+      - 'search_worker/**'
+      - 'test/**'
+      - 'updater.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/test.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Search parity tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # full history: the build reads file dates from git log
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build site
+        # Produces _site/links.json, which the worker tests read as the real
+        # contract between updater.js and the worker
+        run: npm run dev:build
+      - name: Run tests
+        run: npm test

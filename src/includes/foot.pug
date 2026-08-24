@@ -10,6 +10,13 @@ script
     include js/theme-toggle.js
   else
     include:uglify-js js/theme-toggle.js
+//- Shared matching rules, also imported by the autocomplete worker
+//- (search_worker/src/index.js). Must load before search.js, which uses it.
+script
+  if isDev
+    include js/search-match.js
+  else
+    include:uglify-js js/search-match.js
 script
   if isDev
     include js/search.js
