@@ -1,6 +1,27 @@
 # [aflink.us](https://aflink.us)
 
-[![Recording 2024-10-10 at 14 39 36](https://github.com/user-attachments/assets/55004158-af06-4de9-a310-d2eb6539f92f)](https://aflink.us)
+[![Searching aflink and toggling the dark theme](.github/demo.gif)](https://aflink.us)
+
+---
+
+## Changelog
+
+- **Aug 2026** — ✈️ **Heraldry redesign**: new color scheme in the official USAF service colors — Ultramarine Blue & Air Force Yellow — across light and dark themes
+- **Aug 2026** — 🌙 Dark mode, with a light/dark/auto toggle in the navbar; weekly automated link trust & rot checking
+- **Aug 2026** — 📊 [Usage page](https://aflink.us/analytics) with 30-day/90-day/1-year stats; installable PWA with offline support; announcements; search now matches category names
+- **Aug 2026** — 🔗 Unofficial section for community-curated third-party tools, with the same request/override workflows as official links
+- **Dec 2025** — 🆔 Stable content IDs for every link, so overrides and deletions survive AF portal sync churn
+- **Jul 2025** — ⌨️ Search autocomplete worker; `links.json` published with each build
+- **Jun 2025** — 📝 Link override & deletion via GitHub issue forms — hover any link for the 📝/🗑️ icons; [overrides page](https://aflink.us/overrides) lists every change
+- **Nov 2023** — 🔄 Automated weekly sync of links from the AF portal
+- **Jul 2023** — 🪟 Transition modal when following a link
+- **May 2023** — 🔍 Address-bar search suggestions (OpenSearch autocomplete)
+- **Jan 2023** — 🤖 Links added automatically from approved GitHub issues
+- **Jan 2022** — 🎨 Link categories & the OCP earth-tone theme; link request issue templates
+- **May 2021** — ⚡ Tab-to-search from the browser address bar (`?q=` URLs), Enter opens the first result, autofocused search
+- **Apr 2021** — 🚀 Initial launch: static mirror of the USAF portal quick links, rebuilt automatically via GitHub Actions
+
+---
 
 An accessible & simple page to find USAF links without needing to mess with the portal. 
 
