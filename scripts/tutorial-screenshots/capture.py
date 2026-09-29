@@ -26,6 +26,8 @@ from PIL import ImageDraw, ImageGrab
 from playwright.sync_api import sync_playwright
 from pywinauto import Desktop, keyboard, mouse
 
+import demo as demo_gif
+
 HIGHLIGHT = (0, 180, 230)     # the cyan box used in the original screenshots
 WINDOW = (0, 0, 900, 640)     # x, y, w, h of every browser window: small, so
                               # each screenshot is the whole window with little padding
@@ -335,13 +337,21 @@ def firefox(p, profile):
     ctx.close()
 
 
+def demo(p, profile):
+    """The README GIF shows the page in both themes itself, so it is recorded
+    once, in the light pass."""
+    if theme == "light":
+        demo_gif.record(p, args.site, args.demo_out)
+
+
 def main():
     global args, theme
     ap = argparse.ArgumentParser()
     ap.add_argument("--site", default="https://aflink.us")
     ap.add_argument("--out", type=Path, default=Path(__file__).resolve().parents[2] / "src/includes/img")
     ap.add_argument("--debug", type=Path)
-    ap.add_argument("--only", default="chrome,edge,firefox")
+    ap.add_argument("--only", default="chrome,edge,firefox,demo")
+    ap.add_argument("--demo-out", type=Path, default=Path(__file__).resolve().parents[2] / ".github/demo.gif")
     ap.add_argument("--themes", default="light,dark")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
