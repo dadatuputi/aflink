@@ -18,6 +18,9 @@ workflows in `.github/workflows/`, not by hand.
   `links_override.json` (corrections and deletions, matched by `contentId`)
 - `search_worker/` — the Cloudflare Worker behind address-bar autocomplete
 - `test/` — `npm test` (node's test runner, no dependencies)
+- `scripts/tutorial-screenshots/` — re-captures the browser screenshots in
+  `src/tutorial.pug` (`src/includes/img/`) on a Windows runner; run the
+  "Tutorial Screenshots" workflow by hand, don't edit the PNGs
 
 ## Search is two implementations of one behaviour
 

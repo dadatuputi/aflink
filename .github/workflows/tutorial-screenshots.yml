@@ -12,15 +12,10 @@ on:
       only:
         description: Browsers (comma-separated)
         default: chrome,edge,firefox
-  # PROTOTYPE: run on pushes to the development branch; remove before merging
-  push:
-    branches: ["claude/festive-faraday-ty4dtn"]
-    paths:
-      - "scripts/tutorial-screenshots/**"
-      - ".github/workflows/tutorial-screenshots.yml"
 
 permissions:
   contents: write
+  actions: write   # to start the site build: pushes made here don't trigger it
 
 concurrency:
   group: tutorial-screenshots-${{ github.ref }}
@@ -43,11 +38,10 @@ jobs:
         shell: pwsh
         run: Set-DisplayResolution -Width 1280 -Height 800 -Force
       - name: Capture
-        run: >
-          python scripts/tutorial-screenshots/capture.py
-          --site "${{ inputs.site || 'https://aflink.us' }}"
-          --only "${{ inputs.only || 'chrome,edge,firefox' }}"
-          --debug tutorial-debug
+        env:
+          SITE: ${{ inputs.site || 'https://aflink.us' }}
+          ONLY: ${{ inputs.only || 'chrome,edge,firefox' }}
+        run: python scripts/tutorial-screenshots/capture.py --site "$env:SITE" --only "$env:ONLY" --debug tutorial-debug
       - name: Upload debug output
         if: always()
         uses: actions/upload-artifact@v7
@@ -55,14 +49,16 @@ jobs:
           name: tutorial-debug
           path: tutorial-debug
       - name: Commit screenshots
-        if: always()
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
-          # PROTOTYPE: keep the debug captures in the repo so they can be reviewed
-          rm -rf scripts/tutorial-screenshots/debug && mkdir -p scripts/tutorial-screenshots/debug && cp -r tutorial-debug/. scripts/tutorial-screenshots/debug/ || true
-          git add -A src/includes/img scripts/tutorial-screenshots/debug
+          git add src/includes/img
           git diff --cached --quiet && { echo "No changes"; exit 0; }
           git commit -m "Update tutorial screenshots"
           git push
+          if [ "${{ github.ref_name }}" = "${{ github.event.repository.default_branch }}" ]; then
+            gh workflow run build.yml --ref "${{ github.ref_name }}"
+          fi
