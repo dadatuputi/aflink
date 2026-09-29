@@ -169,16 +169,21 @@ def center(r):
     return ((r.left + r.right) // 2, (r.top + r.bottom) // 2)
 
 
+BORDER = 1   # the 1px outline Windows 11 draws round every window
+
+
 def frame(win):
-    """The window's visible bounds. GetWindowRect (and UIA) include the
-    invisible resize border Windows 10/11 draws around every window."""
+    """The window's contents, edge to edge. GetWindowRect (and UIA) include
+    the invisible resize border Windows 10/11 draws around every window; the
+    DWM frame bounds used here drop that but still take in the 1px window
+    outline, which is inset away so it doesn't frame every screenshot."""
     import ctypes
     from ctypes import wintypes
     r = wintypes.RECT()
     DWMWA_EXTENDED_FRAME_BOUNDS = 9
     ctypes.windll.dwmapi.DwmGetWindowAttribute(
         wintypes.HWND(win.handle), DWMWA_EXTENDED_FRAME_BOUNDS, ctypes.byref(r), ctypes.sizeof(r))
-    return (r.left, r.top, r.right, r.bottom)
+    return (r.left + BORDER, r.top + BORDER, r.right - BORDER, r.bottom - BORDER)
 
 
 def window_crop(win, *extra, margin=8):
