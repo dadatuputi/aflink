@@ -265,13 +265,13 @@ def chrome(p, profile):
     row = settings.locator("settings-search-engine-entry", has_text=host).first
     row.scroll_into_view_if_needed()
     settings.wait_for_timeout(500)
-    # Shot from the screen like the others, so it shows the whole window;
-    # the row's page coordinates are offset by where the page sits on screen.
-    box = row.bounding_box()
-    dl, dt = web_origin(win)
-    hl = (dl + int(box["x"]), dt + int(box["y"]),
-          dl + int(box["x"] + box["width"]), dt + int(box["y"] + box["height"]))
-    grab(args.out / "chrome-2.png", window_crop(win), highlight=hl, pad=6)
+    # Shot from the screen like the others, so it shows the whole window. The
+    # row is in the page, so the page draws its highlight itself.
+    row.evaluate("(el, c) => { el.style.outline = `4px solid rgb(${c})`;"
+                 " el.style.outlineOffset = '2px' }", ",".join(map(str, HIGHLIGHT)))
+    settings.wait_for_timeout(300)
+    grab(args.out / "chrome-2.png", window_crop(win))
+    row.evaluate("el => el.style.outline = ''")
     row.get_by_role("button", name=re.compile("activate", re.I)).click()
     settings.wait_for_timeout(1000)
     debug_shot("chrome-activated")
@@ -289,17 +289,6 @@ def edge(p, profile):
     # just autocompletes, 'aflink.us' + Tab engages it
     search_shot("edge", win, args.out / "edge-1.png", keyword="aflink.us")
     ctx.close()
-
-
-def web_origin(win):
-    """Screen position of the page's top-left corner: the largest Document
-    element in the window is the web contents."""
-    def find():
-        docs = [d.rectangle() for d in win.descendants(control_type="Document")]
-        docs = [r for r in docs if r.width() > 200]
-        return max(docs, key=lambda r: r.width() * r.height()) if docs else None
-    r = wait_for(find, 10, "web contents")
-    return r.left, r.top
 
 
 def debug_page(page, name):
