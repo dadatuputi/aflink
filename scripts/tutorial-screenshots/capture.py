@@ -285,17 +285,9 @@ def chrome(p, profile):
 
 def edge(p, profile):
     ctx, page, win = open_site(p, "edge", profile)
-    search_shot("edge", win, args.out / "edge-1.png")
-    # PROTOTYPE: 'aflink' + Tab did not engage the engine; find out what Edge
-    # registered and whether the full host works as the keyword
-    settings = ctx.ctx.new_page()
-    settings.goto("edge://settings/searchEngines")
-    settings.wait_for_timeout(2000)
-    debug_page(settings, "edge-settings")
-    settings.close()
-    page.bring_to_front()
-    win.set_focus()
-    search_shot("edge-host", win, args.debug / "edge-host.png", keyword="aflink.us")
+    # Edge's keyword for a discovered engine is the host: 'aflink' + Tab
+    # just autocompletes, 'aflink.us' + Tab engages it
+    search_shot("edge", win, args.out / "edge-1.png", keyword="aflink.us")
     ctx.close()
 
 
