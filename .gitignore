@@ -1,3 +1,4 @@
 node_modules
 docs
-_site__pycache__/
+_site
+__pycache__/
