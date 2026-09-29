@@ -26,10 +26,6 @@ on:
       site:
         description: Site to capture
         default: https://aflink.us
-  # TEMPORARY: re-record the GIF from this branch; remove before merging
-  push:
-    branches: ["claude/festive-faraday-ty4dtn"]
-    paths: ["scripts/tutorial-screenshots/**"]
 
 permissions:
   contents: write
