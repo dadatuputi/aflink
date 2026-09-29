@@ -26,11 +26,6 @@ on:
       site:
         description: Site to capture
         default: https://aflink.us
-  # TEMPORARY: lets this branch's pushes run it, since a workflow can only be
-  # dispatched once it is on the default branch; remove before merging
-  push:
-    branches: ["claude/festive-faraday-ty4dtn"]
-    paths: ["scripts/tutorial-screenshots/**"]
 
 permissions:
   contents: write
