@@ -218,7 +218,14 @@ class Session:
             self.ctx = p.firefox.launch_persistent_context(
                 profile, headless=False, no_viewport=True,
                 # Playwright otherwise emulates a light page whatever the OS says
-                color_scheme=theme)
+                color_scheme=theme,
+                # and its Firefox keeps a light toolbar and menus; this is what
+                # "System theme - auto" would pick
+                firefox_user_prefs={
+                    "ui.systemUsesDarkTheme": int(theme == "dark"),
+                    "browser.theme.toolbar-theme": 0 if theme == "dark" else 1,
+                    "browser.theme.content-theme": 0 if theme == "dark" else 1,
+                })
             return
         self.proc = subprocess.Popen([
             EXES[name], f"--user-data-dir={profile}", "--remote-debugging-port=9222",
@@ -239,6 +246,9 @@ class Session:
 def open_site(p, name, profile):
     ctx = Session(p, name, profile)
     page = ctx.ctx.pages[0] if ctx.ctx.pages else ctx.ctx.new_page()
+    # Chrome and Edge give their frame the OS theme but not always the page
+    # (seen on the runner), so set prefers-color-scheme explicitly
+    page.emulate_media(color_scheme=theme)
     page.goto(args.site)
     page.wait_for_timeout(3000)   # let the browser fetch osdd.xml
     title = page.title()
@@ -287,6 +297,7 @@ def chrome(p, profile):
 
     # The settings page is web UI: Playwright can screenshot and click it.
     settings = ctx.ctx.new_page()
+    settings.emulate_media(color_scheme=theme)
     settings.goto("chrome://settings/searchEngines")
     settings.wait_for_timeout(1500)
     host = re.sub(r"^https?://", "", args.site).rstrip("/")
