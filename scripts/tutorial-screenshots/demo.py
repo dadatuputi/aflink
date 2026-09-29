@@ -19,7 +19,7 @@ from playwright.sync_api import sync_playwright
 # scaled down to the GIF's size.
 SIZE = {"width": 1000, "height": 700}
 GIF_SIZE = (800, 560)
-FRAME_MS = 150
+TYPE_MS = 100   # per keystroke
 QUERY = "travel"
 
 
@@ -30,30 +30,31 @@ def record(p, site, out):
     page.wait_for_load_state("networkidle")
     frames = []
 
-    def hold(n):
-        # A frame repeated n times; the GIF optimiser folds the repeats.
+    def hold(ms):
+        """One frame, shown for ms."""
         page.wait_for_timeout(80)   # let the filter and highlights settle
         shot = Image.open(io.BytesIO(page.screenshot())).convert("RGB").resize(GIF_SIZE, Image.LANCZOS)
-        frames.extend([shot] * n)
+        frames.append((shot, ms))
 
-    hold(6)                                   # the page as it loads
+    hold(900)                                 # the page as it loads
     page.click("#search-form")
     for i, ch in enumerate(QUERY, 1):         # the list filters as you type
         # real key presses: search.js filters on keyup/change, not on the
         # input event fill() would send
         page.keyboard.press(ch)
-        hold(2 if i < len(QUERY) else 10)
+        hold(TYPE_MS if i < len(QUERY) else 1500)
     page.click("button[data-theme-choice=dark]")
     page.mouse.move(0, SIZE["height"] - 1)    # no hover state on the toggle
-    hold(12)
+    hold(1800)
     page.click("button[data-theme-choice=light]")
     page.mouse.move(0, SIZE["height"] - 1)
-    hold(6)
+    hold(900)
     browser.close()
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    first, *rest = [f.quantize(colors=256, method=Image.Quantize.MEDIANCUT) for f in frames]
-    first.save(out, save_all=True, append_images=rest, duration=FRAME_MS, loop=0, optimize=True)
+    first, *rest = [f.quantize(colors=256, method=Image.Quantize.MEDIANCUT) for f, _ in frames]
+    first.save(out, save_all=True, append_images=rest, duration=[ms for _, ms in frames],
+               loop=0, optimize=True)
     print(f"  wrote {out} ({len(frames)} frames, {out.stat().st_size // 1024} KB)", flush=True)
 
 
