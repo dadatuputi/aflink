@@ -61,8 +61,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
           # PROTOTYPE: keep the debug captures in the repo so they can be reviewed
-          mkdir -p scripts/tutorial-screenshots/debug && cp -r tutorial-debug/. scripts/tutorial-screenshots/debug/ || true
-          git add src/includes/img scripts/tutorial-screenshots/debug
+          rm -rf scripts/tutorial-screenshots/debug && mkdir -p scripts/tutorial-screenshots/debug && cp -r tutorial-debug/. scripts/tutorial-screenshots/debug/ || true
+          git add -A src/includes/img scripts/tutorial-screenshots/debug
           git diff --cached --quiet && { echo "No changes"; exit 0; }
           git commit -m "Update tutorial screenshots"
           git push

@@ -15,6 +15,7 @@ which has an interactive desktop and Chrome, Edge and Firefox installed.
 
 import argparse
 import re
+import subprocess
 import sys
 import tempfile
 import time
@@ -88,13 +89,19 @@ def place(win):
 
 
 def address_bar(win):
-    """The top-most Edit control near the top of the window."""
+    """Firefox's is a ComboBox 'urlbar-input'; Chrome/Edge an Edit named
+    'Address and search bar'."""
     top = win.rectangle().top
 
     def find():
-        edits = [e for e in win.descendants(control_type="Edit")
-                 if e.rectangle().top - top < 150 and e.rectangle().width() > 200]
-        return sorted(edits, key=lambda e: e.rectangle().top)[0] if edits else None
+        for el in win.descendants():
+            info = el.element_info
+            if info.control_type not in ("Edit", "ComboBox"):
+                continue
+            if info.automation_id == "urlbar-input" or re.search(r"address", info.name or "", re.I):
+                r = el.rectangle()
+                if r.top - top < 150 and r.width() > 200:
+                    return el
     return wait_for(find, 10, "address bar")
 
 
@@ -132,20 +139,41 @@ def rect_tuple(r):
     return (r.left, r.top, r.right, r.bottom)
 
 
-def launch(p, name, profile):
-    common = dict(headless=False, no_viewport=True)
-    if name == "firefox":
-        return p.firefox.launch_persistent_context(profile, **common)
-    return p.chromium.launch_persistent_context(
-        profile, channel={"chrome": "chrome", "edge": "msedge"}[name],
-        # without this Chrome shows a "controlled by automated software" bar
-        ignore_default_args=["--enable-automation"],
-        args=["--no-first-run", "--no-default-browser-check"], **common)
+EXES = {
+    "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    "edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+}
+
+
+class Session:
+    """A browser the way a user would run it. Chrome and Edge are started
+    directly and attached over CDP: launched by Playwright they carry its
+    command-line flags and show an 'unsupported command-line flag' bar."""
+
+    def __init__(self, p, name, profile):
+        self.proc = None
+        if name == "firefox":
+            self.ctx = p.firefox.launch_persistent_context(profile, headless=False, no_viewport=True)
+            return
+        self.proc = subprocess.Popen([
+            EXES[name], f"--user-data-dir={profile}", "--remote-debugging-port=9222",
+            "--no-first-run", "--no-default-browser-check", "about:blank"])
+        browser = wait_for(lambda: p.chromium.connect_over_cdp("http://127.0.0.1:9222"), 30, "CDP")
+        self.ctx = browser.contexts[0]
+
+    def close(self):
+        try:
+            self.ctx.close()
+        except Exception:
+            pass
+        if self.proc:
+            self.proc.terminate()
+            self.proc.wait(10)
 
 
 def open_site(p, name, profile):
-    ctx = launch(p, name, profile)
-    page = ctx.pages[0] if ctx.pages else ctx.new_page()
+    ctx = Session(p, name, profile)
+    page = ctx.ctx.pages[0] if ctx.ctx.pages else ctx.ctx.new_page()
     page.goto(args.site)
     page.wait_for_timeout(3000)   # let the browser fetch osdd.xml
     title = page.title()
@@ -168,14 +196,14 @@ def context_menu_shot(name, win, item_pattern, out):
     return item
 
 
-def search_shot(name, win, out):
-    """Type 'aflink', Tab into the engine, then a query; capture the dropdown."""
+def search_shot(name, win, out, keyword="aflink"):
+    """Type the keyword, Tab into the engine, then a query; capture the dropdown."""
     bar = address_bar(win)
     br = bar.rectangle()
     mouse.click(coords=center(br))
     time.sleep(0.3)
     keyboard.send_keys("^a{BACKSPACE}")
-    keyboard.send_keys("aflink", pause=0.08)
+    keyboard.send_keys(keyword, pause=0.08)
     time.sleep(1)
     debug_shot(f"{name}-typed")
     keyboard.send_keys("{TAB}")
@@ -197,7 +225,7 @@ def chrome(p, profile):
     keyboard.send_keys("{ESC}")
 
     # The settings page is web UI: Playwright can screenshot and click it.
-    settings = ctx.new_page()
+    settings = ctx.ctx.new_page()
     settings.goto("chrome://settings/searchEngines")
     settings.wait_for_timeout(1500)
     host = re.sub(r"^https?://", "", args.site).rstrip("/")
@@ -228,7 +256,24 @@ def chrome(p, profile):
 def edge(p, profile):
     ctx, page, win = open_site(p, "edge", profile)
     search_shot("edge", win, args.out / "edge-1.png")
+    # PROTOTYPE: 'aflink' + Tab did not engage the engine; find out what Edge
+    # registered and whether the full host works as the keyword
+    settings = ctx.ctx.new_page()
+    settings.goto("edge://settings/searchEngines")
+    settings.wait_for_timeout(2000)
+    debug_page(settings, "edge-settings")
+    settings.close()
+    page.bring_to_front()
+    win.set_focus()
+    search_shot("edge-host", win, args.debug / "edge-host.png", keyword="aflink.us")
     ctx.close()
+
+
+def debug_page(page, name):
+    if not args.debug:
+        return
+    page.screenshot(path=str(args.debug / f"{name}.png"), full_page=True)
+    (args.debug / f"{name}.txt").write_text(page.locator("body").inner_text(), encoding="utf-8")
 
 
 def firefox(p, profile):
@@ -259,7 +304,7 @@ def main():
         for name in args.only.split(","):
             log(f"== {name}")
             try:
-                with tempfile.TemporaryDirectory() as profile:
+                with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as profile:
                     globals()[name](p, profile)
             except Exception:
                 traceback.print_exc()
