@@ -267,11 +267,19 @@ def chrome(p, profile):
     settings.wait_for_timeout(500)
     # Shot from the screen like the others, so it shows the whole window. The
     # row is in the page, so the page draws its highlight itself.
-    row.evaluate("(el, c) => { el.style.outline = `4px solid rgb(${c})`;"
-                 " el.style.outlineOffset = '2px' }", ",".join(map(str, HIGHLIGHT)))
+    box = row.bounding_box()
+    settings.evaluate("""([b, c]) => {
+        const d = document.createElement('div');
+        d.id = 'tutorial-highlight';
+        Object.assign(d.style, {position: 'fixed', zIndex: 99999, pointerEvents: 'none',
+            left: (b.x - 6) + 'px', top: (b.y - 4) + 'px',
+            width: (b.width + 12) + 'px', height: (b.height + 8) + 'px',
+            border: `4px solid rgb(${c})`, boxSizing: 'border-box'});
+        document.body.appendChild(d);
+    }""", [box, ",".join(map(str, HIGHLIGHT))])
     settings.wait_for_timeout(300)
     grab(args.out / "chrome-2.png", window_crop(win))
-    row.evaluate("el => el.style.outline = ''")
+    settings.evaluate("document.getElementById('tutorial-highlight').remove()")
     row.get_by_role("button", name=re.compile("activate", re.I)).click()
     settings.wait_for_timeout(1000)
     debug_shot("chrome-activated")
