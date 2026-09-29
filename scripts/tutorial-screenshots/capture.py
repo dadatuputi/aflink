@@ -299,13 +299,6 @@ def edge(p, profile):
     ctx.close()
 
 
-def debug_page(page, name):
-    if not args.debug:
-        return
-    page.screenshot(path=str(args.debug / f"{name}.png"), full_page=True)
-    (args.debug / f"{name}.txt").write_text(page.locator("body").inner_text(), encoding="utf-8")
-
-
 def firefox(p, profile):
     ctx, page, win = open_site(p, "firefox", profile)
     item = context_menu_shot("firefox", win, r"add .*aflink", args.out / "firefox-1.png")
