@@ -1,0 +1,68 @@
+name: Tutorial Screenshots
+
+# Re-captures the browser screenshots in src/tutorial.pug on a real Windows
+# desktop and commits them. See scripts/tutorial-screenshots/capture.py.
+
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: Site to capture
+        default: https://aflink.us
+      only:
+        description: Browsers (comma-separated)
+        default: chrome,edge,firefox
+  # PROTOTYPE: run on pushes to the development branch; remove before merging
+  push:
+    branches: ["claude/festive-faraday-ty4dtn"]
+    paths:
+      - "scripts/tutorial-screenshots/**"
+      - ".github/workflows/tutorial-screenshots.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tutorial-screenshots-${{ github.ref }}
+
+jobs:
+  capture:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/tutorial-screenshots/requirements.txt
+          python -m playwright install firefox
+      - name: Set display resolution
+        continue-on-error: true
+        shell: pwsh
+        run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
+      - name: Capture
+        run: >
+          python scripts/tutorial-screenshots/capture.py
+          --site "${{ inputs.site || 'https://aflink.us' }}"
+          --only "${{ inputs.only || 'chrome,edge,firefox' }}"
+          --debug tutorial-debug
+      - name: Upload debug output
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: tutorial-debug
+          path: tutorial-debug
+      - name: Commit screenshots
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          # PROTOTYPE: keep the debug captures in the repo so they can be reviewed
+          mkdir -p scripts/tutorial-screenshots/debug && cp -r tutorial-debug/. scripts/tutorial-screenshots/debug/ || true
+          git add src/includes/img scripts/tutorial-screenshots/debug
+          git diff --cached --quiet && { echo "No changes"; exit 0; }
+          git commit -m "Update tutorial screenshots"
+          git push
