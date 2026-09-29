@@ -41,7 +41,7 @@ jobs:
       - name: Set display resolution
         continue-on-error: true
         shell: pwsh
-        run: Set-DisplayResolution -Width 1920 -Height 1080 -Force
+        run: Set-DisplayResolution -Width 1280 -Height 800 -Force
       - name: Capture
         run: >
           python scripts/tutorial-screenshots/capture.py
