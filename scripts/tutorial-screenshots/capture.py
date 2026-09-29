@@ -27,7 +27,8 @@ from playwright.sync_api import sync_playwright
 from pywinauto import Desktop, keyboard, mouse
 
 HIGHLIGHT = (0, 180, 230)     # the cyan box used in the original screenshots
-WINDOW = (0, 0, 1100, 760)    # x, y, w, h of every browser window
+WINDOW = (0, 0, 900, 640)     # x, y, w, h of every browser window: small, so
+                              # each screenshot is the whole window with little padding
 QUERY = "owa"                 # typed after engaging the search engine
 
 args = None
@@ -120,8 +121,44 @@ def menu_item(win, pattern):
     return wait_for(find, 8, f"menu item /{pattern}/")
 
 
+def menu_rect(item):
+    """Bounds of the menu an item belongs to, so the crop takes in all of it."""
+    el = item
+    for _ in range(4):
+        el = el.parent()
+        if el is None:
+            return None
+        if el.element_info.control_type == "Menu":
+            r = el.rectangle()
+            return rect_tuple(r) if r.width() > 0 else None
+    return None
+
+
 def center(r):
     return ((r.left + r.right) // 2, (r.top + r.bottom) // 2)
+
+
+def frame(win):
+    """The window's visible bounds. GetWindowRect (and UIA) include the
+    invisible resize border Windows 10/11 draws around every window."""
+    import ctypes
+    from ctypes import wintypes
+    r = wintypes.RECT()
+    DWMWA_EXTENDED_FRAME_BOUNDS = 9
+    ctypes.windll.dwmapi.DwmGetWindowAttribute(
+        wintypes.HWND(win.handle), DWMWA_EXTENDED_FRAME_BOUNDS, ctypes.byref(r), ctypes.sizeof(r))
+    return (r.left, r.top, r.right, r.bottom)
+
+
+def window_crop(win, *extra, margin=8):
+    """The whole window, grown to take in anything (a menu) that spills out."""
+    l, t, r, b = frame(win)
+    for (el, et, er, eb) in extra:
+        if el < l: l = el - margin
+        if et < t: t = et - margin
+        if er > r: r = er + margin
+        if eb > b: b = eb + margin
+    return (max(0, l), max(0, t), r, b)
 
 
 def grab(path, crop, highlight=None, pad=4):
@@ -189,10 +226,8 @@ def context_menu_shot(name, win, item_pattern, out):
     mouse.right_click(coords=center(bar.rectangle()))
     item = menu_item(win, item_pattern)
     debug_shot(f"{name}-menu")
-    ir = item.rectangle()
-    wr = win.rectangle()
-    crop = (wr.left, wr.top, min(wr.right, ir.right + 110), min(wr.bottom, ir.bottom + 170))
-    grab(out, crop, highlight=rect_tuple(ir))
+    ir = rect_tuple(item.rectangle())
+    grab(out, window_crop(win, menu_rect(item) or ir), highlight=ir)
     return item
 
 
@@ -213,9 +248,7 @@ def search_shot(name, win, out, keyword="aflink"):
     time.sleep(2)
     debug_shot(f"{name}-query")
     dump_tree(win, f"{name}-query")
-    wr = win.rectangle()
-    crop = (wr.left, wr.top, min(wr.right, br.left + 640), min(wr.bottom, br.bottom + 290))
-    grab(out, crop, highlight=rect_tuple(br))
+    grab(out, window_crop(win), highlight=rect_tuple(br))
     keyboard.send_keys("{ESC}{ESC}")
 
 
@@ -232,16 +265,13 @@ def chrome(p, profile):
     row = settings.locator("settings-search-engine-entry", has_text=host).first
     row.scroll_into_view_if_needed()
     settings.wait_for_timeout(500)
-    tmp = args.out / "chrome-2.png"
-    settings.screenshot(path=str(tmp))
+    # Shot from the screen like the others, so it shows the whole window;
+    # the row's page coordinates are offset by where the page sits on screen.
     box = row.bounding_box()
-    from PIL import Image
-    img = Image.open(tmp)
-    l, t = int(box["x"]), int(box["y"])
-    r, b = int(box["x"] + box["width"]), int(box["y"] + box["height"])
-    ImageDraw.Draw(img).rectangle((l - 6, t - 4, r + 6, b + 4), outline=HIGHLIGHT, width=4)
-    img.crop((0, max(0, t - 330), img.width, min(img.height, b + 40))).save(tmp)
-    log(f"  wrote {tmp}")
+    dl, dt = web_origin(win)
+    hl = (dl + int(box["x"]), dt + int(box["y"]),
+          dl + int(box["x"] + box["width"]), dt + int(box["y"] + box["height"]))
+    grab(args.out / "chrome-2.png", window_crop(win), highlight=hl, pad=6)
     row.get_by_role("button", name=re.compile("activate", re.I)).click()
     settings.wait_for_timeout(1000)
     debug_shot("chrome-activated")
@@ -267,6 +297,17 @@ def edge(p, profile):
     win.set_focus()
     search_shot("edge-host", win, args.debug / "edge-host.png", keyword="aflink.us")
     ctx.close()
+
+
+def web_origin(win):
+    """Screen position of the page's top-left corner: the largest Document
+    element in the window is the web contents."""
+    def find():
+        docs = [d.rectangle() for d in win.descendants(control_type="Document")]
+        docs = [r for r in docs if r.width() > 200]
+        return max(docs, key=lambda r: r.width() * r.height()) if docs else None
+    r = wait_for(find, 10, "web contents")
+    return r.left, r.top
 
 
 def debug_page(page, name):
