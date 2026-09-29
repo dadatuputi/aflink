@@ -10,10 +10,11 @@ Meant for a GitHub-hosted windows runner (.github/workflows/tutorial-screenshots
 which has an interactive desktop and Chrome, Edge and Firefox installed.
 
     python capture.py [--site https://aflink.us] [--out ../../src/includes/img]
-                      [--debug debug/] [--only chrome,edge,firefox]
+                      [--debug debug/] [--only auto|none|chrome,edge,firefox] [--gif]
 """
 
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -348,22 +349,57 @@ def firefox(p, profile):
     ctx.close()
 
 
-def demo(p, profile):
-    """The README GIF shows the page in both themes itself, so it is recorded
-    once, in the light pass."""
-    if theme == "light":
-        demo_gif.record(p, args.site, args.demo_out)
+BROWSERS = ("chrome", "edge", "firefox")
+
+
+def browser_version(p, name):
+    if name == "firefox":   # Playwright's build, which moves with the pip package
+        b = p.firefox.launch()
+        v = b.version
+        b.close()
+        return v
+    import win32api
+    info = win32api.GetFileVersionInfo(EXES[name], "\\")
+    ms, ls = info["FileVersionMS"], info["FileVersionLS"]
+    return f"{ms >> 16}.{ms & 0xFFFF}.{ls >> 16}.{ls & 0xFFFF}"
+
+
+def major(version):
+    return version.split(".")[0] if version else None
+
+
+def pick_browsers(p):
+    """--only auto: the browsers whose major version differs from the one the
+    current screenshots were taken with (browsers.json). Minor updates are
+    security fixes; UI changes ship in majors."""
+    recorded = json.loads(args.versions.read_text()) if args.versions.exists() else {}
+    installed = {name: browser_version(p, name) for name in BROWSERS}
+    if args.only == "auto":
+        picked = [n for n in BROWSERS if major(installed[n]) != major(recorded.get(n))]
+    elif args.only == "none":
+        picked = []
+    else:
+        picked = args.only.split(",")
+    for n in BROWSERS:
+        log(f"{n}: installed {installed[n]}, screenshots from {recorded.get(n)}"
+            f" -> {'capture' if n in picked else 'skip'}")
+    return picked, installed, recorded
 
 
 def main():
     global args, theme
+    root = Path(__file__).resolve().parents[2]
     ap = argparse.ArgumentParser()
     ap.add_argument("--site", default="https://aflink.us")
-    ap.add_argument("--out", type=Path, default=Path(__file__).resolve().parents[2] / "src/includes/img")
+    ap.add_argument("--out", type=Path, default=root / "src/includes/img")
     ap.add_argument("--debug", type=Path)
-    ap.add_argument("--only", default="chrome,edge,firefox,demo")
-    ap.add_argument("--demo-out", type=Path, default=Path(__file__).resolve().parents[2] / ".github/demo.gif")
+    ap.add_argument("--only", default="auto",
+                    help="browsers to capture, 'auto' (those whose major version changed) or 'none'")
     ap.add_argument("--themes", default="light,dark")
+    ap.add_argument("--versions", type=Path, default=Path(__file__).resolve().parent / "browsers.json",
+                    help="browser versions the current screenshots were taken with")
+    ap.add_argument("--gif", action="store_true", help="also record the README demo GIF")
+    ap.add_argument("--gif-out", type=Path, default=root / ".github/demo.gif")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     if args.debug:
@@ -372,9 +408,18 @@ def main():
     log("screen", ImageGrab.grab(all_screens=True).size)
     failed = []
     with sync_playwright() as p:
-        for theme in args.themes.split(","):
+        if args.gif:
+            log("== demo gif")
+            try:
+                demo_gif.record(p, args.site, args.gif_out)
+            except Exception:
+                traceback.print_exc()
+                failed.append("demo gif")
+
+        browsers, installed, recorded = pick_browsers(p)
+        for theme in args.themes.split(",") if browsers else []:
             set_os_theme(theme == "dark")
-            for name in args.only.split(","):
+            for name in browsers:
                 log(f"== {name} ({theme})")
                 try:
                     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as profile:
@@ -383,6 +428,14 @@ def main():
                     traceback.print_exc()
                     debug_shot(f"{name}-FAILED")
                     failed.append(f"{name} ({theme})")
+
+    for name in browsers:
+        if not any(f.startswith(f"{name} ") for f in failed):
+            recorded[name] = installed[name]
+    if browsers:
+        args.versions.write_text(json.dumps(recorded, indent=2, sort_keys=True) + "\n")
+    if not browsers and not args.gif:
+        log("nothing to capture")
     if failed:
         log("FAILED:", ", ".join(failed))
         sys.exit(1)
