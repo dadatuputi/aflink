@@ -7,7 +7,12 @@ screen with Pillow. Chrome's settings page is ordinary web UI, so that one is
 taken with Playwright.
 
 Meant for a GitHub-hosted windows runner (.github/workflows/tutorial-screenshots.yml),
-which has an interactive desktop and Chrome, Edge and Firefox installed.
+which has an interactive desktop and Chrome, Edge and Firefox installed. Each
+browser is captured in Windows light and dark mode (dark shots are
+<name>-dark.png). With --only auto, only browsers whose major version differs
+from browsers.json -- the versions the current screenshots were taken with --
+are captured; the workflow widens that to all of them when the site's look
+changed.
 
     python capture.py [--site https://aflink.us] [--out ../../src/includes/img]
                       [--debug debug/] [--only auto|none|chrome,edge,firefox] [--gif]
