@@ -38,8 +38,10 @@ def record(p, site, out):
 
     hold(6)                                   # the page as it loads
     page.click("#search-form")
-    for i in range(1, len(QUERY) + 1):        # the list filters as you type
-        page.fill("#search-form", QUERY[:i])
+    for i, ch in enumerate(QUERY, 1):         # the list filters as you type
+        # real key presses: search.js filters on keyup/change, not on the
+        # input event fill() would send
+        page.keyboard.press(ch)
         hold(2 if i < len(QUERY) else 10)
     page.click("button[data-theme-choice=dark]")
     page.mouse.move(0, SIZE["height"] - 1)    # no hover state on the toggle

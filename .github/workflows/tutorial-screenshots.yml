@@ -5,8 +5,8 @@ name: Tutorial Screenshots
 # scripts/tutorial-screenshots/capture.py.
 #
 # Runs weekly but only captures what is stale, so most runs commit nothing:
-#   - everything, if the site's look (THEME_PATHS below) changed since it was
-#     last rendered
+#   - the GIF or the screenshots, if the site's look (THEME_PATHS below) or
+#     the script that makes them changed since they were last rendered
 #   - a browser's screenshots, if its major version changed since they were
 #     taken (scripts/tutorial-screenshots/browsers.json)
 
@@ -26,6 +26,10 @@ on:
       site:
         description: Site to capture
         default: https://aflink.us
+  # TEMPORARY: re-record the GIF from this branch; remove before merging
+  push:
+    branches: ["claude/festive-faraday-ty4dtn"]
+    paths: ["scripts/tutorial-screenshots/**"]
 
 permissions:
   contents: write
@@ -53,20 +57,21 @@ jobs:
           SCREENSHOTS: ${{ inputs.screenshots || 'auto' }}
           GIF: ${{ inputs.gif || 'auto' }}
         run: |
-          # true if THEME_PATHS changed since the last commit that touched $1
-          theme_changed_since() {
+          # true if THEME_PATHS or the given script changed since the last
+          # commit that touched $1
+          changed_since() {
             local last
             last=$(git log -1 --format=%H -- "$1")
-            [ -z "$last" ] || ! git diff --quiet "$last" HEAD -- $THEME_PATHS
+            [ -z "$last" ] || ! git diff --quiet "$last" HEAD -- $THEME_PATHS "$2"
           }
           case "$GIF" in
             always) gif=true ;;
             skip) gif=false ;;
-            *) if theme_changed_since .github/demo.gif; then gif=true; else gif=false; fi ;;
+            *) if changed_since .github/demo.gif scripts/tutorial-screenshots/demo.py; then gif=true; else gif=false; fi ;;
           esac
           only="$SCREENSHOTS"
           [ "$only" = all ] && only=chrome,edge,firefox
-          if [ "$only" = auto ] && theme_changed_since src/includes/img; then
+          if [ "$only" = auto ] && changed_since src/includes/img scripts/tutorial-screenshots/capture.py; then
             only=chrome,edge,firefox
           fi
           echo "gif=$gif screenshots=$only"
