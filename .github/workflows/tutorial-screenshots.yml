@@ -1,0 +1,121 @@
+name: Tutorial Screenshots
+
+# Re-captures the browser screenshots in src/tutorial.pug (light and dark) on
+# a real Windows desktop, and the README demo GIF, then commits them. See
+# scripts/tutorial-screenshots/capture.py.
+#
+# Runs weekly but only captures what is stale, so most runs commit nothing:
+#   - the GIF or the screenshots, if the site's look (THEME_PATHS below) or
+#     the script that makes them changed since they were last rendered
+#   - a browser's screenshots, if its major version changed since they were
+#     taken (scripts/tutorial-screenshots/browsers.json)
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"   # Mondays; runner images pick up new browsers weekly
+  workflow_dispatch:
+    inputs:
+      screenshots:
+        description: "Tutorial screenshots: auto (only if stale), all, none, or a list like chrome,edge"
+        default: auto
+      gif:
+        description: README demo GIF
+        type: choice
+        options: [auto, always, skip]
+        default: auto
+      site:
+        description: Site to capture
+        default: https://aflink.us
+
+permissions:
+  contents: write
+  actions: write   # to start the site build: pushes made here don't trigger it
+
+concurrency:
+  group: tutorial-screenshots-${{ github.ref }}
+
+env:
+  # What the screenshots and GIF show of the site itself
+  THEME_PATHS: src/includes/css src/includes/js src/includes/head.pug src/includes/foot.pug src/index.pug
+
+jobs:
+  capture:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # to find when each image was last rendered
+      - name: Plan
+        id: plan
+        shell: bash
+        env:
+          SCREENSHOTS: ${{ inputs.screenshots || 'auto' }}
+          GIF: ${{ inputs.gif || 'auto' }}
+        run: |
+          # true if THEME_PATHS or the given script changed since the last
+          # commit that touched $1
+          changed_since() {
+            local last
+            last=$(git log -1 --format=%H -- "$1")
+            [ -z "$last" ] || ! git diff --quiet "$last" HEAD -- $THEME_PATHS "$2"
+          }
+          case "$GIF" in
+            always) gif=true ;;
+            skip) gif=false ;;
+            *) if changed_since .github/demo.gif scripts/tutorial-screenshots/demo.py; then gif=true; else gif=false; fi ;;
+          esac
+          only="$SCREENSHOTS"
+          [ "$only" = all ] && only=chrome,edge,firefox
+          if [ "$only" = auto ] && changed_since src/includes/img scripts/tutorial-screenshots/capture.py; then
+            only=chrome,edge,firefox
+          fi
+          echo "gif=$gif screenshots=$only"
+          echo "gif=$gif" >> "$GITHUB_OUTPUT"
+          echo "only=$only" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v6
+        if: steps.plan.outputs.gif == 'true' || steps.plan.outputs.only != 'none'
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        if: steps.plan.outputs.gif == 'true' || steps.plan.outputs.only != 'none'
+        run: |
+          pip install -r scripts/tutorial-screenshots/requirements.txt
+          python -m playwright install firefox
+      - name: Set display resolution
+        if: steps.plan.outputs.only != 'none'
+        continue-on-error: true
+        shell: pwsh
+        run: Set-DisplayResolution -Width 1280 -Height 800 -Force
+      - name: Capture
+        if: steps.plan.outputs.gif == 'true' || steps.plan.outputs.only != 'none'
+        env:
+          SITE: ${{ inputs.site || 'https://aflink.us' }}
+          ONLY: ${{ steps.plan.outputs.only }}
+          GIF: ${{ steps.plan.outputs.gif }}
+        run: |
+          $gifArg = @()
+          if ($env:GIF -eq 'true') { $gifArg = @('--gif') }
+          python scripts/tutorial-screenshots/capture.py --site "$env:SITE" --only "$env:ONLY" --debug tutorial-debug @gifArg
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Upload debug output
+        if: always() && hashFiles('tutorial-debug/**') != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: tutorial-debug
+          path: tutorial-debug
+      - name: Commit screenshots
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add src/includes/img .github/demo.gif
+          [ -f scripts/tutorial-screenshots/browsers.json ] && git add scripts/tutorial-screenshots/browsers.json
+          git diff --cached --quiet && { echo "No changes"; exit 0; }
+          git commit -m "Update tutorial screenshots"
+          git push
+          if [ "${{ github.ref_name }}" = "${{ github.event.repository.default_branch }}" ]; then
+            gh workflow run build.yml --ref "${{ github.ref_name }}"
+          fi
