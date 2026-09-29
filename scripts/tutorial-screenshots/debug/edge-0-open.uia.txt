@@ -40,7 +40,7 @@ Tab            'Tab bar'                                                    '' (
 Button         'Search tabs'                                                'view_1056' (L12, T0, R44, B36)
 Pane           ''                                                           'view_25' (L40, T0, R296, B41)
 Tab            ''                                                           '' (L40, T0, R296, B41)
-TabItem        'USAF Links - Memory usage - 61.3 MB'                        'view_24' (L40, T0, R296, B41)
+TabItem        'USAF Links - Memory usage - 64.0 MB'                        'view_24' (L40, T0, R296, B41)
 Button         'Close tab'                                                  'view_27' (L264, T12, R280, B28)
 Pane           ''                                                           '' (L0, T0, R0, B0)
 Pane           ''                                                           '' (L0, T0, R0, B0)
