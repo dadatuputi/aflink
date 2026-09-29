@@ -29,7 +29,7 @@ Pane           ''                                                           '' (
 Button         'Tab search'                                                 '' (L14, T6, R42, B34)
 Pane           ''                                                           'view_21' (L36, T0, R292, B41)
 Tab            ''                                                           '' (L36, T0, R292, B41)
-TabItem        'USAF Links - Memory usage - 64.0 MB'                        'view_20' (L36, T0, R292, B41)
+TabItem        'USAF Links - Memory usage - 59.4 MB'                        'view_20' (L36, T0, R292, B41)
 Button         'Close'                                                      '' (L250, T6, R278, B34)
 Pane           ''                                                           '' (L36, T0, R292, B41)
 Button         'New Tab'                                                    '' (L286, T0, R314, B41)
