@@ -321,11 +321,19 @@ async function getNewestDate(files) {
                     // getting file from includes filter
                     text = options.filename
                 }
-                const contents = fs.readFileSync(text)
-                const type = imageType(contents)
-                const b64 = contents.toString('base64')
-                const tag = `<img ${options.class ? `class="${options.class}` : ""}" src="data:${type.mime};base64,${b64}" />`
-                return tag;
+                const img = (file, extraClass) => {
+                    const contents = fs.readFileSync(file)
+                    const type = imageType(contents)
+                    const cls = [options.class, extraClass].filter(Boolean).join(' ')
+                    return `<img${cls ? ` class="${cls}"` : ''} src="data:${type.mime};base64,${contents.toString('base64')}" />`
+                }
+                // `themed`: also inline the -dark variant (foo.png → foo-dark.png)
+                // if there is one; site.css shows whichever matches the theme
+                const dark = text.replace(/(\.[^.]+)$/, '-dark$1')
+                if (options.themed && fs.existsSync(dark)) {
+                    return img(text, 'theme-img-light') + img(dark, 'theme-img-dark')
+                }
+                return img(text);
             }
         }
 

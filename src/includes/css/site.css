@@ -681,6 +681,33 @@ section[id] {
   color: var(--band-sage-ink);
 }
 
+/* Themed images (the tutorial screenshots): the build inlines a light and a
+   dark copy (see the base64me filter's `themed` option in updater.js) and
+   these rules show the one matching the theme, on the same OS-preference and
+   explicit-override terms as the rest of the page. !important because the
+   images also carry Bootstrap's .d-block, which is !important itself. */
+.theme-img-dark {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-img-light {
+    display: none !important;
+  }
+
+  :root:not([data-theme="light"]) .theme-img-dark {
+    display: block !important;
+  }
+}
+
+:root[data-theme="dark"] .theme-img-light {
+  display: none !important;
+}
+
+:root[data-theme="dark"] .theme-img-dark {
+  display: block !important;
+}
+
 /* Theme toggle: light / dark / auto segmented control in the navbar.
    Hidden until theme-toggle.js reveals it — no-JS visitors get "auto"
    behavior for free via the prefers-color-scheme rules above. */

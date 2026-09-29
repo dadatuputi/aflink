@@ -32,6 +32,29 @@ WINDOW = (0, 0, 900, 640)     # x, y, w, h of every browser window: small, so
 QUERY = "owa"                 # typed after engaging the search engine
 
 args = None
+theme = "light"               # the theme being captured; dark shots get a -dark suffix
+
+
+def out(name):
+    """Where screenshot `name` goes for the current theme."""
+    return args.out / (f"{name}.png" if theme == "light" else f"{name}-{theme}.png")
+
+
+def set_os_theme(dark):
+    """Switch Windows between light and dark mode. Chrome, Edge and Firefox
+    take their UI theme and the page's prefers-color-scheme from this, so a
+    browser started afterwards shows the whole tutorial in that theme."""
+    import ctypes
+    import winreg
+    key = winreg.CreateKey(winreg.HKEY_CURRENT_USER,
+                           r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
+    for value in ("AppsUseLightTheme", "SystemUsesLightTheme"):
+        winreg.SetValueEx(key, value, 0, winreg.REG_DWORD, 0 if dark else 1)
+    winreg.CloseKey(key)
+    HWND_BROADCAST, WM_SETTINGCHANGE, SMTO_ABORTIFHUNG = 0xFFFF, 0x1A, 0x2
+    ctypes.windll.user32.SendMessageTimeoutW(HWND_BROADCAST, WM_SETTINGCHANGE, 0,
+                                             "ImmersiveColorSet", SMTO_ABORTIFHUNG, 5000, None)
+    time.sleep(2)
 
 
 def log(*a):
@@ -40,7 +63,7 @@ def log(*a):
 
 def debug_shot(name):
     if args.debug:
-        ImageGrab.grab(all_screens=True).save(args.debug / f"{name}.png")
+        ImageGrab.grab(all_screens=True).save(args.debug / f"{theme}-{name}.png")
 
 
 def dump_tree(win, name):
@@ -54,7 +77,7 @@ def dump_tree(win, name):
             lines.append(f"{info.control_type:<14} {info.name!r:<60} {info.automation_id!r} {el.rectangle()}")
         except Exception as e:  # elements vanish while we walk
             lines.append(f"<{e}>")
-    (args.debug / f"{name}.uia.txt").write_text("\n".join(lines), encoding="utf-8")
+    (args.debug / f"{theme}-{name}.uia.txt").write_text("\n".join(lines), encoding="utf-8")
 
 
 def wait_for(fn, timeout=10, what="element"):
@@ -190,7 +213,10 @@ class Session:
     def __init__(self, p, name, profile):
         self.proc = None
         if name == "firefox":
-            self.ctx = p.firefox.launch_persistent_context(profile, headless=False, no_viewport=True)
+            self.ctx = p.firefox.launch_persistent_context(
+                profile, headless=False, no_viewport=True,
+                # Playwright otherwise emulates a light page whatever the OS says
+                color_scheme=theme)
             return
         self.proc = subprocess.Popen([
             EXES[name], f"--user-data-dir={profile}", "--remote-debugging-port=9222",
@@ -254,7 +280,7 @@ def search_shot(name, win, out, keyword="aflink"):
 
 def chrome(p, profile):
     ctx, page, win = open_site(p, "chrome", profile)
-    context_menu_shot("chrome", win, r"manage search engines", args.out / "chrome-1.png")
+    context_menu_shot("chrome", win, r"manage search engines", out("chrome-1"))
     keyboard.send_keys("{ESC}")
 
     # The settings page is web UI: Playwright can screenshot and click it.
@@ -278,7 +304,7 @@ def chrome(p, profile):
         document.body.appendChild(d);
     }""", [box, ",".join(map(str, HIGHLIGHT))])
     settings.wait_for_timeout(300)
-    grab(args.out / "chrome-2.png", window_crop(win))
+    grab(out("chrome-2"), window_crop(win))
     settings.evaluate("document.getElementById('tutorial-highlight').remove()")
     row.get_by_role("button", name=re.compile("activate", re.I)).click()
     settings.wait_for_timeout(1000)
@@ -287,7 +313,7 @@ def chrome(p, profile):
 
     page.bring_to_front()
     win.set_focus()
-    search_shot("chrome", win, args.out / "chrome-3.png")
+    search_shot("chrome", win, out("chrome-3"))
     ctx.close()
 
 
@@ -295,27 +321,28 @@ def edge(p, profile):
     ctx, page, win = open_site(p, "edge", profile)
     # Edge's keyword for a discovered engine is the host: 'aflink' + Tab
     # just autocompletes, 'aflink.us' + Tab engages it
-    search_shot("edge", win, args.out / "edge-1.png", keyword="aflink.us")
+    search_shot("edge", win, out("edge-1"), keyword="aflink.us")
     ctx.close()
 
 
 def firefox(p, profile):
     ctx, page, win = open_site(p, "firefox", profile)
-    item = context_menu_shot("firefox", win, r"add .*aflink", args.out / "firefox-1.png")
+    item = context_menu_shot("firefox", win, r"add .*aflink", out("firefox-1"))
     item.click_input()   # actually add the engine for step 2
     time.sleep(1)
     debug_shot("firefox-added")
-    search_shot("firefox", win, args.out / "firefox-2.png")
+    search_shot("firefox", win, out("firefox-2"))
     ctx.close()
 
 
 def main():
-    global args
+    global args, theme
     ap = argparse.ArgumentParser()
     ap.add_argument("--site", default="https://aflink.us")
     ap.add_argument("--out", type=Path, default=Path(__file__).resolve().parents[2] / "src/includes/img")
     ap.add_argument("--debug", type=Path)
     ap.add_argument("--only", default="chrome,edge,firefox")
+    ap.add_argument("--themes", default="light,dark")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     if args.debug:
@@ -324,15 +351,17 @@ def main():
     log("screen", ImageGrab.grab(all_screens=True).size)
     failed = []
     with sync_playwright() as p:
-        for name in args.only.split(","):
-            log(f"== {name}")
-            try:
-                with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as profile:
-                    globals()[name](p, profile)
-            except Exception:
-                traceback.print_exc()
-                debug_shot(f"{name}-FAILED")
-                failed.append(name)
+        for theme in args.themes.split(","):
+            set_os_theme(theme == "dark")
+            for name in args.only.split(","):
+                log(f"== {name} ({theme})")
+                try:
+                    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as profile:
+                        globals()[name](p, profile)
+                except Exception:
+                    traceback.print_exc()
+                    debug_shot(f"{name}-FAILED")
+                    failed.append(f"{name} ({theme})")
     if failed:
         log("FAILED:", ", ".join(failed))
         sys.exit(1)
