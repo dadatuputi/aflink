@@ -1,7 +1,7 @@
 name: Tutorial Screenshots
 
 # Re-captures the browser screenshots in src/tutorial.pug on a real Windows
-# desktop and commits them. See scripts/tutorial-screenshots/capture.py.
+# desktop, in light and dark mode, plus the README demo GIF, and commits them. See scripts/tutorial-screenshots/capture.py.
 
 on:
   workflow_dispatch:
@@ -10,8 +10,8 @@ on:
         description: Site to capture
         default: https://aflink.us
       only:
-        description: Browsers (comma-separated)
-        default: chrome,edge,firefox
+        description: What to capture (comma-separated)
+        default: chrome,edge,firefox,demo
   # TEMPORARY: lets this branch's pushes run it, since a workflow can only be
   # dispatched once it is on the default branch; remove before merging
   push:
@@ -45,7 +45,7 @@ jobs:
       - name: Capture
         env:
           SITE: ${{ inputs.site || 'https://aflink.us' }}
-          ONLY: ${{ inputs.only || 'chrome,edge,firefox' }}
+          ONLY: ${{ inputs.only || 'chrome,edge,firefox,demo' }}
         run: python scripts/tutorial-screenshots/capture.py --site "$env:SITE" --only "$env:ONLY" --debug tutorial-debug
       - name: Upload debug output
         if: always()
@@ -60,7 +60,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
-          git add src/includes/img
+          git add src/includes/img .github/demo.gif
           git diff --cached --quiet && { echo "No changes"; exit 0; }
           git commit -m "Update tutorial screenshots"
           git push
