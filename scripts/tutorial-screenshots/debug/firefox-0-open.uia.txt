@@ -88,7 +88,7 @@ Pane           ''                                                           'pan
 Pane           ''                                                           '' (L8, T85, R1092, B752)
 Document       'USAF Links'                                                 '' (L0, T0, R0, B0)
 Group          ''                                                           '' (L0, T0, R0, B0)
-Hyperlink      'USAF Links'                                                 '' (L0, T0, R0, B0)
+Hyperlink      'USAF Links'                                                 '' (L82, T93, R241, B135)
 Image          ''                                                           '' (L82, T100, R139, B130)
 Hyperlink      'Home'                                                       '' (L370, T94, R429, B134)
 Hyperlink      'Official'                                                   '' (L429, T94, R494, B134)
