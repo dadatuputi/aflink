@@ -1,11 +1,6 @@
 {
-  "generated": "2026-10-05T18:25:53.944Z",
+  "generated": "2026-10-06T15:55:48.082Z",
   "daily": [
-    {
-      "date": "20251005",
-      "users": 643,
-      "pageviews": 2836
-    },
     {
       "date": "20251006",
       "users": 2311,
@@ -1828,196 +1823,201 @@
     },
     {
       "date": "20261005",
-      "users": 438,
-      "pageviews": 1608
+      "users": 4124,
+      "pageviews": 16346
+    },
+    {
+      "date": "20261006",
+      "users": 81,
+      "pageviews": 350
     }
   ],
   "ranges": {
     "30": {
       "totals": {
-        "users": 85781,
-        "pageviews": 369288,
-        "linkClicks": 39504
+        "users": 89011,
+        "pageviews": 382253,
+        "linkClicks": 41014
       },
       "topLinks": [
         {
           "title": "My IMR / ASIMS - Medical Readiness",
           "category": "FITNESS & HEALTH",
-          "clicks": 4284
+          "clicks": 4515
         },
         {
           "title": "Training Business Area (TBA) 2.0 (.mil only)",
           "category": "OTHER",
-          "clicks": 3689
+          "clicks": 3800
         },
         {
           "title": "AROWS (Air National Guard Reserve Order Writing System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 3238
+          "clicks": 3290
         },
         {
           "title": "Air Force Forces Generation Connect (AFFORGEN Connect)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 2481
+          "clicks": 2600
         },
         {
           "title": "vMPF (Virtual Military Personnel Flight)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 2075
+          "clicks": 2182
         },
         {
           "title": "DOTS (DoDIIS One-Way Transfer Service) - (use email cert)",
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 2049
+          "clicks": 2160
         },
         {
           "title": "Office 365 Webmail / OWA / E-mail",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 2043
+          "clicks": 2110
         },
         {
           "title": "MICT (Management Internal Control Toolset)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 1908
+          "clicks": 2000
         },
         {
           "title": "AROWS-R (AF Reserve Order Writing System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 1716
+          "clicks": 1743
         },
         {
           "title": "Military Personnel Data System (MilPDS)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 941
+          "clicks": 980
         },
         {
           "title": "Okta Portal (USAF Apps, e.g. PRDA, AMS, MyVector, etc.",
           "category": "OTHER",
-          "clicks": 835
+          "clicks": 870
         },
         {
           "title": "myFSS (My Force Support Squadron) ",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 787
+          "clicks": 806
         },
         {
           "title": "myLearning (Computer Based Training / CBTs / ADLS)",
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 695
+          "clicks": 730
         },
         {
           "title": "ATAAPS (Automated Time Attendance and Production System)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 694
+          "clicks": 702
         },
         {
           "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
           "category": "OTHER",
-          "clicks": 603
+          "clicks": 623
         },
         {
           "title": "myFitness (myFSS)",
           "category": "OTHER",
-          "clicks": 516
-        },
-        {
-          "title": "AROWS-R",
-          "category": "OTHER",
-          "clicks": 407
-        },
-        {
-          "title": "myPay | Leave and Earnings Statements (LES)",
-          "category": "FINANCE & TRAVEL",
-          "clicks": 402
+          "clicks": 536
         },
         {
           "title": "IGEMS - Inspector General Evaluation Management",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 395
+          "clicks": 424
+        },
+        {
+          "title": "myPay | Leave and Earnings Statements (LES)",
+          "category": "FINANCE & TRAVEL",
+          "clicks": 416
+        },
+        {
+          "title": "AROWS-R",
+          "category": "OTHER",
+          "clicks": 415
         },
         {
           "title": "Air Force Portal",
           "category": "OTHER",
-          "clicks": 394
+          "clicks": 412
         },
         {
           "title": "LeaveWeb",
           "category": "FINANCE & TRAVEL",
-          "clicks": 372
-        },
-        {
-          "title": "DTS (Defense Travel System)",
-          "category": "FINANCE & TRAVEL",
-          "clicks": 352
+          "clicks": 382
         },
         {
           "title": "MHS GENESIS Patient Portal (MHSG PP)",
           "category": "FITNESS & HEALTH",
-          "clicks": 343
+          "clicks": 367
+        },
+        {
+          "title": "DTS (Defense Travel System)",
+          "category": "FINANCE & TRAVEL",
+          "clicks": 363
         },
         {
           "title": "AMS (Assignment Management System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 320
+          "clicks": 343
         },
         {
           "title": "myEval (myFSS)",
           "category": "OTHER",
-          "clicks": 300
+          "clicks": 308
         }
       ],
       "categories": [
         {
           "category": "AIR FORCE INFORMATION",
-          "clicks": 9803
+          "clicks": 10209
         },
         {
           "category": "OTHER",
-          "clicks": 8554
+          "clicks": 8849
         },
         {
           "category": "PERSONNEL AND CAREER",
-          "clicks": 8208
+          "clicks": 8441
         },
         {
           "category": "FITNESS & HEALTH",
-          "clicks": 4831
-        },
-        {
-          "category": "FINANCE & TRAVEL",
-          "clicks": 2405
+          "clicks": 5092
         },
         {
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 2360
+          "clicks": 2475
+        },
+        {
+          "category": "FINANCE & TRAVEL",
+          "clicks": 2460
         },
         {
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 2040
+          "clicks": 2115
         },
         {
           "category": "LOGISTICS, INSTALLATIONS & MISSION SUPPORT",
-          "clicks": 838
+          "clicks": 878
         },
         {
           "category": "ACQUISITION",
-          "clicks": 152
+          "clicks": 156
         },
         {
           "category": "SAFETY",
-          "clicks": 110
+          "clicks": 125
         },
         {
           "category": "PUBLICATIONS & NEWS",
-          "clicks": 96
+          "clicks": 101
         },
         {
           "category": "UNOFFICIAL",
-          "clicks": 44
+          "clicks": 47
         },
         {
           "category": "WEATHER & TIME",
-          "clicks": 36
+          "clicks": 39
         },
         {
           "category": "PERFORMANCE REPORTS & FEEDBACK",
@@ -2027,189 +2027,189 @@
     },
     "90": {
       "totals": {
-        "users": 294094,
-        "pageviews": 1297700,
-        "linkClicks": 84169
+        "users": 292610,
+        "pageviews": 1288653,
+        "linkClicks": 85907
       },
       "topLinks": [
         {
           "title": "My IMR / ASIMS - Medical Readiness",
           "category": "FITNESS & HEALTH",
-          "clicks": 10608
+          "clicks": 10856
         },
         {
           "title": "Training Business Area (TBA) 2.0 (.mil only)",
           "category": "OTHER",
-          "clicks": 7728
+          "clicks": 7856
         },
         {
           "title": "AROWS (Air National Guard Reserve Order Writing System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 6428
+          "clicks": 6511
         },
         {
           "title": "Air Force Forces Generation Connect (AFFORGEN Connect)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 4915
+          "clicks": 5041
         },
         {
           "title": "Office 365 Webmail / OWA / E-mail",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 4192
-        },
-        {
-          "title": "AROWS-R (AF Reserve Order Writing System)",
-          "category": "PERSONNEL AND CAREER",
-          "clicks": 4063
+          "clicks": 4279
         },
         {
           "title": "DOTS (DoDIIS One-Way Transfer Service) - (use email cert)",
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 4003
+          "clicks": 4127
+        },
+        {
+          "title": "AROWS-R (AF Reserve Order Writing System)",
+          "category": "PERSONNEL AND CAREER",
+          "clicks": 4103
         },
         {
           "title": "vMPF (Virtual Military Personnel Flight)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 3932
+          "clicks": 4050
         },
         {
           "title": "MICT (Management Internal Control Toolset)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 3485
+          "clicks": 3580
         },
         {
           "title": "Military Personnel Data System (MilPDS)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 2051
+          "clicks": 2099
         },
         {
           "title": "Okta Portal (USAF Apps, e.g. PRDA, AMS, MyVector, etc.",
           "category": "OTHER",
-          "clicks": 1734
+          "clicks": 1773
         },
         {
           "title": "ATAAPS (Automated Time Attendance and Production System)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 1683
+          "clicks": 1693
         },
         {
           "title": "myFSS (My Force Support Squadron) ",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 1598
+          "clicks": 1624
         },
         {
           "title": "myLearning (Computer Based Training / CBTs / ADLS)",
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 1365
+          "clicks": 1400
         },
         {
           "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
           "category": "OTHER",
-          "clicks": 1293
+          "clicks": 1316
         },
         {
           "title": "myFitness (myFSS)",
           "category": "OTHER",
-          "clicks": 1134
+          "clicks": 1155
         },
         {
           "title": "AROWS-R",
           "category": "OTHER",
-          "clicks": 960
-        },
-        {
-          "title": "LeaveWeb",
-          "category": "FINANCE & TRAVEL",
-          "clicks": 889
+          "clicks": 969
         },
         {
           "title": "Air Force Portal",
           "category": "OTHER",
-          "clicks": 876
+          "clicks": 905
+        },
+        {
+          "title": "LeaveWeb",
+          "category": "FINANCE & TRAVEL",
+          "clicks": 901
         },
         {
           "title": "IGEMS - Inspector General Evaluation Management",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 855
+          "clicks": 886
         },
         {
           "title": "myPay | Leave and Earnings Statements (LES)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 842
+          "clicks": 858
         },
         {
           "title": "MHS GENESIS Patient Portal (MHSG PP)",
           "category": "FITNESS & HEALTH",
-          "clicks": 776
+          "clicks": 802
         },
         {
           "title": "AMS (Assignment Management System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 714
+          "clicks": 738
         },
         {
           "title": "DTS (Defense Travel System)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 701
+          "clicks": 716
         },
         {
           "title": "ETIMS (Enhanced Technical Information Management System) [.mil/.com]",
           "category": "LOGISTICS, INSTALLATIONS & MISSION SUPPORT",
-          "clicks": 649
+          "clicks": 659
         }
       ],
       "categories": [
         {
           "category": "AIR FORCE INFORMATION",
-          "clicks": 19867
+          "clicks": 20325
         },
         {
           "category": "OTHER",
-          "clicks": 18315
+          "clicks": 18659
         },
         {
           "category": "PERSONNEL AND CAREER",
-          "clicks": 16975
+          "clicks": 17272
         },
         {
           "category": "FITNESS & HEALTH",
-          "clicks": 11842
+          "clicks": 12122
         },
         {
           "category": "FINANCE & TRAVEL",
-          "clicks": 5351
+          "clicks": 5422
         },
         {
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 4689
+          "clicks": 4818
         },
         {
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 4149
+          "clicks": 4231
         },
         {
           "category": "LOGISTICS, INSTALLATIONS & MISSION SUPPORT",
-          "clicks": 1964
+          "clicks": 2008
         },
         {
           "category": "ACQUISITION",
-          "clicks": 339
+          "clicks": 346
         },
         {
           "category": "SAFETY",
-          "clicks": 248
+          "clicks": 263
         },
         {
           "category": "PUBLICATIONS & NEWS",
-          "clicks": 204
+          "clicks": 209
         },
         {
           "category": "UNOFFICIAL",
-          "clicks": 95
+          "clicks": 98
         },
         {
           "category": "WEATHER & TIME",
-          "clicks": 85
+          "clicks": 88
         },
         {
           "category": "PERFORMANCE REPORTS & FEEDBACK",
@@ -2219,189 +2219,189 @@
     },
     "365": {
       "totals": {
-        "users": 951534,
-        "pageviews": 4172224,
-        "linkClicks": 84169
+        "users": 952990,
+        "pageviews": 4177202,
+        "linkClicks": 85907
       },
       "topLinks": [
         {
           "title": "My IMR / ASIMS - Medical Readiness",
           "category": "FITNESS & HEALTH",
-          "clicks": 10608
+          "clicks": 10856
         },
         {
           "title": "Training Business Area (TBA) 2.0 (.mil only)",
           "category": "OTHER",
-          "clicks": 7728
+          "clicks": 7856
         },
         {
           "title": "AROWS (Air National Guard Reserve Order Writing System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 6428
+          "clicks": 6511
         },
         {
           "title": "Air Force Forces Generation Connect (AFFORGEN Connect)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 4915
+          "clicks": 5041
         },
         {
           "title": "Office 365 Webmail / OWA / E-mail",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 4192
-        },
-        {
-          "title": "AROWS-R (AF Reserve Order Writing System)",
-          "category": "PERSONNEL AND CAREER",
-          "clicks": 4063
+          "clicks": 4279
         },
         {
           "title": "DOTS (DoDIIS One-Way Transfer Service) - (use email cert)",
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 4003
+          "clicks": 4127
+        },
+        {
+          "title": "AROWS-R (AF Reserve Order Writing System)",
+          "category": "PERSONNEL AND CAREER",
+          "clicks": 4103
         },
         {
           "title": "vMPF (Virtual Military Personnel Flight)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 3932
+          "clicks": 4050
         },
         {
           "title": "MICT (Management Internal Control Toolset)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 3485
+          "clicks": 3580
         },
         {
           "title": "Military Personnel Data System (MilPDS)",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 2051
+          "clicks": 2099
         },
         {
           "title": "Okta Portal (USAF Apps, e.g. PRDA, AMS, MyVector, etc.",
           "category": "OTHER",
-          "clicks": 1734
+          "clicks": 1773
         },
         {
           "title": "ATAAPS (Automated Time Attendance and Production System)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 1683
+          "clicks": 1693
         },
         {
           "title": "myFSS (My Force Support Squadron) ",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 1598
+          "clicks": 1624
         },
         {
           "title": "myLearning (Computer Based Training / CBTs / ADLS)",
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 1365
+          "clicks": 1400
         },
         {
           "title": "DAF365 Service Portal (Unclassified Office 365 / Outlook / Teams / OneDrive",
           "category": "OTHER",
-          "clicks": 1293
+          "clicks": 1316
         },
         {
           "title": "myFitness (myFSS)",
           "category": "OTHER",
-          "clicks": 1134
+          "clicks": 1155
         },
         {
           "title": "AROWS-R",
           "category": "OTHER",
-          "clicks": 960
-        },
-        {
-          "title": "LeaveWeb",
-          "category": "FINANCE & TRAVEL",
-          "clicks": 889
+          "clicks": 969
         },
         {
           "title": "Air Force Portal",
           "category": "OTHER",
-          "clicks": 876
+          "clicks": 905
+        },
+        {
+          "title": "LeaveWeb",
+          "category": "FINANCE & TRAVEL",
+          "clicks": 901
         },
         {
           "title": "IGEMS - Inspector General Evaluation Management",
           "category": "AIR FORCE INFORMATION",
-          "clicks": 855
+          "clicks": 886
         },
         {
           "title": "myPay | Leave and Earnings Statements (LES)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 842
+          "clicks": 858
         },
         {
           "title": "MHS GENESIS Patient Portal (MHSG PP)",
           "category": "FITNESS & HEALTH",
-          "clicks": 776
+          "clicks": 802
         },
         {
           "title": "AMS (Assignment Management System)",
           "category": "PERSONNEL AND CAREER",
-          "clicks": 714
+          "clicks": 738
         },
         {
           "title": "DTS (Defense Travel System)",
           "category": "FINANCE & TRAVEL",
-          "clicks": 701
+          "clicks": 716
         },
         {
           "title": "ETIMS (Enhanced Technical Information Management System) [.mil/.com]",
           "category": "LOGISTICS, INSTALLATIONS & MISSION SUPPORT",
-          "clicks": 649
+          "clicks": 659
         }
       ],
       "categories": [
         {
           "category": "AIR FORCE INFORMATION",
-          "clicks": 19867
+          "clicks": 20325
         },
         {
           "category": "OTHER",
-          "clicks": 18315
+          "clicks": 18659
         },
         {
           "category": "PERSONNEL AND CAREER",
-          "clicks": 16975
+          "clicks": 17272
         },
         {
           "category": "FITNESS & HEALTH",
-          "clicks": 11842
+          "clicks": 12122
         },
         {
           "category": "FINANCE & TRAVEL",
-          "clicks": 5351
+          "clicks": 5422
         },
         {
           "category": "DEPARTMENT OF DEFENSE",
-          "clicks": 4689
+          "clicks": 4818
         },
         {
           "category": "EDUCATION TRAINING/ FORCE DEVELOPMENT",
-          "clicks": 4149
+          "clicks": 4231
         },
         {
           "category": "LOGISTICS, INSTALLATIONS & MISSION SUPPORT",
-          "clicks": 1964
+          "clicks": 2008
         },
         {
           "category": "ACQUISITION",
-          "clicks": 339
+          "clicks": 346
         },
         {
           "category": "SAFETY",
-          "clicks": 248
+          "clicks": 263
         },
         {
           "category": "PUBLICATIONS & NEWS",
-          "clicks": 204
+          "clicks": 209
         },
         {
           "category": "UNOFFICIAL",
-          "clicks": 95
+          "clicks": 98
         },
         {
           "category": "WEATHER & TIME",
-          "clicks": 85
+          "clicks": 88
         },
         {
           "category": "PERFORMANCE REPORTS & FEEDBACK",
