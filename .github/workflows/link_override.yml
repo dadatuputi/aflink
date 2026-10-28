@@ -186,6 +186,30 @@ jobs:
             body: fs.readFileSync('/tmp/trust_warning.md', 'utf8'),
           });
 
+    - name: Reputation scan
+      id: reputation
+      if: env.NEW_LINK != ''
+      # A scan outage must not block the submission; the weekly run retries
+      continue-on-error: true
+      env:
+        SAFE_BROWSING_KEY: ${{ secrets.SAFE_BROWSING_KEY }}
+        VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        SCAN_URL: ${{ env.NEW_LINK }}
+      run: node scripts/scan-reputation.js
+
+    - name: Warn on flagged link
+      if: fromJSON(steps.reputation.outputs.findings || '0') > 0
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: fs.readFileSync('/tmp/reputation_warning.md', 'utf8'),
+          });
+
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
