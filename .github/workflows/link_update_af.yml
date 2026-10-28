@@ -31,11 +31,13 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v7
 
-    - name: Decode new link list
+    - name: Decode and merge new link list
       run: |
-        # Prettify so commits to links_af.json produce readable diffs
-        echo "${{ env.B64 }}" | base64 -d | gzip -dc | jq . > /tmp/links_af_new.json
-        echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_new.json) links"
+        echo "${{ env.B64 }}" | base64 -d | gzip -dc > /tmp/links_af_incoming.json
+        echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_incoming.json) links from $(jq -r '.source // "an unknown page"' /tmp/links_af_incoming.json)"
+        # One page speaks only for its own links; the merge keeps the rest and
+        # deprecates links this page used to list (scripts/af-merge.js)
+        node scripts/af-merge.js src/links/links_af.json /tmp/links_af_incoming.json > /tmp/links_af_new.json
 
     - name: Compute import statistics
       run: |

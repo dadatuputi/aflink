@@ -1,0 +1,55 @@
+name: Dead-Domain Check
+
+# Weekly: records which link domains have stopped existing in public DNS.
+# Never removes a link; three failed weeks in a row only start the 180-day
+# retirement clock. See scripts/check-domains.js.
+on:
+  schedule:
+    - cron: '23 10 * * 3'   # Wednesdays 10:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Check domains
+        id: check
+        run: node scripts/check-domains.js | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Commit link health
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: src/links/link_health.json
+          message: "Update link health"
+
+      - name: Open an issue and rebuild when a domain newly dies
+        if: fromJSON(steps.check.outputs.newly_dead || '0') > 0
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Dead domains: links now retiring',
+              body: fs.readFileSync('/tmp/dead_domains.md', 'utf8'),
+              assignees: ['dadatuputi'],
+            });
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'build',
+              client_payload: { message: 'Dead domains marked' }
+            });
