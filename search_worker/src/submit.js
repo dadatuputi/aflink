@@ -114,14 +114,23 @@ async function sha256(text) {
 }
 
 // gzip + base64, the encoding the issue form already uses, so the workflow
-// decodes both routes the same way; it also keeps the dispatch input well
-// under GitHub's 64 KB cap
+// decodes both routes the same way
 async function pack(text) {
   const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'))
   const bytes = new Uint8Array(await new Response(stream).arrayBuffer())
   let binary = ''
   for (const b of bytes) binary += String.fromCharCode(b)
   return btoa(binary)
+}
+
+// GET /submission/<id>: the packed payload a submission stored, for the
+// Portal Sync workflow. Gone after a day.
+export async function handleSubmission(request, env, id) {
+  if (request.method !== 'GET') return new Response('GET only', { status: 405 })
+  if (!/^[0-9a-f]{32}$/.test(id)) return new Response('', { status: 404 })
+  const packed = await env.LINKS.get(`submit:payload:${id}`)
+  if (!packed) return new Response('', { status: 404 })
+  return new Response(packed, { status: 200, headers: { 'content-type': 'text/plain', 'cache-control': 'no-store' } })
 }
 
 // KV counters: eventually consistent, which is fine for a nuisance limit
@@ -169,6 +178,13 @@ export async function handleSubmit(request, env) {
     return json(200, { ok: true, repeated: true, count, source, message: `Already received these exact lists today. Pull requests: ${pulls}` }, origin)
   }
 
+  // The packed payload stays here for the workflow to fetch back by id:
+  // workflow_dispatch inputs are capped at 64 KB, and the lists with their
+  // descriptions are bigger than that. The id is unguessable; what it serves
+  // is link data headed for a public repository.
+  const id = crypto.randomUUID().replace(/-/g, '')
+  await env.LINKS.put(`submit:payload:${id}`, await pack(serialized), { expirationTtl: DAY })
+
   const dispatch = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${WORKFLOW}/dispatches`, {
     method: 'POST',
     headers: {
@@ -178,7 +194,7 @@ export async function handleSubmit(request, env) {
       'user-agent': 'aflink-sync-worker',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ ref: env.GITHUB_REF || 'master', inputs: { payload: await pack(serialized), source, digest: hash.slice(0, 12) } }),
+    body: JSON.stringify({ ref: env.GITHUB_REF || 'master', inputs: { payload_id: id, source, digest: hash.slice(0, 12) } }),
   })
   if (dispatch.status !== 204) {
     console.error('dispatch failed', dispatch.status, await dispatch.text())
