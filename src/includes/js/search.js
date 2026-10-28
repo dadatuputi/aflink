@@ -34,9 +34,9 @@ $(document).ready(function () {
   
   // Show modal after clicking a link
   const my_modal = new bootstrap.Modal(document.getElementById('exit-modal'), {focus: false});
-  $("#link-list .list-group-item a:first-child, #unofficial-list .list-group-item a:first-child").on('click', function(event) {
+  $("#link-list .list-group-item a.main-link, #unofficial-list .list-group-item a.main-link").on('click', function(event) {
     var href = $(this).prop('href');
-    $('#exit-modal .modal-header .title').text($(this).text());
+    $('#exit-modal .modal-header .title').text($(this).data('orig-text') || $(this).text());
     // The URL doubles as a working link: the navigation this click starts can
     // hang for a long time on a slow destination, and the modal is the only
     // thing on screen at that point. title= carries the full URL because the
@@ -64,12 +64,32 @@ $(document).ready(function () {
     my_modal.hide();
   });
 
+  // Link details: the "…" after a summary opens a dialog with the full
+  // description, filled from the row it sits in
+  const detail_modal = new bootstrap.Modal(document.getElementById('detail-modal'));
+  $('#link-list, #unofficial-list').on('click', '.summary-more', function () {
+    var $row = $(this).closest('.link-container');
+    var $a = $row.find('a.main-link');
+    var title = $a.data('orig-text') || $a.text();
+    $('#detail-modal .modal-title').text(title);
+    $('#detail-modal .meta').text($(this).data('meta') || '');
+    $('#detail-modal .description').text($(this).data('description') || $row.find('.summary-text').data('orig-text') || '');
+    $('#detail-modal .open-link').attr({ href: $a.attr('href'), title: $a.attr('href') }).data('link-title', title);
+    detail_modal.show();
+  });
+  $('#detail-modal .open-link').on('click', function () {
+    if (typeof gtag === 'function') {
+      gtag('event', 'link_click', { link_title: $(this).data('link-title'), link_url: this.href, link_category: 'DETAILS' });
+    }
+  });
+
   // Matching rules live in search-match.js, which the autocomplete worker
   // imports too — keeping address-bar suggestions and on-page results in
   // agreement. Change matching there, never here.
   var parseQuery = AflinkSearch.parseQuery;
   var matchLink = AflinkSearch.matchLink;
   var matchRanges = AflinkSearch.matchRanges;
+  var snippet = AflinkSearch.snippet;
 
   function sameText(a, b) {
     return String(a == null ? "" : a).trim().toLowerCase() ===
@@ -100,9 +120,10 @@ $(document).ready(function () {
     $a.html(html + escapeHtml(text.slice(pos)));
   }
 
-  // Remember pristine header text: search decorates headers with a highlight
-  // and a CATEGORY MATCH pill, and matching must read the original text
-  $('#link-list .category, #unofficial h2').each(function () {
+  // Remember pristine header, title and summary text: search decorates them
+  // with highlights, a CATEGORY MATCH pill or a description snippet, and
+  // matching must read the original text
+  $('#link-list .category, #unofficial h2, .main-link, .summary-text').each(function () {
     $(this).data('orig-text', $(this).text());
   });
 
@@ -118,11 +139,16 @@ $(document).ready(function () {
       // Hide everything
       $('#link-list .category, #link-list .link-container, #unofficial-list .link-container').toggle(false);
 
-      // Show links where every word matches the title or the URL,
-      // highlighting title matches
+      // Show links where every word matches the title, the URL, the category,
+      // the summary or the description. Title matches are highlighted; a
+      // match found only in the summary or description shows the matched
+      // passage in place of the summary line.
       var links = $('#link-list .link-container, #unofficial-list .link-container').filter(function(){
-        var $a = $(this).find('a:first-child');
-        var text = $a.text();
+        var $a = $(this).find('a.main-link');
+        var text = $a.data('orig-text');
+        var $summary = $(this).find('.summary-text');
+        var summaryText = $summary.data('orig-text') || '';
+        var description = $(this).find('.summary-more').data('description') || '';
         // Words can also match the row's category name ("education" shows the
         // whole category); unofficial rows have no .category sibling and match
         // as "unofficial"
@@ -130,10 +156,17 @@ $(document).ready(function () {
         var result = matchLink({
           title: text,
           url: $a.attr('href'),
-          category: $cat.length ? $cat.data('orig-text') : "unofficial"
+          category: $cat.length ? $cat.data('orig-text') : "unofficial",
+          summary: summaryText,
+          description: description
         }, words);
         if (result.matched && result.ranges.length) highlight($a, text, result.ranges);
         else $a.text(text);
+        var excerpt = result.matched && !result.ranges.length && result.inText
+          ? (snippet(summaryText, words) || snippet(description, words))
+          : null;
+        if (excerpt) highlight($summary, excerpt.text, excerpt.ranges);
+        else $summary.text(summaryText);
         return result.matched;
       })
 
@@ -142,8 +175,8 @@ $(document).ready(function () {
       // came from somewhere else (an older worker, a bookmarked ?q= URL)
       if (autocompleted && links.length) {
         var exact = links.filter(function () {
-          var $a = $(this).find('a:first-child');
-          if (!sameText($a.text(), picked.title)) return false;
+          var $a = $(this).find('a.main-link');
+          if (!sameText($a.data('orig-text'), picked.title)) return false;
           if (!picked.category) return true;
           var $c = $(this).siblings('.category');
           return sameText($c.length ? $c.data('orig-text') : AflinkSearch.UNOFFICIAL_CATEGORY, picked.category);

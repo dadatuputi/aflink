@@ -16,7 +16,7 @@ const { parseQuery, matchLink, UNOFFICIAL_CATEGORY } = globalThis.AflinkSearch
 
 // Bump when the cached entry shape changes: a deploy would otherwise keep
 // reading entries written by the previous version until the TTL expires.
-const LINKS_KEY = 'links-v2'
+const LINKS_KEY = 'links-v3'
 const LINKS_URL = 'https://aflink.us/links.json'
 const LINKS_TTL = 60 * 60     // 1 hour
 // Browsers show around ten suggestions; the rest is payload nobody reads.
@@ -32,15 +32,22 @@ function to_entries(linksData) {
       // links.json keeps deleted links so the overrides page can show them;
       // the page hides them, so they must not be suggested either
       .filter(link => !link.isDeleted)
-      .map(link => ({ title: link.title, link: link.link, cat: category.category })))
+      .map(link => entry(link, category.category)))
 
   // Unofficial links are listed and searched on the page, so they belong in
   // suggestions too. Older builds of links.json predate the key.
   const unofficial = (linksData.unofficial || [])
-    .map(link => ({ title: link.title, link: link.link, cat: UNOFFICIAL_CATEGORY }))
+    .map(link => entry(link, UNOFFICIAL_CATEGORY))
 
   return official.concat(unofficial)
 }
+
+// The page also searches each link's summary and description, so a
+// suggestion can come from them too; both ride along from links.json
+function entry(link, cat) {
+  return { title: link.title, link: link.link, cat, summary: link.summary || '', description: link.description || '' }
+}
+
 
 async function update_links(env) {
   console.log('updating links')
@@ -72,7 +79,7 @@ function search(links, term) {
   const titled = [], others = []
 
   for (const link of links) {
-    const { matched, ranges } = matchLink({ title: link.title, url: link.link, category: link.cat }, words)
+    const { matched, ranges } = matchLink({ title: link.title, url: link.link, category: link.cat, summary: link.summary, description: link.description }, words)
     if (!matched) continue
     const bucket = ranges.length ? titled : others
     bucket.push(link)

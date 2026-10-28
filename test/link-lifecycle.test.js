@@ -39,13 +39,11 @@ test('a link no page lists is deprecated, not removed, and comes back cleanly', 
   assert.equal(byId(d, 'b').deprecatedSince, undefined)
 })
 
-test('the merge drops a link once it is past retirement', () => {
+test('the merge never drops an unlisted link, however long ago the portal dropped it', () => {
   let d = applySource(file({}), APPS, { PERSONNEL: [L('a'), L('b')] }, '2026-01-01')
   d = applySource(d, APPS, { PERSONNEL: [L('a')] }, '2026-01-02')
-  d = applySource(d, APPS, { PERSONNEL: [L('a')] }, '2026-06-30')
-  assert.ok(byId(d, 'b'), 'kept through the retirement window')
-  d = applySource(d, APPS, { PERSONNEL: [L('a')] }, '2026-12-31')
-  assert.equal(byId(d, 'b'), undefined)
+  d = applySource(d, APPS, { PERSONNEL: [L('a')] }, '2027-12-31')
+  assert.equal(byId(d, 'b').deprecatedSince, '2026-01-02')
 })
 
 test('links from before source tracking belong to the old Quick Links page', () => {
@@ -84,22 +82,29 @@ test('a submission without a source is refused', () => {
   assert.throws(() => applySource(file({}), undefined, {}, '2026-01-01'), /no source/)
 })
 
-test('link status: muted while deprecated, retired after the window', () => {
-  assert.deepEqual(linkStatus(L('a'), '2026-01-01'), { deprecated: false, retired: false, note: null })
+test('link status: an unlisted link is noted, never retired', () => {
+  assert.deepEqual(linkStatus(L('a'), '2026-01-01'), { unlisted: false, dead: false, retired: false, note: null })
   const dep = L('a', { deprecatedSince: '2026-01-01' })
-  assert.ok(linkStatus(dep, '2026-01-02').deprecated)
-  assert.match(linkStatus(dep, '2026-01-02').note, /No longer listed on the AF Portal since January 1, 2026/)
-  assert.ok(!linkStatus(dep, '2026-06-30').retired)
-  assert.ok(linkStatus(dep, '2026-12-31').retired)
+  assert.ok(linkStatus(dep, '2026-01-02').unlisted)
+  assert.match(linkStatus(dep, '2026-01-02').note, /Removed from the AF Portal since January 1, 2026/)
+  assert.ok(!linkStatus(dep, '2027-12-31').retired)
   assert.equal(RETIRE_DAYS, 180)
+})
+
+test('link status: a dead domain mutes the link, then retires it after the window', () => {
+  const link = L('gone')
+  const health = { 'gone.af.mil': { seen: true, strikes: STRIKES, failingSince: '2026-01-01' } }
+  const s = linkStatus(link, '2026-02-01', health)
+  assert.ok(s.dead && !s.retired)
+  assert.ok(linkStatus(link, '2026-12-31', health).retired)
 })
 
 test('link status: a dead domain counts only at the strike limit', () => {
   const link = L('gone')
   const health = n => ({ 'gone.af.mil': { seen: true, strikes: n, failingSince: '2026-01-01' } })
-  assert.ok(!linkStatus(link, '2026-02-01', health(STRIKES - 1)).deprecated)
+  assert.ok(!linkStatus(link, '2026-02-01', health(STRIKES - 1)).dead)
   const s = linkStatus(link, '2026-02-01', health(STRIKES))
-  assert.ok(s.deprecated)
+  assert.ok(s.dead)
   assert.match(s.note, /Domain has not existed since January 1, 2026/)
 })
 

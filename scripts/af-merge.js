@@ -7,12 +7,11 @@
 // A-Z, the quick-link category pages) lists its own subset, and getlinks.js
 // submits one page at a time. So a submission only speaks for its own page.
 // Every link records the pages that list it in `sources`; a link no page lists
-// any more is kept, stamped `deprecatedSince`, and shown muted until
-// RETIRE_DAYS later (see scripts/link-status.js). `--retire` is for a page the
-// portal has removed: its links lose that source as if it were submitted empty.
+// any more is kept and stamped `deprecatedSince`, which the page shows as an
+// (i) note (see scripts/link-status.js). `--retire` is for a page the portal
+// has removed: its links lose that source as if it were submitted empty.
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { RETIRE_DAYS, daysBetween } from './link-status.js';
 
 // The old Quick Links category everything before the 2026 portal redesign came
 // from. Links with no `sources` predate source tracking and belong to it.
@@ -30,7 +29,7 @@ const categoryName = name => {
 };
 
 // Fields a submission may update on a link it lists
-const PORTAL_FIELDS = ['title', 'link', 'type', 'exitLinkReferrer', 'url', 'renderedAsFile', 'lastModified'];
+const PORTAL_FIELDS = ['title', 'link', 'type', 'exitLinkReferrer', 'url', 'renderedAsFile', 'lastModified', 'description'];
 
 // Applications A-Z emits each link's portal referrer with an empty
 // channelPageId; the quick-link feeds fill it in. Nothing on the site reads
@@ -84,11 +83,10 @@ export function applySource(current, source, incomingLinks, today) {
         if (link.sources.length === 0 && !link.deprecatedSince) link.deprecatedSince = today;
     }
 
-    // Drop links past retirement here too, so the file does not grow forever;
-    // the build applies the same cutoff between syncs.
+    // Unlisted links stay: they leave through the dead-domain check or a
+    // deletion override, never because the portal stopped listing them.
     const links = {};
     for (const { category, link } of byId.values()) {
-        if (link.deprecatedSince && daysBetween(link.deprecatedSince, today) > RETIRE_DAYS) continue;
         (links[category] ||= []).push(link);
     }
     const sorted = {};
