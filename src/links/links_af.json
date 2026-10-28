@@ -1557,7 +1557,7 @@
           "link": "https://af.ataaps.csd.disa.mil/",
           "type": "application",
           "contentId": "c88B4F00B3DF677C3013E1E28D9C8064F",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c88B4F00B3DF677C3013E1E28D9C8064F&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c88B4F00B3DF677C3013E1E28D9C8064F&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -1575,7 +1575,7 @@
           "title": "CSP (Comptroller Services Portal)",
           "link": "https://csp.cce.af.mil/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB891FC767497A90F017497C8E11F000A&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB891FC767497A90F017497C8E11F000A&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-14"
@@ -1668,7 +1668,7 @@
           "title": "LeaveWeb Direct Link (.mil only)",
           "link": "https://leave.af.mil/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15E3E4554015E3F306F060004&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15E3E4554015E3F306F060004&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -1678,7 +1678,7 @@
           "link": "https://mypay.dfas.mil",
           "type": "application",
           "contentId": "c6925EC1BEA760FB5E044080020E329A9",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BEA760FB5E044080020E329A9&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BEA760FB5E044080020E329A9&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -1982,7 +1982,7 @@
           "title": "Health Professions Education Requirements Board (HPERB)",
           "link": "https://afmilpers.us.af.mil/HPERBNet40/Default.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451D87FF90028&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451D87FF90028&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -1996,7 +1996,7 @@
           "title": "MHS GENESIS",
           "link": "https://my.mhsgenesis.health.mil/pages/home",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c44C00E3C8F10DAEF018F10F362520000&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c44C00E3C8F10DAEF018F10F362520000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -2006,7 +2006,7 @@
           "link": "https://my.mhsgenesis.health.mil/pages/home",
           "type": "application",
           "contentId": "c6925EC1B25B70FB5E044080020E329A9",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B25B70FB5E044080020E329A9&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B25B70FB5E044080020E329A9&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -2033,7 +2033,7 @@
           "link": "https://asimsimr.health.mil/imr/myIMR.aspx",
           "type": "application",
           "contentId": "cA4057E1F448EFCC80144944784100115",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cA4057E1F448EFCC80144944784100115&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cA4057E1F448EFCC80144944784100115&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -3057,7 +3057,7 @@
           "link": "https://etims.cce.af.mil/ETIMS/index",
           "type": "application",
           "contentId": "c6925EC1B2F8D0FB5E044080020E329A9",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B2F8D0FB5E044080020E329A9&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B2F8D0FB5E044080020E329A9&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -3084,7 +3084,7 @@
           "link": "https://imds.cce.af.mil/imds/",
           "type": "application",
           "contentId": "c5FDEA9F022797A00012298A035D80477",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c5FDEA9F022797A00012298A035D80477&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c5FDEA9F022797A00012298A035D80477&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -3532,7 +3532,7 @@
           "title": "AFVEC (Air Force Virtual Education Center)",
           "link": "https://afvec.us.af.mil/afvec/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B62490FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B62490FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3542,7 +3542,7 @@
           "link": "https://envision.af.mil/afc",
           "type": "application",
           "contentId": "cEF1DF99C8442F4660184431D0F220000",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cEF1DF99C8442F4660184431D0F220000&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cEF1DF99C8442F4660184431D0F220000&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -3560,7 +3560,7 @@
           "title": "Air Force Officer Qualification Test Score (AFOQTS)",
           "link": "https://afmilpers.us.af.mil/AFOQTSNet40/AuthenticateTCOUser.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B3D2A0FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B3D2A0FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -3588,7 +3588,7 @@
           "title": "AMS (Assignment Management System)",
           "link": "https://ams.us.af.mil/AMSNet40/Default.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B5DDC0FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B5DDC0FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3602,7 +3602,7 @@
           "title": "ARCNet",
           "link": "https://arcnet.sso.cce.af.mil/arcnet",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cF575FC8E236E61F10123AA5ED3A81517&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cF575FC8E236E61F10123AA5ED3A81517&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3616,7 +3616,7 @@
           "title": "ARMS (Automated Records Management System)",
           "link": "https://armslc.us.af.mil/ArmsWeb/Default.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B94590FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B94590FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -3630,7 +3630,7 @@
           "title": "AROWS (Air National Guard Reserve Order Writing System)",
           "link": "https://arows.dc3n.navy.mil/arows/secure/login.jsp",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B712A0FB5E044080020E329A9&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B712A0FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3709,7 +3709,7 @@
           "title": "CMS (Case Management System)",
           "link": "https://cms.us.af.mil/CMSNet40/AuthenticateUser.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B86B80FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B86B80FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -3749,7 +3749,7 @@
           "title": "EPROM (Virtual Enlisted Promotion Release)",
           "link": "https://afmilpers.us.af.mil/epromnet40/EPromMain.aspxv",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cAF429CFD9302A5F4019302CBCEB50001&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cAF429CFD9302A5F4019302CBCEB50001&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -3789,7 +3789,7 @@
           "title": "JKO (Joint Knowledge Online)",
           "link": "https://www.jcs.mil/JKO/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c2D8EB9D6367962C80136AD2676A906FD&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c2D8EB9D6367962C80136AD2676A906FD&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3803,7 +3803,7 @@
           "title": "MICT (Management Internal Control Toolset) (.mil only)",
           "link": "https://mict.cce.af.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BA4480FB5E044080020E329A9&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BA4480FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3817,7 +3817,7 @@
           "title": "milConnect",
           "link": "https://milconnect.dmdc.osd.mil/milconnect/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE3494DD047ABF89A0147B1D3D6D9015F&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE3494DD047ABF89A0147B1D3D6D9015F&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3840,7 +3840,7 @@
           "link": "https://milpds-prod.csd.disa.mil/",
           "type": "application",
           "contentId": "cC9710F917ACF63FE017ACF6692BB0000",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cC9710F917ACF63FE017ACF6692BB0000&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cC9710F917ACF63FE017ACF6692BB0000&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -3897,7 +3897,7 @@
           "title": "MyBiz+ [.mil]",
           "link": "https://compo.dcpds.cpms.osd.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B98880FB5E044080020E329A9&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B98880FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-26"
@@ -3911,7 +3911,7 @@
           "title": "myDecs (Decorations and Medals)",
           "link": "https://myfss.us.af.mil/USAFCommunity/s/mydecs-reimagined",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB8C9E057815D985101815DA2CE110000&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB8C9E057815D985101815DA2CE110000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -3926,7 +3926,7 @@
           "title": "myEval (Evaluation Management)",
           "link": "https://myfss.us.af.mil/USAFCommunity/s/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c2832F169815D983D01815DA0174F0000&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c2832F169815D983D01815DA0174F0000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3942,7 +3942,7 @@
           "title": "myFitness",
           "link": "https://myfss.us.af.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c12916C787AC9990E017AC9A841820000&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c12916C787AC9990E017AC9A841820000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3958,7 +3958,7 @@
           "title": "myFSS (My Force Support Squadron) ",
           "link": "https://myfss.us.af.mil/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c12916C787AC9990E017AC9AB20410004&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c12916C787AC9990E017AC9AB20410004&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3973,7 +3973,7 @@
           "title": "OKTA  (Personnel Applications)",
           "link": "https://af.okta.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB891FC769302A5F1019302B162E90000&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cB891FC769302A5F1019302B162E90000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -3987,7 +3987,7 @@
           "title": "Palace Chase - Early Separation Provision",
           "link": "https://myfss.us.af.mil/USAFCommunity/s/knowledge-detail?pid=kA0t0000000LHrTCAW",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE28A64BE92E8E60D0192E9186C4C0000&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE28A64BE92E8E60D0192E9186C4C0000&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4001,7 +4001,7 @@
           "title": "Palace Front - Seamless transition to the Air Reserve Component ",
           "link": "https://myfss.us.af.mil/USAFCommunity/s/knowledge-detail?pid=kA0t0000000LHrQCAW",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE28A64BE92E8E60D0192E91BB42F0004&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cE28A64BE92E8E60D0192E91BB42F0004&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4041,7 +4041,7 @@
           "title": "Personnel Accounting Symbol Code (PasCodes) Lookup",
           "link": "https://afmilpers.us.af.mil/PasCodesNet40/PasCodesMain.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DA9FF9002C&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DA9FF9002C&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4055,7 +4055,7 @@
           "title": "PERSTEMPO",
           "link": "https://afmilpers.us.af.mil/PersTempoNet40/PersTempoContents.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DCA5E20036&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DCA5E20036&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4082,7 +4082,7 @@
           "title": "Reserve Vacancies",
           "link": "https://afmilpers.us.af.mil/RMVSNet40/SelectVacancies.aspx?iss=https%3A%2F%2Faf.okta.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15EF785FE016079EEE9FD1C73&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15EF785FE016079EEE9FD1C73&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4096,7 +4096,7 @@
           "title": "RMVS (Reserve Management Vacancy System)",
           "link": "https://afmilpers.us.af.mil/RMVSNet40/RmvsMain.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c0ECF2BB857339DFC015754CA85EB003B&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c0ECF2BB857339DFC015754CA85EB003B&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4136,7 +4136,7 @@
           "title": "TEMPO Management and Tracking System (TMTS)",
           "link": "https://afmilpers.us.af.mil/RMVSNet40/SelectVacancies.aspx?iss=https%3A%2F%2Faf.okta.mil",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DE8B33003E&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6D14419A94503E50019451DE8B33003E&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4177,7 +4177,7 @@
           "title": "vMPF (Virtual Military Personnel Flight)",
           "link": "https://af.okta.mil/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B3FD60FB5E044080020E329A9&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B3FD60FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-04-03"
@@ -4191,7 +4191,7 @@
           "title": "VOP (Virtual Out Processing)",
           "link": "https://vmpf.us.af.mil/vMPFNet40/Hub.aspx",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15EF785FE01607A0E72001C82&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A15EF785FE01607A0E72001C82&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-01-13"
@@ -4205,7 +4205,7 @@
           "title": "vPSC (virtual Personnel Services Center) (formerly PRDA)",
           "link": "https://vpscrba.us.af.mil/vpsc_rba/prdaIndex.xhtml",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BAF610FB5E044080020E329A9&channelPageId=s6925EC1356510FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1BAF610FB5E044080020E329A9&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-02-21"
@@ -4703,7 +4703,7 @@
           "link": "https://usaf.percipio.com/",
           "type": "application",
           "contentId": "cFE3B28A190A28A030190A2AE62FF0000",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cFE3B28A190A28A030190A2AE62FF0000&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=cFE3B28A190A28A030190A2AE62FF0000&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
@@ -4800,7 +4800,7 @@
           "title": "myLearning",
           "link": "https://lms-jets.cce.af.mil/moodle/",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c001A94037846B9B6017846E50E9F0002&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c001A94037846B9B6017846E50E9F0002&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2025-05-19"
@@ -4815,7 +4815,7 @@
           "title": "MyVector",
           "link": "https://myvector.us.af.mil/myvector",
           "type": "application",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A148330A54014842D98A0D0D18&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c330D98A148330A54014842D98A0D0D18&channelPageId",
           "url": true,
           "renderedAsFile": false,
           "lastModified": "2026-06-03"
@@ -4853,7 +4853,7 @@
           "link": "https://dtsproweb.defensetravel.osd.mil/dts-app/pubsite/all/view",
           "type": "application",
           "contentId": "c6925EC1B41DB0FB5E044080020E329A9",
-          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B41DB0FB5E044080020E329A9&channelPageId=s6925EC13564F0FB5E044080020E329A9",
+          "exitLinkReferrer": "https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=c6925EC1B41DB0FB5E044080020E329A9&channelPageId",
           "renderedAsFile": false,
           "url": true,
           "sources": [
