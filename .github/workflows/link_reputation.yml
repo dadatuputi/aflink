@@ -1,0 +1,65 @@
+name: Link Reputation Scan
+
+# Weekly malware/phishing check of every served link outside .mil/.gov,
+# unofficial links included (scripts/scan-reputation.js). Submissions are
+# scanned inline by link_add and link_override; this catches sites that go
+# bad after they were added. A hit opens a `reputation-alert` issue, or
+# comments on the one already open.
+#
+# The two sources run as separate passes, one after the other: Safe Browsing
+# answers in one request, so its alert goes out in seconds; VirusTotal is
+# throttled to its free tier (4 lookups/min) and takes ~15s per host.
+on:
+  schedule:
+    - cron: '23 10 * * 1'   # Mondays 10:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  scan:
+    name: Scan (${{ matrix.source }})
+    runs-on: ubuntu-latest
+    strategy:
+      # In order, one at a time: Google alerts first and the passes never race
+      # to open the alert issue. One failing must not cancel the other.
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        source: [google, virustotal]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Reputation scan
+        id: scan
+        env:
+          SAFE_BROWSING_KEY: ${{ secrets.SAFE_BROWSING_KEY }}
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        run: |
+          set -o pipefail
+          node scripts/scan-reputation.js --source=${{ matrix.source }} | tee -a $GITHUB_STEP_SUMMARY
+
+      - name: Open or update alert issue
+        if: fromJSON(steps.scan.outputs.findings || '0') > 0
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/reputation_warning.md', 'utf8') +
+              `\n\n[Scan run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+            const label = 'reputation-alert';
+            try {
+              await github.rest.issues.createLabel({ ...context.repo, name: label, color: 'd93f0b',
+                description: 'A served link was flagged by the weekly reputation scan' });
+            } catch (e) {
+              if (e.status !== 422) throw e; // 422: label already exists
+            }
+            const { data: open } = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: label });
+            if (open.length) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: open[0].number, body });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title: 'Link reputation alert', labels: [label], body });
+            }
