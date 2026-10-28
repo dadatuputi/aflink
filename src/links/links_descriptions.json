@@ -934,370 +934,492 @@
       "summary": "Search Air Force awards and recognition programs"
     },
     "c88B4F00B439D7EF80143DE8BB44E0947": {
-      "summary": "Acquisition workforce career management: certifications and development"
+      "summary": "Acquisition workforce career management: certifications and development",
+      "description": "The Department of the Air Force acquisition career management site covers certification requirements, continuous learning and development opportunities for the acquisition workforce."
     },
     "c88B4F00B42819409014294C62CE50072": {
-      "summary": "Ramstein's Deployment Transition Center for Airmen returning from deployment"
+      "summary": "Ramstein's Deployment Transition Center for Airmen returning from deployment",
+      "description": "The Deployment Transition Center at Ramstein AB runs a short reintegration program for Airmen coming home from high-risk deployments."
     },
     "c896B5E1D7AED258D017AED6808900001": {
-      "summary": "Air Force PKI program office: certificates, tools and guidance"
+      "summary": "Air Force PKI program office: certificates, tools and guidance",
+      "description": "The Air Force PKI System Program Office publishes certificate tools, trust chains and guidance for CAC and server certificates."
     },
     "c12916C786D1C5818016D1C83D1EF000F": {
-      "summary": "Resilience resources: mental, physical, social and spiritual fitness"
+      "summary": "Resilience resources: mental, physical, social and spiritual fitness",
+      "description": "The Air Force resilience site gathers programs and contacts for mental, physical, social and spiritual fitness, including help lines."
     },
     "c2DA148127A103425017A1043660C0000": {
-      "summary": "Account for yourself and your family after a disaster or evacuation"
+      "summary": "Account for yourself and your family after a disaster or evacuation",
+      "description": "AFPAAS lets Airmen, civilians and their families report their status and needs after a natural disaster or evacuation, and lets commanders account for everyone."
     },
     "c88B4F00B41D2F51E01426D2B6ABE1288": {
-      "summary": "Air Force doctrine publications and annexes"
+      "summary": "Air Force doctrine publications and annexes",
+      "description": "The Curtis E. LeMay Center's doctrine site holds Air Force basic doctrine and the doctrine annexes by operation type."
     },
     "c587B5C0971EB29AA0171EB5BB4740000": {
-      "summary": "Equal opportunity policy and how to report discrimination or harassment"
+      "summary": "Equal opportunity policy and how to report discrimination or harassment",
+      "description": "The Air Force Equal Opportunity office explains policy on discrimination and harassment and how to file a complaint."
     },
     "c0A43E6776B4C6ED5016B51ACE175003F": {
-      "summary": "Cybersecurity and information assurance group on the portal"
+      "summary": "Cybersecurity and information assurance group on the portal",
+      "description": "A portal group for cybersecurity and information assurance practitioners, with policy updates and shared documents."
     },
     "c88B4F00B41D2F51E01426D23CE79127E": {
-      "summary": "Air Force lessons learned reports and observations"
+      "summary": "Air Force lessons learned reports and observations",
+      "description": "The Air Force Lessons Learned program publishes observations and reports from operations and exercises for planners and units."
     },
     "cE3494DD04562FCC901456C35338701B0": {
-      "summary": "Air Force survey office: approved surveys and how to request one"
+      "summary": "Air Force survey office: approved surveys and how to request one",
+      "description": "The Air Force Survey Office lists approved surveys and explains how to get a survey licensed before sending it to Airmen."
     },
     "cE66807CD701B3F2401701B5E5F180007": {
-      "summary": "Air Force tactics, techniques and procedures library (Intelink)"
+      "summary": "Air Force tactics, techniques and procedures library (Intelink)",
+      "description": "The 561st Joint Tactics Squadron's library of Air Force tactics, techniques and procedures, hosted on Intelink."
     },
     "c88B4F00B41D2F51E01426D2540821282": {
-      "summary": "Uniform policy, wear guidance and upcoming changes"
+      "summary": "Uniform policy, wear guidance and upcoming changes",
+      "description": "The Air Force Uniform Office site covers uniform policy, wear guidance and announced changes for all uniform items."
     },
     "cA07285AC6833453301683373C02A0007": {
-      "summary": "Getting started with Cloud One hosting"
+      "summary": "Getting started with Cloud One hosting",
+      "description": "Cloud One Kickstart walks program offices through getting an application hosted on the Air Force's Cloud One environment."
     },
     "c22794EF377829A69017782C40D7A000F": {
-      "summary": "Exam vouchers and fees for cyber workforce certifications (8570/8140)"
+      "summary": "Exam vouchers and fees for cyber workforce certifications (8570/8140)",
+      "description": "CWIP pays exam vouchers and maintenance fees for cybersecurity certifications required under DoD 8570 and 8140."
     },
     "cB891FC7689928316018992B15E2A0000": {
-      "summary": "Request DAF IT services and solutions through Front Door"
+      "summary": "Request DAF IT services and solutions through Front Door",
+      "description": "Front Door is the single place to request enterprise IT solutions and services from the Department of the Air Force."
     },
     "c2981A03574BBECA60174BC1410940000": {
-      "summary": "Inspector General inspection reports and evaluation management"
+      "summary": "Inspector General inspection reports and evaluation management",
+      "description": "IGEMS holds Inspector General inspection results, deficiencies and corrective actions for units and MAJCOM IG teams."
     },
     "cE9635A5D7EDA145D017EDA3D71FC0004": {
-      "summary": "Self-service portal for A1 personnel functions and applications"
+      "summary": "Self-service portal for A1 personnel functions and applications",
+      "description": "myFSS is the customer relationship management portal for A1 personnel services: cases, knowledge articles and the myFSS applications."
     },
     "c8E6C53307F230925017F23559DF40115": {
-      "summary": "Predictive maintenance analytics (condition-based maintenance plus)"
+      "summary": "Predictive maintenance analytics (condition-based maintenance plus)",
+      "description": "PANDA applies predictive analytics to maintenance data for condition-based maintenance plus (CBM+) decisions."
     },
     "c0ECF2BB844B63A250144B675FD100002": {
-      "summary": "Official biographies of Air Force senior leaders"
+      "summary": "Official biographies of Air Force senior leaders",
+      "description": "Official biographies of Air Force general officers and senior civilian and enlisted leaders on af.mil."
     },
     "cE3494DD052E520CF0152F4D9F47A011D": {
-      "summary": "Share your Air Force story with public affairs"
+      "summary": "Share your Air Force story with public affairs",
+      "description": "A public affairs site for submitting stories and photos about Airmen and units for Air Force outreach."
     },
     "c78CDB8068894E2170188962440CF000F": {
-      "summary": "Combatives center of excellence SharePoint: training and instructors"
+      "summary": "Combatives center of excellence SharePoint: training and instructors",
+      "description": "The Air Force Combatives Program Center of Excellence SharePoint, with training material and instructor information."
     },
     "cE66807CD80D7E9D00180D7FFC2E30000": {
-      "summary": "USAF digital engineering guide (AFMC)"
+      "summary": "USAF digital engineering guide (AFMC)",
+      "description": "The USAF Digital Guide is AFMC's reference for digital engineering practices, tools and terms."
     },
     "c330D98A15B059EB0015B49136E5B03BB": {
-      "summary": "Multi-service tactics, techniques and procedures publications"
+      "summary": "Multi-service tactics, techniques and procedures publications",
+      "description": "The Air Land Sea Space Application Center writes multi-service tactics, techniques and procedures used by all the services."
     },
     "c0ECF2BB8451FAFE501453DDB51030369": {
-      "summary": "Defense Travel Dispatch newsletter, Spring 2018 issue"
+      "summary": "Defense Travel Dispatch newsletter, Spring 2018 issue",
+      "description": "An issue of the Defense Travel Dispatch newsletter from spring 2018, covering DTS changes and travel policy notes."
     },
     "c2D8EB9D6439D82960143D44988741355": {
-      "summary": "Department of Defense news and official site"
+      "summary": "Department of Defense news and official site",
+      "description": "The Department of Defense's official site: news, leadership, releases and contracts."
     },
     "c2D8EB9D6439D82960143D45011A51357": {
-      "summary": "DoD forms library (DD forms)"
+      "summary": "DoD forms library (DD forms)",
+      "description": "The DoD forms library, where every DD form is published by the Washington Headquarters Services."
     },
     "c2D8EB9D6439D82960143D450D9A11359": {
-      "summary": "DoD instructions, directives and manuals"
+      "summary": "DoD instructions, directives and manuals",
+      "description": "The DoD issuances site publishes current DoD directives, instructions and manuals."
     },
     "c1D231AFA7653680D0176539159A30001": {
-      "summary": "Security cooperation training and courses"
+      "summary": "Security cooperation training and courses",
+      "description": "The Defense Security Cooperation University trains the security cooperation workforce and publishes its course catalog here."
     },
     "c0ECF2BB84AE5734F014AFEDA85F40375": {
-      "summary": "Find off-base housing near military installations"
+      "summary": "Find off-base housing near military installations",
+      "description": "HOMES.mil lists off-base rental housing near installations, with landlord listings reviewed by housing offices."
     },
     "c330D98A143D937EF0143D9CA4D9E002A": {
-      "summary": "Intelligence community collaboration portal (Intelink)"
+      "summary": "Intelligence community collaboration portal (Intelink)",
+      "description": "Intelink is the intelligence community's collaboration network, with search, SharePoint sites and wikis across agencies."
     },
     "cE3494DD05C7ED435015CE520ED3407BF": {
-      "summary": "Transition Assistance Program courses and checklist for separation"
+      "summary": "Transition Assistance Program courses and checklist for separation",
+      "description": "The DoD Transition Assistance Program site hosts the pre-separation courses, counseling checklist and resources for leaving service."
     },
     "c47D80A936657DA47016659254043003D": {
-      "summary": "Nuclear deterrence research and education at Air University"
+      "summary": "Nuclear deterrence research and education at Air University",
+      "description": "The Center for Strategic Deterrence Studies at Air University researches and teaches nuclear deterrence and counter-WMD topics."
     },
     "cE3494DD04C7C2F3E014CE765587B0E43": {
-      "summary": "Language Enabled Airman Program: eligibility, training and application"
+      "summary": "Language Enabled Airman Program: eligibility, training and application",
+      "description": "The Language Enabled Airman Program develops language and culture skills in volunteers through training events and online courses."
     },
     "cD22E51847AC81871017AC95725C10006": {
-      "summary": "Resources for Air Force instructors and training developers"
+      "summary": "Resources for Air Force instructors and training developers",
+      "description": "A resource site for Air Force instructors, curriculum developers and training managers."
     },
     "c330D98A143D937EF0143DEA65DEC0082": {
-      "summary": "Personnel Reliability Program policy and resources"
+      "summary": "Personnel Reliability Program policy and resources",
+      "description": "The Personnel Reliability Program page covers policy and procedures for certifying people with nuclear weapons duties."
     },
     "c44C00E3C80D7B2F30180D7C95D440001": {
-      "summary": "Culture, region and language training from AFCLC"
+      "summary": "Culture, region and language training from AFCLC",
+      "description": "The Air Force Culture and Language Center offers culture, region and language courses and resources for all Airmen."
     },
     "c2D8EB9D643DF92570143E4EBCC83004C": {
-      "summary": "Study guides for promotion testing (AFH 1)"
+      "summary": "Study guides for promotion testing (AFH 1)",
+      "description": "Air Force Handbook 1 study guides, the material behind the promotion fitness and USAF supervisory exams."
     },
     "c330D98A149CA5AFC014A34DF265010F9": {
-      "summary": "Graduate degrees and professional continuing education at AFIT"
+      "summary": "Graduate degrees and professional continuing education at AFIT",
+      "description": "The Air Force Institute of Technology offers graduate degrees and professional continuing education in engineering, management and cyber."
     },
     "c630629996CFCCD2F016CFD032EA50012": {
-      "summary": "Training videos made for Airmen, on milSuite"
+      "summary": "Training videos made for Airmen, on milSuite",
+      "description": "Airman Focused Training Videos is a milSuite group collecting short training videos made by and for Airmen."
     },
     "c742E16CC661A0DF601661BDEDC5D007C": {
-      "summary": "Cyber education and research at Air University"
+      "summary": "Cyber education and research at Air University",
+      "description": "The Air Force Cyber College at Air University delivers cyber education and research for leaders and practitioners."
     },
     "c330D98A150FC7496015124FD0A0801C7": {
-      "summary": "Aircrew flight records and currency summary (ARMS)"
+      "summary": "Aircrew flight records and currency summary (ARMS)",
+      "description": "The ARMS Aircrew Summary shows aircrew members their flight records, currencies and qualifications online."
     },
     "c88B4F00B439D7EF80143DE96FDBA094B": {
-      "summary": "The Chief of Staff's leadership library and reading list"
+      "summary": "The Chief of Staff's leadership library and reading list",
+      "description": "The Chief of Staff's leadership library, with the current reading list and notes on each selection."
     },
     "c742E16CC6BE19053016BE76DC2900047": {
-      "summary": "CCAF degree programs, transcripts and graduation requirements"
+      "summary": "CCAF degree programs, transcripts and graduation requirements",
+      "description": "The Community College of the Air Force site covers degree programs, transcripts and graduation requirements for enlisted members."
     },
     "cE3494DD05EF785CA015FDF1A8FDB0E19": {
-      "summary": "Continuum of Learning: how Air Force education and training fit together"
+      "summary": "Continuum of Learning: how Air Force education and training fit together",
+      "description": "AETC's Continuum of Learning explains how education, training and experience fit together across an Airman's career."
     },
     "cE3494DD0590D665D015A299A20201694": {
-      "summary": "Defense Acquisition University courses and certifications"
+      "summary": "Defense Acquisition University courses and certifications",
+      "description": "The Defense Acquisition University provides the courses and certifications required of the acquisition workforce."
     },
     "cA884EF176657DA4101665926C8680024": {
-      "summary": "Deterrence research articles and knowledge center"
+      "summary": "Deterrence research articles and knowledge center",
+      "description": "The Deterrence Research Knowledge Center collects research and reference material on deterrence from Air University."
     },
     "c2D4C4C1A6D3A62A1016D3A7AC5480000": {
-      "summary": "Catalog of developmental special experiences for officers"
+      "summary": "Catalog of developmental special experiences for officers",
+      "description": "The Developmental Special Experiences catalog lists the career-broadening assignments and programs open to officers."
     },
     "c88B4F00B439D7EF80143E393719A09C9": {
-      "summary": "Financial management distance learning courses"
+      "summary": "Financial management distance learning courses",
+      "description": "The Financial Management Distributed Learning Center delivers online finance and comptroller training courses."
     },
     "cFE3B28A175F5A2AE0175F5B9A99A0003": {
-      "summary": "Force development gateway: programs, boards and guidance"
+      "summary": "Force development gateway: programs, boards and guidance",
+      "description": "The Force Development Gateway gathers force development programs, boards, guidance and points of contact in one place."
     },
     "c88B4F00B439D7EF80143E396587109CB": {
-      "summary": "Joint Knowledge Online course catalog and learning management"
+      "summary": "Joint Knowledge Online course catalog and learning management",
+      "description": "Joint Knowledge Online's learning content management system hosts the joint training course catalog and records."
     },
     "cFAD7CF8C703A935801703ABF886F0001": {
-      "summary": "Language training resources for LEAP scholars"
+      "summary": "Language training resources for LEAP scholars",
+      "description": "LEaDeR provides language training resources and planning tools for Language Enabled Airman Program scholars."
     },
     "cE856B8F77F6AEB34017F6B1907E60012": {
-      "summary": "AFIMSC virtual support center for installation support questions"
+      "summary": "AFIMSC virtual support center for installation support questions",
+      "description": "LAUNCH is AFIMSC's virtual support center for installation and mission support questions, forms and guidance."
     },
     "c0ECF2BB849CA63100149CE47B56100AA": {
-      "summary": "Find a mentor or mentee through AFVEC"
+      "summary": "Find a mentor or mentee through AFVEC",
+      "description": "The mentoring feature in AFVEC matches Airmen with mentors and records mentoring relationships."
     },
     "c1326C1EE74A22CF20174A24CA80F0001": {
-      "summary": "Total Force training records and requirements (.mil)"
+      "summary": "Total Force training records and requirements (.mil)",
+      "description": "My Training shows Total Force members their training requirements and records. .mil network only."
     },
     "c001A94037846B9B6017846E664520006": {
-      "summary": "Required training courses and your training record (formerly ADLS)"
+      "summary": "Required training courses and your training record (formerly ADLS)",
+      "description": "myLearning replaced ADLS as the Air Force's online course platform, hosting required training and your training record."
     },
     "cE3494DD050FC730801511C7D2FA50253": {
-      "summary": "Required training courses and your training record (formerly ADLS)"
+      "summary": "Required training courses and your training record (formerly ADLS)",
+      "description": "myLearning replaced ADLS as the Air Force's online course platform, hosting required training and your training record."
     },
     "c2D8EB9D643DF92570143E4E836520048": {
-      "summary": "Noncommissioned Officer Academy locations and courses"
+      "summary": "Noncommissioned Officer Academy locations and courses",
+      "description": "The Barnes Center's list of Noncommissioned Officer Academy locations and their course information."
     },
     "cE3494DD0508371E80150903A59870116": {
-      "summary": "Profession of arms resources: leadership and Airman development"
+      "summary": "Profession of arms resources: leadership and Airman development",
+      "description": "The Profession of Arms Center of Excellence publishes resources on leadership, character and Airman development."
     },
     "cE856B8F77F6AEB34017F6AFE44030003": {
-      "summary": "Red Vector technical training courses for AFIMSC"
+      "summary": "Red Vector technical training courses for AFIMSC",
+      "description": "Red Vector provides online technical training courses, offered through AFIMSC for installation support personnel."
     },
     "c2D8EB9D643DF92570143E4ECE5EE004E": {
-      "summary": "Self Aid Buddy Care course"
+      "summary": "Self Aid Buddy Care course",
+      "description": "The Self Aid Buddy Care course, the first-aid training every Airman completes, as hosted on ADLS."
     },
     "c8E6C533077697F430177699BB0B90001": {
-      "summary": "Negotiation training and resources from Air University"
+      "summary": "Negotiation training and resources from Air University",
+      "description": "The Air Force Negotiation Center at Air University teaches negotiation skills and publishes training material."
     },
     "c330D98A1533E3BE00153BD6EE09400DC": {
-      "summary": "367th Training Support Squadron course catalog in myLearning"
+      "summary": "367th Training Support Squadron course catalog in myLearning",
+      "description": "The 367th Training Support Squadron's Griffin Catalog of courses, hosted in myLearning."
     },
     "cE3494DD05B059E1A015B169D1C600088": {
-      "summary": "Transgender awareness training slides (face to face version)"
+      "summary": "Transgender awareness training slides (face to face version)",
+      "description": "Slides for the face-to-face version of the transgender awareness training."
     },
     "c2D8EB9D643DF92570143E4F125780054": {
-      "summary": "USAF Expeditionary Center: courses and expeditionary training"
+      "summary": "USAF Expeditionary Center: courses and expeditionary training",
+      "description": "The USAF Expeditionary Center at Joint Base McGuire-Dix-Lakehurst trains Airmen in expeditionary skills and mobility operations."
     },
     "c2D8EB9D643DF92570143E4F26ECE0056": {
-      "summary": "First Sergeant Academy course information"
+      "summary": "First Sergeant Academy course information",
+      "description": "The First Sergeant Academy at the Barnes Center prepares senior NCOs for first sergeant duty."
     },
     "c2D8EB9D643DF92570143E4F82C1A005A": {
-      "summary": "USAF Special Operations School courses"
+      "summary": "USAF Special Operations School courses",
+      "description": "The USAF Special Operations School teaches special operations and irregular warfare courses at Hurlburt Field."
     },
     "c2D8EB9D64456E2DC014474A8C54D083B": {
-      "summary": "Virtual Force Development Center: developmental education and boards"
+      "summary": "Virtual Force Development Center: developmental education and boards",
+      "description": "The virtual Force Development Center explains developmental education, boards and nomination processes for officers and civilians."
     },
     "c330D98A150FC749601512505C67301D5": {
-      "summary": "Verify your military experience and training for civilian employers"
+      "summary": "Verify your military experience and training for civilian employers",
+      "description": "VMET translates military experience and training into civilian terms for separating members to show employers."
     },
     "c0ECF2BB851EE903001521316ADDD01A2": {
-      "summary": "Look up basic allowance for housing rates by ZIP code and grade"
+      "summary": "Look up basic allowance for housing rates by ZIP code and grade",
+      "description": "The BAH rate lookup gives basic allowance for housing rates by duty ZIP code, pay grade and dependency status."
     },
     "cE3494DD043D9330A0143DAD96CD1004E": {
-      "summary": "Government travel card account access (Citibank)"
+      "summary": "Government travel card account access (Citibank)",
+      "description": "Citibank's cardholder site for government travel charge card statements, payments and account access."
     },
     "c2DA1481274984E2D0174986C4CC20001": {
-      "summary": "Submit and track finance customer service requests"
+      "summary": "Submit and track finance customer service requests",
+      "description": "The Comptroller Services Portal is where members submit finance questions and requests and track them to resolution."
     },
     "cE3494DD043D9330A0143DADC65C50050": {
-      "summary": "Travel policy, allowances and rates from the Defense Travel Management Office"
+      "summary": "Travel policy, allowances and rates from the Defense Travel Management Office",
+      "description": "The Defense Travel Management Office publishes travel policy, allowances, rates and DTS guidance."
     },
     "cE3494DD043D9330A0143DADE6C740052": {
-      "summary": "Medical workforce time and labor reporting (DMHRSi)"
+      "summary": "Medical workforce time and labor reporting (DMHRSi)",
+      "description": "DMHRSi records time, labor and personnel data for the military health system's workforce."
     },
     "c330D98A143D937EF0143DADB83BC005E": {
-      "summary": "Government travel charge card rules and resources"
+      "summary": "Government travel charge card rules and resources",
+      "description": "Rules and resources for the government travel charge card, from the Defense Travel Management Office."
     },
     "c88B4F00B448F00880144ACD167D90491": {
-      "summary": "Current federal wage and salary schedules for civilians"
+      "summary": "Current federal wage and salary schedules for civilians",
+      "description": "Current federal wage and salary schedules for civilian employees, by pay plan and locality."
     },
     "c0ECF2BB843D4969B0143DA1102DA006A": {
-      "summary": "Current military basic pay tables"
+      "summary": "Current military basic pay tables",
+      "description": "The current basic pay tables for active duty, from the DoD military compensation site."
     },
     "c2D8EB9D6440F182F01440F5AB27E0019": {
-      "summary": "Look up per diem rates by location"
+      "summary": "Look up per diem rates by location",
+      "description": "The per diem rate lookup gives lodging and meal rates by location and date for official travel."
     },
     "c330D98A144FCC2E801451F1B8BE9037E": {
-      "summary": "Finance help and self-service on the portal's virtual Finance page"
+      "summary": "Finance help and self-service on the portal's virtual Finance page",
+      "description": "The portal's virtual Finance page gathers finance self-service links and guidance for pay, travel and allowances."
     },
     "c88B4F00B42819409014294C879BF0075": {
-      "summary": "Fitness assessment standards, charts and program guidance"
+      "summary": "Fitness assessment standards, charts and program guidance",
+      "description": "AFPC's fitness program page covers assessment standards, scoring charts and program guidance."
     },
     "c0F13191069DD136E0169DEC4F4020023": {
-      "summary": "Base operational medicine clinic program resources"
+      "summary": "Base operational medicine clinic program resources",
+      "description": "Resources for base operational medicine clinics from the Air Force Medical Readiness Agency."
     },
     "c88B4F00B42819409014294CC9E50007D": {
-      "summary": "Pre- and post-deployment health assessment guidance"
+      "summary": "Pre- and post-deployment health assessment guidance",
+      "description": "Guidance on the health assessments required before and after a deployment."
     },
     "c88B4F00B42819409014294D167ED0085": {
-      "summary": "Federal employee health and life insurance from OPM"
+      "summary": "Federal employee health and life insurance from OPM",
+      "description": "OPM's healthcare and insurance site for federal employee health, dental, vision and life insurance programs."
     },
     "c88B4F00B42819409014294D258EE0087": {
-      "summary": "Suicide prevention resources and how to get help"
+      "summary": "Suicide prevention resources and how to get help",
+      "description": "The Air Force suicide prevention page, with warning signs, resources and the crisis line."
     },
     "c88B4F00B42819409014294D334830089": {
-      "summary": "Quit tobacco with TRICARE's quitline and resources"
+      "summary": "Quit tobacco with TRICARE's quitline and resources",
+      "description": "TRICARE's tobacco cessation resources, including the quitline and coaching programs."
     },
     "c88B4F00B42819409014294CB77330079": {
-      "summary": "Complete your annual periodic health assessment questionnaire"
+      "summary": "Complete your annual periodic health assessment questionnaire",
+      "description": "The periodic health assessment questionnaire members complete each year before their PHA."
     },
     "c88B4F00B42819409014294D56E94008C": {
-      "summary": "Air Force Marathon registration and information"
+      "summary": "Air Force Marathon registration and information",
+      "description": "The Air Force Marathon site, for registration, course information and results."
     },
     "cC9710F9170695A8B017069710B5B0001": {
-      "summary": "USAF School of Aerospace Medicine courses and services"
+      "summary": "USAF School of Aerospace Medicine courses and services",
+      "description": "The USAF School of Aerospace Medicine trains medical personnel and runs aerospace medicine services and consults."
     },
     "cEAA4349D6927DA3C01692B74AC490007": {
-      "summary": "Technical order field support team site"
+      "summary": "Technical order field support team site",
+      "description": "The technical order field support team's site for help with technical order systems and distribution."
     },
     "cE3494DD050FC7308015126AFE8AB03C4": {
-      "summary": "Cargo and passenger movement operations"
+      "summary": "Cargo and passenger movement operations",
+      "description": "CMOS manages cargo and passenger movement for deployments and routine shipments at base transportation offices."
     },
     "cB891FC7694B73D850194B7D357F0000A": {
-      "summary": "Single maintenance information system program site"
+      "summary": "Single maintenance information system program site",
+      "description": "The program site for the single maintenance information system that will replace the current maintenance systems."
     },
     "c62EC42D4924D8B9101924DA7729B0000": {
-      "summary": "Sustainment planning, execution and reporting"
+      "summary": "Sustainment planning, execution and reporting",
+      "description": "SPERS supports sustainment planning, execution and reporting for logistics organizations."
     },
     "cA4057E1F41D2F7F501427754A13C110A": {
-      "summary": "The Enlisted Force Structure handbook (AFH 36-2618)"
+      "summary": "The Enlisted Force Structure handbook (AFH 36-2618)",
+      "description": "The handbook that defines the roles and responsibilities of each enlisted tier and rank."
     },
     "c0ECF2BB8461AFF6901461EE7133600C2": {
-      "summary": "Commander's Responsibilities instruction (AFI 1-2)"
+      "summary": "Commander's Responsibilities instruction (AFI 1-2)",
+      "description": "The instruction that sets out what commanders are responsible for in leading their units."
     },
     "c88B4F00B41D2F51E0142775560DE13FC": {
-      "summary": "Fact sheet on military pay and benefits"
+      "summary": "Fact sheet on military pay and benefits",
+      "description": "A fact sheet summarizing military pay, allowances and benefits."
     },
     "c88B4F00B41D2F51E014277560F1413FE": {
-      "summary": "AF Form 475, the education and training report"
+      "summary": "AF Form 475, the education and training report",
+      "description": "AF Form 475, the education and training report used to document formal training completion."
     },
     "c330D98A1466945DC014680BA223C021F": {
-      "summary": "AF Form 931, the airman comprehensive assessment for AB through TSgt"
+      "summary": "AF Form 931, the airman comprehensive assessment for AB through TSgt",
+      "description": "AF Form 931, the airman comprehensive assessment used for feedback sessions with Airmen from AB through TSgt."
     },
     "c2981A0357647D195017648162E7D0000": {
-      "summary": "Assignment preferences, career management and EQUAL-Plus listings"
+      "summary": "Assignment preferences, career management and EQUAL-Plus listings",
+      "description": "AMS is where Airmen record assignment preferences and view EQUAL-Plus listings of upcoming assignments."
     },
     "cFE3B28A1771B9B2001771BC2401A0001": {
-      "summary": "Air Force Reserve orders: request, approve and print"
+      "summary": "Air Force Reserve orders: request, approve and print",
+      "description": "AROWS-R writes and routes orders for Air Force Reserve members."
     },
     "c41A685A493D4A5B30193D55F26C2000E": {
-      "summary": "Find short-term Reserve and Guard gigs matched to your skills"
+      "summary": "Find short-term Reserve and Guard gigs matched to your skills",
+      "description": "GigEagle matches Reserve and Guard members with short-term projects that need their skills."
     },
     "c9AE79FCC76AF75C60176AF937A700002": {
-      "summary": "Civilian employee self-service: personnel record, benefits and performance"
+      "summary": "Civilian employee self-service: personnel record, benefits and performance",
+      "description": "MyBiz+ is the civilian self-service portal for personnel records, benefits and performance management."
     },
     "cB4CE488D766801610176682496FE0001": {
-      "summary": "View your personnel records (PRDA)"
+      "summary": "View your personnel records (PRDA)",
+      "description": "PRDA displays personnel records such as the records review listing and performance reports. Now part of vPSC."
     },
     "cA4057E1F428205D0014294DDB7FC00EF": {
-      "summary": "The official Air Force website: news, leadership and resources"
+      "summary": "The official Air Force website: news, leadership and resources",
+      "description": "The official Air Force website, with news, leadership biographies and public resources."
     },
     "cA4057E1F428205D0014294DF029A00F1": {
-      "summary": "Army publications and forms"
+      "summary": "Army publications and forms",
+      "description": "The Army Publishing Directorate publishes Army regulations, pamphlets and forms."
     },
     "c2D8EB9D64281825001429541E9A30148": {
-      "summary": "DoD forms library (DD forms)"
+      "summary": "DoD forms library (DD forms)",
+      "description": "The DoD forms library, where every DD form is published by the Washington Headquarters Services."
     },
     "c2D8EB9D64281825001429542AB74014A": {
-      "summary": "DoD instructions, directives and manuals"
+      "summary": "DoD instructions, directives and manuals",
+      "description": "The DoD issuances site publishes current DoD directives, instructions and manuals."
     },
     "c2D8EB9D64281825001429545AD6E014E": {
-      "summary": "Navy and Marine Corps forms"
+      "summary": "Navy and Marine Corps forms",
+      "description": "Naval Forms Online publishes Navy and Marine Corps forms."
     },
     "cA884EF1777697F54017769A17A640001": {
-      "summary": "Journal of Military Conflict Transformation from the AF Negotiation Center"
+      "summary": "Journal of Military Conflict Transformation from the AF Negotiation Center",
+      "description": "The Journal of Military Conflict Transformation, published by the Air Force Negotiation Center."
     },
     "cF575FC8E240BBA8701249CE7A1741FD1": {
-      "summary": "Report and manage safety mishaps and hazards"
+      "summary": "Report and manage safety mishaps and hazards",
+      "description": "AFSAS is the Air Force system for reporting and managing safety mishaps, hazards and investigations."
     },
     "c330D98A143D937EF0143D9F9494B002C": {
-      "summary": "Risk management guidance and tools"
+      "summary": "Risk management guidance and tools",
+      "description": "The Air Force Safety Center's risk management page, with guidance and tools for applying risk management."
     },
     "c0ECF2BB843D4969B0143D9FA12F30060": {
-      "summary": "Air Force Safety Center: policy, reports and campaigns"
+      "summary": "Air Force Safety Center: policy, reports and campaigns",
+      "description": "The Air Force Safety Center's portal site, with safety policy, mishap statistics and campaigns."
     },
     "c0ECF2BB843D4969B0143D9FAFE8B0062": {
-      "summary": "Aviation safety resources and mishap prevention"
+      "summary": "Aviation safety resources and mishap prevention",
+      "description": "Aviation safety resources from the Air Force Safety Center, including mishap prevention material."
     },
     "c88B4F00B439D7EF80143D9FC417408A9": {
-      "summary": "Bird and wildlife strike hazard program"
+      "summary": "Bird and wildlife strike hazard program",
+      "description": "The bird and wildlife aircraft strike hazard program, with reporting guidance and risk data."
     },
     "c12916C788C16E34C018C17112A4C0006": {
-      "summary": "Environmental, safety and occupational health service center"
+      "summary": "Environmental, safety and occupational health service center",
+      "description": "The environmental, safety and occupational health service center supports base programs with tools and consultation."
     },
     "c88B4F00B439D7EF80143D9FE00A508AD": {
-      "summary": "Human factors in mishap prevention"
+      "summary": "Human factors in mishap prevention",
+      "description": "Human factors resources from the Air Force Safety Center for understanding the human causes of mishaps."
     },
     "cE3494DD05A4B0E17015A8BFFE6EE0344": {
-      "summary": "Track unit motorcycle riders, training and mentorship"
+      "summary": "Track unit motorcycle riders, training and mentorship",
+      "description": "MUSTT tracks each unit's motorcycle riders, their training and their mentorship under the motorcycle safety program."
     },
     "c0ECF2BB85196DD0A0151B0AACBDE01DB": {
-      "summary": "Guide for safety personnel deploying to a safety position"
+      "summary": "Guide for safety personnel deploying to a safety position",
+      "description": "A guide for safety professionals preparing to deploy into a safety position."
     },
     "cE3494DD043D9330A0143DA017D9D0020": {
-      "summary": "Space safety program resources"
+      "summary": "Space safety program resources",
+      "description": "Space safety resources from the Air Force Safety Center."
     },
     "c330D98A143D937EF0143D9FF019C0030": {
-      "summary": "Safety training and force development courses"
+      "summary": "Safety training and force development courses",
+      "description": "Safety training and force development courses offered by the Air Force Safety Center."
     },
     "c330D98A15559F9360155A297CAEE03C3": {
-      "summary": "Environmental, safety and occupational health service center"
+      "summary": "Environmental, safety and occupational health service center",
+      "description": "The USAF School of Aerospace Medicine's environmental, safety and occupational health service center."
     },
     "c330D98A14A79627C014AB000A6FE012C": {
-      "summary": "Climate data and climatology products for planning"
+      "summary": "Climate data and climatology products for planning",
+      "description": "The 14th Weather Squadron's climatology services provide historical weather data and climate products for planning."
     },
     "c330D98A14B794B63014BBCE882AB063C": {
-      "summary": "Space weather forecasts and alerts"
+      "summary": "Space weather forecasts and alerts",
+      "description": "Space weather forecasts, alerts and products from Air Force weather."
     },
     "cA4057E1F440888E90144094255CA0019": {
-      "summary": "The official U.S. time from the Naval Observatory master clock"
+      "summary": "The official U.S. time from the Naval Observatory master clock",
+      "description": "The U.S. Naval Observatory's master clock page shows the official U.S. time."
     }
   }
 }
