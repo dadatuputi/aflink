@@ -65,3 +65,29 @@ LINKS_URL = "http://localhost:4000/links.json"
 
 Fetched link data is cached in KV under `LINKS_KEY` for an hour, so a change to
 `links.json` shows up in suggestions within an hour of the site rebuilding.
+
+## Portal link submissions (`POST /submit`)
+
+The same worker receives link lists from [`getlinks.js`](../getlinks.js), run
+in the browser console on an AF Portal page, and starts the Portal Sync
+workflow ([`.github/workflows/portal_sync.yml`](../.github/workflows/portal_sync.yml)),
+which merges the list on the `portal-sync` branch and opens or updates one
+pull request. Nothing reaches the site until that PR is merged.
+
+The endpoint is public, so [`src/submit.js`](src/submit.js) is strict:
+
+- Browser origin must be the AF Portal.
+- `source` must be one of `KNOWN_SOURCES`; a new portal page is added there.
+- Only `title`, `link`, `contentId` and a few known fields are kept, each
+  checked for shape and length; the whole payload is capped at 512 KB.
+- Per-address and daily rate limits, counted in the `LINKS` KV namespace; an
+  identical payload within a day is acknowledged but not re-sent.
+- On the workflow side, `scripts/af-guard.js` fails the run (and opens an
+  issue) if a submission would move an existing link to a non-official domain.
+
+It needs one secret, set with `wrangler secret put GITHUB_DISPATCH_TOKEN`: a
+fine-grained GitHub token for the aflink repository only, with **Actions:
+read and write** and nothing else. That is enough to start a workflow run and
+not enough to push code. Give it an expiry and rotate it. Without the secret
+the endpoint answers 503 and `getlinks.js` falls back to the compressed-data
+box for the Update AF Links issue form.

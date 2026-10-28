@@ -85,6 +85,41 @@ const getIndexLinks = () => {
 const countLinks = (data) =>
   Object.values(data.afpCategorizedLinksDto.links).reduce((n, list) => n + list.length, 0);
 
+// The search worker's submit endpoint (search_worker/src/submit.js). It starts
+// the Portal Sync workflow, which opens a pull request for review. When it is
+// unreachable or refuses, the compressed-data modal below is the fallback, for
+// the Update AF Links issue form.
+const SUBMIT_URL = 'https://aflink-autocomplete.aswang.workers.dev/submit';
+
+const submitDirect = async (data) => {
+  const response = await fetch(SUBMIT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || !result.ok) throw new Error(result.error || `HTTP ${response.status}`);
+  return result;
+};
+
+const showMessageModal = (title, message) => {
+  const modalHtml = `
+    <div id="compressedDataModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
+      <div style="background-color:#fefefe; margin:15% auto; padding:20px; border:1px solid #888; width:80%; max-width:600px;">
+        <h2>${title}</h2>
+        <p id="submitMessage"></p>
+        <button id="closeModal">Close</button>
+      </div>
+    </div>
+  `;
+  $('body').append(modalHtml);
+  $('#submitMessage').text(message);
+  $('#compressedDataModal').show();
+  $('#closeModal').on('click', () => {
+    $('#compressedDataModal').remove();
+  });
+};
+
 const showCompressedDataModal = (data, summary) => {
   // Create modal HTML
   const modalHtml = `
@@ -130,7 +165,14 @@ const showCompressedDataModal = (data, summary) => {
       return;
     }
     const summary = `${countLinks(data)} links in ${Object.keys(data.afpCategorizedLinksDto.links).length} categories`;
-    showCompressedDataModal(await compressAndEncode(JSON.stringify(data)), summary);
+    try {
+      const result = await submitDirect(data);
+      showMessageModal('Links submitted', result.message);
+    } catch (error) {
+      console.warn('Direct submission failed, falling back to the issue form:', error.message);
+      showCompressedDataModal(await compressAndEncode(JSON.stringify(data)),
+        `${summary}. Direct submission failed (${error.message}); paste this into an Update AF Links issue instead.`);
+    }
   } catch (error) {
     console.error('Error:', error);
     alert(`Could not read links: ${error.message}`);
