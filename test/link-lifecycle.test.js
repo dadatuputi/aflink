@@ -64,6 +64,17 @@ test('only an index page moves a link between categories', () => {
   assert.deepEqual(Object.keys(d.afpCategorizedLinksDto.links), ['PERSONNEL'])
 })
 
+test('a referrer with the site is kept over one without', () => {
+  const full = 'https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=ca&channelPageId=sHOME'
+  const bare = 'https://www.my.af.mil/gcss-af/USAF/ep/contentView.do?contentType=URL&contentId=ca&channelPageId'
+  let d = applySource(file({}), HOME, { 'Top 10 Searches': [L('a', { exitLinkReferrer: full })] }, '2026-01-01')
+  d = applySource(d, APPS, { PERSONNEL: [L('a', { exitLinkReferrer: bare })] }, '2026-01-02')
+  assert.equal(byId(d, 'a').exitLinkReferrer, full)
+  // a new link takes whatever it comes with
+  d = applySource(d, APPS, { PERSONNEL: [L('a', { exitLinkReferrer: bare }), L('b', { exitLinkReferrer: bare })] }, '2026-01-03')
+  assert.equal(byId(d, 'b').exitLinkReferrer, bare)
+})
+
 test('a portal category named Other does not collide with the community OTHER list', () => {
   const d = applySource(file({}), APPS, { Other: [L('a')] }, '2026-01-01')
   assert.deepEqual(Object.keys(d.afpCategorizedLinksDto.links), ['GENERAL'])
