@@ -453,6 +453,12 @@ ul {
   text-decoration: underline dotted var(--overridden-red) 1px;
 }
 
+/* No longer listed on the portal, or its domain stopped resolving; the title
+   attribute says which and since when */
+.deprecated {
+  opacity: 0.55;
+}
+
 /* Navbar group separators; only shown on the expanded (horizontal) bar */
 .navbar .nav-separator {
   color: #ffffff66;
