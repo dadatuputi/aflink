@@ -1,0 +1,165 @@
+name: Portal Sync
+
+# Started by the search worker's /submit endpoint when someone runs
+# getlinks.js on an AF Portal page. Merges that page's links into
+# links_af.json on the portal-sync branch and opens or updates one pull
+# request for review; nothing reaches master without a merge. The Update AF
+# Links issue form (link_update_af.yml) remains as the manual route.
+on:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: gzip + base64 of {source, afpCategorizedLinksDto} from getlinks.js
+        required: true
+      source:
+        description: Portal page the links came from (index:... or quicklinks:...)
+        required: true
+      digest:
+        description: Short hash of the payload, for the commit message
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+# One submission at a time, so two pages sent back to back both land on the branch
+concurrency:
+  group: portal-sync
+  cancel-in-progress: false
+
+env:
+  BRANCH: portal-sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # the build reads file dates from git log
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Decode submission
+        env:
+          PAYLOAD: ${{ inputs.payload }}
+          SOURCE: ${{ inputs.source }}
+        run: |
+          printf '%s' "$PAYLOAD" | base64 -d | gzip -dc > /tmp/incoming.json
+          # The source the worker checked has to be the one inside the payload
+          [[ "$(jq -r .source /tmp/incoming.json)" == "$SOURCE" ]] || { echo "Source mismatch"; exit 1; }
+          echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/incoming.json) links from $SOURCE"
+
+      - name: Switch to the sync branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git fetch origin "$BRANCH" 2>/dev/null; then
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+            # Earlier submissions wait on this branch; bring master's changes
+            # under them. A conflict means master changed the same links, so
+            # start over from master and say so in the PR.
+            if ! git merge --no-edit origin/master; then
+              git merge --abort
+              git checkout -B "$BRANCH" origin/master
+              echo "RESET_NOTE=Earlier submissions on this branch conflicted with master and were dropped; resubmit those pages." >> $GITHUB_ENV
+            fi
+          else
+            git checkout -b "$BRANCH" origin/master
+          fi
+
+      - name: Merge links
+        run: |
+          cp src/links/links_af.json /tmp/links_af_old.json
+          node scripts/af-merge.js /tmp/links_af_old.json /tmp/incoming.json > src/links/links_af.json
+
+      - name: Guard existing links
+        id: guard
+        run: node scripts/af-guard.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/guard.md
+
+      - name: Open an issue for a rejected submission
+        if: failure() && steps.guard.outcome == 'failure'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Rejected portal sync from ${{ toJSON(inputs.source) }}`,
+              body: fs.readFileSync('/tmp/guard.md', 'utf8') + `\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              labels: ['workflow'],
+              assignees: ['dadatuputi'],
+            });
+
+      - name: Compute import statistics
+        id: stats
+        run: |
+          node scripts/af-import-stats.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/stats.txt
+          if git diff --quiet -- src/links/links_af.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No change to links_af.json; nothing to sync." | tee -a $GITHUB_STEP_SUMMARY
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trust check
+        if: steps.stats.outputs.changed == 'true'
+        id: trust
+        run: node scripts/check-trust.js | tee /tmp/trust.md
+
+      - name: Build and test
+        if: steps.stats.outputs.changed == 'true'
+        # A pull request opened by the workflow token does not start the Test
+        # workflow, so the same checks run here before anything is pushed
+        run: npm run dev:build && npm test
+
+      - name: Commit and push
+        if: steps.stats.outputs.changed == 'true'
+        env:
+          SOURCE: ${{ inputs.source }}
+          DIGEST: ${{ inputs.digest }}
+        run: |
+          git add src/links/links_af.json
+          git commit -m "Portal sync from $SOURCE${DIGEST:+ ($DIGEST)}"
+          git push --force-with-lease origin "$BRANCH"
+
+      - name: Open or update the pull request
+        if: steps.stats.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE: ${{ inputs.source }}
+        run: |
+          {
+            echo "### Submission from \`$SOURCE\`"
+            echo
+            echo '```'
+            cat /tmp/stats.txt
+            echo '```'
+            echo
+            cat /tmp/trust.md
+            if [[ -n "${RESET_NOTE:-}" ]]; then echo; echo "> $RESET_NOTE"; fi
+            echo
+            echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          } > /tmp/comment.md
+          cat /tmp/comment.md >> $GITHUB_STEP_SUMMARY
+
+          NUMBER=$(gh pr list --head "$BRANCH" --base master --state open --json number --jq '.[0].number')
+          if [[ -z "$NUMBER" ]]; then
+            {
+              echo "Links submitted from the AF Portal through getlinks.js, merged by scripts/af-merge.js."
+              echo "Each submission is a commit on this branch and a comment below with what it changed."
+              echo "Merging publishes them; closing discards them."
+            } > /tmp/body.md
+            gh pr create --base master --head "$BRANCH" --title "Portal sync" --body-file /tmp/body.md --assignee dadatuputi
+          fi
+          gh pr comment "$BRANCH" --body-file /tmp/comment.md
