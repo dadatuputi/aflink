@@ -8,18 +8,11 @@
 // run. New links on such hosts are still allowed in, and still warned about,
 // because the portal does list some (shipping carriers, APAN).
 import fs from 'fs';
-
-const AF_BASE = 'https://www.my.af.mil';
+import { hostOf as hostOfLink } from './link-status.js';
 
 const allow = new Set(JSON.parse(fs.readFileSync('src/links/links_trust_allow.json')).allowed.map(a => a.host));
 const trusted = host => /\.(mil|gov|edu)$/.test(host) || allow.has(host);
-const hostOf = link => {
-    try {
-        return new URL(link.startsWith('/') ? AF_BASE + link : link).hostname.toLowerCase();
-    } catch {
-        return '(unparseable URL)';
-    }
-};
+const hostOf = link => hostOfLink({ link }) || '(unparseable URL)';
 
 export function offendingChanges(oldData, newData) {
     const before = new Map();

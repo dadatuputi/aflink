@@ -69,13 +69,8 @@ const getCurrentData = async () => {
     } 
 }*/
 
-async function getNewestDate(files) {
-    // Get links last modified date
-    const dates = await gitDateExtractor.getStamps({ files: files })
-    const newest = Math.max(...Object.values(dates).map(obj => obj.modified));
-    const date = sugar_date.Date.format(new Date(newest * 1000), '{d} {Month} {yyyy}')
-    return date;
-}
+// A git timestamp (seconds) as the page shows dates
+const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{d} {Month} {yyyy}');
 
 (async () => {
     try {
@@ -265,9 +260,11 @@ async function getNewestDate(files) {
         // Sync display: the AF portal sync and the latest community link
         // change are different events — the newer one drives the visible
         // date, and the tooltip breaks out both with UTC timestamps.
-        const fileStamp = async p => {
-            const stamps = await gitDateExtractor.getStamps({ files: [p] });
-            const s = Object.values(stamps)[0];
+        // One git pass covers every link file; git-date-extractor walks the
+        // whole history per call
+        const stamps = await gitDateExtractor.getStamps({ files: [linksAfPath, linksOtherPath, linksUnofficialPath, linksOverridePath] });
+        const fileStamp = p => {
+            const s = stamps[p] || Object.entries(stamps).find(([k]) => p.endsWith(k))?.[1];
             return s ? Number(s.modified) : 0;
         };
         let overrideTargetName = newestOverride ? newestOverride.match : null;
@@ -280,10 +277,10 @@ async function getNewestDate(files) {
                 }
             }
         }
-        const afSyncStamp = await fileStamp(linksAfPath);
+        const afSyncStamp = fileStamp(linksAfPath);
         const lastUpdate = [
-            { stamp: await fileStamp(linksOtherPath), name: lastOtherAdd },
-            { stamp: await fileStamp(linksUnofficialPath), name: lastUnofficialAdd },
+            { stamp: fileStamp(linksOtherPath), name: lastOtherAdd },
+            { stamp: fileStamp(linksUnofficialPath), name: lastUnofficialAdd },
             { stamp: newestOverride ? Math.floor(newestOverride.timestamp) : 0, name: overrideTargetName },
         ].filter(c => c.stamp && c.name).sort((a, b) => b.stamp - a.stamp)[0];
         const utcStamp = s => new Date(s * 1000).toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
@@ -298,7 +295,7 @@ async function getNewestDate(files) {
         if (override_count > 0) {
             dateFiles.push(linksOverridePath);
         }
-        const date = await getNewestDate(dateFiles);
+        const date = formatDay(Math.max(...dateFiles.map(fileStamp)));
         console.log(`Latest update: ${date}`)
 
 
@@ -368,7 +365,6 @@ async function getNewestDate(files) {
         links.forEach(category => category.links.forEach(addIssueUrls));
         links_unofficial.forEach(addIssueUrls);
 
-        console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
 
         // pug filter for base64-encoding images
         let options = {}
@@ -438,7 +434,7 @@ async function getNewestDate(files) {
         console.log("Wrote tutorial")
 
         // write overrides page
-        const override_date = await getNewestDate([linksOverridePath]);
+        const override_date = formatDay(fileStamp(linksOverridePath));
         const pageOverrides = pug.renderFile(path.resolve(srcDir, "overrides.pug"), {
             ...options,
             overrideEvents: [...overrideEvents].sort((a, b) => b.timestamp - a.timestamp), // newest first
@@ -499,7 +495,7 @@ async function getNewestDate(files) {
 
         console.log("Done writing updated data.")
     } catch (e) {
-        console.log(e.message)
+        console.error(e)
         process.exit(1)
     }
 })()

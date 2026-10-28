@@ -16,7 +16,9 @@ $(document).ready(function () {
 
   // If search string has a hidden space anywhere inside it, it comes from autocomplete, so automatically go to the first result
   // https://bugzilla.mozilla.org/show_bug.cgi?id=386591#c32
-  const autocompleted = (searchParams.has("q") && searchParams.get("q").includes('​'));
+  // Cleared once a row has been followed (or none matched), so later typing
+  // in the box searches normally instead of auto-following the first match
+  var autocompleted = (searchParams.has("q") && searchParams.get("q").includes('​'));
 
   // A suggestion is "<title>​ {CATEGORY}" (see search_worker/src/index.js).
   // Both halves matter: the title becomes the query, and the category picks the
@@ -173,15 +175,18 @@ $(document).ready(function () {
       // Follow the suggestion the user actually chose: the row whose title and
       // category match it, falling back to the first result when the suggestion
       // came from somewhere else (an older worker, a bookmarked ?q= URL)
-      if (autocompleted && links.length) {
-        var exact = links.filter(function () {
-          var $a = $(this).find('a.main-link');
-          if (!sameText($a.data('orig-text'), picked.title)) return false;
-          if (!picked.category) return true;
-          var $c = $(this).siblings('.category');
-          return sameText($c.length ? $c.data('orig-text') : AflinkSearch.UNOFFICIAL_CATEGORY, picked.category);
-        });
-        $(exact[0] || links[0]).find('a.main-link')[0].click();
+      if (autocompleted) {
+        autocompleted = false;
+        if (links.length) {
+          var exact = links.filter(function () {
+            var $a = $(this).find('a.main-link');
+            if (!sameText($a.data('orig-text'), picked.title)) return false;
+            if (!picked.category) return true;
+            var $c = $(this).siblings('.category');
+            return sameText($c.length ? $c.data('orig-text') : AflinkSearch.UNOFFICIAL_CATEGORY, picked.category);
+          });
+          $(exact[0] || links[0]).find('a.main-link')[0].click();
+        }
       }
       links.toggle(true);
 
