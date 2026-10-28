@@ -1,0 +1,1478 @@
+{
+  "a4fleets.lightning.crmforce.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "access.afpc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "advana-build-blade.cloud.databricks.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "af-jedmics.navair.navy.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "af-vcd.github.io": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "af.ataaps.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "af.okta.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afeonet.milcloud.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afget.robins.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afmilpers.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afpaas.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afrims.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afriss-tf.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afsas.safety.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "afvec.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "agepift.sso.cce.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "aimwts.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ammo.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ams.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "amtes.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "apacs.milcloud.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "apims.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ara-6.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "arcnet.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "aris.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "arms.sso.cce.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "armslc.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "arows.dc3n.navy.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "arowsr.afrc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "asap.safety.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "asimsimr.health.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "atims1.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "bars.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "base-training.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "base.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "c2imera.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cafdex.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "calfy.net": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "catalog.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cbmplus.cce.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "cems.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cft.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "chris.wpafb.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cips.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cms.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cognos.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "compo.dcpds.cpms.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cool.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "core-integration.affsa.aws.solidstatescientific.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "csp.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "cwip.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "daf.dodmwrlibraries.org": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "deams.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "digitalu.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dod411.gds.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dodaac.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dots.dodiis.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dpassupport.golearnportal.org": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dps.move.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "drils.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "dtsproweb.defensetravel.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "edl.advana.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "eesoh-sds.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "eesoh.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "efinance.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "eitaas.servicecenter.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "emoc.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "envision.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "eodims.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "eopf.opm.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "esd.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "etims.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "etmsweb.wpafb.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "fm.adls.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "fp.logisticsinformationservice.dla.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "fss.emap-web.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "gain.il4.afwerx.dso.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "gamechanger.advana.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "genai.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "gigeagle.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "go.intelink.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "go.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "golearn.adls.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "gopax.transport.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "governmentmac.com": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "grbplatform.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "home.cards.citidirect.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "hpws.afrl.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ias.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ice.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "idco.dmdc.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "idecs.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "igems.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ils-s.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ils-s.test.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "imds.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "imp.afds.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "intelshare.intelink.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ismt.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "itips.servicenowservices.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "jkodirect.jten.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "jrams.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "jtp.jten.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "kdss.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "kx.health.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "leader.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "leave.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "legalassistance.law.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "lims-ev.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "lms-jets.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "login.lcmp.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "logmod.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "lts.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mafops.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "miap.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mict.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "milconnect-pki.dmdc.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "milconnect.dmdc.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "militarycac.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "militarypay.defense.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "milpds-prod.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mpc.mission-planning.org": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mpes4.pentagon.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mrdss.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "my.mhsgenesis.health.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mydhl.express.dhl": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "myetms.wpafb.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "myfss.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "mypay.dfas.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "myvector.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "navalforms.documentservices.dla.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "unknown",
+    "lastChecked": "2026-10-28"
+  },
+  "niprgpt.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "olvims.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "pams.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "paris.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "pepp.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "piee.eb.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "pmrt.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "portal.apps.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "portal.tricare-overseas.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "prmsglobal.prms.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "prps.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "qlik.advana.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "quicksearch.dla.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "rammis.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "rampod4.robins.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ramtmrs.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "remisprd.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "safe.apps.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "sense.qlik.advana.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "slam.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "slcms.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "smart14bis-pipeline.apps.dso.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "sms.transport.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "spers.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "ssat.wpafb.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "starsraw.a1vdc.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "starsraw2.a1vdc.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "static.e-publishing.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "suasman.josce.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "t2.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tableau.advana.data.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tftr.josce.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tmis.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "toap.sso.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tools.usps.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "top.my.site.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tosune5.robins.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "tricare.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "trips.safety.army.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "usaf.dps.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "usaf.percipio.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "usafammo-training.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "usafammo.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "utapsweb.afrc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "vision.il4.afwerx.dso.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "vmpf.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "vpscrba.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wageandsalary.dcpas.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wbcpins.tinker.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "weather.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "web.trdm.transport.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "webapps.afrc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "webg081.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "webmail.apps.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "webtraining.dma.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wmsweb.afncr.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wsmisrealm.cce.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wsmt.hill.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www-tmds.c2.amc.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.aetc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.afacpo.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.afapo.hq.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "unknown",
+    "lastChecked": "2026-10-28"
+  },
+  "www.afit.edu": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.afpc.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.airman.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.airuniversity.af.edu": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.airuniversity.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.alsa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.apan.org": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "unknown",
+    "lastChecked": "2026-10-28"
+  },
+  "www.apd.army.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.au.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.beready.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.climate.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.cmos.csd.disa.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dau.edu": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dbschenker.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dcita.edu": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.defense.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.defensetravel.dod.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dfas.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dla.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dmdc.osd.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.doctrine.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dodtap.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.dscu.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.e-publishing.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.enterprisetraining.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.esd.whs.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.esgr.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.fedex.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.fedmall.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.genai.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.homes.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.housing.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.igc.ustranscom.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.intelink.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.jcs.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.learningprofessionals.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.militaryonesource.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.milsuite.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.my.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.myairforcebenefits.us.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.opm.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.ramstein.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.resilience.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.safcn.af.mil": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  },
+  "www.studyguides.af.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.travel.dod.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.tricare.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.tsp.gov": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.ups.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.usafmarathon.com": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "www.usno.navy.mil": {
+    "seen": true,
+    "strikes": 0,
+    "lastResult": "ok",
+    "lastChecked": "2026-10-28"
+  },
+  "wwyk-ws-2004v": {
+    "seen": false,
+    "strikes": 0,
+    "lastResult": "nxdomain",
+    "lastChecked": "2026-10-28"
+  }
+}
