@@ -5,7 +5,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 
 import worker from '../search_worker/src/index.js'
-import { sanitize, LIMITS } from '../search_worker/src/submit.js'
+import { sanitize, LIMITS, KNOWN_SOURCES } from '../search_worker/src/submit.js'
 import { offendingChanges } from '../scripts/af-guard.js'
 
 const SOURCE = 'index:manageApplications'
@@ -147,6 +147,25 @@ test('a GitHub failure is reported, not swallowed', async () => {
 test('the payload cap applies before parsing', async () => {
   const huge = JSON.stringify(payload({ A: [link('1', { title: 'x'.repeat(LIMITS.bodyBytes) })] }))
   assert.equal((await post(huge)).status, 413)
+})
+
+test('getlinks.js submits exactly the pages the worker knows', () => {
+  const script = fs.readFileSync('getlinks.js', 'utf8')
+  const pages = [...script.matchAll(/source: '([^']+)'/g)].map(m => m[1])
+  assert.deepEqual(pages.sort(), [...KNOWN_SOURCES].sort())
+  // and the issue form names the same portal pages for a manual sync
+  const form = fs.readFileSync('.github/ISSUE_TEMPLATE/04_link_update_af.yaml', 'utf8')
+  assert.ok(/Applications A-Z/.test(form) && /Life and Fitness/.test(form) && /Career and Training/.test(form))
+})
+
+test('rate limits count only submissions that started a run', async () => {
+  const env = environment({ github: 500 })
+  for (let i = 0; i < LIMITS.perIpPerHour + 2; i++) {
+    assert.equal((await post(payload({ A: [link(String(i))] }), { env })).status, 502)
+  }
+  // GitHub refused every one, so none counted; a working GitHub now accepts
+  globalThis.fetch = async (url, init) => { env.dispatches.push({ url: String(url), init }); return new Response(null, { status: 204 }) }
+  assert.equal((await post(payload({ A: [link('99')] }), { env })).status, 200)
 })
 
 test('guard: an existing link may not move to a non-official domain', () => {

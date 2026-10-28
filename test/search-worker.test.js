@@ -63,7 +63,7 @@ test('never suggests a deleted link', async () => {
   assert.deepEqual(titles, [])
 })
 
-test('suggests unofficial links, labelled UNOFFICIAL', async () => {
+test('suggests unofficial links, labeled UNOFFICIAL', async () => {
   assert.deepEqual(await suggest('militarycac'), [
     { title: 'MilitaryCAC (CAC setup and troubleshooting)', category: 'UNOFFICIAL' },
   ])

@@ -22,25 +22,21 @@ jobs:
       github.event.issue.state == 'open' &&
       (github.event.action == 'opened' || github.event.changes.body)
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
       - name: Read URL from the issue form
         id: url
-        uses: actions/github-script@v9
-        with:
-          script: |
-            // Same rule as the link workflows' field(): first non-blank line
-            // after the "### <label>" header
-            const field = label => {
-              const lines = (context.payload.issue.body || '').split(/\r?\n/);
-              const i = lines.findIndex(l => l.startsWith(`### ${label}`));
-              const v = i < 0 ? '' : (lines.slice(i + 1).find(l => l.trim()) || '').trim();
-              return v === '_No response_' ? '' : v;
-            };
-            const labels = context.payload.issue.labels.map(l => l.name);
-            core.setOutput('url', labels.includes('add link') ? field('Link URL') : field('New Link URL'));
-
-      - name: Checkout Repository
-        if: steps.url.outputs.url != ''
-        uses: actions/checkout@v7
+        # The same parser the link workflows use (scripts/issue-fields.js)
+        env:
+          BODY: ${{ github.event.issue.body }}
+          LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+        run: |
+          if [[ ",$LABELS," == *",add link,"* ]]; then
+            node scripts/issue-fields.js --output url="Link URL"
+          else
+            node scripts/issue-fields.js --output url="New Link URL"
+          fi
 
       - name: Reputation scan
         id: scan

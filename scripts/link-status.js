@@ -18,9 +18,13 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 // Whole days from date a to date b, both YYYY-MM-DD
 export const daysBetween = (a, b) => Math.floor((new Date(b) - new Date(a)) / DAY_MS);
 
+// Portal links can be relative to the portal; everything else takes them absolute
+export const absoluteUrl = url => (url.startsWith('/') ? AF_BASE + url : url);
+
+// The one place a link's host is parsed; null when the URL does not parse
 export const hostOf = link => {
     try {
-        return new URL(link.link.startsWith('/') ? AF_BASE + link.link : link.link).hostname.toLowerCase();
+        return new URL(absoluteUrl(link.link)).hostname.toLowerCase();
     } catch {
         return null;
     }

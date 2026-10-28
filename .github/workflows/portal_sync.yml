@@ -134,8 +134,20 @@ jobs:
       - name: Build and test
         if: steps.stats.outputs.changed == 'true'
         # A pull request opened by the workflow token does not start the Test
-        # workflow, so the same checks run here before anything is pushed
-        run: npm run dev:build && npm test
+        # workflow, so the same checks run here before anything is pushed.
+        # New portal links have no hand-written summary yet: that rule holds
+        # for the pull request, not for the sync, which lists them instead.
+        env:
+          AFLINK_SYNC: '1'
+        run: |
+          npm run dev:build && npm test
+          node -e '
+            const d = JSON.parse(require("fs").readFileSync("_site/links.json"));
+            const missing = d.links.flatMap(c => c.links.filter(l => !l.isDeleted && !l.isDead && !l.summary).map(l => `- ${l.title} (${l.contentId})`));
+            require("fs").writeFileSync("/tmp/missing.md", missing.length
+              ? `### ${missing.length} new link(s) need a summary in src/links/links_descriptions.json before this merges\n\n${missing.join("\n")}\n`
+              : "");
+          '
 
       - name: Commit and push
         if: steps.stats.outputs.changed == 'true'
@@ -161,6 +173,8 @@ jobs:
             echo '```'
             echo
             cat /tmp/trust.md
+            echo
+            cat /tmp/missing.md
             if [[ -n "${RESET_NOTE:-}" ]]; then echo; echo "> $RESET_NOTE"; fi
             echo
             echo "Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

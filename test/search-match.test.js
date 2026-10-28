@@ -1,5 +1,5 @@
 // The matching rules the page and the autocomplete worker share.
-// If a case here has to change, the page's behaviour is changing with it —
+// If a case here has to change, the page's behavior is changing with it —
 // which means the worker's suggestions change too. That is the point.
 import test from 'node:test'
 import assert from 'node:assert/strict'

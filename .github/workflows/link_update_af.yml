@@ -1,55 +1,61 @@
 name: Link Bulk Update from Issue
 
+# The manual route for a portal sync: the compressed box getlinks.js shows
+# when the direct route is unavailable. Same merge, guard, build and tests as
+# portal_sync.yml; the result commits to master as the other issue workflows
+# do. Issue text never reaches a shell as ${{ }}: fields are read by
+# scripts/issue-fields.js into environment variables.
 on:
   repository_dispatch:
     types: [link_update_af]
-  
+
 jobs:
   update_af_links:
     runs-on: ubuntu-latest
     steps:
 
-    - name: parse_fields
+    - name: Checkout Repository
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0   # the build reads file dates from git log
+
+    - name: Setup Node
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Read the issue form
       env:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
-        # Extract the first non-blank line after the "### Compressed JSON"
-        # header, trimmed. Anchoring on the header (rather than sed line
-        # numbers) survives blank-line shifts and CRLF payloads.
-        field() {
-          printf '%s' "$BODY" | awk -v H="### $1" '
-            index($0, H) == 1 { found = 1; next }
-            found && $0 ~ /[^[:space:]]/ {
-              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
-            }'
-        }
-
-        B64=$(field "Compressed JSON" | tr -d '[:space:]')
-        [[ -z "$B64" ]] && { echo "Missing Compressed JSON"; exit 1; }
-        echo "B64=$B64" >> $GITHUB_ENV
-
-    - name: Checkout Repository
-      uses: actions/checkout@v7
+        echo "Original issue: ${{ github.event.client_payload.original_issue }}"
+        node scripts/issue-fields.js B64="Compressed JSON"
 
     - name: Decode and merge new link list
       run: |
-        echo "${{ env.B64 }}" | base64 -d | gzip -dc > /tmp/links_af_incoming.json
-        echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_incoming.json) links from $(jq -r '.source // "an unknown page"' /tmp/links_af_incoming.json)"
+        [[ -n "$B64" ]] || { echo "Missing Compressed JSON"; exit 1; }
+        printf '%s' "$B64" | tr -d '[:space:]' | base64 -d | gzip -dc > /tmp/links_af_incoming.json
+        SOURCES=$(jq -r 'if .pages then ([.pages[].source] | join(",")) else (.source // "an unknown page") end' /tmp/links_af_incoming.json)
+        echo "Decoded $(jq '[(if .pages then .pages[] else . end) | .afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_incoming.json) links from $SOURCES"
         # One page speaks only for its own links; the merge keeps the rest and
         # deprecates links this page used to list (scripts/af-merge.js)
-        node scripts/af-merge.js src/links/links_af.json /tmp/links_af_incoming.json > /tmp/links_af_new.json
+        cp src/links/links_af.json /tmp/links_af_old.json
+        node scripts/af-merge.js /tmp/links_af_old.json /tmp/links_af_incoming.json > src/links/links_af.json
+
+    - name: Guard existing links
+      run: node scripts/af-guard.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/guard.md
 
     - name: Compute import statistics
       run: |
-        node scripts/af-import-stats.js src/links/links_af.json /tmp/links_af_new.json | tee /tmp/stats.txt
+        node scripts/af-import-stats.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/stats.txt
         {
           echo 'STATS<<STATS_EOF'
           cat /tmp/stats.txt
           echo 'STATS_EOF'
         } >> $GITHUB_ENV
-
-    - name: Overwrite links with new link list
-      run: mv /tmp/links_af_new.json src/links/links_af.json
 
     - name: Trust check
       id: trust
@@ -68,10 +74,18 @@ jobs:
             body: fs.readFileSync('/tmp/trust_warning.md', 'utf8'),
           });
 
+    - name: Build and test
+      # New portal links have no hand-written summary yet; that rule is for
+      # the pull request check, not for a sync
+      env:
+        AFLINK_SYNC: '1'
+      run: npm run dev:build && npm test
+
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
-        message: "Updated AF Links from issue"
+        add: src/links/links_af.json
+        message: "Updated AF Links from issue ${{ github.event.client_payload.original_issue }}"
 
     - name: Trigger next workflow
       uses: actions/github-script@v9
@@ -87,17 +101,30 @@ jobs:
             }
           });
 
+    - name: Add failure comment
+      if: failure()
+      uses: actions/github-script@v9
+      with:
+        script: |
+          const fs = require('fs');
+          const guard = fs.existsSync('/tmp/guard.md') ? fs.readFileSync('/tmp/guard.md', 'utf8') : '';
+          const run = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId;
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '❌ **AF Links were not updated.** Nothing was committed.\n\n' + guard + '\n\nRun: ' + run
+          })
+
     - name: Add success comment
       uses: actions/github-script@v9
+      env:
+        STATS: ${{ env.STATS }}
       with:
         script: |
           await github.rest.issues.createComment({
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `✅ **AF Links updated successfully!**
-
-            \`\`\`
-            ${{ env.STATS }}
-            \`\`\``
+            body: '✅ **AF Links updated successfully!**\n\n```\n' + process.env.STATS + '\n```'
           })

@@ -21,7 +21,8 @@
     var saved = getSaved();
     var dark = saved === 'dark' || (saved !== 'light' && media.matches);
     var meta = document.getElementById('theme-color');
-    if (meta) meta.setAttribute('content', dark ? '#0f1419' : '#73391D');
+    // Same values as the inline script in head.pug and the band colors in site.css
+    if (meta) meta.setAttribute('content', dark ? '#091021' : '#00308F');
   }
 
   function setActiveButton() {

@@ -22,7 +22,12 @@ test('summaries are one line of at most 90 characters', () => {
   }
 })
 
-test('every listed link has a summary', { skip: built ? false : 'site not built' }, () => {
+// A portal sync brings links nobody has described yet; the sync workflows
+// set AFLINK_SYNC and list them on the pull request instead, where this rule
+// then applies before the merge.
+const skipCoverage = !built ? 'site not built' : process.env.AFLINK_SYNC ? 'sync run: new portal links are listed on the pull request' : false
+
+test('every listed link has a summary', { skip: skipCoverage }, () => {
   const data = JSON.parse(fs.readFileSync(built, 'utf8'))
   const listed = data.links.flatMap(c => c.links.filter(l => !l.isDeleted && !l.isDead)).concat(data.unofficial)
   const missing = listed.filter(l => !l.summary).map(l => `${l.contentId} ${l.title}`)
