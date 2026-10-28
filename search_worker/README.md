@@ -69,15 +69,18 @@ Fetched link data is cached in KV under `LINKS_KEY` for an hour, so a change to
 ## Portal link submissions (`POST /submit`)
 
 The same worker receives link lists from [`getlinks.js`](../getlinks.js), run
-in the browser console on an AF Portal page, and starts the Portal Sync
-workflow ([`.github/workflows/portal_sync.yml`](../.github/workflows/portal_sync.yml)),
-which merges the list on the `portal-sync` branch and opens or updates one
+in the browser console on any AF Portal page: the script fetches every list
+the portal has and sends them together as `{ pages: [{ source,
+afpCategorizedLinksDto }] }`. The worker starts the Portal Sync workflow
+([`.github/workflows/portal_sync.yml`](../.github/workflows/portal_sync.yml)),
+which merges the lists on the `portal-sync` branch and opens or updates one
 pull request. Nothing reaches the site until that PR is merged.
 
 The endpoint is public, so [`src/submit.js`](src/submit.js) is strict:
 
 - Browser origin must be the AF Portal.
-- `source` must be one of `KNOWN_SOURCES`; a new portal page is added there.
+- Every page's `source` must be one of `KNOWN_SOURCES`, each at most once; a
+  new portal list is added there and to `PAGES` in `getlinks.js`.
 - Only `title`, `link`, `contentId` and a few known fields are kept, each
   checked for shape and length; the whole payload is capped at 512 KB.
 - Per-address and daily rate limits, counted in the `LINKS` KV namespace; an

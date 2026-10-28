@@ -54,7 +54,21 @@ test('a good submission starts exactly one workflow run with the packed payload'
   assert.equal(sent.inputs.source, SOURCE)
   // the payload is gzip+base64 of the sanitized JSON, as the issue form sends it
   const unpacked = JSON.parse(await new Response(new Blob([Uint8Array.from(atob(sent.inputs.payload), c => c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('gzip'))).text())
-  assert.deepEqual(unpacked, payload())
+  assert.deepEqual(unpacked, { pages: [payload()] })
+})
+
+test('getlinks.js sends every list at once; each goes to the workflow in order', async () => {
+  const env = environment()
+  const home = 'quicklinks:p44C00E3C94DB4A210194DC84A9E10002'
+  const res = await post({ pages: [payload(), payload({ 'Top 10 Searches': [link('1'), link('2')] }, home)] }, { env })
+  assert.equal(res.status, 200)
+  assert.equal((await res.json()).count, 3)
+  const sent = JSON.parse(env.dispatches[0].init.body)
+  assert.equal(sent.inputs.source, `${SOURCE},${home}`)
+  // the same page twice, or an unknown one among known ones, is refused whole
+  assert.equal((await post({ pages: [payload(), payload()] }, { env })).status, 400)
+  assert.equal((await post({ pages: [payload(), payload(undefined, 'index:bases')] }, { env })).status, 400)
+  assert.equal(env.dispatches.length, 1)
 })
 
 test('only the AF Portal origin may submit, and only by POST', async () => {
@@ -93,7 +107,7 @@ test('rejects shapes the sync could not trust', async () => {
 
 test('sanitize keeps only the fields the sync reads', () => {
   const dirty = payload({ ' Personnel ': [link('1', { type: 'application', url: true, lastModified: '2026-01-02', abstract: '<b>x</b>', contactInfo: { phone: '555' }, isDeleted: true, sources: ['x'] })] })
-  const { links } = sanitize(dirty)
+  const { links } = sanitize(dirty).pages[0]
   assert.deepEqual(Object.keys(links[' Personnel '][0]).sort(), ['contentId', 'lastModified', 'link', 'title', 'type', 'url'])
 })
 
