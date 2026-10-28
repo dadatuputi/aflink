@@ -8,9 +8,14 @@ name: Portal Sync
 on:
   workflow_dispatch:
     inputs:
+      payload_id:
+        description: Id of the packed payload the search worker stored (GET /submission/<id>)
+        required: false
+        default: ''
       payload:
-        description: gzip + base64 of {source, afpCategorizedLinksDto} from getlinks.js
-        required: true
+        description: gzip + base64 of {pages, ...} from getlinks.js, for a payload small enough to pass inline
+        required: false
+        default: ''
       source:
         description: Portal page(s) the links came from, comma-separated (index:... or quicklinks:...)
         required: true
@@ -31,6 +36,7 @@ concurrency:
 
 env:
   BRANCH: portal-sync
+  WORKER: https://aflink-autocomplete.aswang.workers.dev
 
 jobs:
   sync:
@@ -52,8 +58,15 @@ jobs:
       - name: Decode submission
         env:
           PAYLOAD: ${{ inputs.payload }}
+          PAYLOAD_ID: ${{ inputs.payload_id }}
           SOURCE: ${{ inputs.source }}
         run: |
+          # The worker keeps the packed payload; dispatch inputs are too small for it
+          if [[ -n "$PAYLOAD_ID" ]]; then
+            [[ "$PAYLOAD_ID" =~ ^[0-9a-f]{32}$ ]] || { echo "Bad payload id"; exit 1; }
+            PAYLOAD=$(curl -fsS "$WORKER/submission/$PAYLOAD_ID")
+          fi
+          [[ -n "$PAYLOAD" ]] || { echo "No payload"; exit 1; }
           printf '%s' "$PAYLOAD" | base64 -d | gzip -dc > /tmp/incoming.json
           # The sources the worker checked have to be the ones inside the payload
           FOUND=$(jq -r 'if .pages then ([.pages[].source] | join(",")) else .source end' /tmp/incoming.json)

@@ -52,9 +52,17 @@ test('a good submission starts exactly one workflow run with the packed payload'
   const sent = JSON.parse(d.init.body)
   assert.equal(sent.ref, 'master')
   assert.equal(sent.inputs.source, SOURCE)
-  // the payload is gzip+base64 of the sanitized JSON, as the issue form sends it
-  const unpacked = JSON.parse(await new Response(new Blob([Uint8Array.from(atob(sent.inputs.payload), c => c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('gzip'))).text())
+  // the dispatch carries only an id; the packed payload (gzip+base64 of the
+  // sanitized JSON, as the issue form sends it) is served back by that id
+  assert.match(sent.inputs.payload_id, /^[0-9a-f]{32}$/)
+  assert.equal(sent.inputs.payload, undefined)
+  const served = await worker.fetch(new Request('https://worker.dev/submission/' + sent.inputs.payload_id), env)
+  assert.equal(served.status, 200)
+  const unpacked = JSON.parse(await new Response(new Blob([Uint8Array.from(atob(await served.text()), c => c.charCodeAt(0))]).stream().pipeThrough(new DecompressionStream('gzip'))).text())
   assert.deepEqual(unpacked, { pages: [payload()] })
+  // an unknown or malformed id is a 404
+  assert.equal((await worker.fetch(new Request('https://worker.dev/submission/' + '0'.repeat(32)), env)).status, 404)
+  assert.equal((await worker.fetch(new Request('https://worker.dev/submission/../links-v3'), env)).status, 404)
 })
 
 test('getlinks.js sends every list at once; each goes to the workflow in order', async () => {
