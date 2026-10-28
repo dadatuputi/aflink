@@ -93,12 +93,11 @@ const getIndexLinks = async (page) => {
   return links;
 };
 
-// The quicklinks feed answers 404 for a category until its page has been
-// opened in the session as a real document; fetching the page's HTML is not
-// enough. A hidden frame does it in Chromium-based browsers. Firefox treats
-// the framed page differently (its own feed call 404s too), so when the
-// frame has not primed the feed the page is opened as a top-level tab,
-// reusing one named window for every page, and closed afterwards.
+// The quicklinks feed answers 404 for a category while the portal's own
+// page for it shows no links either: the portal serves these lists from a
+// cache that is empty some of the time. Opening the page in a hidden frame
+// sometimes fills it; when it does not, the list is skipped and named in
+// the result, and a later run picks it up.
 const openInFrame = (url) => new Promise((resolve) => {
   const frame = document.createElement('iframe');
   frame.style.display = 'none';
@@ -108,16 +107,6 @@ const openInFrame = (url) => new Promise((resolve) => {
   setTimeout(done, 15000);
   document.body.appendChild(frame);
 });
-
-let primingTab = null;
-const openInTab = (url) => {
-  primingTab = window.open(url, 'aflink-priming');
-  if (!primingTab) throw new Error('could not open the page in a new tab; open the Career & Training and Life & Fitness tabs yourself, then rerun');
-};
-const closePrimingTab = () => {
-  if (primingTab && !primingTab.closed) primingTab.close();
-  primingTab = null;
-};
 
 const pollFeed = async (url, attempts) => {
   let response;
@@ -140,11 +129,7 @@ const getQuickLinks = async (page) => {
     await openInFrame(pageUrl);
     response = await pollFeed(url, 12);
   }
-  if (!response.ok) {
-    openInTab(pageUrl);
-    response = await pollFeed(url, 30);
-  }
-  if (!response.ok) throw new Error(`quick links feed answered ${response.status}`);
+  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; the portal page shows no links either right now, so rerun later`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
   if (!links) throw new Error('quick links feed returned no list');
@@ -164,7 +149,6 @@ const collect = async () => {
       failures.push({ name: page.name, error: error.message });
     }
   }
-  closePrimingTab();
   return { pages, failures };
 };
 
