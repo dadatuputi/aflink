@@ -55,7 +55,13 @@ html.bg-spice-brown(lang='en')
               //- Put each link in the category here
               each link in links_not_deleted
                 .list-group-item.list-group-item-action.border-top.link-container
-                  a.main-link(href=link.link class={'overridden': link.isOverridden, 'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
+                  .link-main
+                    a.main-link(href=link.link class={'overridden': link.isOverridden, 'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
+                    //- One-line summary; the "…" opens the full description (search.js)
+                    if link.summary
+                      .link-summary
+                        span.summary-text= link.summary
+                        button.summary-more(type="button" aria-label=("Full description of " + link.title) data-description=(link.description || '') data-meta=link.detailMeta) …
                   a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
                   a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
       p.alert-dark(hidden) No results for
@@ -69,7 +75,12 @@ html.bg-spice-brown(lang='en')
         div#unofficial-list.list-group
           each link in unofficial
             .list-group-item.list-group-item-action.border-top.link-container
-              a.main-link(href=link.link class={'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.title)) #{link.title}
+              .link-main
+                a.main-link(href=link.link class={'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.title)) #{link.title}
+                if link.summary
+                  .link-summary
+                    span.summary-text= link.summary
+                    button.summary-more(type="button" aria-label=("Full description of " + link.title) data-description=(link.description || '') data-meta=link.detailMeta) …
               a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
               a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
   section#about.bg-olive-drab.text-center
@@ -108,4 +119,17 @@ div#exit-modal.modal(tabindex=-1 style="display: none")
       .modal-body
         .progress
           .progress-bar.progress-bar-striped.progress-bar-animated(role=progressbar aria-label="Animated striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%")
-          
+
+//- Link details: the "…" after a summary opens this with the link's full
+//- description (search.js fills it from the row)
+div#detail-modal.modal(tabindex=-1 style="display: none")
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header.vstack.gap-1.align-items-start
+        h5.modal-title.mb-0
+        .meta
+      .modal-body
+        p.description.mb-0
+      .modal-footer
+        button.btn.btn-outline-secondary(type="button" data-bs-dismiss="modal") Close
+        a.btn.btn-request.open-link(href="") Open

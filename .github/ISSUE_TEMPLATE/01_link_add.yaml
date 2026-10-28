@@ -21,6 +21,21 @@ body:
       placeholder: e.g., https://www.my.af.mil
     validations:
       required: true
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One line of 90 characters or fewer saying what the link is for. It is shown under the title and searched.
+      placeholder: e.g., Pay statements, W-2s and allotments
+    validations:
+      required: true
+  - type: input
+    id: description
+    attributes:
+      label: Description
+      description: Optional. A sentence or two more, shown when someone opens the link's details. One line.
+    validations:
+      required: false
   - type: dropdown
     id: link_type
     attributes:
@@ -38,4 +53,3 @@ body:
       description: A comment about the link and a reason why it should be added.
     validations:
       required: true
-  

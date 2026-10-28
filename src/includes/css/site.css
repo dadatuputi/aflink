@@ -459,6 +459,75 @@ ul {
   opacity: 0.55;
 }
 
+/* Title with its one-line summary beneath. The summary never wraps; the "…"
+   after it is a real button that opens the full description, styled as plain
+   text on purpose: same color, no underline, no hover change. Its padding
+   gives it a 44px tap target without changing the row height. */
+.link-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.55rem 1.25rem;
+}
+
+.link-main .main-link {
+  flex: none;
+  padding: 0;
+}
+
+.link-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  max-width: 100%;
+  margin-top: 0.1rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.summary-text {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.summary-more {
+  flex-shrink: 0;
+  background: none;
+  border: 0;
+  padding: 0.8rem 1rem;
+  margin: -0.8rem -1rem -0.8rem -0.7rem;
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.summary-more:focus-visible {
+  outline: 2px solid var(--input-focus-border);
+  outline-offset: -6px;
+  border-radius: 4px;
+}
+
+.summary-text mark {
+  padding: 0;
+  background-color: var(--mark-bg);
+  border-radius: 2px;
+  color: inherit;
+}
+
+#detail-modal .meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+#detail-modal .description {
+  white-space: pre-line;
+}
+
 /* Navbar group separators; only shown on the expanded (horizontal) bar */
 .navbar .nav-separator {
   color: #ffffff66;

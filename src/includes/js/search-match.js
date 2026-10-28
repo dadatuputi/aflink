@@ -51,17 +51,23 @@
   }
 
   // Does this link match every query word? A word may match the title, the
-  // URL (scheme stripped), or the link's category name — "education" pulls up
-  // the whole category, "unofficial" the whole unofficial section.
+  // URL (scheme stripped), the link's category name — "education" pulls up
+  // the whole category, "unofficial" the whole unofficial section — or the
+  // link's summary or description, so "deployment" finds LOGMOD.
   //
-  // link: { title, url, category }. Returns { matched, ranges }, where ranges
-  // are [start, end] index pairs into the ORIGINAL title for highlighting;
-  // an empty ranges array on a match means it matched only on URL/category.
+  // link: { title, url, category, summary, description }. Returns
+  // { matched, ranges, inText }: ranges are [start, end] index pairs into the
+  // ORIGINAL title for highlighting; an empty ranges array on a match means
+  // it matched only elsewhere. inText says whether some word matched the
+  // summary or description, which is when the page shows a snippet.
   function matchLink(link, words) {
     var title = normalize(link.title);
     var url = normalize(String(link.url == null ? "" : link.url).replace(/^https?:\/\//, "")).norm;
     var cat = normalize(link.category).norm;
+    var text = normalize(String(link.summary == null ? "" : link.summary) + " " +
+      String(link.description == null ? "" : link.description)).norm;
     var ranges = [];
+    var inText = false;
     var matched = words.every(function (w) {
       var p = title.norm.indexOf(w.whole);
       if (p > -1) {
@@ -69,23 +75,69 @@
         return true;
       }
       if (url.indexOf(w.whole) > -1 || cat.indexOf(w.whole) > -1) return true;
+      if (text.indexOf(w.whole) > -1) {
+        inText = true;
+        return true;
+      }
       if (!w.parts.length) return false;
       var partRanges = [];
+      var partInText = false;
       var all = w.parts.every(function (t) {
         var q = title.norm.indexOf(t);
         if (q > -1) {
           partRanges.push([title.map[q], title.map[q + t.length - 1]]);
           return true;
         }
-        return url.indexOf(t) > -1 || cat.indexOf(t) > -1;
+        if (url.indexOf(t) > -1 || cat.indexOf(t) > -1) return true;
+        if (text.indexOf(t) > -1) {
+          partInText = true;
+          return true;
+        }
+        return false;
       });
       if (all) {
         ranges.push.apply(ranges, partRanges);
+        if (partInText) inText = true;
         return true;
       }
       return false;
     });
-    return { matched: matched, ranges: ranges };
+    return { matched: matched, ranges: ranges, inText: inText };
+  }
+
+  // A short excerpt of `text` around the first query word found in it, with
+  // highlight ranges into the excerpt — what the page shows under a title
+  // when the match came from the summary or description rather than the
+  // title. Returns null when no word appears in the text.
+  function snippet(text, words, radius) {
+    text = String(text == null ? "" : text);
+    radius = radius || 60;
+    var n = normalize(text), hit = null;
+    words.some(function (w) {
+      return [w.whole].concat(w.parts).some(function (t) {
+        var p = n.norm.indexOf(t);
+        if (p > -1) {
+          hit = [n.map[p], n.map[p + t.length - 1]];
+          return true;
+        }
+        return false;
+      });
+    });
+    if (!hit) return null;
+    var start = Math.max(0, hit[0] - radius);
+    var end = Math.min(text.length, hit[1] + 1 + radius);
+    // Cut on word boundaries so the excerpt does not start or end mid-word
+    if (start > 0) {
+      var s = text.lastIndexOf(" ", start);
+      if (s > -1 && s + 1 <= hit[0]) start = s + 1;
+    }
+    if (end < text.length) {
+      var e = text.indexOf(" ", end);
+      if (e > -1) end = e;
+    }
+    var lead = start > 0 ? "…" : "";
+    var excerpt = lead + text.slice(start, end) + (end < text.length ? "…" : "");
+    return { text: excerpt, ranges: matchRanges(excerpt, words) };
   }
 
   // Ranges for whichever query words appear in a plain string — used to
@@ -119,6 +171,7 @@
     parseQuery: parseQuery,
     matchLink: matchLink,
     matchRanges: matchRanges,
+    snippet: snippet,
     // The page has no category header for unofficial rows and matches them as
     // "unofficial"; the worker labels their suggestions with this name.
     UNOFFICIAL_CATEGORY: "UNOFFICIAL"

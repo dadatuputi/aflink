@@ -1,0 +1,937 @@
+{
+  "comment": "Hand-written, keyed by contentId. summary: one line, 90 characters at most, shown under the title and searched. description: optional plain text for the details dialog, used when the portal supplies none. A portal sync never touches this file; the Add a Link and Override forms write to it.",
+  "descriptions": {
+    "cAF17B3959F0573F0019F146E6F44000A": {
+      "summary": "Training Business Area: unit training records, tasks and qualifications",
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+    },
+    "cC2DB2BB29F0573F8019F1469D6F0000C": {
+      "summary": "Training Business Area: unit training records, tasks and qualifications",
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+    },
+    "cFE3B28A19CE21542019CE25A25F50001": {
+      "summary": "GenAI.mil, the DoD's approved generative AI assistant",
+      "description": "GenAI.mil gives DoD personnel access to approved generative AI models for unclassified work, with CAC login."
+    },
+    "cE3494DD05A4B0E17015AC836175F0652": {
+      "summary": "Where to sign in to DAF365 Outlook on the web",
+      "description": "The portal's guidance page for reaching Air Force email in a browser through DAF365 (Office 365)."
+    },
+    "cA4057E1F428205D0014294DAA34200EC": {
+      "summary": "Official Air Force instructions, manuals, handbooks and forms",
+      "description": "The Department of the Air Force e-Publishing site is the authoritative source for current publications and forms."
+    },
+    "05dddf39-d01b-4f78-86e0-fea3346c1ce9": {
+      "summary": "Officer and enlisted performance evaluations in myFSS",
+      "description": "myEval is where evaluations, performance briefs and promotion recommendation forms are written, routed and signed."
+    },
+    "d4354ab6-8f1a-4c12-b79c-96292cf29bcd": {
+      "summary": "DoD collaboration site: milBook groups, wikis and shared documents",
+      "description": "milSuite hosts community pages, groups and document libraries across the services. CAC login."
+    },
+    "41de8009-05c1-4f2f-a909-47290bcbea1f": {
+      "summary": "Schedule and track household goods moves for a PCS",
+      "description": "The Defense Personal Property System handles counseling, shipment scheduling, tracking and claims for household goods moves."
+    },
+    "3e441b0c-69f0-4b00-9947-d3dfbf3afb7f": {
+      "summary": "Enrollment and benefits records for you and your dependents, in milConnect",
+      "description": "DEERS holds the eligibility records behind ID cards, TRICARE and other benefits. Update dependents and contact information here."
+    },
+    "b2fa039d-e021-428e-b1e1-349174c9d967": {
+      "summary": "Book an ID card appointment and update your GAL contact details",
+      "description": "ID Card Office Online finds RAPIDS sites, books appointments, and lets you edit the contact information the Global Address List shows."
+    },
+    "1634814a-52a8-48a4-a814-73f2428e9f0e": {
+      "summary": "Fitness assessment scores and scheduling in myFSS",
+      "description": "myFitness records physical fitness assessment results and lets members and unit fitness managers schedule and review tests."
+    },
+    "a171a74d-7a26-4b56-bd59-955f5be0d7fe": {
+      "summary": "Search the index of every Air Force publication and form",
+      "description": "The e-Publishing product index lists current instructions, manuals and forms by number, title and organization."
+    },
+    "a7681434-b2f8-48b8-88ea-6025dfdf5ab9": {
+      "summary": "Assignment preferences, Talent Marketplace matching and mentoring",
+      "description": "MyVector carries the Talent Marketplace for officer and enlisted assignments, development plans and mentor matching."
+    },
+    "af6575d0-7310-4da8-ba16-ff434682c75f": {
+      "summary": "Fix your Outlook Global Address List entry through the service desk",
+      "description": "The Enterprise Service Desk portal handles requests to update the name, rank, unit and phone shown in the GAL."
+    },
+    "40e55dfc-d999-40c8-a909-6fd3b5ed1e23": {
+      "summary": "The Air Force Portal home page",
+      "description": "Entry point to Air Force applications, announcements and base and functional area pages. CAC login."
+    },
+    "8741976f-c12b-4694-8f25-459aafeff887": {
+      "summary": "Country clearance and travel requirements for official travel abroad",
+      "description": "The Foreign Clearance Guide lists entry, clearance and theater requirements for DoD travel to each country."
+    },
+    "53a622a6-f6a7-4044-aef1-628de6a0c203": {
+      "summary": "Recover old CAC encryption certificates to open older encrypted email",
+      "description": "The Automatic Key Recovery Agent restores private keys from previous CACs so email encrypted to them can still be read. .mil only."
+    },
+    "3c28f7d2-96d7-46fb-b625-e3bec00bbea9": {
+      "summary": "DAF365: Outlook, Teams, OneDrive and SharePoint in a browser",
+      "description": "The unclassified Microsoft 365 tenant for the Department of the Air Force, reachable from any network with a CAC."
+    },
+    "0465fffd-b7b2-4d82-8033-7511d53e7d53": {
+      "summary": "Request aircraft and personnel clearances for official foreign travel",
+      "description": "APACS routes theater and country clearance requests for personnel and aircraft and tracks their approval."
+    },
+    "3c6e28c5-9c4f-485d-9402-255877e3a22d": {
+      "summary": "Airfield driving training, testing and certification records",
+      "description": "The AFFSA airfield driving application delivers the training and tests behind airfield driving privileges and keeps the records."
+    },
+    "77efc173-dd2a-47c7-b8bb-64be42f7ff66": {
+      "summary": "Send large files, up to 8 GB, inside and outside the DoD",
+      "description": "DoD SAFE transfers files too large for email, with encryption at rest and a time limit on each drop-off."
+    },
+    "0d23bca0-f31c-427a-9ad1-1dcc65aab117": {
+      "summary": "Free online courses in coding, cloud, data and cyber skills",
+      "description": "Digital University provides on-demand technical training from commercial providers to Air Force and Space Force members."
+    },
+    "b53ca766-4357-4e93-b49a-4ca2605292f4": {
+      "summary": "Required foreign travel briefings and reporting",
+      "description": "The Foreign Travel Briefs System delivers pre-travel briefings and records the travel reports security managers require. .mil only."
+    },
+    "09f201d5-c92f-4d49-904b-10a9600933ef": {
+      "summary": "Isolated personnel reports and personnel recovery data",
+      "description": "PRMS holds the ISOPREP and other records personnel recovery forces need to identify and recover isolated personnel. .mil only."
+    },
+    "f34449ce-533e-4705-8c3e-937b7ce8aa60": {
+      "summary": "Contract invoicing and payment through WAWF and other DoD procurement tools",
+      "description": "PIEE is the DoD's procurement portal, home to Wide Area Workflow invoicing, SPRS and related contracting applications."
+    },
+    "df6e266b-d836-4687-9656-602d214cd4e2": {
+      "summary": "Air Force Reserve orders: request, approve and print",
+      "description": "AROWS-R writes and routes orders for Air Force Reserve members, from annual tour to active duty orders."
+    },
+    "e72a0cd4-2411-4c0a-b4c1-a4277edb646e": {
+      "summary": "Sign-in hub for personnel apps: vMPF, PRDA, AMS, MyVector and more",
+      "description": "The Air Force Okta portal is the single sign-on page for A1 personnel applications. Log in once, then open the app tiles."
+    },
+    "561966fe-e90d-485a-85f5-5df945ef85d7": {
+      "summary": "Search and apply for Air Force Reserve vacancies",
+      "description": "RMVS lists open Reserve positions by unit and specialty and takes applications from members seeking a new assignment."
+    },
+    "4d27d77b-4d4d-4dbb-8406-81fafa89b93a": {
+      "summary": "Find the nearest legal office for wills, powers of attorney and advice",
+      "description": "The JAG legal assistance locator lists base legal offices, their hours and the services each provides."
+    },
+    "a5105d4f-c4f3-4007-91fa-d484d77dcf08": {
+      "summary": "Open an IT help desk ticket with the Enterprise Service Desk",
+      "description": "The EITaaS service center portal takes requests for accounts, access, hardware and other enterprise IT support."
+    },
+    "3471cb76-e56f-443b-8d93-a3542c0a6ab9": {
+      "summary": "How the Department of the Air Force is carrying out current executive orders",
+      "description": "The official DAF page tracking policy changes and guidance issued in response to executive orders."
+    },
+    "016534e8-5c9c-4166-9a0d-9a9620c59853": {
+      "summary": "Personnel Services Delivery Memorandums, the current A1 process guidance",
+      "description": "PSDMs are the memorandums that change or clarify personnel processes between publication updates. Listed in myFSS knowledge."
+    },
+    "8f3d50ff-0f72-4a86-8392-eca383118240": {
+      "summary": "TRICARE Overseas referrals and authorizations for beneficiaries",
+      "description": "MyCare Overseas is the TRICARE Overseas Program's beneficiary portal for referrals, authorizations and provider searches."
+    },
+    "4f0ad81e-aa82-47fe-92be-050e1b6a437a": {
+      "summary": "File and track TRICARE Overseas claims",
+      "description": "The TRICARE Overseas Program portal for submitting claims and checking their status."
+    },
+    "578022f2-4396-4eb6-8852-9e494715d87e": {
+      "summary": "Remote desktop into the Air Force network from any computer",
+      "description": "Azure Virtual Desktop, also called Desktop Anywhere or Sonic Boom, provides a government desktop in a browser or client. Setup and FAQs."
+    },
+    "fa167ae6-0af3-4969-b0d1-491eec80438d": {
+      "summary": "Air National Guard manning and position reports",
+      "description": "STARS RAW pulls manning, position and personnel data for Air National Guard units. .mil only."
+    },
+    "765553eb-6b4b-41e1-8746-fd340782dfdc": {
+      "summary": "Explosive ordnance disposal incident and equipment records",
+      "description": "EODIMS tracks EOD incidents, munitions and equipment for Air Force EOD flights."
+    },
+    "684719e5-8a7a-4d6f-a04b-238537d33877": {
+      "summary": "Explosive ordnance disposal incident and equipment records",
+      "description": "EODIMS tracks EOD incidents, munitions and equipment for Air Force EOD flights."
+    },
+    "85a471aa-e338-4de8-8ddb-55b0cdd24775": {
+      "summary": "Sign in to myFSS with a username and password instead of a CAC",
+      "description": "The non-CAC login for myFSS, for members, retirees and family without a card reader."
+    },
+    "7ad6db36-3b64-42fe-b55c-810a639a53b6": {
+      "summary": "Maintenance scheduling and status for mobility aircraft (G081)",
+      "description": "WebG081 is the maintenance information system for AMC and other mobility aircraft: scheduling, discrepancies and status."
+    },
+    "20ccdc86-ef98-4c96-b05e-45a2f988650d": {
+      "summary": "Emergency management command and control for unit control centers",
+      "description": "C2IMERA connects installation emergency operations centers with unit control centers for accountability, reporting and tasking."
+    },
+    "3a767706-5ddb-4398-ba51-a3664105c564": {
+      "summary": "Reserve unit training assembly participation and pay (IDT)",
+      "description": "UTAPSWeb records attendance at unit training assemblies and inactive duty training for Air Force Reserve pay. .mil only."
+    },
+    "5d93a849-1f5e-4d51-b2d3-16d9d19e1262": {
+      "summary": "Unit readiness reporting and personnel availability",
+      "description": "ARIS collects readiness data for deployable units: personnel, equipment and training status."
+    },
+    "1f8511d5-88a4-4036-977c-822841b17392": {
+      "summary": "Training Business Area: unit training records, tasks and qualifications",
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+    },
+    "3c06433f-06b1-4ec4-999d-dab4d8bc1ece": {
+      "summary": "Leave feedback on myFSS, myEval, TMIS and the A1 service desk",
+      "description": "The ICE comment card for A1 human resources IT systems, read by the teams that run them."
+    },
+    "6f2d5817-b84b-44cc-b0c3-07f304ff1bf9": {
+      "summary": "Defense Cyber Investigations Training Academy courses",
+      "description": "DCITA trains DoD investigators and cyber personnel in digital forensics and cyber investigations."
+    },
+    "uAFBULLETSHAPER": {
+      "summary": "Fit performance bullets to the line, with abbreviation suggestions",
+      "description": "A community tool that measures bullets against the AF form width and suggests spacing and abbreviation changes. Runs in the browser."
+    },
+    "uMILITARYCAC": {
+      "summary": "Get a CAC reader working on a home computer, step by step",
+      "description": "MilitaryCAC walks through reader drivers, DoD certificates and browser setup for Windows and Mac, with fixes for common errors."
+    },
+    "uDODCERTSMAC": {
+      "summary": "Install DoD root certificates on a Mac",
+      "description": "A guide to installing and trusting the DoD certificate chain on macOS so CAC sites load without warnings."
+    },
+    "a1ef7d6b-246a-4bd7-8ec4-4ccf235b7e21": {
+      "summary": "Check whether you are eligible for below-the-zone promotion and when",
+      "description": "A community calculator that works out BTZ eligibility windows from your date of rank and time in service."
+    },
+    "c6925EC1BF2870FB5E044080020E329A9": {
+      "summary": "Plans and tracks cargo and personnel moves for deployments and exercises"
+    },
+    "c6925EC1B89C90FB5E044080020E329A9": {
+      "summary": "309th SMXG program data warehouse: plans, documents and technical orders"
+    },
+    "c6925EC1B4C0A0FB5E044080020E329A9": {
+      "summary": "Aircraft reliability and availability analysis tools and reports"
+    },
+    "c6925EC1B7F150FB5E044080020E329A9": {
+      "summary": "Tracks and reports munitions and component data for AFLCMC"
+    },
+    "c6925EC1B2F7E0FB5E044080020E329A9": {
+      "summary": "Documents PMEL calibration and maintenance of test equipment"
+    },
+    "c6925EC1B8B760FB5E044080020E329A9": {
+      "summary": "Requirements and configuration tracking for logistics systems"
+    },
+    "c6925EC1BF8550FB5E044080020E329A9": {
+      "summary": "Weapon System Support Program data (D040)"
+    },
+    "c6925EC1B61AD0FB5E044080020E329A9": {
+      "summary": "Data exchange with contractors supporting weapon systems"
+    },
+    "c6925EC1BBC5E0FB5E044080020E329A9": {
+      "summary": "GCSS-AF program outreach and information site"
+    },
+    "c6925EC1B89D10FB5E044080020E329A9": {
+      "summary": "309th SMXG asset and personnel locator"
+    },
+    "c6925EC1B56490FB5E044080020E329A9": {
+      "summary": "Tuition pricing tool for SAF/FMB cost estimates"
+    },
+    "c6925EC1B38D40FB5E044080020E329A9": {
+      "summary": "Talent management data for logistics: skills, positions and assignments"
+    },
+    "c1326C1EE9276BE6B019276CCBF510005": {
+      "summary": "Nuclear weapons related materiel positive inventory control"
+    },
+    "c6925EC1B5CCE0FB5E044080020E329A9": {
+      "summary": "AFMC action item and task tracker"
+    },
+    "c6925EC1BAE810FB5E044080020E329A9": {
+      "summary": "Library of government-owned software available for reuse"
+    },
+    "c2D8EB9D6297405FA01298528A24A0196": {
+      "summary": "Weapon system requirements, execution and availability data"
+    },
+    "c6925EC1B276E0FB5E044080020E329A9": {
+      "summary": "Air Force directory services: find people and organizations"
+    },
+    "c0ECF2BB84AE5734F014AFEB732F50361": {
+      "summary": "Confidential help for service members and families: counseling, finances, moves"
+    },
+    "c6925EC1B21A90FB5E044080020E329A9": {
+      "summary": "Weapon system program management tool at Hill AFB"
+    },
+    "c9AE79FCC999FCE8901999FF81DCF0000": {
+      "summary": "BLADE aircraft readiness dashboard (Qlik, Advana)"
+    },
+    "c6925EC1B98880FB5E044080020E329A9": {
+      "summary": "Civilian employee self-service: personnel record, benefits and performance"
+    },
+    "c5FDEA9F022797A00012298A035D80477": {
+      "summary": "Aircraft maintenance data: discrepancies, scheduling and status"
+    },
+    "c88B4F00B3DF677C3013E1E28D9C8064F": {
+      "summary": "Civilian time and attendance reporting"
+    },
+    "c9AE79FCC85E4BC070185E4D5E97C0000": {
+      "summary": "Workforce analytics dashboards on Envision"
+    },
+    "cA1FBF31D27033713012728F8CDA806DE": {
+      "summary": "Mobility Air Forces operations planning and tracking"
+    },
+    "c001A940383F16A030183F1918DA40001": {
+      "summary": "Financial decision support: budgets, execution and reports"
+    },
+    "c6925EC1B73D80FB5E044080020E329A9": {
+      "summary": "Verify your military experience and training for civilian employers"
+    },
+    "c6925EC1B66D60FB5E044080020E329A9": {
+      "summary": "Special packaging instructions for shipping Air Force materiel"
+    },
+    "cE9635A5D6A2C7889016A2CECFFA80019": {
+      "summary": "Strategic management tool for acquisition programs"
+    },
+    "c6925EC1B41DB0FB5E044080020E329A9": {
+      "summary": "TDY travel authorizations, reservations and vouchers"
+    },
+    "c0ECF2BB84A073E04014A34F93EBF0A56": {
+      "summary": "Radioactive materials permits and inventory"
+    },
+    "c69C25CE18E1E1778018E1E69F7E4008D": {
+      "summary": "myLearning course: KDSS basic toolset"
+    },
+    "c6925EC1B62490FB5E044080020E329A9": {
+      "summary": "Tuition assistance, CCAF progress and your education record"
+    },
+    "cA4057E1F2C16F481012C36B72204044A": {
+      "summary": "Budget justification documents and execution tracking"
+    },
+    "cE3494DD0549DC90E0154A66E0C600004": {
+      "summary": "One-way file transfer between networks (DoDIIS)"
+    },
+    "c44C00E3C84432B1E0184434307CD0000": {
+      "summary": "Fire and emergency services incident and inspection records"
+    },
+    "c88B4F00B39C57917013AE55DE8F63B8C": {
+      "summary": "Civilian employment information for Guard and Reserve members"
+    },
+    "cE3494DD052E520CF0152FA3DC4BD021A": {
+      "summary": "Aircraft maintenance training records and scheduling"
+    },
+    "c6925EC1BE3A60FB5E044080020E329A9": {
+      "summary": "Schenker USA freight shipment tracking"
+    },
+    "c6925EC1BACEF0FB5E044080020E329A9": {
+      "summary": "Search military specifications and standards (DLA ASSIST)"
+    },
+    "c742E16CC84C3EA160184C4077B7A0000": {
+      "summary": "Support equipment health tracking dashboard"
+    },
+    "c6925EC1BF1AE0FB5E044080020E329A9": {
+      "summary": "Vehicle fleet management: dispatch, maintenance and records"
+    },
+    "cA4057E1F31340BF60131AFF08BA01718": {
+      "summary": "TRANSCOM reference data: codes and tables for transportation systems"
+    },
+    "cB8C9E0579716ED03019717ECE5A1000B": {
+      "summary": "BLADE readiness information dashboard without PII (Qlik)"
+    },
+    "c6925EC1BA6200FB5E044080020E329A9": {
+      "summary": "Create and route purchase requests"
+    },
+    "cF575FC8E2231B533012260CBD0BD0552": {
+      "summary": "DLA logistics information services: NSN and item data"
+    },
+    "c6D14419A94503E50019451DE8B33003E": {
+      "summary": "Track TEMPO days and high-deployment tempo"
+    },
+    "c330D98A15C7ED696015CB85810FA0448": {
+      "summary": "Order supplies and equipment from the DoD catalog"
+    },
+    "c1D231AFA91BC0FF50191BD18E7CB0003": {
+      "summary": "BLADE enterprise health of the fleet dashboard (Qlik)"
+    },
+    "c6925EC1BF25A0FB5E044080020E329A9": {
+      "summary": "Medical readiness planning and decision support"
+    },
+    "c330D98A15C7ED696015CA92A651B02E5": {
+      "summary": "Environmental management guidance and documents (Intelink)"
+    },
+    "cE28A64BE92E8E60D0192E9186C4C0000": {
+      "summary": "Early separation to join the Guard or Reserve: how Palace Chase works"
+    },
+    "c6925EC1BF4560FB5E044080020E329A9": {
+      "summary": "Table management for AMC command and control systems"
+    },
+    "c0ECF2BB857C49BCE0157E7BA91300225": {
+      "summary": "Manpower authorizations and unit manning documents"
+    },
+    "cF575FC8E2231B533012260C3294F054E": {
+      "summary": "Federal logistics data: look up items by NSN or part number"
+    },
+    "c6925EC1BADA70FB5E044080020E329A9": {
+      "summary": "Civilian in-processing checklist and forms, through Okta"
+    },
+    "c6925EC1BA4480FB5E044080020E329A9": {
+      "summary": "Self-assessment checklists and inspection management"
+    },
+    "c08F5BC98836582E5018365AAFDBC0004": {
+      "summary": "BLADE propulsion dashboard (Qlik)"
+    },
+    "cEF2EBCF1799E67D901799E6FC3890008": {
+      "summary": "Board operations support for selection and promotion boards"
+    },
+    "c6925EC1BF0740FB5E044080020E329A9": {
+      "summary": "UPS package tracking"
+    },
+    "cEF1DF99C8442F4660184431D0F220000": {
+      "summary": "AFFORGEN Connect: force generation cycles and deployment readiness"
+    },
+    "c6925EC1B6BD10FB5E044080020E329A9": {
+      "summary": "Mission planning software, training and support"
+    },
+    "cE3494DD05D8E6DA7015D9F42212A021C": {
+      "summary": "Equal opportunity case management network"
+    },
+    "c6925EC1B2B7C0FB5E044080020E329A9": {
+      "summary": "Technical data and product data management repository"
+    },
+    "c88B4F00B37FFAD8E01397CE3E4D32D43": {
+      "summary": "Contract field team requests and tracking"
+    },
+    "c88B4F00B3679665D0136836952A40106": {
+      "summary": "Training for the public affairs information management system"
+    },
+    "c330D98A15D246862015D4293D7010310": {
+      "summary": "Weapons load crew certification and management"
+    },
+    "c6925EC1B56340FB5E044080020E329A9": {
+      "summary": "Reliability and maintainability data for Air Force systems"
+    },
+    "c2DA1481276AA18440176AA4E7EF50004": {
+      "summary": "FEDLOG Lite download: federal logistics data offline"
+    },
+    "c6925EC1BA1EB0FB5E044080020E329A9": {
+      "summary": "DoD global directory: find email addresses and certificates"
+    },
+    "cEF1DF99C851160AC018511869D780000": {
+      "summary": "BLADE vehicles dashboard (Qlik)"
+    },
+    "c001A940387F316FC0187F466A0E70016": {
+      "summary": "AFWERX crowdsourcing for ideas and challenges"
+    },
+    "c6925EC1B8A6D0FB5E044080020E329A9": {
+      "summary": "Unit training assembly processing for Reserve units"
+    },
+    "c001A94038A09D131018A09E65C010002": {
+      "summary": "BLADE communications and electronics equipment dashboard (Qlik)"
+    },
+    "c6925EC1B2F8D0FB5E044080020E329A9": {
+      "summary": "Technical order management: distribution, updates and accounts"
+    },
+    "c6925EC1B5D070FB5E044080020E329A9": {
+      "summary": "Help for Air Force SharePoint sites"
+    },
+    "c08F5BC98836582E5018365A5EF260000": {
+      "summary": "BLADE weapon systems dashboard (Qlik)"
+    },
+    "c69C25CE19248D344019248FDC9B20000": {
+      "summary": "Free e-books, audiobooks and databases from DAF MWR libraries"
+    },
+    "cB891FC769386661B0193878912180000": {
+      "summary": "BLADE THANOS: AMC mobility logistics readiness (Qlik)"
+    },
+    "cA4057E1F3679634D0136D11E20CA082D": {
+      "summary": "Housing offices, privatized housing and dorm information by base"
+    },
+    "cE3494DD052705D6B01528F08439F02A3": {
+      "summary": "Register employee vehicles for base air program reporting"
+    },
+    "c6306299993D4A5B30193D4EF1E150000": {
+      "summary": "Explore pay, benefits and retirement options"
+    },
+    "c6925EC1B94590FB5E044080020E329A9": {
+      "summary": "Automated records management: file plans and records"
+    },
+    "c6925EC1BD0E40FB5E044080020E329A9": {
+      "summary": "Access DISA-hosted applications through a single portal"
+    },
+    "c630629999D2A2DD3019D2A87A29A0002": {
+      "summary": "BLADE data catalog on Collibra"
+    },
+    "c0F13191089E5FB9C0189E61C2E9A0001": {
+      "summary": "BLADE supply chain dashboard (Qlik)"
+    },
+    "cA4057E1F448EFCC80144944784100115": {
+      "summary": "Your individual medical readiness status: immunizations, labs and exams"
+    },
+    "c53F6FE2F6B65F7A1016B65FA8C700000": {
+      "summary": "Air Force justice case information (Intelink)"
+    },
+    "c6925EC1B5DDC0FB5E044080020E329A9": {
+      "summary": "Assignment preferences, career management and EQUAL-Plus listings"
+    },
+    "c0ECF2BB85DD7C62A015DE359BD4602FE": {
+      "summary": "Acquisition modernization process model and guidance"
+    },
+    "cB891FC767497A90F017497C8E11F000A": {
+      "summary": "Submit and track finance customer service requests"
+    },
+    "c6925EC1B66D70FB5E044080020E329A9": {
+      "summary": "Manage DoD activity address codes"
+    },
+    "c330D98A15EF785FE016079EEE9FD1C73": {
+      "summary": "Search Air Force Reserve vacancies"
+    },
+    "c62EC42D492F859320192F8963AE30001": {
+      "summary": "Vehicle fleet applications: authorizations, validation and ratings"
+    },
+    "c330D98A151CAE9B301520FD89758014D": {
+      "summary": "Request aircraft and personnel clearances for foreign travel"
+    },
+    "cA1FBF31D22DC71E601232ECDA8D00F1A": {
+      "summary": "ILS-S supply system training environment"
+    },
+    "c6925EC1B3DB20FB5E044080020E329A9": {
+      "summary": "Civilian career reports in MyBiz+"
+    },
+    "c6925EC1B8FDA0FB5E044080020E329A9": {
+      "summary": "Submit and vote on innovation ideas"
+    },
+    "c330D98A14EF3FAB9014F22D2558C0510": {
+      "summary": "Air Force Medical Service knowledge exchange"
+    },
+    "c0F13191089E5FB9C0189E6215BD40005": {
+      "summary": "BLADE enterprise reports (Qlik)"
+    },
+    "cC9710F9178D9B5E70178DABDBA400003": {
+      "summary": "Cyber network operations development program community page"
+    },
+    "c6925EC1B96B70FB5E044080020E329A9": {
+      "summary": "In-transit visibility of cargo and passengers (USTRANSCOM IGC)"
+    },
+    "cA1FBF31D25AE0DF201260E77CE82110B": {
+      "summary": "Plan a trip and assess travel risk before leave or TDY"
+    },
+    "c6925EC1B62F50FB5E044080020E329A9": {
+      "summary": "Course announcements: prerequisites, dates and quotas"
+    },
+    "c5FDEA9F0240B216101247DBEBBC81312": {
+      "summary": "Submit and track finance vouchers and forms"
+    },
+    "c6925EC1B5B8A0FB5E044080020E329A9": {
+      "summary": "FedEx package tracking"
+    },
+    "cAF429CFD958A627A01958C0A567E0012": {
+      "summary": "Registry of BLADE applications and dashboards (Qlik)"
+    },
+    "c5FDEA9F0270340D7012720BE0EC203A9": {
+      "summary": "Track assets and shipments at depots"
+    },
+    "c6D14419A94503E50019451DA9FF9002C": {
+      "summary": "Look up personnel accounting symbol (PAS) codes"
+    },
+    "c6925EC1B91640FB5E044080020E329A9": {
+      "summary": "Plan and document cyberspace infrastructure projects"
+    },
+    "c6925EC1B75010FB5E044080020E329A9": {
+      "summary": "Supervisor tools for civilian employees in MyBiz+"
+    },
+    "cB891FC769302A5F1019302B162E90000": {
+      "summary": "Sign-in hub for personnel apps: vMPF, PRDA, AMS, MyVector and more"
+    },
+    "c0ECF2BB847443D4501475A4804390223": {
+      "summary": "Search safety data sheets for hazardous materials"
+    },
+    "c6925EC1B712A0FB5E044080020E329A9": {
+      "summary": "Air National Guard orders: request, approve and print"
+    },
+    "c6925EC1B3D290FB5E044080020E329A9": {
+      "summary": "Your civilian official personnel folder"
+    },
+    "c6925EC1B675B0FB5E044080020E329A9": {
+      "summary": "UPS supply chain shipment tracking"
+    },
+    "c6925EC1B781F0FB5E044080020E329A9": {
+      "summary": "Education and training management for civilians (.mil)"
+    },
+    "c330D98A15BC6E686015C3685B4FD079A": {
+      "summary": "Program management resources for acquisition programs"
+    },
+    "c2DA1481276AA18440176AA4BD1300000": {
+      "summary": "FEDLOG download: federal logistics data offline"
+    },
+    "c630629999D2A2DD3019D2A8D29E70004": {
+      "summary": "BLADE external data load tool (Advana)"
+    },
+    "cEF1DF99C8E61C172018E61E9271D0001": {
+      "summary": "BLADE weapon system sustainment dashboard (Qlik)"
+    },
+    "c001A94037846B9B6017846E50E9F0002": {
+      "summary": "Required training courses and your training record (formerly ADLS)"
+    },
+    "c6D14419A94503E50019451DCA5E20036": {
+      "summary": "View your PERSTEMPO deployment and TDY days"
+    },
+    "c6925EC1B8B2B0FB5E044080020E329A9": {
+      "summary": "Air Force Reserve orders: request, approve and print"
+    },
+    "cE9635A5D6FFAA197016FFBABB0AB0000": {
+      "summary": "Munitions accountability and reporting in theater (.mil)"
+    },
+    "cE3494DD0489DB4490148D1D1C8B30712": {
+      "summary": "Pay for civilian credentials and certifications with AF COOL"
+    },
+    "c12916C787AC9990E017AC9A841820000": {
+      "summary": "Fitness assessment scores and scheduling in myFSS"
+    },
+    "cE3494DD05452E5F30154625A9B5F028A": {
+      "summary": "Air program permits, emissions and compliance records"
+    },
+    "c6925EC1B675A0FB5E044080020E329A9": {
+      "summary": "Engine inventory, status and configuration management"
+    },
+    "c2832F169815D983D01815DA0174F0000": {
+      "summary": "Officer and enlisted performance evaluations in myFSS"
+    },
+    "c6925EC1B20950FB5E044080020E329A9": {
+      "summary": "Weapon system management support application"
+    },
+    "cA4057E1F2F99DB88012FA290B80B062E": {
+      "summary": "Positive inventory control of nuclear-related materiel"
+    },
+    "cAF429CFD9302A5F4019302CBCEB50001": {
+      "summary": "See enlisted promotion release results"
+    },
+    "c6925EC1B6F860FB5E044080020E329A9": {
+      "summary": "Depot repair information and G200 inventory"
+    },
+    "cE3494DD0586426B30158E15354E50EAD": {
+      "summary": "Computer program identification numbers for software"
+    },
+    "c6925EC1B5E080FB5E044080020E329A9": {
+      "summary": "Physical examination processing for flight and special duty"
+    },
+    "c330D98A14C2434A1014C2815779400DC": {
+      "summary": "Emergency management command and control for unit control centers"
+    },
+    "c0ECF2BB85DD7C62A015E0F1745F0064B": {
+      "summary": "Author and publish technical orders"
+    },
+    "cE3494DD05DD7CCA3015E2B4082E60C1A": {
+      "summary": "IT investment portfolio and system registration"
+    },
+    "c6925EC1B7A130FB5E044080020E329A9": {
+      "summary": "Your Thrift Savings Plan account"
+    },
+    "c88B4F00B36F10E810137044935570195": {
+      "summary": "Report safety hazards and near misses anonymously"
+    },
+    "c630629999D2A2DD3019D2A838A520000": {
+      "summary": "BLADE Databricks build environment"
+    },
+    "c630629999D2A2DD3019D2AA79D710008": {
+      "summary": "BLADE Tableau dashboards (Advana)"
+    },
+    "c6925EC1B6E830FB5E044080020E329A9": {
+      "summary": "Volunteer for Reserve opportunities and tours (.mil)"
+    },
+    "c330D98A15EF785FE01607A0E72001C82": {
+      "summary": "Virtual out-processing checklist in vMPF"
+    },
+    "cE3494DD051CB1089015217E067510437": {
+      "summary": "Your education and training record (civilians, .mil)"
+    },
+    "c6925EC1BCF7C0FB5E044080020E329A9": {
+      "summary": "Submit contract invoices through Wide Area Workflow (PIEE)"
+    },
+    "c9AE79FCC8E1E60BD018E1E7250AC0001": {
+      "summary": "myLearning course: KDSS budget development tool"
+    },
+    "c330D98A15E3E4554015E3F306F060004": {
+      "summary": "Request, approve and track leave (.mil only)"
+    },
+    "cE3494DD0590D665D015948702B4405EE": {
+      "summary": "Schedule field training detachment courses"
+    },
+    "c6925EC1BA2BC0FB5E044080020E329A9": {
+      "summary": "Look up Air Force people by name, email or unit (.mil)"
+    },
+    "cE3494DD0586426B30158B6E7D59E0AD5": {
+      "summary": "Engineering drawings and technical data repository"
+    },
+    "cE3494DD047ABF89A0147B1D3D6D9015F": {
+      "summary": "DEERS, ID cards, benefits and personnel records in one place"
+    },
+    "c6925EC1B3C750FB5E044080020E329A9": {
+      "summary": "F-15 Eagle modification action plans"
+    },
+    "c6925EC1BCC840FB5E044080020E329A9": {
+      "summary": "Strategic sourcing analysis for sustainment contracting"
+    },
+    "c0ECF2BB85790EEAA0157ACA1CB440116": {
+      "summary": "Pilot candidate selection method scores and information"
+    },
+    "cF575FC8E256A5E6A012570549557029A": {
+      "summary": "Defense Finance and Accounting Service: pay, travel and retirement"
+    },
+    "cB891FC7696AAC7730196AAF512EC0000": {
+      "summary": "Your Department of the Air Force learning record"
+    },
+    "c6925EC1B87860FB5E044080020E329A9": {
+      "summary": "Aeromedical waiver tracking"
+    },
+    "c0ECF2BB8627C278D01628D72136300C0": {
+      "summary": "Small unmanned aircraft system registration and management (.mil)"
+    },
+    "c6925EC1B23D60FB5E044080020E329A9": {
+      "summary": "Records disposition schedule and file plan management"
+    },
+    "c6925EC1B627F0FB5E044080020E329A9": {
+      "summary": "Federal logistics item data lookup (WebFLIS)"
+    },
+    "c0ECF2BB86321C94E0163B2E56A7A0689": {
+      "summary": "Flying hour program data exchange"
+    },
+    "cA4057E1F3EF1D1EA013F1AFF0D11034E": {
+      "summary": "Electronic source selection tool for contracting (CAC)"
+    },
+    "c6925EC1B7C700FB5E044080020E329A9": {
+      "summary": "Civilian personnel records and requests for personnel action"
+    },
+    "c6D14419A94503E50019451D87FF90028": {
+      "summary": "Health professions education requirements board"
+    },
+    "c6925EC1B37D20FB5E044080020E329A9": {
+      "summary": "Employer support for Guard and Reserve members"
+    },
+    "c53F6FE2F797B12AA01797B27D03A0000": {
+      "summary": "Civil engineer environmental dashboard and documents"
+    },
+    "c0ECF2BB857339DFC015754CA85EB003B": {
+      "summary": "Search and apply for Air Force Reserve vacancies"
+    },
+    "c6925EC1B61AB0FB5E044080020E329A9": {
+      "summary": "Reliability, availability and maintainability logistics data"
+    },
+    "c12916C787AC9990E017AC9AB20410004": {
+      "summary": "Self-service portal for A1 personnel functions and applications"
+    },
+    "cC9710F9194B73D8B0194B7CEFDD80032": {
+      "summary": "Maintenance command and control for mobility aircraft (G081)"
+    },
+    "c6925EC1B6DF50FB5E044080020E329A9": {
+      "summary": "Government retirement and benefits planning for civilians"
+    },
+    "c88B4F00B309AB29B0130B39EB23F0377": {
+      "summary": "Tinker AFB Cognos business intelligence reports"
+    },
+    "c0F131910727B926301727BA0158E0000": {
+      "summary": "Request access to operations applications (SLAM)"
+    },
+    "c78CDB8069252B1E2019252B77B850000": {
+      "summary": "NIPRGPT, the Air Force's generative AI chat on NIPRNet"
+    },
+    "c1D231AFA838A6AFD01838A8C90610002": {
+      "summary": "Request access to BLADE dashboards"
+    },
+    "c6925EC1BA3080FB5E044080020E329A9": {
+      "summary": "Electronic project orders for acquisition"
+    },
+    "c330D98A148330A54014842D98A0D0D18": {
+      "summary": "Assignment preferences, Talent Marketplace matching and mentoring"
+    },
+    "c2D8EB9D62D713923012D858A2FFD08BC": {
+      "summary": "Training environment for the base support and expeditionary planning system"
+    },
+    "c44C00E3C8364394B01836588D10F0003": {
+      "summary": "BLADE maintenance and repair dashboard (Qlik)"
+    },
+    "c8E6C5330868272C40186839E75BF0000": {
+      "summary": "AFWERX innovation support and project network"
+    },
+    "c6925EC1B3D2A0FB5E044080020E329A9": {
+      "summary": "Look up Air Force Officer Qualifying Test scores"
+    },
+    "c6925EC1BF1990FB5E044080020E329A9": {
+      "summary": "Edwards AFB center operations online"
+    },
+    "cA4057E1F356423810135CA24BBC70A73": {
+      "summary": "Air Force Reserve military clearing house"
+    },
+    "c6D14419A75547D13017555AEE4110002": {
+      "summary": "Logistics professional development program resources"
+    },
+    "c6925EC1BAF610FB5E044080020E329A9": {
+      "summary": "View your personnel records, formerly PRDA"
+    },
+    "cA4057E1F36F1137E013704B16B390131": {
+      "summary": "Warehouse management system (use email certificate)"
+    },
+    "c6925EC1B86B80FB5E044080020E329A9": {
+      "summary": "Submit and track personnel cases with AFPC"
+    },
+    "c6925EC1B80CF0FB5E044080020E329A9": {
+      "summary": "Automated logistics management and support site"
+    },
+    "cE3494DD05BC6DC2D015C36FBB37E09AC": {
+      "summary": "Defense property accountability system training and support (.mil)"
+    },
+    "c330D98A1533E3BE001539F2043A6009B": {
+      "summary": "Senior leader career management dashboard"
+    },
+    "c6925EC1B86C80FB5E044080020E329A9": {
+      "summary": "Compare TRICARE plans, including TRICARE Reserve Select"
+    },
+    "cE28A64BE92E8E60D0192E91BB42F0004": {
+      "summary": "Move from active duty to the Guard or Reserve: how Palace Front works"
+    },
+    "c6925EC1B2E8E0FB5E044080020E329A9": {
+      "summary": "Aircrew flight records and currency summary (ARMS)"
+    },
+    "c6925EC1B87CB0FB5E044080020E329A9": {
+      "summary": "Generate requests for personnel action for civilians"
+    },
+    "c6925EC1B60440FB5E044080020E329A9": {
+      "summary": "Defense Acquisition University courses and certifications"
+    },
+    "cC2DB2BB286755BE801867592047F0009": {
+      "summary": "BLADE equipment gateway dashboard (Qlik)"
+    },
+    "c742E16CC8005A096018005EDBF75008E": {
+      "summary": "Book group passenger movements with USTRANSCOM"
+    },
+    "c6925EC1B455A0FB5E044080020E329A9": {
+      "summary": "USPS package tracking"
+    },
+    "c6925EC1BE1C00FB5E044080020E329A9": {
+      "summary": "Single mobility system: airlift and sealift movement visibility"
+    },
+    "c88B4F00B3D92481D013DA2BEE21F005D": {
+      "summary": "Reserve component training management in ARCNet"
+    },
+    "cE3494DD045FC3176014600B391C70042": {
+      "summary": "Emergency preparedness guidance for Airmen and families"
+    },
+    "cEF2EBCF192587D980192588737000004": {
+      "summary": "Search DoD policy and documents with Advana Gamechanger"
+    },
+    "c6925EC1BDEF70FB5E044080020E329A9": {
+      "summary": "Recruiting information support system"
+    },
+    "c0ECF2BB846D638FC0146F74EAA280297": {
+      "summary": "Unit medical readiness reports for unit points of contact"
+    },
+    "c6925EC1B61DC0FB5E044080020E329A9": {
+      "summary": "Munitions allocation and control (Global Ammunition Control Point)"
+    },
+    "cA4057E1F3800DAA60138312C95BC03F5": {
+      "summary": "Rapid resupply requests for battlefield Airmen"
+    },
+    "c6925EC1B25B70FB5E044080020E329A9": {
+      "summary": "Patient portal: appointments, messages, prescriptions and records"
+    },
+    "c9AE79FCC963EA18E01963FF836750010": {
+      "summary": "Unit readiness reporting and personnel availability"
+    },
+    "c88B4F00B2C52D7E7012C5564103B002E": {
+      "summary": "Unclassified collaboration with partner nations and agencies"
+    },
+    "c6925EC1B3FD60FB5E044080020E329A9": {
+      "summary": "Your personnel record and self-service requests to AFPC"
+    },
+    "c6925EC1B45580FB5E044080020E329A9": {
+      "summary": "DHL package tracking"
+    },
+    "cF575FC8E2231B53301225643AC270321": {
+      "summary": "Joint lessons learned database"
+    },
+    "cE3494DD06322A58A01632740D1B9003A": {
+      "summary": "Enterprise accounting: commitments, obligations and payments"
+    },
+    "c44C00E3C8F10DAEF018F10F362520000": {
+      "summary": "Patient portal: appointments, messages, prescriptions and records"
+    },
+    "c6925EC1B80190FB5E044080020E329A9": {
+      "summary": "Personnel data retrieval applications, through Okta"
+    },
+    "cC9710F916FF054D4016FF18397F10003": {
+      "summary": "Training environment for the theater munitions system"
+    },
+    "cFE3B28A190A28A030190A2AE62FF0000": {
+      "summary": "Self-paced courses and certification prep on Percipio"
+    },
+    "cEF2EBCF18433EF000184340EA8470087": {
+      "summary": "Security assistance technical order data (internal network only)"
+    },
+    "c330D98A14C7C2B3E014CDD8000700F35": {
+      "summary": "Enrollment and benefits records for you and your dependents, in milConnect"
+    },
+    "cD22E5184786A8F7801786AB2D50E0001": {
+      "summary": "Criminal justice information cell resources (Intelink)"
+    },
+    "cC9710F917ACF63FE017ACF6692BB0000": {
+      "summary": "The military personnel data system behind your record (MilPDS)"
+    },
+    "cC2DB2BB292531FC30192535919AA0010": {
+      "summary": "Department of the Air Force AI tools and guidance"
+    },
+    "c6925EC1BE2120FB5E044080020E329A9": {
+      "summary": "Cost and requirements planning for acquisition programs"
+    },
+    "c88B4F00B3B95416E013B9A6EABA80125": {
+      "summary": "Global transportation network and in-transit data (IGC)"
+    },
+    "c6925EC1B6C870FB5E044080020E329A9": {
+      "summary": "Browse the Air Force Art Collection"
+    },
+    "c2D8EB9D6367962C80136AD2676A906FD": {
+      "summary": "Joint training courses, including annual mandatory training"
+    },
+    "cDD148DB87497A937017497DB15DA000C": {
+      "summary": "Send large files, up to 8 GB, inside and outside the DoD"
+    },
+    "c6925EC1B63890FB5E044080020E329A9": {
+      "summary": "Base supply: requisitions, stock and asset records"
+    },
+    "c6925EC1BC54D0FB5E044080020E329A9": {
+      "summary": "Maintenance operations center flight line status"
+    },
+    "c6925EC1B60040FB5E044080020E329A9": {
+      "summary": "Aircrew graduate evaluation for introductory flight training"
+    },
+    "c6925EC1BFA1D0FB5E044080020E329A9": {
+      "summary": "Account for yourself and your family after a disaster or evacuation"
+    },
+    "c88B4F00B37FFAD8E01393156645620F5": {
+      "summary": "Air Force weather forecasts and observations (AFW-WEBS)"
+    },
+    "cE3494DD05EF785CA0161248C79FE2464": {
+      "summary": "Depot source of repair decisions and documents"
+    },
+    "c88B4F00B39C579170139F8C0CA30044A": {
+      "summary": "Environmental, safety and occupational health management"
+    },
+    "c62EC42D4788899E7017888C057460000": {
+      "summary": "Personnel statistics and retrievals (STARS/RAW)"
+    },
+    "c53F6FE2F8E622F34018E623F7B6B0000": {
+      "summary": "BLADE worldwide asset laydown overlay (Qlik)"
+    },
+    "c6925EC1B91930FB5E044080020E329A9": {
+      "summary": "Command human resources data for AFMC"
+    },
+    "cB8C9E057815D985101815DA2CE110000": {
+      "summary": "Nominate and track decorations and medals in myFSS"
+    },
+    "c6925EC1BEA760FB5E044080020E329A9": {
+      "summary": "Pay statements, W-2s and allotments"
+    },
+    "c6925EC1BE1880FB5E044080020E329A9": {
+      "summary": "Base support and expeditionary planning"
+    },
+    "cF575FC8E236E61F10123AA5ED3A81517": {
+      "summary": "Air Reserve Component network: training, vacancies and tours"
+    },
+    "cA4057E1F28B8C7C20128F9E12CFD0447": {
+      "summary": "Search Air Force awards and recognition programs"
+    }
+  }
+}

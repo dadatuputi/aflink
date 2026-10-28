@@ -34,7 +34,9 @@ body:
       options:
         - Title
         - URL
+        - Summary
         - Title and URL
+        - Several of these
     validations:
       required: true
   - type: input
@@ -51,6 +53,14 @@ body:
       label: New Link URL
       description: "Required when updating the URL."
       placeholder: https://www.my.af.mil
+    validations:
+      required: false
+  - type: input
+    id: new_summary
+    attributes:
+      label: New Summary
+      description: "Required when updating the summary: one line of 90 characters or fewer, shown under the title."
+      placeholder: Pay statements, W-2s and allotments
     validations:
       required: false
   - type: textarea

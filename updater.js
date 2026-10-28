@@ -189,6 +189,9 @@ async function getNewestDate(files) {
                         contentId: originalLink.contentId,
                         // An override fixes the link; it does not stop its retirement clock
                         deprecatedSince: originalLink.deprecatedSince,
+                        // The portal's description and date still describe the fixed link
+                        description: originalLink.description,
+                        lastModified: originalLink.lastModified,
                         // exitLinkReferrer: originalLink.exitLinkReferrer,
                         // renderedAsFile: originalLink.renderedAsFile,
                         // url: originalLink.url
@@ -230,6 +233,29 @@ async function getNewestDate(files) {
         }
         links_unofficial.splice(0, links_unofficial.length, ...withStatus(links_unofficial));
         console.log(`Retired ${retired_count} links past ${RETIRE_DAYS} days`)
+
+        // Summaries are written by hand in links_descriptions.json, keyed by
+        // contentId, so a portal sync never overwrites them. The full
+        // description comes from the portal when it has one, else from the
+        // same file. detailMeta is the line under the title in the details
+        // dialog. Deprecated links carry no summary: they are on their way out.
+        const descriptions = JSON.parse(fs.readFileSync(path.resolve(linksDir, 'links_descriptions.json'))).descriptions;
+        const describe = (link, label) => {
+            const written = descriptions[link.contentId] || {};
+            const described = { ...link };
+            if (written.summary && !link.isDeprecated) described.summary = written.summary;
+            const description = link.description || written.description;
+            if (description) described.description = description;
+            else delete described.description;
+            described.detailMeta = label + (link.lastModified
+                ? ' · Updated ' + sugar_date.Date.format(new Date(link.lastModified + 'T00:00:00Z'), '{d} {Month} {yyyy}')
+                : '');
+            return described;
+        };
+        for (const category of Object.keys(links)) {
+            links[category] = links[category].map(link => describe(link, category === 'OTHER' ? 'Community link' : category));
+        }
+        links_unofficial.splice(0, links_unofficial.length, ...links_unofficial.map(link => describe(link, 'Unofficial')));
 
         const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
         console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
@@ -305,7 +331,9 @@ async function getNewestDate(files) {
             unofficial: links_unofficial.map(link => ({
                 title: link.title,
                 link: link.link,
-                contentId: link.contentId
+                contentId: link.contentId,
+                summary: link.summary,
+                description: link.description
             }))
         }
         fs.writeFileSync(path.resolve(outputDir, "links.json"), JSON.stringify(links_published, null, 2));

@@ -25,6 +25,7 @@ export const LIMITS = {
   links: 2000,
   title: 300,
   url: 2000,
+  description: 2000,
   perIpPerHour: 6,
   perDay: 40,
 }
@@ -97,6 +98,8 @@ export function sanitize(body) {
       if (typeof item.url === 'boolean') clean.url = item.url
       if (typeof item.renderedAsFile === 'boolean') clean.renderedAsFile = item.renderedAsFile
       if (typeof item.lastModified === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item.lastModified)) clean.lastModified = item.lastModified
+      // Plain text only: the page renders it as text, but keep markup out of the data
+      if (typeof item.description === 'string' && item.description.trim() && item.description.length <= LIMITS.description && !/[<>]/.test(item.description)) clean.description = item.description.trim()
       return clean
     })
   }

@@ -33,11 +33,13 @@ jobs:
         LINK_ID=$(field "Link ID")
         NEW_TITLE=$(field "New Link Title")
         NEW_LINK=$(field "New Link URL")
+        NEW_SUMMARY=$(field "New Summary")
         CHANGE_TYPE=$(field "What are you updating?")
 
         # Blank optional form fields arrive as the literal "_No response_"
         [[ "$NEW_TITLE" == "_No response_" ]] && NEW_TITLE=""
         [[ "$NEW_LINK" == "_No response_" ]] && NEW_LINK=""
+        [[ "$NEW_SUMMARY" == "_No response_" ]] && NEW_SUMMARY=""
 
         # Validate required fields
         if [[ -z "$LINK_ID" ]]; then
@@ -49,6 +51,7 @@ jobs:
         echo "LINK_ID=$LINK_ID" >> $GITHUB_ENV
         echo "NEW_TITLE=$NEW_TITLE" >> $GITHUB_ENV
         echo "NEW_LINK=$NEW_LINK" >> $GITHUB_ENV
+        echo "NEW_SUMMARY=$NEW_SUMMARY" >> $GITHUB_ENV
 
         # The selected change type dictates which new-value fields must be present;
         # a later step comments the error back on the issue and fails the job.
@@ -56,14 +59,19 @@ jobs:
           echo "VALIDATION_ERROR=the change type includes the title, but no New Link Title was provided" >> $GITHUB_ENV
         elif [[ "$CHANGE_TYPE" == *"URL"* && -z "$NEW_LINK" ]]; then
           echo "VALIDATION_ERROR=the change type includes the URL, but no New Link URL was provided" >> $GITHUB_ENV
-        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" ]]; then
-          echo "VALIDATION_ERROR=no New Link Title or New Link URL was provided" >> $GITHUB_ENV
+        elif [[ "$CHANGE_TYPE" == "Summary" && -z "$NEW_SUMMARY" ]]; then
+          echo "VALIDATION_ERROR=the change type is the summary, but no New Summary was provided" >> $GITHUB_ENV
+        elif (( ${#NEW_SUMMARY} > 90 )); then
+          echo "VALIDATION_ERROR=the New Summary is ${#NEW_SUMMARY} characters; keep it to 90 or fewer" >> $GITHUB_ENV
+        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" && -z "$NEW_SUMMARY" ]]; then
+          echo "VALIDATION_ERROR=no New Link Title, New Link URL or New Summary was provided" >> $GITHUB_ENV
         fi
 
         echo "✅ Parsed values:"
         echo "  Link ID: $LINK_ID"
         echo "  New Title: $NEW_TITLE"
         echo "  New URL: $NEW_LINK"
+        echo "  New Summary: $NEW_SUMMARY"
           
     - name: Checkout Repository
       uses: actions/checkout@v7
@@ -127,8 +135,21 @@ jobs:
           exit 1
         fi
 
+    - name: "Case: New summary (any link)"
+      if: env.NEW_SUMMARY != ''
+      env:
+        NEW_SUMMARY: ${{ env.NEW_SUMMARY }}
+      run: |
+        set -o pipefail
+        # Summaries live in links_descriptions.json for every kind of link,
+        # keyed by contentId, so this is the same edit whichever file the link is in
+        jq --arg ID "${{ env.LINK_ID }}" --arg S "$NEW_SUMMARY" \
+          '.descriptions[$ID] = ((.descriptions[$ID] // {}) + {summary: $S})' \
+          src/links/links_descriptions.json | sponge src/links/links_descriptions.json
+        echo "✅ Summary updated for LINK_ID '${{ env.LINK_ID }}'"
+
     - name: "Case: Editing a link in place (OTHER or UNOFFICIAL)"
-      if: env.ACTION == 'edit_direct'
+      if: env.ACTION == 'edit_direct' && (env.NEW_TITLE != '' || env.NEW_LINK != '')
       run: |
         set -o pipefail
         jq -r --arg id "${{ env.LINK_ID }}" \
@@ -143,7 +164,7 @@ jobs:
         echo "✅ Updated ${{ env.TARGET_FILE }} for LINK_ID '${{ env.LINK_ID }}'"
 
     - name: "Case: Overriding an AF Portal link in links_af.json via links_override.json"
-      if: env.ACTION == 'override'
+      if: env.ACTION == 'override' && (env.NEW_TITLE != '' || env.NEW_LINK != '')
       run: |
         set -o pipefail
         OVERRIDE_ID=$(uuidgen)
@@ -244,5 +265,6 @@ jobs:
             **Update Details:**
             - Link ID: ${{ env.LINK_ID }}
             - New Title: ${{ env.NEW_TITLE }}
-            - New URL: ${{ env.NEW_LINK }}`
+            - New URL: ${{ env.NEW_LINK }}
+            - New Summary: ${{ env.NEW_SUMMARY }}`
           })

@@ -30,7 +30,7 @@ const categoryName = name => {
 };
 
 // Fields a submission may update on a link it lists
-const PORTAL_FIELDS = ['title', 'link', 'type', 'exitLinkReferrer', 'url', 'renderedAsFile', 'lastModified'];
+const PORTAL_FIELDS = ['title', 'link', 'type', 'exitLinkReferrer', 'url', 'renderedAsFile', 'lastModified', 'description'];
 
 // Applications A-Z emits each link's portal referrer with an empty
 // channelPageId; the quick-link feeds fill it in. Nothing on the site reads
