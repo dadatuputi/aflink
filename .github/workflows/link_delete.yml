@@ -1,52 +1,42 @@
 name: Link Delete from Issue
 
+# Issue text never reaches a shell or a script template: fields are read by
+# scripts/issue-fields.js into environment variables, and every step uses
+# them as $VAR (or process.env in github-script), never as ${{ }}.
 on:
   repository_dispatch:
     types: [link_delete]
-  
+
 jobs:
   delete_link:
     runs-on: ubuntu-latest
     steps:
 
-    - name: parse_fields
+    - name: Checkout Repository
+      uses: actions/checkout@v7
+
+    - name: Setup Node
+      uses: actions/setup-node@v7
+      with:
+        node-version: 24
+
+    - name: Read the issue form
       env:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
-
         echo "Original issue: ${{ github.event.client_payload.original_issue }}"
-        echo "Triggered by: ${{ github.event.client_payload.triggered_by }}"
-        echo "Issue body: ${{ github.event.client_payload.issue_body }}"
+        node scripts/issue-fields.js LINK_ID="Link ID"
 
-        # Extract the first non-blank line after a "### <header>" line, trimmed.
-        # Anchoring on the header (rather than grep|xargs) survives blank-line
-        # shifts, CRLF payloads, and values containing quotes/apostrophes.
-        field() {
-          printf '%s' "$BODY" | awk -v H="### $1" '
-            index($0, H) == 1 { found = 1; next }
-            found && $0 ~ /[^[:space:]]/ {
-              sub(/^[[:space:]]+/, ""); sub(/[[:space:]]+$/, ""); print; exit
-            }'
-        }
-
-        LINK_ID=$(field "Link ID")
-
+    - name: Validate
+      run: |
         if [ -z "$LINK_ID" ]; then
           echo "Error: LINK_ID not found in issue body"
           exit 1
         fi
 
-        echo "ISSUE_NUMBER=${{ github.event.client_payload.original_issue }}" >> $GITHUB_ENV
-        echo "TRIGGERED_BY=${{ github.event.client_payload.triggered_by }}" >> $GITHUB_ENV
-        echo "LINK_ID=$LINK_ID" >> $GITHUB_ENV
-
-    - name: Checkout Repository
-      uses: actions/checkout@v7
-
     - name: Install jq & sponge
       run: |
-        # Skip installing pacakge docs {makes the man-db trigger much faster) 
-        # (I disabled `/doc` and `/info` too, just in case.)
+        # Skip installing package docs (makes the man-db trigger much faster)
         sudo tee /etc/dpkg/dpkg.cfg.d/01_nodoc > /dev/null << 'EOF'
         path-exclude /usr/share/doc/*
         path-exclude /usr/share/man/*
@@ -62,29 +52,24 @@ jobs:
 
         # Check links_other.json first (this is the file we normally remove from)
         if jq -e --arg id "$LINK_ID" '.OTHER[]? | select(.contentId == $id)' src/links/links_other.json >/dev/null 2>&1; then
-          echo "FOUND_IN=links_other.json" >> $GITHUB_ENV
           echo "ACTION=remove" >> $GITHUB_ENV
           echo "TARGET_FILE=src/links/links_other.json" >> $GITHUB_ENV
           echo "TARGET_KEY=OTHER" >> $GITHUB_ENV
           echo "Found LINK_ID in src/links/links_other.json; will remove."
 
-        # If not there, check links_af.json (AF categorized links) — we will create an override instead
+        # If not there, check links_af.json (AF categorized links): an override hides it instead
         elif jq -e --arg id "$LINK_ID" '.afpCategorizedLinksDto.links[]? | .[]? | select(.contentId == $id)' src/links/links_af.json >/dev/null 2>&1; then
-          echo "FOUND_IN=links_af.json" >> $GITHUB_ENV
           echo "ACTION=override" >> $GITHUB_ENV
           echo "Found LINK_ID in src/links/links_af.json; will create override entry."
 
-        # Last, check links_unofficial.json — removed directly like OTHER
+        # Last, check links_unofficial.json, removed directly like OTHER
         elif jq -e --arg id "$LINK_ID" '.UNOFFICIAL[]? | select(.contentId == $id)' src/links/links_unofficial.json >/dev/null 2>&1; then
-          echo "FOUND_IN=links_unofficial.json" >> $GITHUB_ENV
           echo "ACTION=remove" >> $GITHUB_ENV
           echo "TARGET_FILE=src/links/links_unofficial.json" >> $GITHUB_ENV
           echo "TARGET_KEY=UNOFFICIAL" >> $GITHUB_ENV
           echo "Found LINK_ID in src/links/links_unofficial.json; will remove."
 
         else
-          echo "FOUND_IN=none" >> $GITHUB_ENV
-          echo "ACTION=none" >> $GITHUB_ENV
           echo "Error: LINK_ID '$LINK_ID' not found in links_other.json, links_af.json, or links_unofficial.json"
           exit 1
         fi
@@ -92,20 +77,23 @@ jobs:
     - name: Remove link from its list
       if: env.ACTION == 'remove'
       run: |
-        BEFORE_COUNT=$(jq --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] | length' "${{ env.TARGET_FILE }}")
+        BEFORE_COUNT=$(jq --arg KEY "$TARGET_KEY" '.[$KEY] | length' "$TARGET_FILE")
 
-        jq -r --arg LINK_ID "${{ env.LINK_ID }}" --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] |= map(select(.contentId != $LINK_ID))' "${{ env.TARGET_FILE }}" | sponge "${{ env.TARGET_FILE }}"
+        jq -r --arg LINK_ID "$LINK_ID" --arg KEY "$TARGET_KEY" '.[$KEY] |= map(select(.contentId != $LINK_ID))' "$TARGET_FILE" | sponge "$TARGET_FILE"
 
-        AFTER_COUNT=$(jq --arg KEY "${{ env.TARGET_KEY }}" '.[$KEY] | length' "${{ env.TARGET_FILE }}")
+        AFTER_COUNT=$(jq --arg KEY "$TARGET_KEY" '.[$KEY] | length' "$TARGET_FILE")
 
         if [ "$BEFORE_COUNT" -eq "$AFTER_COUNT" ]; then
-          echo "Warning: No items were removed. LINK_ID '${{ env.LINK_ID }}' may not exist."
+          echo "Warning: No items were removed. LINK_ID '$LINK_ID' may not exist."
           exit 1
         else
           echo "Successfully removed 1 item. Count: $BEFORE_COUNT -> $AFTER_COUNT"
         fi
 
-        cat "${{ env.TARGET_FILE }}"
+        # Its summary and description go with it
+        jq --arg ID "$LINK_ID" 'del(.descriptions[$ID])' src/links/links_descriptions.json | sponge src/links/links_descriptions.json
+
+        cat "$TARGET_FILE"
 
     - name: Add override entry for links_af.json
       if: env.ACTION == 'override'
@@ -114,7 +102,7 @@ jobs:
         OVERRIDE_ID=$(uuidgen)
 
         # Create override entry with title and link set to null to hide the AF Portal link
-        jq --arg LINK_ID "${{ env.LINK_ID }}" \
+        jq --arg LINK_ID "$LINK_ID" \
            --arg OVERRIDE_ID "$OVERRIDE_ID" \
            '. += [{
              "id": $OVERRIDE_ID,
@@ -125,24 +113,26 @@ jobs:
              "timestamp": now
            }]' src/links/links_override.json | sponge src/links/links_override.json
 
-        echo "✅ Added override entry for LINK_ID '${{ env.LINK_ID }}' (override id: $OVERRIDE_ID)"
+        echo "✅ Added override entry for LINK_ID '$LINK_ID' (override id: $OVERRIDE_ID)"
 
     - name: Add failure comment
       if: failure()
       uses: actions/github-script@v9
+      env:
+        LINK_ID: ${{ env.LINK_ID }}
       with:
         script: |
           await github.rest.issues.createComment({
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '❌ Failed to remove link with Content ID `${{ env.LINK_ID }}` - it may not exist in the list.'
+            body: '❌ Failed to remove link with Content ID `' + process.env.LINK_ID + '` - it may not exist in the list.'
           })
 
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
-        message: "Deleted link (${{ env.LINK_ID }}) from issue ${{ env.ISSUE_NUMBER }}, closed by ${{ env.TRIGGERED_BY }}"
+        message: "Deleted link from issue ${{ github.event.client_payload.original_issue }}"
 
     - name: Trigger next workflow
       uses: actions/github-script@v9
@@ -166,7 +156,5 @@ jobs:
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: `✅ **Link deleted successfully!**
-            
-            The link has been deleted and will be removed on the next site deployment.`
+            body: '✅ **Link deleted successfully!**\n\nThe link has been deleted and will be removed on the next site deployment.'
           })

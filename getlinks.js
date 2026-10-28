@@ -25,8 +25,12 @@ const compressAndEncode = async (data) => {
   const writer = cs.writable.getWriter();
   writer.write(bytes);
   writer.close();
-  const compressedBytes = await new Response(cs.readable).arrayBuffer();
-  return btoa(String.fromCharCode.apply(null, new Uint8Array(compressedBytes)));
+  const compressedBytes = new Uint8Array(await new Response(cs.readable).arrayBuffer());
+  // A loop, not String.fromCharCode.apply: apply overflows the call stack
+  // past roughly 100 KB, and a full set of lists with descriptions is bigger
+  let binary = '';
+  for (const b of compressedBytes) binary += String.fromCharCode(b);
+  return btoa(binary);
 };
 
 // Return the JSON array passed to afp.indexModel.storeData( [...] ) in a page's HTML.

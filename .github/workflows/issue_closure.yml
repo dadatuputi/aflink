@@ -20,7 +20,7 @@ jobs:
           const notPlanned = stateReason === 'not_planned';
           core.setOutput('state-reason', stateReason);
           core.setOutput('is-not-planned', notPlanned);
-          
+
           if (notPlanned) {
             core.notice('Issue closed as "Not Planned" - workflow will halt');
 
@@ -30,7 +30,7 @@ jobs:
               repo: context.repo.repo,
               body: `🚫 **Action not taken** - This issue was closed as "not planned". No further action will be taken.`
             });
-            
+
           } else {
             core.notice(`Issue closed as ${stateReason || 'completed'} - workflow will continue`);
           }
@@ -46,12 +46,11 @@ jobs:
             repo: context.repo.repo,
             permission: 'push'
           });
-          
+
           const authorizedUsers = collaborators.map(user => user.login);
           const currentUser = context.payload.sender.login;
           const isAuthorized = authorizedUsers.includes(currentUser);
-          
-          // Set multiple outputs
+
           core.setOutput('authorized', isAuthorized);
           core.setOutput('user', currentUser);
           core.setOutput('authorized-users', authorizedUsers.join(','));
@@ -65,82 +64,43 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚫 **Action not taken** - This issue was closed by @${{ steps.auth.outputs.user }} but only authorized users can approve link requests.
-              
+              body: `🚫 **Action not taken** - This issue was closed by @${currentUser} but only authorized users can approve link requests.
+
               If this action should still be taken, please have an authorized user review and close this issue.`
             });
           }
-          
+
           return isAuthorized;
 
-    - name: Dispatch workflow - ADD LINK
-      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'add link')
+    - name: Dispatch the workflow for the issue's label
+      if: steps.auth.outputs.authorized == 'true'
       env:
         BODY: ${{ github.event.issue.body }}
       uses: actions/github-script@v9
       with:
         script: |
+          // One request type per issue: the first label with a workflow wins,
+          // so an issue carrying two never starts two runs that race to commit
+          const events = {
+            'add link': 'link_add',
+            'override link': 'link_override',
+            'update af links': 'link_update_af',
+            'delete link': 'link_delete',
+          };
+          const labels = context.payload.issue.labels.map(l => l.name);
+          const label = Object.keys(events).find(l => labels.includes(l));
+          if (!label) {
+            core.notice('No link request label on this issue; nothing to dispatch');
+            return;
+          }
           await github.rest.repos.createDispatchEvent({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            event_type: 'link_add',
+            event_type: events[label],
             client_payload: {
               original_issue: context.issue.number,
               issue_body: process.env.BODY,
               triggered_by: context.actor
             }
           });
-
-    - name: Dispatch workflow - OVERRIDE LINK
-      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'override link')
-      env:
-        BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v9
-      with:
-        script: |
-          await github.rest.repos.createDispatchEvent({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            event_type: 'link_override',
-            client_payload: {
-              original_issue: context.issue.number,
-              issue_body: process.env.BODY,
-              triggered_by: context.actor
-            }
-          });
-
-    - name: Dispatch workflow - UPDATE LINKS FROM AF PORTAL
-      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'update af links')
-      env:
-        BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v9
-      with:
-        script: |
-          await github.rest.repos.createDispatchEvent({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            event_type: 'link_update_af',
-            client_payload: {
-              original_issue: context.issue.number,
-              issue_body: process.env.BODY,
-              triggered_by: context.actor
-            }
-          });
-
-    - name: Dispatch workflow - DELETE LINK
-      if: steps.auth.outputs.authorized == 'true' && contains(github.event.issue.labels.*.name, 'delete link')
-      env:
-        BODY: ${{ github.event.issue.body }}
-      uses: actions/github-script@v9
-      with:
-        script: |
-          await github.rest.repos.createDispatchEvent({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            event_type: 'link_delete',
-            client_payload: {
-              original_issue: context.issue.number,
-              issue_body: process.env.BODY,
-              triggered_by: context.actor
-            }
-          });
+          core.notice(`Dispatched ${events[label]} for label "${label}"`);
