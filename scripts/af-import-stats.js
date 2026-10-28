@@ -10,7 +10,7 @@ const flatten = file => {
     const links = JSON.parse(fs.readFileSync(file)).afpCategorizedLinksDto.links;
     const map = new Map();
     for (const [cat, items] of Object.entries(links)) {
-        for (const l of items) map.set(l.contentId, { title: l.title, link: l.link, cat });
+        for (const l of items) map.set(l.contentId, { title: l.title, link: l.link, cat, deprecated: !!l.deprecatedSince });
     }
     return map;
 };
@@ -19,17 +19,23 @@ const [oldFile, newFile] = process.argv.slice(2);
 const oldMap = flatten(oldFile);
 const newMap = flatten(newFile);
 
-const added = [], removed = [], changed = [];
+const added = [], removed = [], changed = [], deprecated = [], restored = [];
 for (const [id, l] of newMap) if (!oldMap.has(id)) added.push(l);
 for (const [id, l] of oldMap) if (!newMap.has(id)) removed.push(l);
 for (const [id, l] of newMap) {
     const o = oldMap.get(id);
-    if (o && (o.title !== l.title || o.link !== l.link)) changed.push({ o, n: l });
+    if (!o) continue;
+    if (o.title !== l.title || o.link !== l.link) changed.push({ o, n: l });
+    if (!o.deprecated && l.deprecated) deprecated.push(l);
+    if (o.deprecated && !l.deprecated) restored.push(l);
 }
 
-say(`${newMap.size} links total: ${added.length} added, ${removed.length} removed, ${changed.length} changed`);
+say(`${newMap.size} links total: ${added.length} added, ${changed.length} changed, `
+    + `${deprecated.length} deprecated, ${restored.length} back on the portal, ${removed.length} retired`);
 for (const l of added) say(`+ ${l.title} (${l.cat})`);
-for (const l of removed) say(`- ${l.title} (${l.cat})`);
+for (const l of deprecated) say(`! deprecated: ${l.title} (${l.cat})`);
+for (const l of restored) say(`* back on the portal: ${l.title} (${l.cat})`);
+for (const l of removed) say(`- retired: ${l.title} (${l.cat})`);
 for (const { o, n } of changed) {
     if (o.title !== n.title) say(`~ title: "${o.title}" → "${n.title}"`);
     if (o.link !== n.link) say(`~ url (${n.title}): ${o.link} → ${n.link}`);

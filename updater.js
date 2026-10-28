@@ -9,6 +9,7 @@ import gitDateExtractor from 'git-date-extractor'
 import imageType from 'image-type'
 import process from 'process'
 import sharp from 'sharp'
+import { linkStatus, RETIRE_DAYS } from './scripts/link-status.js'
 
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
@@ -186,6 +187,8 @@ async function getNewestDate(files) {
                         originalLink: trueOriginalLink,
                         // type: originalLink.type,
                         contentId: originalLink.contentId,
+                        // An override fixes the link; it does not stop its retirement clock
+                        deprecatedSince: originalLink.deprecatedSince,
                         // exitLinkReferrer: originalLink.exitLinkReferrer,
                         // renderedAsFile: originalLink.renderedAsFile,
                         // url: originalLink.url
@@ -203,6 +206,31 @@ async function getNewestDate(files) {
 
         // Add other links
         links.OTHER = links_other.OTHER;
+
+        // Deprecated links (dropped by the portal, or a dead domain) stay listed,
+        // muted and after the current ones, until they retire; see
+        // scripts/link-status.js. Sorting here orders links.json too, so the
+        // worker suggests them in the same place the page lists them.
+        const today = new Date().toISOString().slice(0, 10);
+        const healthPath = path.resolve(linksDir, 'link_health.json');
+        const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath)) : {};
+        const withStatus = list => list
+            .map(link => ({ link, status: linkStatus(link, today, health) }))
+            .filter(({ status }) => !status.retired)
+            .sort((a, b) => a.status.deprecated - b.status.deprecated)
+            .map(({ link, status }) => status.deprecated
+                ? { ...link, isDeprecated: true, deprecatedNote: status.note }
+                : link);
+        let retired_count = 0;
+        for (const category of Object.keys(links)) {
+            const before = links[category].length;
+            links[category] = withStatus(links[category]);
+            retired_count += before - links[category].length;
+            if (links[category].length === 0) delete links[category];
+        }
+        links_unofficial.splice(0, links_unofficial.length, ...withStatus(links_unofficial));
+        console.log(`Retired ${retired_count} links past ${RETIRE_DAYS} days`)
+
         const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
         console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
 

@@ -40,7 +40,7 @@ jobs:
             --form-string "token=$PUSHOVER_TOKEN" \
             --form-string "user=$PUSHOVER_USER" \
             --form-string "title=aflink: AF Portal sync overdue" \
-            --form-string "message=Links last synced $AGE_DAYS days ago ($LAST_SYNC), past the $THRESHOLD-day threshold. Re-sync: portal Quick Links → getlinks.js in console → paste into an Update AF Links issue and close it." \
+            --form-string "message=Links last synced $AGE_DAYS days ago ($LAST_SYNC), past the $THRESHOLD-day threshold. Re-sync: open each page listed in the Update AF Links issue form → getlinks.js in console → paste into one issue per page and close it." \
             --form-string "url=https://github.com/dadatuputi/aflink/issues/new?template=04_link_update_af.yaml" \
             --form-string "url_title=Open Update AF Links issue" \
             https://api.pushover.net/1/messages.json

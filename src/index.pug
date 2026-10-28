@@ -55,7 +55,7 @@ html.bg-spice-brown(lang='en')
               //- Put each link in the category here
               each link in links_not_deleted
                 .list-group-item.list-group-item-action.border-top.link-container
-                  a.main-link(href=link.link class={'overridden': link.isOverridden} data-content-id=(link.contentId) title=(link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden: title=link.title)) #{link.title}
+                  a.main-link(href=link.link class={'overridden': link.isOverridden, 'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
                   a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
                   a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
       p.alert-dark(hidden) No results for
@@ -69,14 +69,14 @@ html.bg-spice-brown(lang='en')
         div#unofficial-list.list-group
           each link in unofficial
             .list-group-item.list-group-item-action.border-top.link-container
-              a.main-link(href=link.link data-content-id=(link.contentId) title=link.title) #{link.title}
+              a.main-link(href=link.link class={'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.title)) #{link.title}
               a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
               a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
   section#about.bg-olive-drab.text-center
     .container
       h2 About
       p.lead
-        | These links are mirrored from the USAF Quick Links page to be 
+        | These links are mirrored from the AF Portal's Applications A-Z and quick link pages to be
         | quickly and easily accessible from anywhere
 
   include includes/update.pug
