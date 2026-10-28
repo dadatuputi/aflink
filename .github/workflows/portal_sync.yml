@@ -12,7 +12,7 @@ on:
         description: gzip + base64 of {source, afpCategorizedLinksDto} from getlinks.js
         required: true
       source:
-        description: Portal page the links came from (index:... or quicklinks:...)
+        description: Portal page(s) the links came from, comma-separated (index:... or quicklinks:...)
         required: true
       digest:
         description: Short hash of the payload, for the commit message
@@ -55,9 +55,10 @@ jobs:
           SOURCE: ${{ inputs.source }}
         run: |
           printf '%s' "$PAYLOAD" | base64 -d | gzip -dc > /tmp/incoming.json
-          # The source the worker checked has to be the one inside the payload
-          [[ "$(jq -r .source /tmp/incoming.json)" == "$SOURCE" ]] || { echo "Source mismatch"; exit 1; }
-          echo "Decoded $(jq '[.afpCategorizedLinksDto.links[] | length] | add' /tmp/incoming.json) links from $SOURCE"
+          # The sources the worker checked have to be the ones inside the payload
+          FOUND=$(jq -r 'if .pages then ([.pages[].source] | join(",")) else .source end' /tmp/incoming.json)
+          [[ "$FOUND" == "$SOURCE" ]] || { echo "Source mismatch: $FOUND vs $SOURCE"; exit 1; }
+          echo "Decoded $(jq '[(if .pages then .pages[] else . end) | .afpCategorizedLinksDto.links[] | length] | add' /tmp/incoming.json) links from $SOURCE"
 
       - name: Switch to the sync branch
         run: |

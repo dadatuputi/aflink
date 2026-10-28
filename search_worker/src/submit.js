@@ -47,24 +47,42 @@ const cors = origin => ORIGINS.includes(origin) ? {
 } : {}
 
 // The payload as the sync will see it: known fields only, every value checked.
-// Returns { source, links } or throws with a message safe to send back.
+// getlinks.js sends every list at once as { pages: [{ source,
+// afpCategorizedLinksDto }] }; a single { source, afpCategorizedLinksDto } is
+// one page. Returns { pages: [{ source, links }] } or throws with a message
+// safe to send back.
 export function sanitize(body) {
   if (!body || typeof body !== 'object') throw new Error('Expected a JSON object')
-  const { source } = body
-  if (!KNOWN_SOURCES.includes(source)) throw new Error('Unknown portal page; run getlinks.js on one of the pages listed in the Update AF Links issue form')
-  const groups = body.afpCategorizedLinksDto?.links
-  if (!groups || typeof groups !== 'object' || Array.isArray(groups)) throw new Error('Missing afpCategorizedLinksDto.links')
-  const names = Object.keys(groups)
-  if (names.length === 0 || names.length > LIMITS.categories) throw new Error(`Expected 1 to ${LIMITS.categories} categories`)
-
-  const links = {}
+  const raw = Array.isArray(body.pages) ? body.pages : [body]
+  if (raw.length === 0 || raw.length > KNOWN_SOURCES.length) throw new Error(`Expected 1 to ${KNOWN_SOURCES.length} pages`)
+  const sources = new Set()
   const seen = new Set()
   let count = 0
+  const pages = raw.map(page => {
+    if (!page || typeof page !== 'object') throw new Error('Bad page entry')
+    const { source } = page
+    if (!KNOWN_SOURCES.includes(source)) throw new Error('Unknown portal page; getlinks.js only submits the lists it knows')
+    if (sources.has(source)) throw new Error(`Page ${source} sent twice`)
+    sources.add(source)
+    seen.clear()
+    return { source, links: sanitizeLinks(page, source) }
+  })
+  return { pages }
+
+  function sanitizeLinks(page, source) {
+  const groups = page.afpCategorizedLinksDto?.links
+  if (!groups || typeof groups !== 'object' || Array.isArray(groups)) throw new Error(`Missing afpCategorizedLinksDto.links for ${source}`)
+  const names = Object.keys(groups)
+  if (names.length === 0 || names.length > LIMITS.categories) throw new Error(`Expected 1 to ${LIMITS.categories} categories for ${source}`)
+
+  const links = {}
+  let pageCount = 0
   for (const name of names) {
     if (typeof name !== 'string' || !name.trim() || name.length > LIMITS.title) throw new Error('Bad category name')
     const items = groups[name]
     if (!Array.isArray(items)) throw new Error(`Category ${JSON.stringify(name)} is not a list`)
     links[name] = items.map(item => {
+      pageCount++
       if (++count > LIMITS.links) throw new Error(`More than ${LIMITS.links} links`)
       if (!item || typeof item !== 'object') throw new Error('Bad link entry')
       const { contentId, title, link } = item
@@ -82,8 +100,9 @@ export function sanitize(body) {
       return clean
     })
   }
-  if (count === 0) throw new Error('No links')
-  return { source, links }
+  if (pageCount === 0) throw new Error(`No links for ${source}`)
+  return links
+  }
 }
 
 async function sha256(text) {
@@ -137,13 +156,14 @@ export async function handleSubmit(request, env) {
     return json(429, { ok: false, error: 'Daily submission limit reached; try again tomorrow' }, origin)
   }
 
-  const serialized = JSON.stringify({ source: payload.source, afpCategorizedLinksDto: { links: payload.links } })
-  const count = Object.values(payload.links).reduce((n, l) => n + l.length, 0)
+  const serialized = JSON.stringify({ pages: payload.pages.map(p => ({ source: p.source, afpCategorizedLinksDto: { links: p.links } })) })
+  const count = payload.pages.reduce((n, p) => n + Object.values(p.links).reduce((m, l) => m + l.length, 0), 0)
+  const source = payload.pages.map(p => p.source).join(',')
   const hash = await sha256(serialized)
   const repo = env.GITHUB_REPO || DEFAULT_REPO
   const pulls = `https://github.com/${repo}/pulls`
   if (await env.LINKS.get(`submit:hash:${hash}`)) {
-    return json(200, { ok: true, repeated: true, count, source: payload.source, message: `Already received this exact list today. Pull requests: ${pulls}` }, origin)
+    return json(200, { ok: true, repeated: true, count, source, message: `Already received these exact lists today. Pull requests: ${pulls}` }, origin)
   }
 
   const dispatch = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/${WORKFLOW}/dispatches`, {
@@ -155,12 +175,12 @@ export async function handleSubmit(request, env) {
       'user-agent': 'aflink-sync-worker',
       'content-type': 'application/json',
     },
-    body: JSON.stringify({ ref: env.GITHUB_REF || 'master', inputs: { payload: await pack(serialized), source: payload.source, digest: hash.slice(0, 12) } }),
+    body: JSON.stringify({ ref: env.GITHUB_REF || 'master', inputs: { payload: await pack(serialized), source, digest: hash.slice(0, 12) } }),
   })
   if (dispatch.status !== 204) {
     console.error('dispatch failed', dispatch.status, await dispatch.text())
     return json(502, { ok: false, error: `Could not start the sync (GitHub answered ${dispatch.status}); use the Update AF Links issue form` }, origin)
   }
   await env.LINKS.put(`submit:hash:${hash}`, '1', { expirationTtl: DAY })
-  return json(200, { ok: true, count, source: payload.source, message: `Received ${count} links. A pull request will appear within a few minutes: ${pulls}` }, origin)
+  return json(200, { ok: true, count, source, message: `Received ${count} links from ${payload.pages.length} list(s). A pull request will appear within a few minutes: ${pulls}` }, origin)
 }
