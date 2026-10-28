@@ -32,6 +32,13 @@ const categoryName = name => {
 // Fields a submission may update on a link it lists
 const PORTAL_FIELDS = ['title', 'link', 'type', 'exitLinkReferrer', 'url', 'renderedAsFile', 'lastModified'];
 
+// Applications A-Z emits each link's portal referrer with an empty
+// channelPageId; the quick-link feeds fill it in. Nothing on the site reads
+// the field, so a value with the site beats one without, and neither is
+// worth a diff line.
+const keepReferrer = (current, incoming) =>
+    typeof current === 'string' && /channelPageId=.+/.test(current) && !/channelPageId=.+/.test(incoming || '');
+
 const sortByTitle = list => list.sort((a, b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()));
 
 export function applySource(current, source, incomingLinks, today) {
@@ -59,7 +66,11 @@ export function applySource(current, source, incomingLinks, today) {
                 byId.set(incoming.contentId, { category, link });
                 continue;
             }
-            for (const f of PORTAL_FIELDS) if (incoming[f] !== undefined) entry.link[f] = incoming[f];
+            for (const f of PORTAL_FIELDS) {
+                if (incoming[f] === undefined) continue;
+                if (f === 'exitLinkReferrer' && keepReferrer(entry.link[f], incoming[f])) continue;
+                entry.link[f] = incoming[f];
+            }
             if (!entry.link.sources.includes(source)) entry.link.sources.push(source);
             delete entry.link.deprecatedSince;
             if (isIndex) entry.category = category;

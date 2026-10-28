@@ -80,13 +80,31 @@ const getIndexLinks = async (page) => {
   return links;
 };
 
-// Quick-link page: the portal's "cached" quicklinks feed answers for a category
-// once its page has been rendered in this session, so load the page first.
+// Load a portal page as a real document in a hidden frame. The quicklinks
+// feed below answers 404 for a category until its page has been opened in the
+// session as a document; fetching the page's HTML is not enough, a frame is.
+const openInFrame = (url) => new Promise((resolve) => {
+  const frame = document.createElement('iframe');
+  frame.style.display = 'none';
+  frame.src = url;
+  const done = () => { setTimeout(() => frame.remove(), 15000); resolve(); };
+  frame.onload = done;
+  setTimeout(done, 15000);
+  document.body.appendChild(frame);
+});
+
+// Quick-link page: open the page, then read its category from the feed,
+// allowing the page a few seconds to prime it.
 const getQuickLinks = async (page) => {
   const categoryId = page.source.slice('quicklinks:'.length);
-  await fetchText(`/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`);
+  await openInFrame(`/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`);
   const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
-  const response = await fetch(url, { credentials: 'same-origin' });
+  let response;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    response = await fetch(url, { credentials: 'same-origin' });
+    if (response.ok) break;
+    await new Promise(r => setTimeout(r, 500));
+  }
   if (!response.ok) throw new Error(`quick links feed answered ${response.status}`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
