@@ -111,6 +111,9 @@ test('a link request always gets a verdict', () => {
   const finding = { title: 'X', host: 'a.com', source: 'Safe Browsing', verdict: 'MALWARE' }
   assert.match(verdict({ url: 'https://a.com/', host: 'a.com', findings: [], sources }), /safe\./)
   assert.match(verdict({ url: 'https://a.com/', host: 'a.com', findings: [finding], sources }), /UNSAFE[\s\S]*MALWARE/)
+  const safe = verdict({ url: 'https://a.com/p?q=1', host: 'a.com', findings: [], sources })
+  assert.ok(safe.includes('https://transparencyreport.google.com/safe-browsing/search?url=https%3A%2F%2Fa.com%2Fp%3Fq%3D1'))
+  assert.ok(safe.includes('https://www.virustotal.com/gui/domain/a.com'))
   assert.match(verdict({ url: 'https://x.af.mil/', host: 'x.af.mil', findings: [], sources }), /official domain/)
   assert.match(verdict({ url: 'nope', host: '(unparseable URL)', findings: [], sources }), /not a valid URL/)
 })

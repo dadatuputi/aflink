@@ -89,6 +89,11 @@ export function vtFlagged(stats) {
     return !!stats && stats.malicious + stats.suspicious >= VT_THRESHOLD;
 }
 
+// Public report pages, so a reader can see the evidence behind a verdict
+export const googleReport = url => `https://transparencyreport.google.com/safe-browsing/search?url=${encodeURIComponent(url)}`;
+export const vtReport = host => `https://www.virustotal.com/gui/domain/${encodeURIComponent(host)}`;
+const reports = (url, host) => `Reports: [Google Safe Browsing](${googleReport(url)}) · [VirusTotal](${vtReport(host)})`;
+
 // The comment posted on a link request: always says what was concluded
 export function verdict({ url, host, findings, sources }) {
     const code = `\`${url.replace(/`/g, '')}\``;
@@ -98,13 +103,14 @@ export function verdict({ url, host, findings, sources }) {
         return `✅ **Link check: official domain.** \`${host}\` is a .mil/.gov host, so no reputation scan is needed.`;
     if (findings.length)
         return `⚠️ **Link check: UNSAFE.** ${code} was flagged (checked with ${sources}):\n\n${table(findings)}\n\n` +
-            'Check the site before approving: a flag can be a false positive, or the domain may have changed hands.';
-    return `✅ **Link check: safe.** ${code} has no known malware or phishing listings (${sources}).`;
+            'Check the site before approving: a flag can be a false positive, or the domain may have changed hands.\n\n' +
+            reports(url, host);
+    return `✅ **Link check: safe.** ${code} has no known malware or phishing listings (${sources}).\n\n${reports(url, host)}`;
 }
 
 const table = items =>
     `| Link | Host | Source | Verdict |\n|---|---|---|---|\n${items.map(f =>
-        `| ${f.title.replace(/\|/g, '\\|')} | \`${f.host}\` | ${f.source} | ${f.verdict} |`).join('\n')}`;
+        `| ${f.title.replace(/\|/g, '\\|')} | \`${f.host}\` | [${f.source}](${f.source === 'VirusTotal' ? vtReport(f.host) : googleReport(f.url)}) | ${f.verdict} |`).join('\n')}`;
 
 async function googlePass(links) {
     const key = process.env.SAFE_BROWSING_KEY;
