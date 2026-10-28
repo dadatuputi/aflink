@@ -57,13 +57,26 @@ jobs:
         uses: actions/github-script@v9
         env:
           OUTCOME: ${{ steps.scan.outcome }}
+          SCAN_URL: ${{ steps.url.outputs.url }}
         with:
           script: |
             const fs = require('fs');
             const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            // Scan failed: point at the same report pages the script links, to check by hand
+            const failed = () => {
+              const url = process.env.SCAN_URL;
+              let host = '';
+              try { host = new URL(url).hostname; } catch {}
+              const reports = [
+                `[Google Safe Browsing](https://transparencyreport.google.com/safe-browsing/search?url=${encodeURIComponent(url)})`,
+                ...(host ? [`[VirusTotal](https://www.virustotal.com/gui/domain/${encodeURIComponent(host)})`] : []),
+              ];
+              return '❔ **Link check: could not complete.** The reputation services did not answer, so this link has not been checked. ' +
+                'It will be scanned again when the request is approved.\n\nCheck manually: ' + reports.join(' · ');
+            };
             const body = process.env.OUTCOME === 'success'
               ? fs.readFileSync('/tmp/reputation_verdict.md', 'utf8')
-              : '❔ **Link check: could not complete.** The reputation services did not answer, so this link has not been checked. It will be scanned again when the request is approved.';
+              : failed();
             await github.rest.issues.createComment({
               ...context.repo,
               issue_number: context.issue.number,
