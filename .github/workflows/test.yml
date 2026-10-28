@@ -11,6 +11,7 @@ on:
       - 'src/**'
       - 'search_worker/**'
       - 'test/**'
+      - 'scripts/*.js'
       - 'updater.js'
       - 'package.json'
       - 'package-lock.json'
