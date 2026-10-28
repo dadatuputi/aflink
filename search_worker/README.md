@@ -85,6 +85,10 @@ The endpoint is public, so [`src/submit.js`](src/submit.js) is strict:
   checked for shape and length; the whole payload is capped at 512 KB.
 - Per-address and daily rate limits, counted in the `LINKS` KV namespace; an
   identical payload within a day is acknowledged but not re-sent.
+- The packed payload is kept in KV for a day and served at
+  `GET /submission/<id>`; the workflow receives only the id, because
+  `workflow_dispatch` inputs are capped at 64 KB and the lists with their
+  descriptions are larger.
 - On the workflow side, `scripts/af-guard.js` fails the run (and opens an
   issue) if a submission would move an existing link to a non-official domain.
 

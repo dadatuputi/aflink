@@ -11,6 +11,8 @@ on:
       - 'src/**'
       - 'search_worker/**'
       - 'test/**'
+      - 'test-browser/**'
+      - 'getlinks.js'
       - 'scripts/*.js'
       - 'updater.js'
       - 'package.json'
@@ -40,3 +42,22 @@ jobs:
         run: npm run dev:build
       - name: Run tests
         run: npm test
+
+  browsers:
+    name: getlinks.js in Chromium and Firefox
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Install Dependencies
+        run: npm ci
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox
+      - name: Run getlinks.js against the mock portal
+        # test-browser/mock-portal.js stands in for the AF Portal; the real
+        # one needs a CAC, so this proves the script, not the portal
+        run: npm run test:browser

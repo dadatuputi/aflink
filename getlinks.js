@@ -93,32 +93,47 @@ const getIndexLinks = async (page) => {
   return links;
 };
 
-// Load a portal page as a real document in a hidden frame. The quicklinks
-// feed below answers 404 for a category until its page has been opened in the
-// session as a document; fetching the page's HTML is not enough, a frame is.
-const openInFrame = (url) => new Promise((resolve) => {
-  const frame = document.createElement('iframe');
-  frame.style.display = 'none';
-  frame.src = url;
-  const done = () => { setTimeout(() => frame.remove(), 15000); resolve(); };
-  frame.onload = done;
-  setTimeout(done, 15000);
-  document.body.appendChild(frame);
-});
+// The quicklinks feed answers 404 for a category until the session has
+// entered that section the way the nav bar does: a top-level load of its
+// landing page (globalTab.do?command=landing). A deep link straight to the
+// links page skips that, and that page then shows no links either. Fetching
+// the landing page, or loading it in a hidden frame, does not count (checked
+// on a fresh session), so the landing page is opened in a real tab, which a
+// script run from the console may do, and closed once the feed answers. One
+// named tab serves every section. When the browser blocks the tab, the list
+// is skipped and the result names the nav tab to click before rerunning.
+let primingTab = null;
+const primeSection = (landingUrl) => {
+  primingTab = window.open(landingUrl, 'aflink-priming');
+  return !!primingTab;
+};
+const closePrimingTab = () => {
+  if (primingTab && !primingTab.closed) primingTab.close();
+  primingTab = null;
+};
 
-// Quick-link page: open the page, then read its category from the feed,
+const pollFeed = async (url, attempts) => {
+  let response;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    response = await fetch(url, { credentials: 'same-origin' });
+    if (response.ok) return response;
+    await new Promise(r => setTimeout(r, 500));
+  }
+  return response;
+};
+
+// Quick-link page: enter its section, then read its category from the feed,
 // allowing the page a few seconds to prime it.
 const getQuickLinks = async (page) => {
   const categoryId = page.source.slice('quicklinks:'.length);
-  await openInFrame(`/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`);
+  const landingUrl = `/gcss-af/USAF/ep/globalTab.do?command=landing&channelPageId=${page.siteId}`;
   const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
-  let response;
-  for (let attempt = 0; attempt < 20; attempt++) {
-    response = await fetch(url, { credentials: 'same-origin' });
-    if (response.ok) break;
-    await new Promise(r => setTimeout(r, 500));
+  let response = await pollFeed(url, 1);
+  if (!response.ok) {
+    if (!primeSection(landingUrl)) throw new Error(`the browser blocked opening the section; click the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
+    response = await pollFeed(url, 30);
   }
-  if (!response.ok) throw new Error(`quick links feed answered ${response.status}`);
+  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status} even after opening the section; rerun later`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
   if (!links) throw new Error('quick links feed returned no list');
@@ -138,6 +153,7 @@ const collect = async () => {
       failures.push({ name: page.name, error: error.message });
     }
   }
+  closePrimingTab();
   return { pages, failures };
 };
 
