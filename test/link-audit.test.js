@@ -9,7 +9,7 @@ import os from 'node:os'
 import path from 'node:path'
 
 import { servedLinks } from '../scripts/served-links.js'
-import { inScope, lookupUrls, sbFindings, vtFlagged, safeBrowsing, virusTotal } from '../scripts/scan-reputation.js'
+import { inScope, lookupUrls, sbFindings, vtFlagged, safeBrowsing, virusTotal, verdict } from '../scripts/scan-reputation.js'
 
 function fixture() {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'aflink-links-'))
@@ -104,4 +104,13 @@ test('VirusTotal rate limiting waits and retries once', async () => {
   }
   assert.deepEqual(await virusTotal('a.com', 'V', { retryMs: 0 }), { malicious: 0, suspicious: 0 })
   assert.equal(calls, 2)
+})
+
+test('a link request always gets a verdict', () => {
+  const sources = 'Safe Browsing'
+  const finding = { title: 'X', host: 'a.com', source: 'Safe Browsing', verdict: 'MALWARE' }
+  assert.match(verdict({ url: 'https://a.com/', host: 'a.com', findings: [], sources }), /safe\./)
+  assert.match(verdict({ url: 'https://a.com/', host: 'a.com', findings: [finding], sources }), /UNSAFE[\s\S]*MALWARE/)
+  assert.match(verdict({ url: 'https://x.af.mil/', host: 'x.af.mil', findings: [], sources }), /official domain/)
+  assert.match(verdict({ url: 'nope', host: '(unparseable URL)', findings: [], sources }), /not a valid URL/)
 })

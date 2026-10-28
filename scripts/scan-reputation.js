@@ -12,7 +12,8 @@
 //               out and a 429 waits a minute and retries.
 // The weekly workflow runs them as separate jobs so a Safe Browsing hit is
 // raised without waiting on VirusTotal. SCAN_URL limits the scan to one URL,
-// for the submission workflows.
+// for the submission workflows; it also writes a safe/unsafe verdict for that
+// URL to /tmp/reputation_verdict.md, whatever the outcome.
 //
 // Output: markdown report on stdout; writes a warning comment body to
 // /tmp/reputation_warning.md and appends findings=<n> to $GITHUB_OUTPUT when
@@ -88,6 +89,19 @@ export function vtFlagged(stats) {
     return !!stats && stats.malicious + stats.suspicious >= VT_THRESHOLD;
 }
 
+// The comment posted on a link request: always says what was concluded
+export function verdict({ url, host, findings, sources }) {
+    const code = `\`${url.replace(/`/g, '')}\``;
+    if (host === '(unparseable URL)')
+        return `⚠️ **Link check: not a valid URL.** ${code} could not be parsed, so it was not scanned.`;
+    if (!inScope(host))
+        return `✅ **Link check: official domain.** \`${host}\` is a .mil/.gov host, so no reputation scan is needed.`;
+    if (findings.length)
+        return `⚠️ **Link check: UNSAFE.** ${code} was flagged (checked with ${sources}):\n\n${table(findings)}\n\n` +
+            'Check the site before approving: a flag can be a false positive, or the domain may have changed hands.';
+    return `✅ **Link check: safe.** ${code} has no known malware or phishing listings (${sources}).`;
+}
+
 const table = items =>
     `| Link | Host | Source | Verdict |\n|---|---|---|---|\n${items.map(f =>
         `| ${f.title.replace(/\|/g, '\\|')} | \`${f.host}\` | ${f.source} | ${f.verdict} |`).join('\n')}`;
@@ -122,11 +136,9 @@ async function main() {
     const only = process.env.SCAN_URL?.trim();
 
     const served = servedLinks({ unofficial: true });
-    let links = served.filter(l => inScope(l.host));
-    if (only) {
-        const known = served.find(l => l.url === only);
-        links = [known ?? withHost(only, only)].filter(l => inScope(l.host));
-    }
+    // A request issue's URL is not on the site yet; a merged one is, with a title
+    const target = only && (served.find(l => l.url === only) ?? withHost(only, only));
+    const links = (only ? [target] : served).filter(l => inScope(l.host));
     const hosts = new Set(links.map(l => l.host));
 
     const findings = [];
@@ -157,6 +169,10 @@ async function main() {
         ].join('\n'));
     } else {
         console.log('Nothing flagged. ✅\n');
+    }
+
+    if (target) {
+        fs.writeFileSync('/tmp/reputation_verdict.md', verdict({ url: only, host: target.host, findings, sources }));
     }
 
     if (process.env.GITHUB_OUTPUT) {
