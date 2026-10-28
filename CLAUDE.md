@@ -27,7 +27,7 @@ workflows in `.github/workflows/`, not by hand.
   `.github/demo.gif` on a Windows runner; run the "Tutorial Screenshots"
   workflow by hand, don't edit the images
 
-## Search is two implementations of one behaviour
+## Search is two implementations of one behavior
 
 The page filters links client-side; the search worker answers the browser's
 address-bar suggestion requests. A suggestion is resolved by loading the page

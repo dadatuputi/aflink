@@ -133,12 +133,13 @@ export async function handleSubmission(request, env, id) {
   return new Response(packed, { status: 200, headers: { 'content-type': 'text/plain', 'cache-control': 'no-store' } })
 }
 
-// KV counters: eventually consistent, which is fine for a nuisance limit
-async function overLimit(env, key, limit, ttl) {
+// KV counters: eventually consistent, which is fine for a nuisance limit.
+// Only a submission that starts a workflow run counts against them, so
+// rejected and repeated submissions cannot spend the budget.
+const atLimit = async (env, key, limit) => (Number(await env.LINKS.get(key)) || 0) >= limit
+async function bump(env, key, ttl) {
   const n = Number(await env.LINKS.get(key)) || 0
-  if (n >= limit) return true
   await env.LINKS.put(key, String(n + 1), { expirationTtl: ttl })
-  return false
 }
 
 export async function handleSubmit(request, env) {
@@ -160,11 +161,11 @@ export async function handleSubmit(request, env) {
     return json(400, { ok: false, error: e.message }, origin)
   }
 
-  const ip = request.headers.get('cf-connecting-ip') || 'unknown'
-  if (await overLimit(env, `submit:ip:${await sha256(ip)}`, LIMITS.perIpPerHour, HOUR)) {
+  const ipKey = `submit:ip:${await sha256(request.headers.get('cf-connecting-ip') || 'unknown')}`
+  if (await atLimit(env, ipKey, LIMITS.perIpPerHour)) {
     return json(429, { ok: false, error: 'Too many submissions from this address; try again in an hour' }, origin)
   }
-  if (await overLimit(env, 'submit:day', LIMITS.perDay, DAY)) {
+  if (await atLimit(env, 'submit:day', LIMITS.perDay)) {
     return json(429, { ok: false, error: 'Daily submission limit reached; try again tomorrow' }, origin)
   }
 
@@ -201,5 +202,7 @@ export async function handleSubmit(request, env) {
     return json(502, { ok: false, error: `Could not start the sync (GitHub answered ${dispatch.status}); use the Update AF Links issue form` }, origin)
   }
   await env.LINKS.put(`submit:hash:${hash}`, '1', { expirationTtl: DAY })
+  await bump(env, ipKey, HOUR)
+  await bump(env, 'submit:day', DAY)
   return json(200, { ok: true, count, source, message: `Received ${count} links from ${payload.pages.length} list(s). A pull request will appear within a few minutes: ${pulls}` }, origin)
 }

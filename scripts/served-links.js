@@ -5,8 +5,7 @@
 // parsed host ('(unparseable URL)' when the URL does not parse).
 import fs from 'fs';
 import path from 'path';
-
-const AF_BASE = 'https://www.my.af.mil';
+import { absoluteUrl } from './link-status.js';
 
 const read = (dir, name) => JSON.parse(fs.readFileSync(path.join(dir, name)));
 
@@ -31,7 +30,7 @@ export function servedLinks({ dir = 'src/links', unofficial = false } = {}) {
         ...[...byId.values()].filter(l => !l.deleted),
         ...other,
         ...(unofficial ? read(dir, 'links_unofficial.json').UNOFFICIAL : []),
-    ].map(l => withHost(l.title, l.link.startsWith('/') ? AF_BASE + l.link : l.link));
+    ].map(l => withHost(l.title, absoluteUrl(l.link)));
 }
 
 export function withHost(title, url) {
