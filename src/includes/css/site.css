@@ -459,20 +459,13 @@ ul {
   opacity: 0.55;
 }
 
-/* Title row: the anchor plus, for a link the portal no longer lists, a muted
-   (i) whose tooltip is the note */
+/* Title row; a link the portal no longer lists looks like any other, and the
+   details dialog carries the "Removed from the AF Portal since" note */
 .link-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
   max-width: 100%;
-}
-
-.unlisted {
-  display: inline-flex;
-  color: var(--muted);
-  cursor: help;
 }
 
 /* Title with its one-line summary beneath. The summary never wraps; the "…"
@@ -496,7 +489,9 @@ ul {
 .link-summary {
   display: flex;
   align-items: baseline;
-  justify-content: center;
+  /* "safe": a summary wider than the row clips on the right only, instead
+     of overflowing both sides as a plain centered flex row does */
+  justify-content: safe center;
   max-width: 100%;
   margin-top: 0.1rem;
   font-size: 0.85rem;
