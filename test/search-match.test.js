@@ -61,6 +61,36 @@ test('an empty query matches everything, as the unfiltered page does', () => {
   assert.ok(match(LINK, '   ').matched)
 })
 
+test('summary and description match, without title highlights, and say so', () => {
+  const link = { title: 'LOGMOD - Logistics Module', url: 'https://logmod.cce.af.mil', category: 'LOGISTICS READINESS',
+    summary: 'Plans and tracks cargo and personnel moves for deployments', description: 'Schedules movement of cargo in support of contingency operations.' }
+  const bySummary = match(link, 'deployments')
+  assert.ok(bySummary.matched)
+  assert.deepEqual(bySummary.ranges, [])
+  assert.equal(bySummary.inText, true)
+  assert.equal(match(link, 'contingency').inText, true)
+  // a title match is not reported as a text match, even when the text has the word too
+  const byTitle = match({ ...link, summary: 'logistics' }, 'logistics')
+  assert.equal(byTitle.ranges.length, 1)
+  assert.equal(byTitle.inText, false)
+  assert.ok(!match(link, 'nothing').matched)
+  // a link without either still matches the old way
+  assert.ok(match(LINK, 'webmail').matched)
+  assert.equal(match(LINK, 'webmail').inText, false)
+})
+
+test('snippet excerpts the text around the first matching word', () => {
+  const { snippet } = globalThis.AflinkSearch
+  const text = 'LOGMOD schedules, monitors and controls movement of cargo and personnel in support of contingency operations across the force.'
+  const s = snippet(text, parseQuery('contingency'), 20)
+  assert.ok(s.text.startsWith('…') && s.text.endsWith('…'), s.text)
+  assert.ok(s.text.includes('contingency'))
+  const [start, end] = s.ranges[0]
+  assert.equal(s.text.slice(start, end + 1), 'contingency')
+  assert.equal(snippet(text, parseQuery('absent')), null)
+  assert.equal(snippet('', parseQuery('x')), null)
+})
+
 test('matchRanges highlights whichever words appear', () => {
   assert.equal(matchRanges('WEATHER & TIME', parseQuery('weather')).length, 1)
   assert.equal(matchRanges('SAFETY', parseQuery('weather')).length, 0)

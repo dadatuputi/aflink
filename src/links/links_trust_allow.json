@@ -44,6 +44,38 @@
     {
       "host": "daf.dodmwrlibraries.org",
       "reason": "DAF MWR Virtual Library (DoD MWR Libraries program)"
+    },
+    {
+      "host": "www.apan.org",
+      "reason": "APAN - All Partners Access Network, DoD-sponsored unclassified collaboration platform, listed on the AF Portal"
+    },
+    {
+      "host": "itips.servicenowservices.com",
+      "reason": "ITIPS - IT Investment Portfolio Suite, DAF system hosted on ServiceNow's government cloud, listed on the AF Portal"
+    },
+    {
+      "host": "mpc.mission-planning.org",
+      "reason": "Mission Planning Central, DoD mission planning support site, listed on the AF Portal"
+    },
+    {
+      "host": "www.fedex.com",
+      "reason": "Shipment tracking, listed on the AF Portal's Applications A-Z"
+    },
+    {
+      "host": "www.ups.com",
+      "reason": "Shipment tracking, listed on the AF Portal's Applications A-Z"
+    },
+    {
+      "host": "mydhl.express.dhl",
+      "reason": "Shipment tracking, listed on the AF Portal's Applications A-Z"
+    },
+    {
+      "host": "www.dbschenker.com",
+      "reason": "Schenker USA freight, listed on the AF Portal's Applications A-Z"
+    },
+    {
+      "host": "tools.usps.com",
+      "reason": "USPS tracking, listed on the AF Portal's Applications A-Z"
     }
   ]
 }

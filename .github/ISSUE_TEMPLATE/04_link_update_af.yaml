@@ -10,7 +10,7 @@ body:
       value: |
         The portal keeps its links on several pages (Applications A-Z and the Home, Career and Training, and Life and Fitness quick-link lists). `getlinks.js` fetches all of them from any portal page and submits them together. Links no list carries any more are kept, muted, and retired after 180 days.
 
-        1. Open any page of the [AF Portal](https://www.my.af.mil/) while logged in.
+        1. Open the [AF Portal](https://www.my.af.mil/) in a new tab (middle-click or Cmd/Ctrl-click; GitHub does not let links here open one by themselves) and log in. Applications A-Z is a good page to run from.
         1. Open developer tools (F12) and select the `Console` tab
         1. Paste the contents of [`getlinks.js`](https://raw.githubusercontent.com/dadatuputi/aflink/refs/heads/master/getlinks.js) into the console command line and hit return.
         1. Normally the script submits the links itself and shows "Links submitted" with a count per list; a pull request then appears for review, and no issue is needed. Only if it shows the compressed-data box instead: copy the box and paste it into the field below.

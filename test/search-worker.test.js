@@ -12,7 +12,7 @@ const LINKS_JSON = {
   metadata: { version: '1.1' },
   links: [
     { category: 'WEATHER & TIME', links: [
-      { title: 'AFW-WEBS (Air Force Weather-Web Services)', link: 'https://weather.af.mil' },
+      { title: 'AFW-WEBS (Air Force Weather-Web Services)', link: 'https://weather.af.mil', summary: 'Forecasts and observations', description: 'Operational weather products for flying units.' },
       { title: 'Retired Weather Tool', link: 'https://gone.af.mil', isDeleted: true },
     ]},
     { category: 'OTHER', links: [
@@ -77,6 +77,11 @@ test('matches the way the page does: normalized, multi-word, url and category', 
   assert.deepEqual((await suggest('milsuite.mil')).map(s => s.title), ['milSuite'])
   assert.deepEqual((await suggest('weather & time')).map(s => s.title), ['AFW-WEBS (Air Force Weather-Web Services)'])
   assert.deepEqual((await suggest('nothing here')).map(s => s.title), [])
+})
+
+test('suggests on the summary and description, as the page matches them', async () => {
+  assert.deepEqual((await suggest('forecasts')).map(s => s.title), ['AFW-WEBS (Air Force Weather-Web Services)'])
+  assert.deepEqual((await suggest('flying units')).map(s => s.title), ['AFW-WEBS (Air Force Weather-Web Services)'])
 })
 
 test('title matches come before url-only and category-only matches', async () => {

@@ -57,8 +57,20 @@ const fetchText = async (url) => {
   return response.text();
 };
 
+// The portal's description of an app is HTML; the site shows it as plain text
+// in the link's details, without the access and help-desk boilerplate many
+// of them end with.
+const plainDescription = (html) => {
+  const box = document.createElement('div');
+  box.innerHTML = html || '';
+  let text = box.textContent.replace(/\s+/g, ' ').trim();
+  text = text.replace(/\s*(To gain access to this application|To address any inquir|For (support|problems|assistance)|Users? (requiring assistance|should contact)|Contact (the|your)|Please contact|If you (do not have|need)|Hours of [Oo]peration)[\s\S]*$/, '').trim();
+  return text.slice(0, 2000);
+};
+
 // Index page (Applications A-Z): group entries by functional area, in the same
-// link shape the quicklinks API returns, plus the portal's last-modified date.
+// link shape the quicklinks API returns, plus the portal's last-modified date
+// and description.
 const getIndexLinks = async (page) => {
   const items = findStoreData(await fetchText(page.url));
   if (!items) throw new Error('no embedded list found');
@@ -75,6 +87,7 @@ const getIndexLinks = async (page) => {
       url: item.isUrl,
       renderedAsFile: false,
       lastModified: item.lastModTime?.time ? new Date(item.lastModTime.time).toISOString().slice(0, 10) : undefined,
+      description: plainDescription(item.abstract) || undefined,
     });
   }
   return links;
