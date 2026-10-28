@@ -94,20 +94,23 @@ const getIndexLinks = async (page) => {
 };
 
 // The quicklinks feed answers 404 for a category until the session has
-// entered that section the way the nav bar does, through its landing page
-// (globalTab.do?command=landing); a deep link straight to the links page
-// skips that, and the page then shows no links either. So the section's
-// landing page is opened in a hidden frame first. Should that still not
-// do it, the list is skipped and named in the result for a later run.
-const openInFrame = (url) => new Promise((resolve) => {
-  const frame = document.createElement('iframe');
-  frame.style.display = 'none';
-  frame.src = url;
-  const done = () => { setTimeout(() => frame.remove(), 15000); resolve(); };
-  frame.onload = done;
-  setTimeout(done, 15000);
-  document.body.appendChild(frame);
-});
+// entered that section the way the nav bar does: a top-level load of its
+// landing page (globalTab.do?command=landing). A deep link straight to the
+// links page skips that, and that page then shows no links either. Fetching
+// the landing page, or loading it in a hidden frame, does not count (checked
+// on a fresh session), so the landing page is opened in a real tab, which a
+// script run from the console may do, and closed once the feed answers. One
+// named tab serves every section. When the browser blocks the tab, the list
+// is skipped and the result names the nav tab to click before rerunning.
+let primingTab = null;
+const primeSection = (landingUrl) => {
+  primingTab = window.open(landingUrl, 'aflink-priming');
+  return !!primingTab;
+};
+const closePrimingTab = () => {
+  if (primingTab && !primingTab.closed) primingTab.close();
+  primingTab = null;
+};
 
 const pollFeed = async (url, attempts) => {
   let response;
@@ -124,25 +127,13 @@ const pollFeed = async (url, attempts) => {
 const getQuickLinks = async (page) => {
   const categoryId = page.source.slice('quicklinks:'.length);
   const landingUrl = `/gcss-af/USAF/ep/globalTab.do?command=landing&channelPageId=${page.siteId}`;
-  const pageUrl = `/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`;
   const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
   let response = await pollFeed(url, 1);
-  for (const prime of [landingUrl, pageUrl]) {
-    if (response.ok) break;
-    await openInFrame(prime);
-    response = await pollFeed(url, 12);
-  }
-  // A frame does not prime it in every browser; a real tab is what the nav
-  // bar does. Opened from the console this is allowed where it would be
-  // blocked for a page script; when it is blocked anyway, say what to click.
   if (!response.ok) {
-    const tab = window.open(landingUrl, 'aflink-priming');
-    if (tab) {
-      response = await pollFeed(url, 30);
-      if (!tab.closed) tab.close();
-    }
+    if (!primeSection(landingUrl)) throw new Error(`the browser blocked opening the section; click the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
+    response = await pollFeed(url, 30);
   }
-  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; click the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
+  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status} even after opening the section; rerun later`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
   if (!links) throw new Error('quick links feed returned no list');
@@ -162,6 +153,7 @@ const collect = async () => {
       failures.push({ name: page.name, error: error.message });
     }
   }
+  closePrimingTab();
   return { pages, failures };
 };
 

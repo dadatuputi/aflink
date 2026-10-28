@@ -1,8 +1,9 @@
 // A stand-in for the AF Portal, just enough for getlinks.js: Applications A-Z
 // with its embedded list, the quick-link pages, and the quicklinks feed, which
 // answers 404 for a section until the session has loaded that section's
-// landing page as a document (the way the nav bar tabs do). A plain fetch of
-// the landing page does not count, as on the real portal.
+// landing page as a top-level document (the way the nav bar tabs do). A fetch
+// of the landing page, or loading it in a hidden frame, does not count, as on
+// the real portal.
 import http from 'node:http'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -57,9 +58,10 @@ export function startMockPortal() {
       return res.end(page(`<h1>Applications A-Z</h1><script>var afp={indexModel:{storeData:function(){}}};afp.indexModel.storeData(${JSON.stringify(APPS)});</script>`))
     }
     if (url.pathname === '/gcss-af/USAF/ep/globalTab.do') {
-      // Entering a section: only a document or frame load counts
+      // Entering a section: only a top-level document load counts, as on the
+      // real portal, where a hidden frame or a fetch of this page does nothing
       const site = url.searchParams.get('channelPageId')
-      if (url.searchParams.get('command') === 'landing' && site && (dest === 'document' || dest === 'iframe')) session.primed.add(site)
+      if (url.searchParams.get('command') === 'landing' && site && dest === 'document') session.primed.add(site)
       res.writeHead(200, { 'content-type': 'text/html' }); return res.end(page('<h1>Section landing</h1>'))
     }
     if (url.pathname === '/gcss-af/USAF/ep/browse.do') {
