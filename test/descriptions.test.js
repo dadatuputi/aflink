@@ -1,7 +1,7 @@
 // Every link the page lists carries a one-line summary. The summaries live in
 // src/links/links_descriptions.json; this is the rule that keeps the file
-// complete as links are added. Deprecated links are exempt: they show
-// muted, without a summary, until they retire.
+// complete as links are added. Only a link whose domain has died is exempt:
+// it shows muted until it retires.
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
@@ -24,7 +24,7 @@ test('summaries are one line of at most 90 characters', () => {
 
 test('every listed link has a summary', { skip: built ? false : 'site not built' }, () => {
   const data = JSON.parse(fs.readFileSync(built, 'utf8'))
-  const listed = data.links.flatMap(c => c.links.filter(l => !l.isDeleted && !l.isDeprecated)).concat(data.unofficial)
+  const listed = data.links.flatMap(c => c.links.filter(l => !l.isDeleted && !l.isDead)).concat(data.unofficial)
   const missing = listed.filter(l => !l.summary).map(l => `${l.contentId} ${l.title}`)
   assert.deepEqual(missing, [], `links without a summary:\n${missing.join('\n')}`)
 })
