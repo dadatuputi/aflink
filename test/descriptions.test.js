@@ -18,7 +18,13 @@ test('summaries are one line of at most 90 characters', () => {
     assert.ok(typeof d.summary === 'string' && d.summary.trim(), `${id}: no summary`)
     assert.ok(d.summary.length <= SUMMARY_MAX, `${id}: summary is ${d.summary.length} characters`)
     assert.ok(!/[\r\n]/.test(d.summary), `${id}: summary spans lines`)
-    if (d.description !== undefined) assert.ok(typeof d.description === 'string' && d.description.trim(), `${id}: empty description`)
+    if (d.description !== undefined) {
+      assert.ok(typeof d.description === 'string' && d.description.trim(), `${id}: empty description`)
+      // the dialog falls back to the summary when there is no description, so
+      // a description that repeats it is noise; the cap matches the worker's
+      assert.notEqual(d.description.trim(), d.summary.trim(), `${id}: description repeats the summary`)
+      assert.ok(d.description.length <= 2000, `${id}: description is ${d.description.length} characters`)
+    }
   }
 })
 

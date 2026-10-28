@@ -1153,10 +1153,6 @@
       "summary": "Required training courses and your training record (formerly ADLS)",
       "description": "myLearning replaced ADLS as the Air Force's online course platform, hosting required training and your training record."
     },
-    "cE3494DD050FC730801511C7D2FA50253": {
-      "summary": "Required training courses and your training record (formerly ADLS)",
-      "description": "myLearning replaced ADLS as the Air Force's online course platform, hosting required training and your training record."
-    },
     "c2D8EB9D643DF92570143E4E836520048": {
       "summary": "Noncommissioned Officer Academy locations and courses",
       "description": "The Barnes Center's list of Noncommissioned Officer Academy locations and their course information."
@@ -1171,7 +1167,7 @@
     },
     "c2D8EB9D643DF92570143E4ECE5EE004E": {
       "summary": "Self Aid Buddy Care course",
-      "description": "The Self Aid Buddy Care course, the first-aid training every Airman completes, as hosted on ADLS."
+      "description": "The Self Aid Buddy Care course, the first-aid training every Airman completes. This is the older ADLS address; myLearning hosts the current version."
     },
     "c8E6C533077697F430177699BB0B90001": {
       "summary": "Negotiation training and resources from Air University",
@@ -1180,10 +1176,6 @@
     "c330D98A1533E3BE00153BD6EE09400DC": {
       "summary": "367th Training Support Squadron course catalog in myLearning",
       "description": "The 367th Training Support Squadron's Griffin Catalog of courses, hosted in myLearning."
-    },
-    "cE3494DD05B059E1A015B169D1C600088": {
-      "summary": "Transgender awareness training slides (face to face version)",
-      "description": "Slides for the face-to-face version of the transgender awareness training."
     },
     "c2D8EB9D643DF92570143E4F125780054": {
       "summary": "USAF Expeditionary Center: courses and expeditionary training",
@@ -1251,7 +1243,7 @@
     },
     "c0F13191069DD136E0169DEC4F4020023": {
       "summary": "Base operational medicine clinic program resources",
-      "description": "Resources for base operational medicine clinics from the Air Force Medical Readiness Agency."
+      "description": "The base operational medicine clinic program site, hosted by the Air Force Research Laboratory's health portal."
     },
     "c88B4F00B42819409014294CC9E50007D": {
       "summary": "Pre- and post-deployment health assessment guidance",
@@ -1291,7 +1283,7 @@
     },
     "cB891FC7694B73D850194B7D357F0000A": {
       "summary": "Single maintenance information system program site",
-      "description": "The program site for the single maintenance information system that will replace the current maintenance systems."
+      "description": "The program site for Single-MIS, the maintenance information system meant to consolidate the Air Force's maintenance systems."
     },
     "c62EC42D4924D8B9101924DA7729B0000": {
       "summary": "Sustainment planning, execution and reporting",
@@ -1332,10 +1324,6 @@
     "c9AE79FCC76AF75C60176AF937A700002": {
       "summary": "Civilian employee self-service: personnel record, benefits and performance",
       "description": "MyBiz+ is the civilian self-service portal for personnel records, benefits and performance management."
-    },
-    "cB4CE488D766801610176682496FE0001": {
-      "summary": "View your personnel records (PRDA)",
-      "description": "PRDA displays personnel records such as the records review listing and performance reports. Now part of vPSC."
     },
     "cA4057E1F428205D0014294DDB7FC00EF": {
       "summary": "The official Air Force website: news, leadership and resources",
@@ -1383,7 +1371,7 @@
     },
     "c12916C788C16E34C018C17112A4C0006": {
       "summary": "Environmental, safety and occupational health service center",
-      "description": "The environmental, safety and occupational health service center supports base programs with tools and consultation."
+      "description": "The USAF School of Aerospace Medicine's environmental, safety and occupational health service center supports base programs with tools and consultation."
     },
     "c88B4F00B439D7EF80143D9FE00A508AD": {
       "summary": "Human factors in mishap prevention",
@@ -1407,7 +1395,7 @@
     },
     "c330D98A15559F9360155A297CAEE03C3": {
       "summary": "Environmental, safety and occupational health service center",
-      "description": "The USAF School of Aerospace Medicine's environmental, safety and occupational health service center."
+      "description": "The USAF School of Aerospace Medicine's environmental, safety and occupational health service center supports base programs with tools and consultation."
     },
     "c330D98A14A79627C014AB000A6FE012C": {
       "summary": "Climate data and climatology products for planning",

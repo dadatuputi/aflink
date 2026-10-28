@@ -3,7 +3,9 @@
 Static mirror of the USAF portal quick links, built with pug + node
 (`updater.js`) and published to GitHub Pages by `.github/workflows/build.yml`.
 Link data lives in `src/links/*.json` and is edited by the issue-driven
-workflows in `.github/workflows/`, not by hand.
+workflows in `.github/workflows/`, not by hand; the one exception is
+`links_descriptions.json`, whose summaries and descriptions are written by
+hand (the forms append to it).
 
 ## Layout
 
