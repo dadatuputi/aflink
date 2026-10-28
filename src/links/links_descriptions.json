@@ -220,7 +220,7 @@
       "summary": "Requirements and configuration tracking for logistics systems"
     },
     "c6925EC1BF8550FB5E044080020E329A9": {
-      "summary": "Weapon System Support Program data (D040)"
+      "summary": "Register weapon system essentiality for DLA-managed consumable items"
     },
     "c6925EC1B61AD0FB5E044080020E329A9": {
       "summary": "Data exchange with contractors supporting weapon systems"
@@ -235,13 +235,13 @@
       "summary": "Tuition pricing tool for SAF/FMB cost estimates"
     },
     "c6925EC1B38D40FB5E044080020E329A9": {
-      "summary": "Talent management data for logistics: skills, positions and assignments"
+      "summary": "Sustainment applications that compute spares and depot repair requirements"
     },
     "c1326C1EE9276BE6B019276CCBF510005": {
       "summary": "Nuclear weapons related materiel positive inventory control"
     },
     "c6925EC1B5CCE0FB5E044080020E329A9": {
-      "summary": "AFMC action item and task tracker"
+      "summary": "Supply and transportation pipeline reports from DoD data systems"
     },
     "c6925EC1BAE810FB5E044080020E329A9": {
       "summary": "Library of government-owned software available for reuse"
@@ -250,7 +250,7 @@
       "summary": "Weapon system requirements, execution and availability data"
     },
     "c6925EC1B276E0FB5E044080020E329A9": {
-      "summary": "Air Force directory services: find people and organizations"
+      "summary": "Identity and access management for Air Force systems"
     },
     "c0ECF2BB84AE5734F014AFEB732F50361": {
       "summary": "Confidential help for service members and families: counseling, finances, moves"
@@ -340,7 +340,7 @@
       "summary": "DLA logistics information services: NSN and item data"
     },
     "c6D14419A94503E50019451DE8B33003E": {
-      "summary": "Track TEMPO days and high-deployment tempo"
+      "summary": "TDY calculator and individual TEMPO day lookup"
     },
     "c330D98A15C7ED696015CB85810FA0448": {
       "summary": "Order supplies and equipment from the DoD catalog"
@@ -352,13 +352,13 @@
       "summary": "Medical readiness planning and decision support"
     },
     "c330D98A15C7ED696015CA92A651B02E5": {
-      "summary": "Environmental management guidance and documents (Intelink)"
+      "summary": "Air National Guard environmental management system on SharePoint"
     },
     "cE28A64BE92E8E60D0192E9186C4C0000": {
       "summary": "Early separation to join the Guard or Reserve: how Palace Chase works"
     },
     "c6925EC1BF4560FB5E044080020E329A9": {
-      "summary": "Table management for AMC command and control systems"
+      "summary": "Replaced by TRDM in 2011; see the TRDM entry"
     },
     "c0ECF2BB857C49BCE0157E7BA91300225": {
       "summary": "Manpower authorizations and unit manning documents"
@@ -397,7 +397,7 @@
       "summary": "Contract field team requests and tracking"
     },
     "c88B4F00B3679665D0136836952A40106": {
-      "summary": "Training for the public affairs information management system"
+      "summary": "Training for AFPIMS, the content system behind Air Force public websites"
     },
     "c330D98A15D246862015D4293D7010310": {
       "summary": "Weapons load crew certification and management"
@@ -415,7 +415,7 @@
       "summary": "BLADE vehicles dashboard (Qlik)"
     },
     "c001A940387F316FC0187F466A0E70016": {
-      "summary": "AFWERX crowdsourcing for ideas and challenges"
+      "summary": "Idea campaign software behind GAIN"
     },
     "c6925EC1B8A6D0FB5E044080020E329A9": {
       "summary": "Unit training assembly processing for Reserve units"
@@ -448,7 +448,7 @@
       "summary": "Explore pay, benefits and retirement options"
     },
     "c6925EC1B94590FB5E044080020E329A9": {
-      "summary": "Automated records management: file plans and records"
+      "summary": "View your unit personnel record group documents"
     },
     "c6925EC1BD0E40FB5E044080020E329A9": {
       "summary": "Access DISA-hosted applications through a single portal"
@@ -724,7 +724,7 @@
       "summary": "Tinker AFB Cognos business intelligence reports"
     },
     "c0F131910727B926301727BA0158E0000": {
-      "summary": "Request access to operations applications (SLAM)"
+      "summary": "Group and access management for AF Portal and Cloud One applications"
     },
     "c78CDB8069252B1E2019252B77B850000": {
       "summary": "NIPRGPT, the Air Force's generative AI chat on NIPRNet"
@@ -733,7 +733,7 @@
       "summary": "Request access to BLADE dashboards"
     },
     "c6925EC1BA3080FB5E044080020E329A9": {
-      "summary": "Electronic project orders for acquisition"
+      "summary": "Track ACC test center project orders"
     },
     "c330D98A148330A54014842D98A0D0D18": {
       "summary": "Assignment preferences, Talent Marketplace matching and mentoring"
@@ -751,10 +751,10 @@
       "summary": "Look up Air Force Officer Qualifying Test scores"
     },
     "c6925EC1BF1990FB5E044080020E329A9": {
-      "summary": "Edwards AFB center operations online"
+      "summary": "AFMC ops desk tool: aircrew currency and flight authorizations (Edwards)"
     },
     "cA4057E1F356423810135CA24BBC70A73": {
-      "summary": "Air Force Reserve military clearing house"
+      "summary": "Assignment opportunity registration for AFRC NAF re-missioning"
     },
     "c6D14419A75547D13017555AEE4110002": {
       "summary": "Logistics professional development program resources"
