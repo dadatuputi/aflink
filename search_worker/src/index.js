@@ -10,6 +10,7 @@
 // the page's own module so the two cannot drift; the list is rebuilt from
 // links.json here. See search_worker/README.md before changing either.
 import '../../src/includes/js/search-match.js'
+import { handleSubmit } from './submit.js'
 
 const { parseQuery, matchLink, UNOFFICIAL_CATEGORY } = globalThis.AflinkSearch
 
@@ -84,6 +85,11 @@ function search(links, term) {
 async function handleRequest(request, env) {
   try {
     const { pathname } = new URL(request.url);
+
+    // Portal link submissions from getlinks.js; see submit.js
+    if (pathname === "/submit") {
+      return handleSubmit(request, env);
+    }
 
     if (pathname.startsWith("/search")) {
 
