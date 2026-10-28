@@ -16,10 +16,10 @@ body:
         - [Career and Training links](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=pAF429CFD945FB19F0194605EE6410002&channelPageId=sF1D9EE47BB312480E0400F9E4DDA2DD3)
         - [Life and Fitness Quick Links](https://www.my.af.mil/gcss-af/USAF/ep/browse.do?categoryId=pAF429CFD945FB19F019460FC9A650026&channelPageId=s6925EC13564F0FB5E044080020E329A9)
 
-        1. Open the page while logged in to the AF Portal. If a link lands on the home page, click through to the page from there.
+        1. Open the page while logged in to the AF Portal (the login page returns you to it).
         1. Open developer tools (F12) and select the `Console` tab
         1. Paste the contents of [`getlinks.js`](https://raw.githubusercontent.com/dadatuputi/aflink/refs/heads/master/getlinks.js) into the console command line and hit return.
-        1. Check the link count the modal shows, copy its contents and paste into the field below.
+        1. Normally the script submits the links itself and shows "Links submitted"; a pull request then appears for review, and no issue is needed. Only if it shows the compressed-data box instead: check the link count, copy the box and paste it into the field below.
         1. When the issue is closed/approved, it will be rolled in and built using GitHub actions.
   - type: input
     id: b64json
