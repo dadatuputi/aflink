@@ -132,7 +132,17 @@ const getQuickLinks = async (page) => {
     await openInFrame(prime);
     response = await pollFeed(url, 12);
   }
-  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; open the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
+  // A frame does not prime it in every browser; a real tab is what the nav
+  // bar does. Opened from the console this is allowed where it would be
+  // blocked for a page script; when it is blocked anyway, say what to click.
+  if (!response.ok) {
+    const tab = window.open(landingUrl, 'aflink-priming');
+    if (tab) {
+      response = await pollFeed(url, 30);
+      if (!tab.closed) tab.close();
+    }
+  }
+  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; click the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
   if (!links) throw new Error('quick links feed returned no list');
