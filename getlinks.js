@@ -93,11 +93,12 @@ const getIndexLinks = async (page) => {
   return links;
 };
 
-// The quicklinks feed answers 404 for a category while the portal's own
-// page for it shows no links either: the portal serves these lists from a
-// cache that is empty some of the time. Opening the page in a hidden frame
-// sometimes fills it; when it does not, the list is skipped and named in
-// the result, and a later run picks it up.
+// The quicklinks feed answers 404 for a category until the session has
+// entered that section the way the nav bar does, through its landing page
+// (globalTab.do?command=landing); a deep link straight to the links page
+// skips that, and the page then shows no links either. So the section's
+// landing page is opened in a hidden frame first. Should that still not
+// do it, the list is skipped and named in the result for a later run.
 const openInFrame = (url) => new Promise((resolve) => {
   const frame = document.createElement('iframe');
   frame.style.display = 'none';
@@ -118,18 +119,20 @@ const pollFeed = async (url, attempts) => {
   return response;
 };
 
-// Quick-link page: open the page, then read its category from the feed,
+// Quick-link page: enter its section, then read its category from the feed,
 // allowing the page a few seconds to prime it.
 const getQuickLinks = async (page) => {
   const categoryId = page.source.slice('quicklinks:'.length);
+  const landingUrl = `/gcss-af/USAF/ep/globalTab.do?command=landing&channelPageId=${page.siteId}`;
   const pageUrl = `/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`;
   const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
   let response = await pollFeed(url, 1);
-  if (!response.ok) {
-    await openInFrame(pageUrl);
+  for (const prime of [landingUrl, pageUrl]) {
+    if (response.ok) break;
+    await openInFrame(prime);
     response = await pollFeed(url, 12);
   }
-  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; the portal page shows no links either right now, so rerun later`);
+  if (!response.ok) throw new Error(`the portal's feed for this list answered ${response.status}; open the ${page.name.split(':')[0]} tab on the portal once, then rerun`);
   const data = await response.json();
   const links = data?.afpCategorizedLinksDto?.links;
   if (!links) throw new Error('quick links feed returned no list');
