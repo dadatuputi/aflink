@@ -48,10 +48,12 @@ for (const [name, type] of [['chromium', chromium], ['firefox', firefox]]) {
       assert.equal(mypay.description, 'Pay statements.')
       assert.equal(mypay.lastModified, '2026-01-01')
 
-      // How each section got primed, for the record: a frame or a real tab
+      // Each section was entered through its landing page in a real tab
       const landings = portal.log.filter(e => e.path.endsWith('globalTab.do') && e.query.command === 'landing').map(e => e.dest)
       console.log(`${name}: landing pages loaded as`, landings.join(', '))
-      assert.ok(landings.length >= 3, 'every section was entered through its landing page')
+      assert.ok(landings.filter(d => d === 'document').length >= 3, 'every section was entered through its landing page as a document')
+      // and the tab is gone afterwards
+      assert.equal(context.pages().length, 1, 'priming tab closed')
     } finally {
       await browser.close()
       await portal.close()
