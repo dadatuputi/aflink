@@ -6,7 +6,7 @@
 
 ## Changelog
 
-- **Oct 2026** — 🛡️ Weekly malware & phishing scan of every link outside .mil/.gov, unofficial links included (Google Safe Browsing + VirusTotal); new and corrected links are scanned when submitted
+- **Oct 2026** — 🛡️ Weekly malware & phishing scan of every link outside .mil/.gov, unofficial links included (Google Safe Browsing + VirusTotal); link requests get a ✅ safe / ⚠️ unsafe verdict on the issue as soon as they're opened
 - **Aug 2026** — ⌨️ Address-bar suggestions rebuilt on the page's own search rules: unofficial links are suggested, deleted ones no longer are, and picking a suggestion opens that exact link
 - **Aug 2026** — ✈️ **Heraldry redesign**: new color scheme in the official USAF service colors — Ultramarine Blue & Air Force Yellow — across light and dark themes
 - **Aug 2026** — 🌙 Dark mode, with a light/dark/auto toggle in the navbar; link trust checking on every submission

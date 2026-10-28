@@ -1,0 +1,71 @@
+name: Link Request Safety Check
+
+# Scans the URL in a new Add a Link or Override request as soon as the issue
+# is opened (or its body edited) and always reports back on the issue: safe,
+# unsafe, official domain, or not a URL. Gives the approver a verdict before
+# closing; link_add/link_override scan again at approval in case it changed.
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    # Edits only matter when the body (and so maybe the URL) changed
+    if: >-
+      (contains(github.event.issue.labels.*.name, 'add link') ||
+       contains(github.event.issue.labels.*.name, 'override link')) &&
+      github.event.issue.state == 'open' &&
+      (github.event.action == 'opened' || github.event.changes.body)
+    steps:
+      - name: Read URL from the issue form
+        id: url
+        uses: actions/github-script@v9
+        with:
+          script: |
+            // Same rule as the link workflows' field(): first non-blank line
+            // after the "### <label>" header
+            const field = label => {
+              const lines = (context.payload.issue.body || '').split(/\r?\n/);
+              const i = lines.findIndex(l => l.startsWith(`### ${label}`));
+              const v = i < 0 ? '' : (lines.slice(i + 1).find(l => l.trim()) || '').trim();
+              return v === '_No response_' ? '' : v;
+            };
+            const labels = context.payload.issue.labels.map(l => l.name);
+            core.setOutput('url', labels.includes('add link') ? field('Link URL') : field('New Link URL'));
+
+      - name: Checkout Repository
+        if: steps.url.outputs.url != ''
+        uses: actions/checkout@v7
+
+      - name: Reputation scan
+        id: scan
+        if: steps.url.outputs.url != ''
+        continue-on-error: true
+        env:
+          SAFE_BROWSING_KEY: ${{ secrets.SAFE_BROWSING_KEY }}
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+          SCAN_URL: ${{ steps.url.outputs.url }}
+        run: node scripts/scan-reputation.js
+
+      - name: Report on the issue
+        if: steps.url.outputs.url != ''
+        uses: actions/github-script@v9
+        env:
+          OUTCOME: ${{ steps.scan.outcome }}
+        with:
+          script: |
+            const fs = require('fs');
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = process.env.OUTCOME === 'success'
+              ? fs.readFileSync('/tmp/reputation_verdict.md', 'utf8')
+              : '❔ **Link check: could not complete.** The reputation services did not answer, so this link has not been checked. It will be scanned again when the request is approved.';
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: `${body}\n\n<sub>[Scan details](${run})</sub>`,
+            });

@@ -19,8 +19,8 @@ workflows in `.github/workflows/`, not by hand.
 - `search_worker/` — the Cloudflare Worker behind address-bar autocomplete
 - `scripts/check-trust.js`, `scripts/scan-reputation.js` — link audits over
   the served set (`scripts/served-links.js`): domain allowlist on submission,
-  and a malware/phishing reputation scan weekly (`link_reputation.yml`) and on
-  submission
+  and a malware/phishing reputation scan weekly (`link_reputation.yml`), on
+  each link request as it is opened (`link_screen.yml`), and on approval
 - `test/` — `npm test` (node's test runner, no dependencies)
 - `scripts/tutorial-screenshots/` — re-captures the browser screenshots in
   `src/tutorial.pug` (`src/includes/img/`, light and `-dark`) and the README's
