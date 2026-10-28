@@ -33,19 +33,35 @@ jobs:
         TITLE=$(field "Link Title")
         URL=$(field "Link URL")
         LINK_TYPE=$(field "Link Type")
+        SUMMARY=$(field "Summary")
+        DESCRIPTION=$(field "Description")
         [[ -z "$TITLE" ]] && { echo "Missing Link Title"; exit 1; }
         [[ -z "$URL" ]] && { echo "Missing Link URL"; exit 1; }
         # Issues predating the Link Type dropdown have no such field: official
         [[ "$LINK_TYPE" == "Unofficial" ]] || LINK_TYPE="Official"
+        # Blank optional form fields arrive as the literal "_No response_"
+        [[ "$DESCRIPTION" == "_No response_" ]] && DESCRIPTION=""
+        [[ "$SUMMARY" == "_No response_" ]] && SUMMARY=""
+
+        # Every link shows a one-line summary; a later step comments the
+        # error back on the issue and fails the job
+        if [[ -z "$SUMMARY" ]]; then
+          echo "VALIDATION_ERROR=no Summary was provided; every link needs a one-line summary of 90 characters or fewer" >> $GITHUB_ENV
+        elif (( ${#SUMMARY} > 90 )); then
+          echo "VALIDATION_ERROR=the Summary is ${#SUMMARY} characters; keep it to 90 or fewer" >> $GITHUB_ENV
+        fi
 
         {
           echo "TITLE=$TITLE"
           echo "URL=$URL"
           echo "LINK_TYPE=$LINK_TYPE"
+          echo "SUMMARY=$SUMMARY"
+          echo "DESCRIPTION=$DESCRIPTION"
         } >> "$GITHUB_ENV"
         echo "Parsed TITLE=$TITLE"
         echo "Parsed URL=$URL"
         echo "Parsed LINK_TYPE=$LINK_TYPE"
+        echo "Parsed SUMMARY=$SUMMARY"
 
     - name: Checkout Repository
       uses: actions/checkout@v7
@@ -63,7 +79,23 @@ jobs:
         sudo apt-get update
         sudo apt-get install --yes jq moreutils uuid-runtime
 
+    - name: Fail on validation error
+      if: env.VALIDATION_ERROR != ''
+      uses: actions/github-script@v9
+      with:
+        script: |
+          await github.rest.issues.createComment({
+            issue_number: context.payload.client_payload.original_issue,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `❌ Failed to add link: ${{ env.VALIDATION_ERROR }}. Please edit the issue so the link can be added.`
+          });
+          throw new Error('Validation error: ${{ env.VALIDATION_ERROR }}');
+
     - name: Add link to end of list with an auto-generated contentId
+      env:
+        SUMMARY: ${{ env.SUMMARY }}
+        DESCRIPTION: ${{ env.DESCRIPTION }}
       run: |
         UUID=$(uuidgen)
         if [[ "${{ env.LINK_TYPE }}" == "Unofficial" ]]; then
@@ -75,6 +107,10 @@ jobs:
         fi
         jq -r --arg TITLE "${{ env.TITLE }}" --arg URL "${{ env.URL }}" --arg CONTENTID "$UUID" --arg KEY "$KEY" '.[$KEY] += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' "$TARGET" | sponge "$TARGET"
         cat "$TARGET"
+        # The summary and description live beside the link, keyed by its contentId
+        jq --arg ID "$UUID" --arg S "$SUMMARY" --arg D "$DESCRIPTION" \
+          '.descriptions[$ID] = ({summary: $S} + (if $D != "" then {description: $D} else {} end))' \
+          src/links/links_descriptions.json | sponge src/links/links_descriptions.json
 
     - name: Trust check
       id: trust

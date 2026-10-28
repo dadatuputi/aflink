@@ -106,9 +106,13 @@ test('rejects shapes the sync could not trust', async () => {
 })
 
 test('sanitize keeps only the fields the sync reads', () => {
-  const dirty = payload({ ' Personnel ': [link('1', { type: 'application', url: true, lastModified: '2026-01-02', abstract: '<b>x</b>', contactInfo: { phone: '555' }, isDeleted: true, sources: ['x'] })] })
+  const dirty = payload({ ' Personnel ': [link('1', { type: 'application', url: true, lastModified: '2026-01-02', description: ' Plans moves. ', abstract: '<b>x</b>', contactInfo: { phone: '555' }, isDeleted: true, sources: ['x'] })] })
   const { links } = sanitize(dirty).pages[0]
-  assert.deepEqual(Object.keys(links[' Personnel '][0]).sort(), ['contentId', 'lastModified', 'link', 'title', 'type', 'url'])
+  assert.deepEqual(Object.keys(links[' Personnel '][0]).sort(), ['contentId', 'description', 'lastModified', 'link', 'title', 'type', 'url'])
+  assert.equal(links[' Personnel '][0].description, 'Plans moves.')
+  // markup in a description is dropped rather than published
+  const html = payload({ A: [link('1', { description: 'see <a href=x>here</a>' })] })
+  assert.equal(sanitize(html).pages[0].links.A[0].description, undefined)
 })
 
 test('rate limits per address and per day, and ignores an exact repeat', async () => {

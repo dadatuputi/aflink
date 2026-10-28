@@ -1,10 +1,14 @@
-// Lifecycle of a link that is on its way out. Two things can start the clock:
+// Lifecycle of a link the portal no longer lists, or whose domain is gone.
 //   deprecatedSince — the sync found no portal page that lists it any more
-//                     (stored on the link by scripts/af-merge.js)
+//                     (stored on the link by scripts/af-merge.js). The link
+//                     stays, looking like any other, with an (i) saying when
+//                     the portal dropped it: many such links still work and
+//                     are still wanted. It leaves only when its domain dies
+//                     or someone asks for its removal.
 //   dead since      — its domain stopped existing in public DNS for STRIKES
-//                     weekly runs (link_health.json, scripts/check-domains.js)
-// A deprecated link stays on the page, muted and sorted last, until
-// RETIRE_DAYS after the earlier date, then the build drops it.
+//                     weekly runs (link_health.json, scripts/check-domains.js).
+//                     The link is muted from then on and retired RETIRE_DAYS
+//                     later, unless the domain comes back.
 export const RETIRE_DAYS = 180;
 export const STRIKES = 3;
 
@@ -30,13 +34,17 @@ export const deadSince = (link, health) => {
 
 const formatDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
-// { deprecated, retired, note } for a link as of `today` (YYYY-MM-DD)
+// { unlisted, dead, retired, note } for a link as of `today` (YYYY-MM-DD):
+// unlisted carries the (i) note, dead mutes the link, retired drops it
 export function linkStatus(link, today, health = {}) {
     const dead = deadSince(link, health);
-    const since = [link.deprecatedSince, dead].filter(Boolean).sort()[0];
-    if (!since) return { deprecated: false, retired: false, note: null };
-    const note = dead === since
-        ? `Domain has not existed since ${formatDate(dead)}`
-        : `No longer listed on the AF Portal since ${formatDate(link.deprecatedSince)}`;
-    return { deprecated: true, retired: daysBetween(since, today) > RETIRE_DAYS, note };
+    const unlisted = !!link.deprecatedSince;
+    return {
+        unlisted,
+        dead: !!dead,
+        retired: !!dead && daysBetween(dead, today) > RETIRE_DAYS,
+        note: dead
+            ? `Domain has not existed since ${formatDate(dead)}`
+            : unlisted ? `Removed from the AF Portal since ${formatDate(link.deprecatedSince)}` : null,
+    };
 }
