@@ -93,9 +93,12 @@ const getIndexLinks = async (page) => {
   return links;
 };
 
-// Load a portal page as a real document in a hidden frame. The quicklinks
-// feed below answers 404 for a category until its page has been opened in the
-// session as a document; fetching the page's HTML is not enough, a frame is.
+// The quicklinks feed answers 404 for a category until its page has been
+// opened in the session as a real document; fetching the page's HTML is not
+// enough. A hidden frame does it in Chromium-based browsers. Firefox treats
+// the framed page differently (its own feed call 404s too), so when the
+// frame has not primed the feed the page is opened as a top-level tab,
+// reusing one named window for every page, and closed afterwards.
 const openInFrame = (url) => new Promise((resolve) => {
   const frame = document.createElement('iframe');
   frame.style.display = 'none';
@@ -106,17 +109,40 @@ const openInFrame = (url) => new Promise((resolve) => {
   document.body.appendChild(frame);
 });
 
+let primingTab = null;
+const openInTab = (url) => {
+  primingTab = window.open(url, 'aflink-priming');
+  if (!primingTab) throw new Error('could not open the page in a new tab; open the Career & Training and Life & Fitness tabs yourself, then rerun');
+};
+const closePrimingTab = () => {
+  if (primingTab && !primingTab.closed) primingTab.close();
+  primingTab = null;
+};
+
+const pollFeed = async (url, attempts) => {
+  let response;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    response = await fetch(url, { credentials: 'same-origin' });
+    if (response.ok) return response;
+    await new Promise(r => setTimeout(r, 500));
+  }
+  return response;
+};
+
 // Quick-link page: open the page, then read its category from the feed,
 // allowing the page a few seconds to prime it.
 const getQuickLinks = async (page) => {
   const categoryId = page.source.slice('quicklinks:'.length);
-  await openInFrame(`/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`);
+  const pageUrl = `/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`;
   const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
-  let response;
-  for (let attempt = 0; attempt < 20; attempt++) {
-    response = await fetch(url, { credentials: 'same-origin' });
-    if (response.ok) break;
-    await new Promise(r => setTimeout(r, 500));
+  let response = await pollFeed(url, 1);
+  if (!response.ok) {
+    await openInFrame(pageUrl);
+    response = await pollFeed(url, 12);
+  }
+  if (!response.ok) {
+    openInTab(pageUrl);
+    response = await pollFeed(url, 30);
   }
   if (!response.ok) throw new Error(`quick links feed answered ${response.status}`);
   const data = await response.json();
@@ -138,6 +164,7 @@ const collect = async () => {
       failures.push({ name: page.name, error: error.message });
     }
   }
+  closePrimingTab();
   return { pages, failures };
 };
 
