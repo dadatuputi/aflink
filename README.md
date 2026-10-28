@@ -6,9 +6,10 @@
 
 ## Changelog
 
+- **Oct 2026** — 🛡️ Weekly malware & phishing scan of every link outside .mil/.gov, unofficial links included (Google Safe Browsing + VirusTotal); link requests get a ✅ safe / ⚠️ unsafe verdict on the issue as soon as they're opened
 - **Aug 2026** — ⌨️ Address-bar suggestions rebuilt on the page's own search rules: unofficial links are suggested, deleted ones no longer are, and picking a suggestion opens that exact link
 - **Aug 2026** — ✈️ **Heraldry redesign**: new color scheme in the official USAF service colors — Ultramarine Blue & Air Force Yellow — across light and dark themes
-- **Aug 2026** — 🌙 Dark mode, with a light/dark/auto toggle in the navbar; weekly automated link trust & rot checking
+- **Aug 2026** — 🌙 Dark mode, with a light/dark/auto toggle in the navbar; link trust checking on every submission
 - **Aug 2026** — 📊 [Usage page](https://aflink.us/analytics) with 30-day/90-day/1-year stats; installable PWA with offline support; announcements; search now matches category names
 - **Aug 2026** — 🔗 Unofficial section for community-curated third-party tools, with the same request/override workflows as official links
 - **Dec 2025** — 🆔 Stable content IDs for every link, so overrides and deletions survive AF portal sync churn
