@@ -210,20 +210,21 @@ async function getNewestDate(files) {
         // Add other links
         links.OTHER = links_other.OTHER;
 
-        // Deprecated links (dropped by the portal, or a dead domain) stay listed,
-        // muted and after the current ones, until they retire; see
-        // scripts/link-status.js. Sorting here orders links.json too, so the
-        // worker suggests them in the same place the page lists them.
+        // Links the portal no longer lists stay, looking like any other, with
+        // an (i) note saying since when. A link whose domain has died is
+        // muted, and retired RETIRE_DAYS later; see scripts/link-status.js.
         const today = new Date().toISOString().slice(0, 10);
         const healthPath = path.resolve(linksDir, 'link_health.json');
         const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath)) : {};
         const withStatus = list => list
             .map(link => ({ link, status: linkStatus(link, today, health) }))
             .filter(({ status }) => !status.retired)
-            .sort((a, b) => a.status.deprecated - b.status.deprecated)
-            .map(({ link, status }) => status.deprecated
-                ? { ...link, isDeprecated: true, deprecatedNote: status.note }
-                : link);
+            .map(({ link, status }) => ({
+                ...link,
+                ...(status.unlisted && { isUnlisted: true }),
+                ...(status.dead && { isDead: true }),
+                ...(status.note && { statusNote: status.note }),
+            }));
         let retired_count = 0;
         for (const category of Object.keys(links)) {
             const before = links[category].length;
@@ -238,18 +239,18 @@ async function getNewestDate(files) {
         // contentId, so a portal sync never overwrites them. The full
         // description comes from the portal when it has one, else from the
         // same file. detailMeta is the line under the title in the details
-        // dialog. Deprecated links carry no summary: they are on their way out.
+        // dialog, with the status note when the link has one.
         const descriptions = JSON.parse(fs.readFileSync(path.resolve(linksDir, 'links_descriptions.json'))).descriptions;
         const describe = (link, label) => {
             const written = descriptions[link.contentId] || {};
             const described = { ...link };
-            if (written.summary && !link.isDeprecated) described.summary = written.summary;
+            if (written.summary) described.summary = written.summary;
             const description = link.description || written.description;
             if (description) described.description = description;
             else delete described.description;
             described.detailMeta = label + (link.lastModified
                 ? ' · Updated ' + sugar_date.Date.format(new Date(link.lastModified + 'T00:00:00Z'), '{d} {Month} {yyyy}')
-                : '');
+                : '') + (link.statusNote ? ' · ' + link.statusNote : '');
             return described;
         };
         for (const category of Object.keys(links)) {

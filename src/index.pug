@@ -1,4 +1,13 @@
 doctype html
+
+//- (i) after a title the portal has stopped listing; the note is its tooltip
+mixin unlisted(note)
+  span.unlisted(title=note role="img" aria-label=note)
+    svg(viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true")
+      circle(cx="12" cy="12" r="10")
+      path(d="M12 16v-5")
+      path(d="M12 8h.01")
+
 html.bg-spice-brown(lang='en')
 
   include includes/head.pug
@@ -56,7 +65,12 @@ html.bg-spice-brown(lang='en')
               each link in links_not_deleted
                 .list-group-item.list-group-item-action.border-top.link-container
                   .link-main
-                    a.main-link(href=link.link class={'overridden': link.isOverridden, 'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
+                    .link-title
+                      a.main-link(href=link.link class={'overridden': link.isOverridden, 'dead': link.isDead} data-content-id=(link.contentId) title=(link.isDead ? link.statusNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
+                      //- The portal no longer lists this link; it stays until it dies or is reported.
+                      //- A sibling of the anchor, not a child: search rewrites the anchor's text.
+                      if link.isUnlisted && !link.isDead
+                        +unlisted(link.statusNote)
                     //- One-line summary; the "…" opens the full description (search.js)
                     if link.summary
                       .link-summary
@@ -76,7 +90,8 @@ html.bg-spice-brown(lang='en')
           each link in unofficial
             .list-group-item.list-group-item-action.border-top.link-container
               .link-main
-                a.main-link(href=link.link class={'deprecated': link.isDeprecated} data-content-id=(link.contentId) title=(link.isDeprecated ? link.deprecatedNote : link.title)) #{link.title}
+                .link-title
+                  a.main-link(href=link.link class={'dead': link.isDead} data-content-id=(link.contentId) title=(link.isDead ? link.statusNote : link.title)) #{link.title}
                 if link.summary
                   .link-summary
                     span.summary-text= link.summary
