@@ -1,12 +1,22 @@
-// Paste into the browser console on an AF Portal page that lists links.
-// Supported pages:
-//   - quick-link category pages (browse.do?categoryId=...&channelPageId=...),
-//     read from the portal's quicklinks API
-//   - index pages that embed their list, such as Applications A-Z
-//     (manageApplications.do), read from the page's afp.indexModel.storeData call
-// Either way the output is the {afpCategorizedLinksDto: {links: {CATEGORY: [...]}}}
-// shape that src/links/links_af.json uses, plus a `source` naming the page, so
-// the sync (scripts/af-merge.js) knows which links this page vouches for.
+// Paste into the browser console on any AF Portal page while logged in.
+//
+// The portal keeps its links on several pages, so this fetches each list
+// itself (PAGES below), combines them into one submission in the shape
+// src/links/links_af.json uses, and posts it to the search worker, which
+// starts the Portal Sync workflow and a pull request for review. A list that
+// cannot be fetched is skipped and named in the result; the sync only touches
+// links from the lists that arrived. If the worker is unreachable or declines,
+// the compressed-data box appears instead, for the Update AF Links issue form.
+
+const PAGES = [
+  { source: 'index:manageApplications', name: 'Applications A-Z', url: '/gcss-af/USAF/ep/manageApplications.do' },
+  { source: 'quicklinks:p44C00E3C94DB4A210194DC84A9E10002', name: 'Home: Temporary Links Information', siteId: 's6925EC1356510FB5E044080020E329A9' },
+  { source: 'quicklinks:pAF429CFD945FB19F0194605EE6410002', name: 'Career and Training links', siteId: 'sF1D9EE47BB312480E0400F9E4DDA2DD3' },
+  { source: 'quicklinks:pAF429CFD945FB19F019460FC9A650026', name: 'Life and Fitness Quick Links', siteId: 's6925EC13564F0FB5E044080020E329A9' },
+];
+
+// The search worker's submit endpoint (search_worker/src/submit.js)
+const SUBMIT_URL = 'https://aflink-autocomplete.aswang.workers.dev/submit';
 
 const compressAndEncode = async (data) => {
   const encoder = new TextEncoder();
@@ -19,50 +29,39 @@ const compressAndEncode = async (data) => {
   return btoa(String.fromCharCode.apply(null, new Uint8Array(compressedBytes)));
 };
 
-// Quick-link category page: the categoryId and channelPageId in the URL name
-// the list the page renders.
-const getQuickLinks = async () => {
-  const params = new URLSearchParams(location.search);
-  const categoryId = params.get('categoryId');
-  const siteId = params.get('channelPageId');
-  if (!categoryId || !siteId) return null;
-  const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${siteId}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`Quick links API returned ${response.status} for this page`);
-  const data = await response.json();
-  return { source: `quicklinks:${categoryId}`, ...data };
-};
-
-// Return the JSON array passed to afp.indexModel.storeData( [...] ) in an inline script.
-const findStoreData = () => {
-  for (const script of document.scripts) {
-    const text = script.textContent;
-    const call = text.indexOf('afp.indexModel.storeData(');
-    if (call === -1) continue;
-    const start = text.indexOf('[', call);
-    let depth = 0, inString = false, escaped = false;
-    for (let i = start; i < text.length; i++) {
-      const c = text[i];
-      if (inString) {
-        if (escaped) escaped = false;
-        else if (c === '\\') escaped = true;
-        else if (c === '"') inString = false;
-      } else if (c === '"') inString = true;
-      else if (c === '[' || c === '{') depth++;
-      else if (c === ']' || c === '}') {
-        depth--;
-        if (depth === 0) return JSON.parse(text.slice(start, i + 1));
-      }
+// Return the JSON array passed to afp.indexModel.storeData( [...] ) in a page's HTML.
+const findStoreData = (html) => {
+  const call = html.indexOf('afp.indexModel.storeData(');
+  if (call === -1) return null;
+  const start = html.indexOf('[', call);
+  let depth = 0, inString = false, escaped = false;
+  for (let i = start; i < html.length; i++) {
+    const c = html[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (c === '\\') escaped = true;
+      else if (c === '"') inString = false;
+    } else if (c === '"') inString = true;
+    else if (c === '[' || c === '{') depth++;
+    else if (c === ']' || c === '}') {
+      depth--;
+      if (depth === 0) return JSON.parse(html.slice(start, i + 1));
     }
   }
   return null;
 };
 
-// Index page: group entries by functional area, in the same link shape the
-// quicklinks API returns, plus the portal's last-modified date.
-const getIndexLinks = () => {
-  const items = findStoreData();
-  if (!items) return null;
+const fetchText = async (url) => {
+  const response = await fetch(url, { credentials: 'same-origin' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.text();
+};
+
+// Index page (Applications A-Z): group entries by functional area, in the same
+// link shape the quicklinks API returns, plus the portal's last-modified date.
+const getIndexLinks = async (page) => {
+  const items = findStoreData(await fetchText(page.url));
+  if (!items) throw new Error('no embedded list found');
   const links = {};
   for (const item of items) {
     if (!item.link) continue;
@@ -78,69 +77,78 @@ const getIndexLinks = () => {
       lastModified: item.lastModTime?.time ? new Date(item.lastModTime.time).toISOString().slice(0, 10) : undefined,
     });
   }
-  const page = location.pathname.split('/').pop().replace(/\.do$/, '');
-  return { source: `index:${page}`, afpCategorizedLinksDto: { links } };
+  return links;
 };
 
-const countLinks = (data) =>
-  Object.values(data.afpCategorizedLinksDto.links).reduce((n, list) => n + list.length, 0);
+// Quick-link page: the portal's "cached" quicklinks feed answers for a category
+// once its page has been rendered in this session, so load the page first.
+const getQuickLinks = async (page) => {
+  const categoryId = page.source.slice('quicklinks:'.length);
+  await fetchText(`/gcss-af/USAF/ep/browse.do?categoryId=${categoryId}&channelPageId=${page.siteId}`);
+  const url = `/gcss-af/USAF/api/quicklinks/cached?categorized=true&id=${categoryId}&siteId=${page.siteId}`;
+  const response = await fetch(url, { credentials: 'same-origin' });
+  if (!response.ok) throw new Error(`quick links feed answered ${response.status}`);
+  const data = await response.json();
+  const links = data?.afpCategorizedLinksDto?.links;
+  if (!links) throw new Error('quick links feed returned no list');
+  return links;
+};
 
-// The search worker's submit endpoint (search_worker/src/submit.js). It starts
-// the Portal Sync workflow, which opens a pull request for review. When it is
-// unreachable or refuses, the compressed-data modal below is the fallback, for
-// the Update AF Links issue form.
-const SUBMIT_URL = 'https://aflink-autocomplete.aswang.workers.dev/submit';
+const countLinks = (links) => Object.values(links).reduce((n, list) => n + list.length, 0);
 
-const submitDirect = async (data) => {
+// Every list the portal has, fetched from wherever this runs
+const collect = async () => {
+  const pages = [], failures = [];
+  for (const page of PAGES) {
+    try {
+      const links = page.url ? await getIndexLinks(page) : await getQuickLinks(page);
+      pages.push({ source: page.source, name: page.name, count: countLinks(links), afpCategorizedLinksDto: { links } });
+    } catch (error) {
+      failures.push({ name: page.name, error: error.message });
+    }
+  }
+  return { pages, failures };
+};
+
+const submitDirect = async (payload) => {
   const response = await fetch(SUBMIT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
   const result = await response.json().catch(() => ({}));
   if (!response.ok || !result.ok) throw new Error(result.error || `HTTP ${response.status}`);
   return result;
 };
 
-const showMessageModal = (title, message) => {
+const modal = (title, lines, extraHtml = '') => {
   const modalHtml = `
     <div id="compressedDataModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
-      <div style="background-color:#fefefe; margin:15% auto; padding:20px; border:1px solid #888; width:80%; max-width:600px;">
+      <div style="background-color:#fefefe; color:#222; margin:15% auto; padding:20px; border:1px solid #888; width:80%; max-width:600px;">
         <h2>${title}</h2>
-        <p id="submitMessage"></p>
+        <ul id="submitLines"></ul>
+        ${extraHtml}
         <button id="closeModal">Close</button>
       </div>
     </div>
   `;
   $('body').append(modalHtml);
-  $('#submitMessage').text(message);
+  for (const line of lines) $('<li>').text(line).appendTo('#submitLines');
   $('#compressedDataModal').show();
   $('#closeModal').on('click', () => {
     $('#compressedDataModal').remove();
   });
 };
 
-const showCompressedDataModal = (data, summary) => {
-  // Create modal HTML
-  const modalHtml = `
-    <div id="compressedDataModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
-      <div style="background-color:#fefefe; margin:15% auto; padding:20px; border:1px solid #888; width:80%; max-width:600px;">
-        <h2>Compressed Links Data</h2>
-        <p>${summary}</p>
-        <textarea id="compressedDataText" style="width:100%; height:100px; margin-bottom:10px;" readonly>${data}</textarea>
-        <button id="copyCompressedData">Copy to Clipboard</button>
-        <button id="closeModal" style="margin-left:10px;">Close</button>
-      </div>
-    </div>
-  `;
+const summaryLines = ({ pages, failures }) => [
+  ...pages.map(p => `${p.name}: ${p.count} links`),
+  ...failures.map(f => `${f.name}: not fetched (${f.error})`),
+];
 
-  // Append modal to body
-  $('body').append(modalHtml);
-
-  // Show modal
-  $('#compressedDataModal').show();
-
-  // Copy button functionality
+const showCompressedDataModal = (data, collected, reason) => {
+  modal('Compressed Links Data', [...summaryLines(collected), reason, 'Paste the box below into an Update AF Links issue.'], `
+    <textarea id="compressedDataText" style="width:100%; height:100px; margin-bottom:10px;" readonly>${data}</textarea>
+    <button id="copyCompressedData" style="margin-right:10px;">Copy to Clipboard</button>`);
   $('#copyCompressedData').on('click', async () => {
     try {
       await navigator.clipboard.writeText(data);
@@ -150,28 +158,22 @@ const showCompressedDataModal = (data, summary) => {
     }
     $('#copyCompressedData').text('Copied');
   });
-
-  // Close button functionality
-  $('#closeModal').on('click', () => {
-    $('#compressedDataModal').remove();
-  });
 };
 
 (async () => {
   try {
-    const data = getIndexLinks() || await getQuickLinks();
-    if (!data) {
-      alert('No link list found on this page. Open a quick-link category page or Applications A-Z and try again.');
+    const collected = await collect();
+    if (collected.pages.length === 0) {
+      modal('No lists fetched', [...summaryLines(collected), 'Are you logged in to the AF Portal?']);
       return;
     }
-    const summary = `${countLinks(data)} links in ${Object.keys(data.afpCategorizedLinksDto.links).length} categories`;
+    const payload = { pages: collected.pages.map(({ source, afpCategorizedLinksDto }) => ({ source, afpCategorizedLinksDto })) };
     try {
-      const result = await submitDirect(data);
-      showMessageModal('Links submitted', result.message);
+      const result = await submitDirect(payload);
+      modal('Links submitted', [...summaryLines(collected), result.message]);
     } catch (error) {
       console.warn('Direct submission failed, falling back to the issue form:', error.message);
-      showCompressedDataModal(await compressAndEncode(JSON.stringify(data)),
-        `${summary}. Direct submission failed (${error.message}); paste this into an Update AF Links issue instead.`);
+      showCompressedDataModal(await compressAndEncode(JSON.stringify(payload)), collected, `Direct submission failed: ${error.message}`);
     }
   } catch (error) {
     console.error('Error:', error);

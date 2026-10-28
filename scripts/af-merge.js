@@ -93,8 +93,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         merged = applySource(current, third, {}, fourth || new Date().toISOString().slice(0, 10));
     } else {
         const incoming = JSON.parse(fs.readFileSync(second));
-        merged = applySource(current, incoming.source, incoming.afpCategorizedLinksDto.links,
-            third || new Date().toISOString().slice(0, 10));
+        const today = third || new Date().toISOString().slice(0, 10);
+        // getlinks.js submits every list at once as { pages: [...] }; one
+        // page alone is the older { source, afpCategorizedLinksDto } shape
+        const pages = Array.isArray(incoming.pages) ? incoming.pages : [incoming];
+        merged = current;
+        for (const page of pages) {
+            merged = applySource(merged, page.source, page.afpCategorizedLinksDto.links, today);
+        }
     }
     process.stdout.write(JSON.stringify(merged, null, 2) + '\n');
 }
