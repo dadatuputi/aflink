@@ -197,10 +197,28 @@ jobs:
             body: fs.readFileSync('/tmp/reputation_warning.md', 'utf8'),
           });
 
+    - name: Compose commit message
+      env:
+        ISSUE: ${{ github.event.client_payload.original_issue }}
+      run: |
+        # The link's title as it was before this change, from whichever list holds it
+        TITLE=$(for f in other af unofficial; do git show HEAD:src/links/links_$f.json; done \
+          | jq -rn --arg id "$LINK_ID" '[inputs | .. | objects | select(.contentId? == $id) | .title | strings] | first // empty')
+        # Subject for people, git trailers for scripts (scripts/commit-message.sh)
+        {
+          echo 'COMMIT_MESSAGE<<COMMIT_EOF'
+          scripts/commit-message.sh "Update link: ${TITLE:-$LINK_ID}" \
+            Issue="${ISSUE:+#$ISSUE}" \
+            Content-Id="$LINK_ID" \
+            Change="$CHANGE_TYPE" \
+            Run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo 'COMMIT_EOF'
+        } >> $GITHUB_ENV
+
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
-        message: "Override or update link from issue ${{ github.event.client_payload.original_issue }}"
+        message: ${{ env.COMMIT_MESSAGE }}
 
     - name: Trigger next workflow
       uses: actions/github-script@v9

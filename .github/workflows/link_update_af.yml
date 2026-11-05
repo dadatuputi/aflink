@@ -39,6 +39,7 @@ jobs:
         [[ -n "$B64" ]] || { echo "Missing Compressed JSON"; exit 1; }
         printf '%s' "$B64" | tr -d '[:space:]' | base64 -d | gzip -dc > /tmp/links_af_incoming.json
         SOURCES=$(jq -r 'if .pages then ([.pages[].source] | join(",")) else (.source // "an unknown page") end' /tmp/links_af_incoming.json)
+        echo "SOURCES=$SOURCES" >> $GITHUB_ENV
         echo "Decoded $(jq '[(if .pages then .pages[] else . end) | .afpCategorizedLinksDto.links[] | length] | add' /tmp/links_af_incoming.json) links from $SOURCES"
         # One page speaks only for its own links; the merge keeps the rest and
         # deprecates links this page used to list (scripts/af-merge.js)
@@ -49,8 +50,18 @@ jobs:
       run: node scripts/af-guard.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/guard.md
 
     - name: Compute import statistics
+      env:
+        ISSUE: ${{ github.event.client_payload.original_issue }}
       run: |
         node scripts/af-import-stats.js /tmp/links_af_old.json src/links/links_af.json | tee /tmp/stats.txt
+        # Counts in the subject, the rest as git trailers (scripts/sync-commit-message.sh)
+        {
+          echo 'COMMIT_MESSAGE<<COMMIT_EOF'
+          scripts/sync-commit-message.sh /tmp/stats.txt "$SOURCES" \
+            Issue="${ISSUE:+#$ISSUE}" \
+            Run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo 'COMMIT_EOF'
+        } >> $GITHUB_ENV
         {
           echo 'STATS<<STATS_EOF'
           cat /tmp/stats.txt
@@ -85,7 +96,7 @@ jobs:
       uses: EndBug/add-and-commit@v10
       with:
         add: src/links/links_af.json
-        message: "Updated AF Links from issue ${{ github.event.client_payload.original_issue }}"
+        message: ${{ env.COMMIT_MESSAGE }}
 
     - name: Trigger next workflow
       uses: actions/github-script@v9

@@ -73,6 +73,7 @@ jobs:
     - name: Add link to end of list with an auto-generated contentId
       run: |
         UUID=$(uuidgen)
+        echo "CONTENT_ID=$UUID" >> $GITHUB_ENV
         if [[ "$LINK_TYPE" == "Unofficial" ]]; then
           TARGET=src/links/links_unofficial.json
           KEY=UNOFFICIAL
@@ -128,10 +129,24 @@ jobs:
             body: fs.readFileSync('/tmp/reputation_warning.md', 'utf8'),
           });
 
+    - name: Compose commit message
+      env:
+        ISSUE: ${{ github.event.client_payload.original_issue }}
+      run: |
+        # Subject for people, git trailers for scripts (scripts/commit-message.sh)
+        {
+          echo 'COMMIT_MESSAGE<<COMMIT_EOF'
+          scripts/commit-message.sh "Add $LINK_TYPE link: $TITLE" \
+            Issue="${ISSUE:+#$ISSUE}" \
+            Content-Id="$CONTENT_ID" \
+            Run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo 'COMMIT_EOF'
+        } >> $GITHUB_ENV
+
     - name: Commit New Changes
       uses: EndBug/add-and-commit@v10
       with:
-        message: "Added ${{ env.LINK_TYPE }} link from issue ${{ github.event.client_payload.original_issue }}"
+        message: ${{ env.COMMIT_MESSAGE }}
 
     - name: Trigger next workflow
       uses: actions/github-script@v9
