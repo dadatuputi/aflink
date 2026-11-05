@@ -20,7 +20,7 @@ on:
         description: Portal page(s) the links came from, comma-separated (index:... or quicklinks:...)
         required: true
       digest:
-        description: Short hash of the payload, for the commit message
+        description: Short hash of the payload, for the commit's Payload-Digest trailer
         required: false
         default: ''
 
@@ -154,9 +154,14 @@ jobs:
         env:
           SOURCE: ${{ inputs.source }}
           DIGEST: ${{ inputs.digest }}
+          PAYLOAD_ID: ${{ inputs.payload_id }}
         run: |
           git add src/links/links_af.json
-          git commit -m "Portal sync from $SOURCE${DIGEST:+ ($DIGEST)}"
+          # Counts in the subject, the rest as git trailers (scripts/sync-commit-message.sh)
+          scripts/sync-commit-message.sh /tmp/stats.txt "$SOURCE" \
+            Payload-Digest="$DIGEST" Payload-Id="$PAYLOAD_ID" \
+            Run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" > /tmp/commit-msg.txt
+          git commit -F /tmp/commit-msg.txt
           git push --force-with-lease origin "$BRANCH"
 
       - name: Open or update the pull request
