@@ -56,3 +56,8 @@ table of which changes need what; `npm test` checks both ends, including the
   `_site/links.json`).
 - Don't hand-edit `docs/` or `_site/`; both are build output and gitignored.
 - `src/analytics.json` is written by the nightly analytics workflow.
+- Bot commits that change links carry their metadata as git trailers, not in
+  the subject: `Issue`, `Content-Id`, `Change`, `Portal-Source` (one per
+  page), `Payload-Digest`, `Payload-Id`, `Run`. Build the message with
+  `scripts/commit-message.sh` (or `sync-commit-message.sh` for portal syncs)
+  and read it back with `git log --format='%(trailers:key=Content-Id,valueonly)'`.
