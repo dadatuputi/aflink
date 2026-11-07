@@ -12,7 +12,7 @@
 // See search_worker/README.md before changing either.
 import '../../src/includes/js/search-match.js'
 import { handleSubmit, handleSubmission } from './submit.js'
-import { handleMcp } from './mcp.js'
+import { handleMcp, handleServerCard } from './mcp.js'
 // Written by build-links.js before every deploy (wrangler's build command)
 import bundledLinks from './links.generated.js'
 
@@ -82,6 +82,9 @@ async function handleRequest(request, env, links) {
     // Public, read-only MCP server over the same links and matching; see mcp.js
     if (pathname === "/mcp") {
       return handleMcp(request, env, { search, links });
+    }
+    if (pathname === "/mcp/server-card") {
+      return handleServerCard(request);
     }
 
     if (pathname.startsWith("/search")) {

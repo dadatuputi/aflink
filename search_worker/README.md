@@ -118,6 +118,19 @@ asks. The code is [`src/mcp.js`](src/mcp.js) with no SDK dependency, and
 [`test/mcp-server.test.js`](../test/mcp-server.test.js) covers the protocol,
 the tool and `server.json`.
 
+**Discovery.** Besides the Registry listing, the server can be found from
+the domain itself, as the MCP Server Cards extension
+([SEP-2127](https://modelcontextprotocol.io/seps/2127-mcp-server-cards))
+describes. [`src/.well-known/ai-catalog.json`](../src/.well-known/) is served
+at `https://aflink.us/.well-known/ai-catalog.json` and lists one entry, which
+points to the server card at `GET https://api.aflink.us/mcp/server-card`, the
+place the spec reserves for a server at `/mcp`. The card (`SERVER_CARD` in
+`mcp.js`) gives the name, version, description and endpoint, with CORS, an
+ETag and an hour's caching; it does not list tools, which clients still get
+from `tools/list`. It is built in `mcp.js` rather than read from
+`server.json`, so the worker needs no new watch path, and a test checks the
+two agree. Both formats are new, so update them if the extension changes.
+
 To try it:
 
 ```sh
@@ -162,7 +175,8 @@ for a month while traffic moves over, and is to be turned off
 (`workers_dev: false`) after 2026-12-07.
 
 For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
-`src/mcp.js` together (a test checks they agree), merge, let the worker
+`src/mcp.js` together (a test checks they agree, and that the server card
+matches `server.json`), merge, let the worker
 build finish, and run the workflow again. The Registry refuses a version it already has.
 
 ## Development
