@@ -41,7 +41,9 @@ jobs:
           node-version: 24
 
       - name: Test the MCP endpoint and server.json
-        run: node --test test/mcp-server.test.js
+        run: |
+          node search_worker/build-links.js
+          node --test test/mcp-server.test.js
 
       - name: Check the deployed endpoint answers
         run: |

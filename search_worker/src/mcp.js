@@ -133,9 +133,9 @@ function rpcError(id, code, message, status = 200) {
   return json({ jsonrpc: '2.0', id, error: { code, message } }, status)
 }
 
-// `search(links, term, max)` and `loadLinks(env)` come from index.js, so the
-// tool answers from exactly the list and ranking the address-bar suggestions use.
-export async function handleMcp(request, env, { search, loadLinks }) {
+// `search(links, term, max)` and `links` come from index.js, so the tool
+// answers from exactly the list and ranking the address-bar suggestions use.
+export async function handleMcp(request, env, { search, links }) {
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS })
   }
@@ -194,13 +194,13 @@ export async function handleMcp(request, env, { search, loadLinks }) {
     case 'tools/list':
       return json({ jsonrpc: '2.0', id, result: { tools: [SEARCH_TOOL] } })
     case 'tools/call':
-      return callTool(id, params, env, { search, loadLinks })
+      return callTool(id, params, { search, links })
     default:
       return rpcError(id, METHOD_NOT_FOUND, `Method not found: ${method}`)
   }
 }
 
-async function callTool(id, params, env, { search, loadLinks }) {
+async function callTool(id, params, { search, links }) {
   if (params.name !== SEARCH_TOOL.name) {
     return rpcError(id, INVALID_PARAMS, `Unknown tool: ${params.name}`)
   }
@@ -220,7 +220,6 @@ async function callTool(id, params, env, { search, loadLinks }) {
     limit = args.limit
   }
 
-  const links = await loadLinks(env)
   const results = search(links, query.toLowerCase(), limit).map(link => ({
     title: link.title,
     url: link.link,
