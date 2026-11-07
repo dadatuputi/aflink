@@ -16,7 +16,9 @@ workflows in `.github/workflows/`, not by hand.
 - `src/links/` — link data: `links_af.json` (portal sync), `links_other.json`
   (community `OTHER` links), `links_unofficial.json` (third-party),
   `links_override.json` (corrections and deletions, matched by `contentId`)
-- `search_worker/` — the Cloudflare Worker behind address-bar autocomplete
+- `search_worker/` — the Cloudflare Worker behind address-bar autocomplete,
+  and the public read-only MCP server at `/mcp` (`src/mcp.js`); `server.json`
+  is its MCP Registry entry, published by hand with `mcp_publish.yml`
 - `scripts/check-trust.js`, `scripts/scan-reputation.js` — link audits over
   the served set (`scripts/served-links.js`): domain allowlist on submission,
   and a malware/phishing reputation scan weekly (`link_reputation.yml`), on
@@ -30,10 +32,11 @@ workflows in `.github/workflows/`, not by hand.
 ## Search is two implementations of one behavior
 
 The page filters links client-side; the search worker answers the browser's
-address-bar suggestion requests. A suggestion is resolved by loading the page
-with it as the query, so **the worker must see the site the way the page
-does** — same visible links, same matching rules. When they drift, suggestions
-appear for links the page cannot find, or point at the wrong row.
+address-bar suggestion requests and MCP `search_links` calls. A suggestion is
+resolved by loading the page with it as the query, so **the worker must see
+the site the way the page does** — same visible links, same matching rules.
+When they drift, suggestions appear for links the page cannot find, or point
+at the wrong row.
 
 Two seams hold them together:
 

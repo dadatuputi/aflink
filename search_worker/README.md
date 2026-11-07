@@ -1,7 +1,8 @@
 # Search worker
 
 Cloudflare Worker behind the address-bar autocomplete (OpenSearch suggestions)
-for [aflink.us](https://aflink.us). Deployed as `aflink-autocomplete`; the site
+for [aflink.us](https://aflink.us), and aflink's public, read-only
+[MCP server](#mcp-server-post-mcp). Deployed as `aflink-autocomplete`; the site
 points at it through `suggestedURL` in [`updater.js`](../updater.js), which the
 browser discovers via [`osdd.xml`](../src/osdd.xml.pug).
 
@@ -45,6 +46,65 @@ Two things keep the two ends together, and both are load-bearing:
 | A link becoming hidden on the page (a new flag like `isDeleted`) | `to_entries()` must filter it out too |
 | Renaming or restructuring `links.json` | `to_entries()` reads the new shape; bump `LINKS_KEY` so cached entries from the old shape are not reused |
 | How the page resolves a chosen suggestion (`?q=` parsing) | The suggestion format here has to match it |
+
+## MCP server (`POST /mcp`)
+
+The same worker is a [Model Context Protocol](https://modelcontextprotocol.io)
+server, so an AI agent can look up an Air Force or DoD site the way a person
+does on aflink.us. It is listed in the
+[MCP Registry](https://registry.modelcontextprotocol.io) as
+`io.github.dadatuputi/aflink`.
+
+- **Endpoint:** `https://aflink-autocomplete.aswang.workers.dev/mcp`,
+  Streamable HTTP transport (MCP spec 2025-11-25; 2025-06-18 and 2025-03-26
+  clients are also accepted).
+- **One tool, `search_links`:** takes a `query` (and an optional `limit`, 1–50,
+  default 10) and returns matching links with title, URL, category and
+  summary, title matches first. Links in the `UNOFFICIAL` category come back
+  with `official: false`.
+- **Read-only:** the tool reads the published `links.json` and nothing else.
+  It cannot add, change or request links; that still goes through the issue
+  forms and their review.
+- **No authentication:** it serves only what `https://aflink.us/links.json`
+  already publishes. No login, no API key, no cookies, and the worker stores
+  nothing about the caller.
+- **Same answers as the site:** it uses the list and ranking the suggestions
+  use (`to_entries()` and `search()` in [`src/index.js`](src/index.js)) and the
+  page's own matching rules in
+  [`search-match.js`](../src/includes/js/search-match.js), so the parity rules
+  above cover it too.
+
+It is stateless: each POST gets one JSON response, no session is kept, and
+`GET /mcp` is `405` because the server never sends anything unprompted. Any
+web origin may call it (CORS `*`), since there is nothing private to protect;
+an `Origin` that is not an `http(s)` origin is refused, as the transport spec
+asks. The code is [`src/mcp.js`](src/mcp.js) with no SDK dependency, and
+[`test/mcp-server.test.js`](../test/mcp-server.test.js) covers the protocol,
+the tool and `server.json`.
+
+To try it:
+
+```sh
+claude mcp add --transport http aflink https://aflink-autocomplete.aswang.workers.dev/mcp
+# or, with the MCP Inspector
+npx @modelcontextprotocol/inspector   # transport "Streamable HTTP", the URL above
+```
+
+### Publishing to the MCP Registry
+
+[`server.json`](../server.json) in the repository root is the Registry entry.
+[`.github/workflows/mcp_publish.yml`](../.github/workflows/mcp_publish.yml)
+publishes it, run by hand from the Actions tab:
+
+1. Deploy the worker (`npm run deploy` here) so `/mcp` is live.
+2. Run **Publish MCP server**. It runs the MCP tests, checks the deployed
+   endpoint answers `initialize` as `io.github.dadatuputi/aflink` at the
+   version in `server.json`, then logs in with GitHub OIDC (no secret: running
+   in a `dadatuputi` repository is what proves the namespace) and publishes.
+
+For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
+`src/mcp.js` together (a test checks they agree), deploy, and run the workflow
+again. The Registry refuses a version it already has.
 
 ## Development
 
