@@ -9,7 +9,8 @@ import gitDateExtractor from 'git-date-extractor'
 import imageType from 'image-type'
 import process from 'process'
 import sharp from 'sharp'
-import { linkStatus, RETIRE_DAYS } from './scripts/link-status.js'
+import { RETIRE_DAYS } from './scripts/link-status.js'
+import { readLinkFiles, assembleLinks, publishedLinks } from './scripts/assemble-links.js'
 
 const environment = process.env.NODE_ENV;
 console.log("Node environment is: " + environment)
@@ -89,172 +90,34 @@ const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{
 
         const linksUnofficialPath = path.resolve(linksDir, 'links_unofficial.json')
 
-        const links_af = JSON.parse(fs.readFileSync(linksAfPath));
-        let links_other = JSON.parse(fs.readFileSync(linksOtherPath));
-        const links_override = JSON.parse(fs.readFileSync(linksOverridePath));
-        // Unofficial third-party links stay out of the official links object so
-        // the override/delete workflows never walk them. They are still
-        // published in links.json, as their own top-level list, because the
-        // page searches them and the autocomplete worker has to match it.
-        const links_unofficial_raw = JSON.parse(fs.readFileSync(linksUnofficialPath)).UNOFFICIAL
-        const links_unofficial = [...links_unofficial_raw]
-            .sort((a, b) => a.title.toLowerCase() < b.title.toLowerCase() ? -1 : 1);
-
+        const files = readLinkFiles(linksDir);
         // The workflows append new links, so the raw (pre-sort) last element
         // names each file's most recent addition — used for the sync tooltip.
         // An in-place edit bumps the file date but keeps the last-added name;
         // close enough for a tooltip.
-        const lastOtherAdd = links_other.OTHER.length ? links_other.OTHER[links_other.OTHER.length - 1].title : null;
-        const lastUnofficialAdd = links_unofficial_raw.length ? links_unofficial_raw[links_unofficial_raw.length - 1].title : null;
-        const newestOverride = links_override.reduce((a, b) => (!a || b.timestamp > a.timestamp) ? b : a, null);
+        const lastOtherAdd = files.other.OTHER.length ? files.other.OTHER[files.other.OTHER.length - 1].title : null;
+        const lastUnofficialAdd = files.unofficial.UNOFFICIAL.length ? files.unofficial.UNOFFICIAL[files.unofficial.UNOFFICIAL.length - 1].title : null;
+        const newestOverride = files.overrides.reduce((a, b) => (!a || b.timestamp > a.timestamp) ? b : a, null);
 
-        // Sort other links
-        links_other = {
-            OTHER: links_other.OTHER.sort((a, b) => {
-                a = a.title.toLowerCase();
-                b = b.title.toLowerCase();
-                return a < b ? -1 : a > b ? 1 : 0;
-            })
-        }
-
-        let links = links_af.afpCategorizedLinksDto.links;
-
-        // Some AF portal links are relative paths (e.g. /gcss-af/...); make
-        // them absolute before overrides record originals or URLs are built
-        Object.values(links).forEach(items => items.forEach(link => {
-            if (link.link && link.link.startsWith('/')) {
-                link.link = 'https://www.my.af.mil' + link.link;
-            }
-        }));
-
-        // Apply overrides to AF links - iterate through overrides looking for matches in links.
-        // Apply in timestamp order so a link with multiple overrides ends in the newest state,
-        // and record each application as a before/after event for the overrides page.
-        links_override.sort((a, b) => a.timestamp - b.timestamp);
-        const overrideEvents = [];
-        let override_count = 0;
-        for (const override of links_override) {
-            // Search through all categories and links to find matches
-            const matches = Object.entries(links).flatMap(([category, items]) => 
-                 items
-                    .map((link, index) => ({ category, linkIndex: index, link }))
-                    .filter(result => result.link.contentId === override.match)
-            );
-
-            switch (true) {
-                case matches.length == 0:
-                    console.log(`Warning: No matches found for override: ${override.title || override.link || "Deletion"} (${override.match})`);
-                    break;
-
-                case matches.length == 1:
-                    override_count += 1;
-                    const match = matches[0];
-                    const originalLink = match.link;
-
-                    // When overrides chain, originalLink is the already-overridden
-                    // state; the true AF originals ride along on it.
-                    const trueOriginalTitle = originalLink.originalTitle ?? originalLink.title;
-                    const trueOriginalLink = originalLink.originalLink ?? originalLink.link;
-                    const newTitle = override.title || originalLink.title;
-                    const newLink = override.link || originalLink.link;
-
-                    overrideEvents.push({
-                        timestamp: override.timestamp,
-                        date: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
-                        beforeTitle: originalLink.title,
-                        beforeLink: originalLink.link,
-                        afterTitle: newTitle,
-                        afterLink: newLink,
-                        isDeleted: !override.title && !override.link,
-                        contentId: originalLink.contentId,
-                    });
-
-                    links[match.category][match.linkIndex] = {
-                        title: newTitle, // Use override title if provided, otherwise keep original
-                        link: newLink,   // Use override link if provided, otherwise keep original
-                        isDeleted: !override.title && !override.link, // If neither title nor link is provided, mark as deleted
-                        isOverridden: true,
-                        overridden: [newTitle !== trueOriginalTitle ? trueOriginalTitle : null, newLink !== trueOriginalLink ? trueOriginalLink : null].filter(Boolean).join(', '), // Preserve originals
-                        overriddenTimestamp: sugar_date.Date.format(new Date(override.timestamp * 1000), '{d} {Month} {yyyy}'),
-
-                        // Preserve original AF link properties
-                        originalTitle: trueOriginalTitle,
-                        originalLink: trueOriginalLink,
-                        // type: originalLink.type,
-                        contentId: originalLink.contentId,
-                        // An override fixes the link; it does not stop its retirement clock
-                        deprecatedSince: originalLink.deprecatedSince,
-                        // The portal's description and date still describe the fixed link
-                        description: originalLink.description,
-                        lastModified: originalLink.lastModified,
-                        // exitLinkReferrer: originalLink.exitLinkReferrer,
-                        // renderedAsFile: originalLink.renderedAsFile,
-                        // url: originalLink.url
-                    };
-
-                    console.log(`Applied override: ${override.title || override.link || "Deletion"} (${override.match}) to link "${originalLink.title}"`);
-                    break;
-                    
-                case matches.length > 1:
-                    console.log(`Error: Found ${matches.length} matches. There should only be one. Exiting.`);
-                    process.exit(1); // Fail job to prevent undefined behavior
-            }
-        };
-
-
-        // Add other links
-        links.OTHER = links_other.OTHER;
-
-        // Links the portal no longer lists stay, looking like any other, with
-        // an (i) note saying since when. A link whose domain has died is
-        // muted, and retired RETIRE_DAYS later; see scripts/link-status.js.
+        // Overrides, OTHER links, the unofficial section, retirement and
+        // descriptions: scripts/assemble-links.js, shared with the search
+        // worker's build so the two lists cannot drift. Unofficial links stay
+        // out of the official links object so the override/delete workflows
+        // never walk them.
         const today = new Date().toISOString().slice(0, 10);
-        const healthPath = path.resolve(linksDir, 'link_health.json');
-        const health = fs.existsSync(healthPath) ? JSON.parse(fs.readFileSync(healthPath)) : {};
-        const withStatus = list => list
-            .map(link => ({ link, status: linkStatus(link, today, health) }))
-            .filter(({ status }) => !status.retired)
-            .map(({ link, status }) => ({
-                ...link,
-                ...(status.unlisted && { isUnlisted: true }),
-                ...(status.dead && { isDead: true }),
-                ...(status.note && { statusNote: status.note }),
-            }));
-        let retired_count = 0;
-        for (const category of Object.keys(links)) {
-            const before = links[category].length;
-            links[category] = withStatus(links[category]);
-            retired_count += before - links[category].length;
-            if (links[category].length === 0) delete links[category];
-        }
-        links_unofficial.splice(0, links_unofficial.length, ...withStatus(links_unofficial));
-        console.log(`Retired ${retired_count} links past ${RETIRE_DAYS} days`)
-
-        // Summaries are written by hand in links_descriptions.json, keyed by
-        // contentId, so a portal sync never overwrites them. The full
-        // description comes from the portal when it has one, else from the
-        // same file. detailMeta is the line under the title in the details
-        // dialog, with the status note when the link has one.
-        const descriptions = JSON.parse(fs.readFileSync(path.resolve(linksDir, 'links_descriptions.json'))).descriptions;
-        const describe = (link, label) => {
-            const written = descriptions[link.contentId] || {};
-            const described = { ...link };
-            if (written.summary) described.summary = written.summary;
-            const description = link.description || written.description;
-            if (description) described.description = description;
-            else delete described.description;
-            described.detailMeta = label + (link.lastModified
-                ? ' · Updated ' + sugar_date.Date.format(new Date(link.lastModified + 'T00:00:00Z'), '{d} {Month} {yyyy}')
-                : '') + (link.statusNote ? ' · ' + link.statusNote : '');
-            return described;
-        };
-        for (const category of Object.keys(links)) {
-            links[category] = links[category].map(link => describe(link, category === 'OTHER' ? 'Community link' : category));
-        }
-        links_unofficial.splice(0, links_unofficial.length, ...links_unofficial.map(link => describe(link, 'Unofficial')));
+        const assembled = assembleLinks(files, {
+            today,
+            formatDay: d => sugar_date.Date.format(d, '{d} {Month} {yyyy}'),
+            log: console.log,
+        });
+        let links = assembled.links;
+        const links_unofficial = assembled.unofficial;
+        const overrideEvents = assembled.overrideEvents;
+        const override_count = assembled.overrideCount;
+        console.log(`Retired ${assembled.retiredCount} links past ${RETIRE_DAYS} days`)
 
         const links_length = Object.values(links).reduce((sum, category) => sum + category.length, 0);
-        console.log(`Combined ${links_length} links with ${override_count}/${links_override.length} overrides applied`)
+        console.log(`Combined ${links_length} links with ${override_count}/${files.overrides.length} overrides applied`)
 
 
         // Sync display: the AF portal sync and the latest community link
@@ -299,41 +162,18 @@ const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{
         console.log(`Latest update: ${date}`)
 
 
-        // reformat links to an array, e.g.
-        //[ { name: "ACQUISITION", links: [..]}, {...}, ...]
-        links = Object.keys(links).map(category => {
-            return {
-                category: category,
-                links: links[category]
-            }
+        // Write links to JSON for publishing: the search worker's view of the
+        // site (its build assembles the same list; see search_worker/README.md)
+        const links_published = publishedLinks({ links, unofficial: links_unofficial }, {
+            generated: new Date().toISOString(),
+            lastModified: date,
+            overridesApplied: override_count,
         });
 
+        // reformat links to an array, e.g.
+        //[ { name: "ACQUISITION", links: [..]}, {...}, ...]
+        links = links_published.links;
 
-        // Write links to JSON for publishing.
-        // This file is the search worker's only view of the site — whatever the
-        // page shows has to be derivable from here, including the unofficial
-        // section and the isDeleted flag the page filters on.
-        const links_published = {
-            metadata: {
-                generated: new Date().toISOString(),
-                lastModified: date,
-                numLinks: links_length,
-                numCategories: links.length,
-                numUnofficial: links_unofficial.length,
-                overridesApplied: override_count,
-                version: "1.1"
-            },
-            links: links,
-            // Copied field by field, and before the issue URLs are attached
-            // below, so links.json stays the plain data the worker expects
-            unofficial: links_unofficial.map(link => ({
-                title: link.title,
-                link: link.link,
-                contentId: link.contentId,
-                summary: link.summary,
-                description: link.description
-            }))
-        }
         fs.writeFileSync(path.resolve(outputDir, "links.json"), JSON.stringify(links_published, null, 2));
         console.log(`Wrote links.json`);
 

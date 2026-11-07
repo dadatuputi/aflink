@@ -6,7 +6,8 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
 
-import worker from '../search_worker/src/index.js'
+import { createWorker } from '../search_worker/src/index.js'
+import { buildLinks } from '../search_worker/build-links.js'
 
 const LINKS_JSON = {
   metadata: { version: '1.1' },
@@ -24,22 +25,16 @@ const LINKS_JSON = {
   ],
 }
 
-// Minimal stand-ins for the Cloudflare runtime the worker is given
+// A worker over the given links.json, as build-links.js would bundle it, plus
+// a stand-in for the Cloudflare runtime that counts any network fetch
 function environment(linksJson = LINKS_JSON) {
-  const store = new Map()
-  const env = {
-    fetches: 0,
-    LINKS: {
-      get: async (key) => (store.has(key) ? JSON.parse(store.get(key)) : null),
-      put: async (key, value) => { store.set(key, value) },
-    },
-  }
-  globalThis.fetch = async () => { env.fetches++; return new Response(JSON.stringify(linksJson)) }
+  const env = { fetches: 0, worker: createWorker(linksJson) }
+  globalThis.fetch = async () => { env.fetches++; throw new Error('the worker should not fetch') }
   return env
 }
 
 async function suggest(term, env = environment()) {
-  const res = await worker.fetch(new Request('https://worker.dev/search/' + encodeURIComponent(term)), env)
+  const res = await env.worker.fetch(new Request('https://worker.dev/search/' + encodeURIComponent(term)), env)
   assert.equal(res.status, 200)
   const [echoed, suggestions] = await res.json()
   assert.equal(echoed, term.toLowerCase())
@@ -98,11 +93,11 @@ test('caps the list a browser will never show all of', async () => {
   assert.equal((await suggest('travel', env)).length, 20)
 })
 
-test('links.json is fetched once and then served from KV', async () => {
+test('answers from the bundled links without fetching anything', async () => {
   const env = environment()
   await suggest('weather', env)
   await suggest('milsuite', env)
-  assert.equal(env.fetches, 1)
+  assert.equal(env.fetches, 0)
 })
 
 test('tolerates a links.json from a build that predates unofficial links', async () => {
@@ -113,14 +108,14 @@ test('tolerates a links.json from a build that predates unofficial links', async
 
 test('a request without a search term is a 400, anything else a 404', async () => {
   const env = environment()
-  assert.equal((await worker.fetch(new Request('https://worker.dev/search'), env)).status, 400)
-  assert.equal((await worker.fetch(new Request('https://worker.dev/search/'), env)).status, 400)
-  assert.equal((await worker.fetch(new Request('https://worker.dev/'), env)).status, 404)
+  assert.equal((await env.worker.fetch(new Request('https://worker.dev/search'), env)).status, 400)
+  assert.equal((await env.worker.fetch(new Request('https://worker.dev/search/'), env)).status, 400)
+  assert.equal((await env.worker.fetch(new Request('https://worker.dev/'), env)).status, 404)
 })
 
 test('a term containing a slash is kept whole', async () => {
   const env = environment()
-  const res = await worker.fetch(new Request('https://worker.dev/search/' + encodeURIComponent('owa / e-mail')), env)
+  const res = await env.worker.fetch(new Request('https://worker.dev/search/' + encodeURIComponent('owa / e-mail')), env)
   const [term] = await res.json()
   assert.equal(term, 'owa / e-mail')
 })
@@ -149,4 +144,19 @@ test('the published links.json is shaped the way the worker reads it', { skip: b
     const titles = (await suggest(link.title, env)).map(s => s.title)
     assert.ok(!titles.includes(link.title), `deleted link suggested: ${link.title}`)
   }
+})
+
+// What Workers Builds bundles has to be what the site shows: build-links.js
+// and updater.js assemble from src/links/ with the same module, and this holds
+// them to it against the site the build really produced.
+test('the bundled links are the links the site publishes', { skip: built ? false : 'site not built' }, async () => {
+  const site = JSON.parse(fs.readFileSync(built, 'utf8'))
+  const bundled = buildLinks({ today: site.metadata.generated.slice(0, 10) })
+  const shape = data => ({
+    links: data.links.map(c => ({ category: c.category, links: c.links.map(l =>
+      ({ title: l.title, link: l.link, summary: l.summary, description: l.description, isDeleted: !!l.isDeleted })) })),
+    unofficial: data.unofficial.map(l => ({ title: l.title, link: l.link, summary: l.summary, description: l.description })),
+  })
+  assert.deepEqual(shape(bundled), shape(site))
+  assert.equal(bundled.metadata.numLinks, site.metadata.numLinks)
 })

@@ -40,9 +40,13 @@ Two seams hold them together:
 - `src/includes/js/search-match.js` — the matching rules, shared: the page
   inlines it, the worker imports it. Change matching **here**, never in one
   copy.
-- `links.json`, written by `updater.js` — the worker's only view of the site.
-  Anything the page shows has to be derivable from it, including the
-  `unofficial` list and the `isDeleted` flag the page filters on.
+- `scripts/assemble-links.js` — the link list, assembled from `src/links/`
+  for both `updater.js` (the site and `links.json`) and
+  `search_worker/build-links.js` (bundled into the worker when Workers Builds
+  deploys it). The worker reads it in the `links.json` shape, so anything the
+  page shows has to be derivable from that, including the `unofficial` list
+  and the `isDeleted` flag the page filters on. A new file the worker is built
+  from needs a Workers Builds watch path (see `search_worker/README.md`).
 
 So: **a change to what the page lists or how it searches is not finished until
 the worker matches it.** `search_worker/README.md` has the specifics and a
@@ -52,8 +56,8 @@ table of which changes need what; `npm test` checks both ends, including the
 ## Working here
 
 - `npm run dev:build` builds into `_site/`; `npm run dev:serve` also serves it
-  on :4000. `npm test` runs the search tests (build first — one test reads
-  `_site/links.json`).
+  on :4000. `npm test` bundles the worker's links and runs the tests (build
+  the site first — two tests read `_site/links.json`).
 - Don't hand-edit `docs/` or `_site/`; both are build output and gitignored.
 - `src/analytics.json` is written by the nightly analytics workflow.
 - Bot commits that change links carry their metadata as git trailers, not in
