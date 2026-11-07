@@ -96,22 +96,24 @@ npx @modelcontextprotocol/inspector   # transport "Streamable HTTP", the URL abo
 [`.github/workflows/mcp_publish.yml`](../.github/workflows/mcp_publish.yml)
 publishes it, run by hand from the Actions tab:
 
-1. Deploy the worker (`npm run deploy` here) so `/mcp` is live.
+1. Merge the change to `master`. Cloudflare Workers Builds deploys the worker
+   on every push to `master` that touches `search_worker/`; wait for that
+   build to finish so `/mcp` is live.
 2. Run **Publish MCP server**. It runs the MCP tests, checks the deployed
    endpoint answers `initialize` as `io.github.dadatuputi/aflink` at the
    version in `server.json`, then logs in with GitHub OIDC (no secret: running
    in a `dadatuputi` repository is what proves the namespace) and publishes.
 
 For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
-`src/mcp.js` together (a test checks they agree), deploy, and run the workflow
-again. The Registry refuses a version it already has.
+`src/mcp.js` together (a test checks they agree), merge, let the worker
+build finish, and run the workflow again. The Registry refuses a version it already has.
 
 ## Development
 
 ```sh
 npm install          # in this directory
 npm run dev          # serves the worker on :8787
-npm run deploy       # wrangler deploy
+npm run deploy       # wrangler deploy (by hand; normally Workers Builds deploys on push to master)
 ```
 
 A development build of the site (`npm run dev:build` in the repo root) points

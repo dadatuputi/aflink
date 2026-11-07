@@ -1,6 +1,7 @@
 # Publishes server.json to the MCP Registry (https://registry.modelcontextprotocol.io)
-# as io.github.dadatuputi/aflink. Run by hand, after the worker carrying the
-# /mcp endpoint has been deployed: the Registry lists the remote URL as given,
+# as io.github.dadatuputi/aflink. Run by hand, after Cloudflare Workers Builds
+# has deployed the worker carrying the /mcp endpoint (it deploys on pushes to
+# master that touch search_worker/): the Registry lists the remote URL as given,
 # so this checks that the URL really answers before publishing.
 #
 # Authentication is GitHub OIDC: the job's id-token proves it runs in a
@@ -50,9 +51,9 @@ jobs:
             -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"aflink-publish-check","version":"1"}}}')"
           echo "$reply" | jq .
           [ "$(echo "$reply" | jq -r '.result.serverInfo.name')" = "$name" ] \
-            || { echo "::error::$url does not answer as $name; deploy the worker first"; exit 1; }
+            || { echo "::error::$url does not answer as $name; wait for the worker build to deploy first"; exit 1; }
           [ "$(echo "$reply" | jq -r '.result.serverInfo.version')" = "$version" ] \
-            || { echo "::error::$url is not serving version $version; deploy the worker first"; exit 1; }
+            || { echo "::error::$url is not serving version $version; wait for the worker build to deploy first"; exit 1; }
 
       - name: Install cosign
         uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
