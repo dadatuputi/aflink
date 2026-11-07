@@ -7,6 +7,16 @@
     "name": "aflink-autocomplete",
     "compatibility_date": "2025-07-03",
     "main": "src/index.js",
+    // api.aflink.us serves everything this worker does: suggestions
+    // (/search/), portal submissions (/submit) and MCP (/mcp). Attached once in
+    // the dashboard (adding a custom domain needs zone permission the Workers
+    // Builds token does not have); listed here so deploys keep it. workers.dev
+    // stays on only while traffic moves over; turn it off (false) after
+    // 2026-12-07.
+    "workers_dev": true,
+    "routes": [
+      { "pattern": "api.aflink.us", "custom_domain": true }
+    ],
     "kv_namespaces": [
     {
       "binding": "LINKS",
