@@ -17,7 +17,7 @@ let locals = null;
 if (environment === 'production') {
     locals = {
         baseURL: "https://aflink.us",
-        suggestedURL: "https://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}",
+        suggestedURL: "https://api.aflink.us/search/{searchTerms}",
         osddShortName: "aflink",
     }
 } else {

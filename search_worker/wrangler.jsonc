@@ -7,13 +7,15 @@
     "name": "aflink-autocomplete",
     "compatibility_date": "2025-07-03",
     "main": "src/index.js",
-    // The MCP server's address. Attached once by hand (adding a custom domain
-    // needs zone permission the Workers Builds token does not have); listed
-    // here so deploys keep it. workers.dev stays on: the site's suggestions
-    // and getlinks.js submissions use aflink-autocomplete.aswang.workers.dev.
+    // api.aflink.us serves everything this worker does: suggestions
+    // (/search/), portal submissions (/submit) and MCP (/mcp). Attached once in
+    // the dashboard (adding a custom domain needs zone permission the Workers
+    // Builds token does not have); listed here so deploys keep it. workers.dev
+    // stays on for browsers that saved the old suggestion URL and for
+    // getlinks.js copies people already have.
     "workers_dev": true,
     "routes": [
-      { "pattern": "mcp.aflink.us", "custom_domain": true }
+      { "pattern": "api.aflink.us", "custom_domain": true }
     ],
     "kv_namespaces": [
     {

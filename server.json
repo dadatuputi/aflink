@@ -13,7 +13,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://mcp.aflink.us/mcp"
+      "url": "https://api.aflink.us/mcp"
     }
   ]
 }
