@@ -1,6 +1,6 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.dadatuputi/aflink",
+  "name": "us.aflink/search",
   "title": "aflink: search AF links",
   "description": "Read-only search of aflink.us, a public mirror of the U.S. Air Force portal quick links.",
   "repository": {
@@ -13,7 +13,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://aflink-autocomplete.aswang.workers.dev/mcp"
+      "url": "https://mcp.aflink.us/mcp"
     }
   ]
 }

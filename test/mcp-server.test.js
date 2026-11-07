@@ -172,8 +172,37 @@ test('server.json matches the server it registers', () => {
   assert.equal(server.version, SERVER_VERSION)
   assert.ok(server.description.length <= 100, 'the Registry caps description at 100 characters')
 
-  // The remote is the same deployed worker the site's address-bar suggestions use
-  const updater = fs.readFileSync(new URL('../updater.js', import.meta.url), 'utf8')
-  const suggestHost = new URL(updater.match(/suggestedURL: "(https:[^"]+)"/)[1].replace('{searchTerms}', 'x')).host
-  assert.deepEqual(server.remotes, [{ type: 'streamable-http', url: `https://${suggestHost}/mcp` }])
+  // The remote is the custom domain the worker's wrangler.jsonc attaches
+  const wrangler = fs.readFileSync(new URL('../search_worker/wrangler.jsonc', import.meta.url), 'utf8')
+  const domain = wrangler.match(/"pattern":\s*"([^"]+)",\s*"custom_domain":\s*true/)[1]
+  assert.deepEqual(server.remotes, [{ type: 'streamable-http', url: `https://${domain}/mcp` }])
+  // ...on the domain the name claims, which is what the Registry verifies
+  const [namespace] = server.name.split('/')
+  const apex = namespace.split('.').reverse().join('.')
+  assert.ok(domain === apex || domain.endsWith('.' + apex), `${domain} is not under ${apex}`)
+  assert.equal(server.websiteUrl, `https://${apex}`)
+})
+
+// The Registry checks https://aflink.us/.well-known/mcp-registry-auth for the
+// public key that signs the publish; Jekyll and the Pages upload skip
+// dot-folders unless told, so the build has to carry it through.
+const proof = new URL('../src/.well-known/mcp-registry-auth', import.meta.url)
+
+test('the registry proof file is a well-formed MCP key record', { skip: fs.existsSync(proof) ? false : 'no key yet' }, () => {
+  const record = fs.readFileSync(proof, 'utf8').trim()
+  const m = record.match(/^v=MCPv1; k=ed25519; p=([A-Za-z0-9+/]+=*)$/)
+  assert.ok(m, `unexpected record: ${record}`)
+  assert.equal(Buffer.from(m[1], 'base64').length, 32, 'an Ed25519 public key is 32 bytes')
+})
+
+test('the site build serves /.well-known/', () => {
+  const config = fs.readFileSync(new URL('../src/_config.yml', import.meta.url), 'utf8')
+  assert.match(config, /include:\s*\n\s*-\s*\.well-known/)
+  const build = fs.readFileSync(new URL('../.github/workflows/build.yml', import.meta.url), 'utf8')
+  assert.equal((build.match(/include-hidden-files: true/g) || []).length, 2,
+    'both the docs artifact and the Pages artifact must keep hidden files')
+  const site = ['_site', 'docs'].map(d => new URL(`../${d}/`, import.meta.url)).find(u => fs.existsSync(u))
+  if (site && fs.existsSync(proof)) {
+    assert.equal(fs.readFileSync(new URL('.well-known/mcp-registry-auth', site), 'utf8'), fs.readFileSync(proof, 'utf8'))
+  }
 })

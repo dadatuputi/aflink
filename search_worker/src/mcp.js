@@ -1,7 +1,8 @@
 // aflink as a Model Context Protocol (MCP) server: one read-only tool,
 // `search_links`, that searches the same links the aflink.us page lists, with
 // the same matching rules. Listed in the MCP Registry as
-// io.github.dadatuputi/aflink (see server.json in the repository root).
+// us.aflink/search (see server.json in the repository root), served at
+// https://mcp.aflink.us/mcp.
 //
 // Transport is Streamable HTTP (MCP spec 2025-11-25), served statelessly at
 // POST /mcp: every request is answered with one JSON response, no session is
@@ -16,7 +17,7 @@ import '../../src/includes/js/search-match.js'
 
 const { UNOFFICIAL_CATEGORY } = globalThis.AflinkSearch
 
-export const SERVER_NAME = 'io.github.dadatuputi/aflink'
+export const SERVER_NAME = 'us.aflink/search'
 // Keep in step with "version" in server.json (test/mcp-server.test.js checks)
 export const SERVER_VERSION = '1.0.0'
 
