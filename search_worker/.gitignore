@@ -1,3 +1,5 @@
 node_modules
 .wrangler
 .dev.vars
+# written by build-links.js on every build
+src/links.generated.js
