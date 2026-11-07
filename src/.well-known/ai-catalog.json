@@ -1,0 +1,10 @@
+{
+  "specVersion": "1.0",
+  "entries": [
+    {
+      "identifier": "urn:air:aflink.us:mcp:search",
+      "type": "application/mcp-server-card+json",
+      "url": "https://api.aflink.us/mcp/server-card"
+    }
+  ]
+}
