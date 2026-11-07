@@ -1,0 +1,5 @@
+# Jekyll (the Pages build in .github/workflows/build.yml) skips dot-folders
+# unless told otherwise. .well-known/mcp-registry-auth proves to the MCP
+# Registry that aflink.us publishes the us.aflink/* servers.
+include:
+  - .well-known
