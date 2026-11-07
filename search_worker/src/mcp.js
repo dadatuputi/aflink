@@ -2,7 +2,7 @@
 // `search_links`, that searches the same links the aflink.us page lists, with
 // the same matching rules. Listed in the MCP Registry as
 // us.aflink/search (see server.json in the repository root), served at
-// https://mcp.aflink.us/mcp.
+// https://api.aflink.us/mcp.
 //
 // Transport is Streamable HTTP (MCP spec 2025-11-25), served statelessly at
 // POST /mcp: every request is answered with one JSON response, no session is

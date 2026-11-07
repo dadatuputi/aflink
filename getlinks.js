@@ -16,7 +16,7 @@ const PAGES = [
 ];
 
 // The search worker's submit endpoint (search_worker/src/submit.js)
-const SUBMIT_URL = 'https://aflink-autocomplete.aswang.workers.dev/submit';
+const SUBMIT_URL = 'https://api.aflink.us/submit';
 
 const compressAndEncode = async (data) => {
   const encoder = new TextEncoder();

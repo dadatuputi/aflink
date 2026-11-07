@@ -2,8 +2,8 @@
 
 Cloudflare Worker behind the address-bar autocomplete (OpenSearch suggestions)
 for [aflink.us](https://aflink.us), and aflink's public, read-only
-[MCP server](#mcp-server-post-mcp). Deployed as `aflink-autocomplete`; the site
-points at it through `suggestedURL` in [`updater.js`](../updater.js), which the
+[MCP server](#mcp-server-post-mcp). Deployed as `aflink-autocomplete` and
+served at `https://api.aflink.us`; the site points at it through `suggestedURL` in [`updater.js`](../updater.js), which the
 browser discovers via [`osdd.xml`](../src/osdd.xml.pug).
 
 ## How a suggestion round trips
@@ -57,8 +57,9 @@ does on aflink.us. It is listed in the
 domain itself (see below), and the endpoint is on the same domain, so the
 listing, the site and the server are visibly one publisher.
 
-- **Endpoint:** `https://mcp.aflink.us/mcp` (a Cloudflare custom domain on
-  this worker, declared in [`wrangler.jsonc`](wrangler.jsonc)),
+- **Endpoint:** `https://api.aflink.us/mcp` (`api.aflink.us` is a Cloudflare
+  custom domain on this worker, declared in [`wrangler.jsonc`](wrangler.jsonc),
+  that also serves the suggestions and submissions),
   Streamable HTTP transport (MCP spec 2025-11-25; 2025-06-18 and 2025-03-26
   clients are also accepted).
 - **One tool, `search_links`:** takes a `query` (and an optional `limit`, 1–50,
@@ -88,7 +89,7 @@ the tool and `server.json`.
 To try it:
 
 ```sh
-claude mcp add --transport http aflink https://mcp.aflink.us/mcp
+claude mcp add --transport http aflink https://api.aflink.us/mcp
 # or, with the MCP Inspector
 npx @modelcontextprotocol/inspector   # transport "Streamable HTTP", the URL above
 ```
@@ -103,7 +104,7 @@ publishes it, run by hand from the Actions tab:
    on every push to `master` that touches `search_worker/`, and GitHub Pages
    rebuilds the site; wait for both.
 2. Run **Publish MCP server**. It runs the MCP tests, checks that
-   `https://mcp.aflink.us/mcp` answers `initialize` as `us.aflink/search` at
+   `https://api.aflink.us/mcp` answers `initialize` as `us.aflink/search` at
    the version in `server.json` and that aflink.us serves the public key, then
    logs in and publishes.
 
@@ -119,12 +120,14 @@ to `master`, because it can publish anything under `us.aflink/*`. To rotate
 it, generate a new pair, replace the file and the secret, and let Pages
 rebuild before publishing.
 
-**The custom domain.** `mcp.aflink.us` was attached once in the dashboard:
+**The custom domain.** `api.aflink.us` was attached once in the dashboard:
 adding a domain needs zone permission the Workers Builds token does not have,
 while a deploy that leaves an existing domain as it is needs none.
 `wrangler.jsonc` lists it so deploys keep it, and sets `workers_dev: true`,
-because a config with routes otherwise turns the workers.dev URL off, and the
-site's suggestions and `getlinks.js` submissions use that URL.
+because a config with routes otherwise turns the workers.dev URL off. The site
+and `getlinks.js` now use `api.aflink.us`, but browsers that installed aflink
+as a search engine keep the suggestion URL they saw then, and people keep old
+copies of `getlinks.js`, so the workers.dev URL stays.
 
 For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
 `src/mcp.js` together (a test checks they agree), merge, let the worker

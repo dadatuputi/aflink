@@ -181,6 +181,14 @@ test('server.json matches the server it registers', () => {
   const apex = namespace.split('.').reverse().join('.')
   assert.ok(domain === apex || domain.endsWith('.' + apex), `${domain} is not under ${apex}`)
   assert.equal(server.websiteUrl, `https://${apex}`)
+
+  // One host for everything the worker serves: suggestions, submissions, MCP
+  const updater = fs.readFileSync(new URL('../updater.js', import.meta.url), 'utf8')
+  assert.equal(new URL(updater.match(/suggestedURL: "(https:[^"]+)"/)[1].replace('{searchTerms}', 'x')).host, domain)
+  const getlinks = fs.readFileSync(new URL('../getlinks.js', import.meta.url), 'utf8')
+  assert.equal(new URL(getlinks.match(/const SUBMIT_URL = '([^']+)'/)[1]).host, domain)
+  const sync = fs.readFileSync(new URL('../.github/workflows/portal_sync.yml', import.meta.url), 'utf8')
+  assert.equal(new URL(sync.match(/WORKER: (\S+)/)[1]).host, domain)
 })
 
 // The Registry checks https://aflink.us/.well-known/mcp-registry-auth for the
