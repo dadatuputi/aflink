@@ -1,12 +1,16 @@
-  // Local development: `npm run dev` serves the worker on :8787, which is the
-  // suggestion URL a development build of the site points at (see updater.js).
-  // It reads the live https://aflink.us/links.json unless LINKS_URL is set —
-  // put `LINKS_URL = "http://localhost:4000/links.json"` in .dev.vars to test
-  // against a local build of the site instead.
+  // Deployed by Cloudflare Workers Builds on pushes to master
+  // (`cd search_worker && npx wrangler deploy`). The build command below runs
+  // first and bundles the site's links into the worker, so the build's watch
+  // paths have to include everything the links come from: see
+  // search_worker/README.md. Local development: `npm run dev` serves the worker
+  // on :8787, the suggestion URL a development build of the site points at.
   {
     "name": "aflink-autocomplete",
     "compatibility_date": "2025-07-03",
     "main": "src/index.js",
+    "build": {
+      "command": "node build-links.js"
+    },
     // api.aflink.us serves everything this worker does: suggestions
     // (/search/), portal submissions (/submit) and MCP (/mcp). Attached once in
     // the dashboard (adding a custom domain needs zone permission the Workers

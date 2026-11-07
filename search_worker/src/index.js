@@ -7,19 +7,17 @@
 //
 // Because of that round trip this worker has to see the site the way the page
 // does: same link list, same matching rules. Matching itself is imported from
-// the page's own module so the two cannot drift; the list is rebuilt from
-// links.json here. See search_worker/README.md before changing either.
+// the page's own module so the two cannot drift; the list is assembled at
+// build time by the same code as the site's (build-links.js) and bundled in.
+// See search_worker/README.md before changing either.
 import '../../src/includes/js/search-match.js'
 import { handleSubmit, handleSubmission } from './submit.js'
 import { handleMcp } from './mcp.js'
+// Written by build-links.js before every deploy (wrangler's build command)
+import bundledLinks from './links.generated.js'
 
 const { parseQuery, matchLink, UNOFFICIAL_CATEGORY } = globalThis.AflinkSearch
 
-// Bump when the cached entry shape changes: a deploy would otherwise keep
-// reading entries written by the previous version until the TTL expires.
-const LINKS_KEY = 'links-v3'
-const LINKS_URL = 'https://aflink.us/links.json'
-const LINKS_TTL = 60 * 60     // 1 hour
 // Browsers show around ten suggestions; the rest is payload nobody reads.
 const MAX_SUGGESTIONS = 20
 // Zero-width space separating the title from the category in a suggestion
@@ -50,27 +48,6 @@ function entry(link, cat) {
 }
 
 
-async function update_links(env) {
-  console.log('updating links')
-  const links_cf = { cf: { cacheTtl: LINKS_TTL }}
-
-  // Fetch the pre-processed links.json
-  const response = await fetch(env.LINKS_URL || LINKS_URL, links_cf)
-  try {
-    const linksData = await response.json()
-    const links = to_entries(linksData)
-
-    console.log(`Loaded ${links.length} links from ${(linksData.links || []).length} categories`)
-
-    await env.LINKS.put(LINKS_KEY, JSON.stringify(links), {expirationTtl: LINKS_TTL})
-    return links
-
-  } catch (e) {
-    console.error('Failed to parse links.json:', e)
-    throw new Error('Failed to fetch links.')
-  }
-}
-
 // Same rules as the page: every word has to match the title, the URL or the
 // category. Links that matched on their title come first — a suggestion list
 // showing titles that do not contain what was typed reads as noise, even
@@ -90,11 +67,7 @@ function search(links, term, max = MAX_SUGGESTIONS) {
   return titled.concat(others).slice(0, max)
 }
 
-async function loadLinks(env) {
-  return await env.LINKS.get(LINKS_KEY, { type: "json" }) || await update_links(env)
-}
-
-async function handleRequest(request, env) {
+async function handleRequest(request, env, links) {
   try {
     const { pathname } = new URL(request.url);
 
@@ -108,7 +81,7 @@ async function handleRequest(request, env) {
 
     // Public, read-only MCP server over the same links and matching; see mcp.js
     if (pathname === "/mcp") {
-      return handleMcp(request, env, { search, loadLinks });
+      return handleMcp(request, env, { search, links });
     }
 
     if (pathname.startsWith("/search")) {
@@ -125,8 +98,6 @@ async function handleRequest(request, env) {
       } catch (e) {
         return new Response("Malformed search term", { status: 400 });
       }
-
-      const links = await loadLinks(env);
 
       const results = search(links, term)
 
@@ -151,11 +122,14 @@ async function handleRequest(request, env) {
   }
 }
 
-export default {
-  async fetch(
-    request,
-    env
-  ) {
-    return handleRequest(request, env);
-  },
-};
+// A worker over a given links.json-shaped list; tests build their own
+export function createWorker(linksData) {
+  const links = to_entries(linksData)
+  return {
+    async fetch(request, env) {
+      return handleRequest(request, env, links);
+    },
+  };
+}
+
+export default createWorker(bundledLinks);

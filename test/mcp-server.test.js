@@ -5,7 +5,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 
-import worker from '../search_worker/src/index.js'
+import { createWorker } from '../search_worker/src/index.js'
 import { SERVER_NAME, SERVER_VERSION, PROTOCOL_VERSIONS } from '../search_worker/src/mcp.js'
 
 const LINKS_JSON = {
@@ -24,18 +24,11 @@ const LINKS_JSON = {
 }
 
 function environment(linksJson = LINKS_JSON) {
-  const store = new Map()
-  globalThis.fetch = async () => new Response(JSON.stringify(linksJson))
-  return {
-    LINKS: {
-      get: async (key) => (store.has(key) ? JSON.parse(store.get(key)) : null),
-      put: async (key, value) => { store.set(key, value) },
-    },
-  }
+  return { worker: createWorker(linksJson) }
 }
 
 function post(body, { env = environment(), headers = {} } = {}) {
-  return worker.fetch(new Request('https://worker.dev/mcp', {
+  return env.worker.fetch(new Request('https://worker.dev/mcp', {
     method: 'POST',
     headers: { 'content-type': 'application/json', accept: 'application/json, text/event-stream', ...headers },
     body: typeof body === 'string' ? body : JSON.stringify(body),
@@ -148,7 +141,8 @@ test('rejects what the Streamable HTTP transport does not allow', async () => {
     { headers: { 'mcp-protocol-version': '1999-01-01' } })).status, 400)
 
   // No server-to-client stream is offered
-  const get = await worker.fetch(new Request('https://worker.dev/mcp', { headers: { accept: 'text/event-stream' } }), environment())
+  const env = environment()
+  const get = await env.worker.fetch(new Request('https://worker.dev/mcp', { headers: { accept: 'text/event-stream' } }), env)
   assert.equal(get.status, 405)
 })
 
@@ -160,7 +154,8 @@ test('any web origin may call it; a non-web origin is refused', async () => {
   const bad = await post({ jsonrpc: '2.0', id: 1, method: 'ping' }, { headers: { origin: 'null' } })
   assert.equal(bad.status, 403)
 
-  const preflight = await worker.fetch(new Request('https://worker.dev/mcp', { method: 'OPTIONS' }), environment())
+  const env = environment()
+  const preflight = await env.worker.fetch(new Request('https://worker.dev/mcp', { method: 'OPTIONS' }), env)
   assert.equal(preflight.status, 204)
   assert.match(preflight.headers.get('access-control-allow-headers'), /mcp-protocol-version/)
 })

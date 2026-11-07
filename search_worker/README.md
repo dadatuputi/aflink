@@ -29,22 +29,53 @@ Two things keep the two ends together, and both are load-bearing:
   The page inlines that file; this worker imports it. There is one
   implementation, so normalization, multi-word matching and title/URL/category
   matching cannot drift. Change matching there and both ends move together.
-- **The link list** comes from `links.json`, written by `updater.js` on every
-  build. The worker rebuilds what the page displays from it: official
-  categories in page order (skipping `isDeleted` links, which the page hides),
-  then the `unofficial` list.
+- **The link list** is assembled from `src/links/` by
+  [`scripts/assemble-links.js`](../scripts/assemble-links.js), which both
+  builds run: `updater.js` for the site and its `links.json`, and
+  [`build-links.js`](build-links.js) for this worker, which bundles the result
+  in the `links.json` shape. The worker rebuilds what the page displays from
+  it: official categories in page order (skipping `isDeleted` links, which the
+  page hides), then the `unofficial` list.
 
-`npm test` in the repo root covers both — including a check that the
-`links.json` the build actually produces still matches what the worker reads.
+`npm test` in the repo root covers both — including checks that the
+`links.json` the site build actually produces is what the worker reads, and
+that the worker's bundle holds the same links.
+
+## Deploys
+
+Cloudflare Workers Builds deploys the worker on every push to `master` that
+touches one of its watch paths, running `cd search_worker && npx wrangler
+deploy`. Wrangler first runs the build command in
+[`wrangler.jsonc`](wrangler.jsonc), `node build-links.js`, which writes
+`src/links.generated.js` (gitignored) from that commit's `src/links/`. So the
+deployed worker carries exactly the links the commit lists: nothing is
+fetched at request time and nothing is cached.
+
+That only works if a link-only change triggers a build, so the watch paths
+(Workers & Pages → aflink-autocomplete → Settings → Build) must cover
+everything the worker is built from:
+
+```
+search_worker/*
+src/links/*
+src/includes/js/search-match.js
+scripts/assemble-links.js
+scripts/link-status.js
+```
+
+A new file the worker or `build-links.js` imports goes on that list too.
+Retirement is by date (`scripts/link-status.js`), so a link that retires
+without any commit leaves the worker at the next link change; the weekly link
+health commit bounds that to a week.
 
 ### Changes that need the worker updated
 
 | Change on the site | What the worker needs |
 | --- | --- |
 | How search matches (normalizing, word splitting, what fields count) | Nothing, if the change is made in `search-match.js`; the worker imports it |
-| A new field or source of links (another section, another JSON file) | `updater.js` must publish it in `links.json`, and `to_entries()` must include it |
+| A new field or source of links (another section, another JSON file) | Add it in `assemble-links.js` (both builds pick it up); `publishedLinks()`, `build-links.js`'s `slim()` and `to_entries()` must carry it, and a new file needs a watch path |
 | A link becoming hidden on the page (a new flag like `isDeleted`) | `to_entries()` must filter it out too |
-| Renaming or restructuring `links.json` | `to_entries()` reads the new shape; bump `LINKS_KEY` so cached entries from the old shape are not reused |
+| Renaming or restructuring `links.json` | `to_entries()` reads the new shape |
 | How the page resolves a chosen suggestion (`?q=` parsing) | The suggestion format here has to match it |
 
 ## MCP server (`POST /mcp`)
@@ -66,8 +97,9 @@ listing, the site and the server are visibly one publisher.
   default 10) and returns matching links with title, URL, category and
   summary, title matches first. Links in the `UNOFFICIAL` category come back
   with `official: false`.
-- **Read-only:** the tool reads the published `links.json` and nothing else.
-  It cannot add, change or request links; that still goes through the issue
+- **Read-only:** the tool searches the link list bundled into the worker,
+  the same list aflink.us publishes as `links.json`, and nothing else. It
+  cannot add, change or request links; that still goes through the issue
   forms and their review.
 - **No authentication:** it serves only what `https://aflink.us/links.json`
   already publishes. No login, no API key, no cookies, and the worker stores
@@ -142,16 +174,10 @@ npm run deploy       # wrangler deploy (by hand; normally Workers Builds deploys
 ```
 
 A development build of the site (`npm run dev:build` in the repo root) points
-its suggestions at `localhost:8787`, so the two can be exercised together. The
-worker reads the live `https://aflink.us/links.json` unless `LINKS_URL` says
-otherwise — to test against a local build, put this in `.dev.vars`:
-
-```
-LINKS_URL = "http://localhost:4000/links.json"
-```
-
-Fetched link data is cached in KV under `LINKS_KEY` for an hour, so a change to
-`links.json` shows up in suggestions within an hour of the site rebuilding.
+its suggestions at `localhost:8787`, so the two can be exercised together.
+`npm run dev` bundles the links from your working copy of `src/links/`, so a
+local edit shows up when the worker restarts. `npm test` in the repo root
+bundles them too (its `pretest` step).
 
 ## Portal link submissions (`POST /submit`)
 
