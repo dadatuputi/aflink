@@ -12,6 +12,7 @@
 // See search_worker/README.md before changing either.
 import '../../src/includes/js/search-match.js'
 import { handleSubmit, handleSubmission } from './submit.js'
+import { handleMcp } from './mcp.js'
 // Written by build-links.js before every deploy (wrangler's build command)
 import bundledLinks from './links.generated.js'
 
@@ -51,7 +52,7 @@ function entry(link, cat) {
 // category. Links that matched on their title come first — a suggestion list
 // showing titles that do not contain what was typed reads as noise, even
 // though the page would list those rows too.
-function search(links, term) {
+function search(links, term, max = MAX_SUGGESTIONS) {
   const words = parseQuery(term)
   const titled = [], others = []
 
@@ -60,10 +61,10 @@ function search(links, term) {
     if (!matched) continue
     const bucket = ranges.length ? titled : others
     bucket.push(link)
-    if (titled.length >= MAX_SUGGESTIONS) break
+    if (titled.length >= max) break
   }
 
-  return titled.concat(others).slice(0, MAX_SUGGESTIONS)
+  return titled.concat(others).slice(0, max)
 }
 
 async function handleRequest(request, env, links) {
@@ -76,6 +77,11 @@ async function handleRequest(request, env, links) {
     }
     if (pathname.startsWith("/submission/")) {
       return handleSubmission(request, env, pathname.slice("/submission/".length));
+    }
+
+    // Public, read-only MCP server over the same links and matching; see mcp.js
+    if (pathname === "/mcp") {
+      return handleMcp(request, env, { search, links });
     }
 
     if (pathname.startsWith("/search")) {

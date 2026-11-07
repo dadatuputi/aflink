@@ -16,6 +16,7 @@ on:
       - 'scripts/*.js'
       - 'updater.js'
       - 'package.json'
+      - 'server.json'
       - 'package-lock.json'
       - '.github/workflows/test.yml'
   pull_request:

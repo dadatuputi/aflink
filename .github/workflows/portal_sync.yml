@@ -36,7 +36,7 @@ concurrency:
 
 env:
   BRANCH: portal-sync
-  WORKER: https://aflink-autocomplete.aswang.workers.dev
+  WORKER: https://api.aflink.us
 
 jobs:
   sync:
