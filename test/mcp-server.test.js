@@ -6,7 +6,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 
 import { createWorker } from '../search_worker/src/index.js'
-import { SERVER_NAME, SERVER_VERSION, PROTOCOL_VERSIONS } from '../search_worker/src/mcp.js'
+import { SERVER_NAME, SERVER_VERSION, PROTOCOL_VERSIONS, SERVER_CARD } from '../search_worker/src/mcp.js'
 
 const LINKS_JSON = {
   links: [
@@ -207,5 +207,57 @@ test('the site build serves /.well-known/', () => {
   const site = ['_site', 'docs'].map(d => new URL(`../${d}/`, import.meta.url)).find(u => fs.existsSync(u))
   if (site && fs.existsSync(proof)) {
     assert.equal(fs.readFileSync(new URL('.well-known/mcp-registry-auth', site), 'utf8'), fs.readFileSync(proof, 'utf8'))
+  }
+})
+
+// Discovery (MCP Server Cards, SEP-2127): aflink.us/.well-known/ai-catalog.json
+// points at the card the worker serves at /mcp/server-card
+function getCard({ method = 'GET', headers = {} } = {}) {
+  const env = environment()
+  return env.worker.fetch(new Request('https://worker.dev/mcp/server-card', { method, headers }), env)
+}
+
+test('the server card says what server.json says', () => {
+  const server = JSON.parse(fs.readFileSync(new URL('../server.json', import.meta.url)))
+  for (const key of ['name', 'version', 'title', 'description', 'websiteUrl', 'repository']) {
+    assert.deepEqual(SERVER_CARD[key], server[key], key)
+  }
+  assert.equal(SERVER_CARD.$schema, 'https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json')
+  assert.ok(SERVER_CARD.description.length <= 100)
+  assert.deepEqual(SERVER_CARD.remotes, server.remotes.map(r => ({ ...r, supportedProtocolVersions: PROTOCOL_VERSIONS })))
+})
+
+test('the server card is served with its media type, CORS and caching', async () => {
+  const res = await getCard({ headers: { accept: 'application/mcp-server-card+json' } })
+  assert.equal(res.status, 200)
+  assert.equal(res.headers.get('content-type'), 'application/mcp-server-card+json')
+  assert.equal(res.headers.get('access-control-allow-origin'), '*')
+  assert.match(res.headers.get('access-control-expose-headers'), /ETag/)
+  assert.equal(res.headers.get('cache-control'), 'public, max-age=3600')
+  assert.deepEqual(await res.json(), SERVER_CARD)
+
+  const etag = res.headers.get('etag')
+  assert.match(etag, /^"[0-9a-f]+"$/)
+  const again = await getCard({ headers: { 'if-none-match': etag } })
+  assert.equal(again.status, 304)
+  assert.equal(await again.text(), '')
+  assert.equal((await getCard({ headers: { 'if-none-match': '"other"' } })).status, 200)
+
+  assert.equal((await getCard({ method: 'OPTIONS' })).status, 204)
+  assert.equal((await getCard({ method: 'POST' })).status, 405)
+})
+
+test('the AI catalog lists the server card', () => {
+  const catalog = JSON.parse(fs.readFileSync(new URL('../src/.well-known/ai-catalog.json', import.meta.url)))
+  const [namespace, name] = SERVER_NAME.split('/')
+  const apex = namespace.split('.').reverse().join('.')
+  assert.deepEqual(catalog.entries, [{
+    identifier: `urn:air:${apex}:mcp:${name}`,
+    type: 'application/mcp-server-card+json',
+    url: SERVER_CARD.remotes[0].url + '/server-card',
+  }])
+  const site = ['_site', 'docs'].map(d => new URL(`../${d}/`, import.meta.url)).find(u => fs.existsSync(u))
+  if (site) {
+    assert.deepEqual(JSON.parse(fs.readFileSync(new URL('.well-known/ai-catalog.json', site))), catalog)
   }
 })

@@ -93,6 +93,54 @@ const SEARCH_TOOL = {
   },
 }
 
+// The MCP Server Card (SEP-2127): what a client reads before connecting,
+// served at GET /mcp/server-card, the place the spec reserves for a server at
+// /mcp, and listed in https://aflink.us/.well-known/ai-catalog.json. It says
+// the same as server.json (test/mcp-server.test.js checks), but is built here
+// so the worker never reads a file outside its watch paths.
+export const SERVER_CARD = {
+  $schema: 'https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json',
+  name: SERVER_NAME,
+  version: SERVER_VERSION,
+  title: 'aflink: search AF links',
+  description: 'Read-only search of aflink.us, a public mirror of the U.S. Air Force portal quick links.',
+  websiteUrl: 'https://aflink.us',
+  repository: { url: 'https://github.com/dadatuputi/aflink', source: 'github', subfolder: 'search_worker' },
+  remotes: [{
+    type: 'streamable-http',
+    url: 'https://api.aflink.us/mcp',
+    supportedProtocolVersions: PROTOCOL_VERSIONS,
+  }],
+}
+
+const CARD_BODY = JSON.stringify(SERVER_CARD)
+// Any stable validator will do; FNV-1a over the body changes when the card does
+const CARD_ETAG = '"' + [...CARD_BODY].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261).toString(16) + '"'
+const CARD_HEADERS = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'GET',
+  'access-control-allow-headers': 'Content-Type, If-None-Match',
+  'access-control-expose-headers': 'ETag',
+  'cache-control': 'public, max-age=3600',
+  etag: CARD_ETAG,
+}
+
+export function handleServerCard(request) {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: CARD_HEADERS })
+  }
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new Response('Method Not Allowed', { status: 405, headers: { allow: 'GET, HEAD, OPTIONS', ...CARD_HEADERS } })
+  }
+  const asked = request.headers.get('if-none-match')
+  if (asked && asked.split(',').some(tag => tag.trim().replace(/^W\//, '') === CARD_ETAG || tag.trim() === '*')) {
+    return new Response(null, { status: 304, headers: CARD_HEADERS })
+  }
+  return new Response(request.method === 'HEAD' ? null : CARD_BODY, {
+    headers: { 'content-type': 'application/mcp-server-card+json', ...CARD_HEADERS },
+  })
+}
+
 // JSON-RPC error codes
 const PARSE_ERROR = -32700
 const INVALID_REQUEST = -32600
