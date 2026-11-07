@@ -1,8 +1,9 @@
 # Search worker
 
 Cloudflare Worker behind the address-bar autocomplete (OpenSearch suggestions)
-for [aflink.us](https://aflink.us). Deployed as `aflink-autocomplete`; the site
-points at it through `suggestedURL` in [`updater.js`](../updater.js), which the
+for [aflink.us](https://aflink.us), and aflink's public, read-only
+[MCP server](#mcp-server-post-mcp). Deployed as `aflink-autocomplete` and
+served at `https://api.aflink.us`; the site points at it through `suggestedURL` in [`updater.js`](../updater.js), which the
 browser discovers via [`osdd.xml`](../src/osdd.xml.pug).
 
 ## How a suggestion round trips
@@ -46,12 +47,98 @@ Two things keep the two ends together, and both are load-bearing:
 | Renaming or restructuring `links.json` | `to_entries()` reads the new shape; bump `LINKS_KEY` so cached entries from the old shape are not reused |
 | How the page resolves a chosen suggestion (`?q=` parsing) | The suggestion format here has to match it |
 
+## MCP server (`POST /mcp`)
+
+The same worker is a [Model Context Protocol](https://modelcontextprotocol.io)
+server, so an AI agent can look up an Air Force or DoD site the way a person
+does on aflink.us. It is listed in the
+[MCP Registry](https://registry.modelcontextprotocol.io) as
+`us.aflink/search`. The Registry verifies that name against the aflink.us
+domain itself (see below), and the endpoint is on the same domain, so the
+listing, the site and the server are visibly one publisher.
+
+- **Endpoint:** `https://api.aflink.us/mcp` (`api.aflink.us` is a Cloudflare
+  custom domain on this worker, declared in [`wrangler.jsonc`](wrangler.jsonc),
+  that also serves the suggestions and submissions),
+  Streamable HTTP transport (MCP spec 2025-11-25; 2025-06-18 and 2025-03-26
+  clients are also accepted).
+- **One tool, `search_links`:** takes a `query` (and an optional `limit`, 1–50,
+  default 10) and returns matching links with title, URL, category and
+  summary, title matches first. Links in the `UNOFFICIAL` category come back
+  with `official: false`.
+- **Read-only:** the tool reads the published `links.json` and nothing else.
+  It cannot add, change or request links; that still goes through the issue
+  forms and their review.
+- **No authentication:** it serves only what `https://aflink.us/links.json`
+  already publishes. No login, no API key, no cookies, and the worker stores
+  nothing about the caller.
+- **Same answers as the site:** it uses the list and ranking the suggestions
+  use (`to_entries()` and `search()` in [`src/index.js`](src/index.js)) and the
+  page's own matching rules in
+  [`search-match.js`](../src/includes/js/search-match.js), so the parity rules
+  above cover it too.
+
+It is stateless: each POST gets one JSON response, no session is kept, and
+`GET /mcp` is `405` because the server never sends anything unprompted. Any
+web origin may call it (CORS `*`), since there is nothing private to protect;
+an `Origin` that is not an `http(s)` origin is refused, as the transport spec
+asks. The code is [`src/mcp.js`](src/mcp.js) with no SDK dependency, and
+[`test/mcp-server.test.js`](../test/mcp-server.test.js) covers the protocol,
+the tool and `server.json`.
+
+To try it:
+
+```sh
+claude mcp add --transport http aflink https://api.aflink.us/mcp
+# or, with the MCP Inspector
+npx @modelcontextprotocol/inspector   # transport "Streamable HTTP", the URL above
+```
+
+### Publishing to the MCP Registry
+
+[`server.json`](../server.json) in the repository root is the Registry entry.
+[`.github/workflows/mcp_publish.yml`](../.github/workflows/mcp_publish.yml)
+publishes it, run by hand from the Actions tab:
+
+1. Merge the change to `master`. Cloudflare Workers Builds deploys the worker
+   on every push to `master` that touches `search_worker/`, and GitHub Pages
+   rebuilds the site; wait for both.
+2. Run **Publish MCP server**. It runs the MCP tests, checks that
+   `https://api.aflink.us/mcp` answers `initialize` as `us.aflink/search` at
+   the version in `server.json` and that aflink.us serves the public key, then
+   logs in and publishes.
+
+**How the Registry knows aflink.us is ours.** The `us.aflink/*` namespace is
+proven over HTTP: [`src/.well-known/mcp-registry-auth`](../src/.well-known/)
+holds an Ed25519 public key (`v=MCPv1; k=ed25519; p=…`), served at
+`https://aflink.us/.well-known/mcp-registry-auth`, and the workflow signs its
+login with the matching private key. Jekyll and the Pages upload skip
+dot-folders, so [`src/_config.yml`](../src/_config.yml) includes it and
+`build.yml` uploads hidden files; a test checks both. The private key is the
+`MCP_REGISTRY_KEY` secret of the `mcp-registry-publish` environment, limited
+to `master`, because it can publish anything under `us.aflink/*`. To rotate
+it, generate a new pair, replace the file and the secret, and let Pages
+rebuild before publishing.
+
+**The custom domain.** `api.aflink.us` was attached once in the dashboard:
+adding a domain needs zone permission the Workers Builds token does not have,
+while a deploy that leaves an existing domain as it is needs none.
+`wrangler.jsonc` lists it so deploys keep it, and sets `workers_dev: true`,
+because a config with routes otherwise turns the workers.dev URL off. The site
+and `getlinks.js` now use `api.aflink.us`; the workers.dev URL stays on only
+for a month while traffic moves over, and is to be turned off
+(`workers_dev: false`) after 2026-12-07.
+
+For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
+`src/mcp.js` together (a test checks they agree), merge, let the worker
+build finish, and run the workflow again. The Registry refuses a version it already has.
+
 ## Development
 
 ```sh
 npm install          # in this directory
 npm run dev          # serves the worker on :8787
-npm run deploy       # wrangler deploy
+npm run deploy       # wrangler deploy (by hand; normally Workers Builds deploys on push to master)
 ```
 
 A development build of the site (`npm run dev:build` in the repo root) points

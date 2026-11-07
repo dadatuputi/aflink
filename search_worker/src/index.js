@@ -11,6 +11,7 @@
 // links.json here. See search_worker/README.md before changing either.
 import '../../src/includes/js/search-match.js'
 import { handleSubmit, handleSubmission } from './submit.js'
+import { handleMcp } from './mcp.js'
 
 const { parseQuery, matchLink, UNOFFICIAL_CATEGORY } = globalThis.AflinkSearch
 
@@ -74,7 +75,7 @@ async function update_links(env) {
 // category. Links that matched on their title come first — a suggestion list
 // showing titles that do not contain what was typed reads as noise, even
 // though the page would list those rows too.
-function search(links, term) {
+function search(links, term, max = MAX_SUGGESTIONS) {
   const words = parseQuery(term)
   const titled = [], others = []
 
@@ -83,10 +84,14 @@ function search(links, term) {
     if (!matched) continue
     const bucket = ranges.length ? titled : others
     bucket.push(link)
-    if (titled.length >= MAX_SUGGESTIONS) break
+    if (titled.length >= max) break
   }
 
-  return titled.concat(others).slice(0, MAX_SUGGESTIONS)
+  return titled.concat(others).slice(0, max)
+}
+
+async function loadLinks(env) {
+  return await env.LINKS.get(LINKS_KEY, { type: "json" }) || await update_links(env)
 }
 
 async function handleRequest(request, env) {
@@ -99,6 +104,11 @@ async function handleRequest(request, env) {
     }
     if (pathname.startsWith("/submission/")) {
       return handleSubmission(request, env, pathname.slice("/submission/".length));
+    }
+
+    // Public, read-only MCP server over the same links and matching; see mcp.js
+    if (pathname === "/mcp") {
+      return handleMcp(request, env, { search, loadLinks });
     }
 
     if (pathname.startsWith("/search")) {
@@ -116,7 +126,7 @@ async function handleRequest(request, env) {
         return new Response("Malformed search term", { status: 400 });
       }
 
-      let links = await env.LINKS.get(LINKS_KEY, { type: "json" }) || await update_links(env);
+      const links = await loadLinks(env);
 
       const results = search(links, term)
 

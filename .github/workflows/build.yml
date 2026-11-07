@@ -55,6 +55,7 @@ jobs:
         with:
           name: docs
           path: ${{ github.workspace }}/${{ env.DOCS_DIR }}
+          include-hidden-files: true   # .well-known/
           
   # Build site with jekyll
   jekyll:
@@ -76,6 +77,8 @@ jobs:
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
+        with:
+          include-hidden-files: true   # .well-known/
 
   # Deploy site to GH Pages
   deploy:
