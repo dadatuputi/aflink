@@ -18,7 +18,7 @@ let locals = null;
 if (environment === 'production') {
     locals = {
         baseURL: "https://aflink.us",
-        suggestedURL: "https://aflink-autocomplete.aswang.workers.dev/search/{searchTerms}",
+        suggestedURL: "https://api.aflink.us/search/{searchTerms}",
         osddShortName: "aflink",
     }
 } else {
@@ -330,6 +330,14 @@ const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{
         ));
         fs.cpSync(path.resolve(srcDir, "manifest.json"), path.resolve(outputDir, "manifest.json"))
         fs.cpSync(path.resolve(srcDir, "sw.js"), path.resolve(outputDir, "sw.js"))
+        // Served as-is: /.well-known/ (the MCP Registry's proof that aflink.us
+        // publishes us.aflink/*), and the Jekyll config that keeps it
+        fs.cpSync(path.resolve(srcDir, "_config.yml"), path.resolve(outputDir, "_config.yml"))
+        const wellKnown = path.resolve(srcDir, ".well-known")
+        if (fs.existsSync(wellKnown)) {
+            fs.cpSync(wellKnown, path.resolve(outputDir, ".well-known"), { recursive: true })
+            console.log("Wrote .well-known")
+        }
         console.log("Wrote PWA assets")
 
 

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "us.aflink/search",
+  "title": "aflink: search AF links",
+  "description": "Read-only search of aflink.us, a public mirror of the U.S. Air Force portal quick links.",
+  "repository": {
+    "url": "https://github.com/dadatuputi/aflink",
+    "source": "github",
+    "subfolder": "search_worker"
+  },
+  "websiteUrl": "https://aflink.us",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.aflink.us/mcp"
+    }
+  ]
+}
