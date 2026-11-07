@@ -154,10 +154,18 @@ export async function handleSubmit(request, env) {
   const text = await request.text()
   if (text.length > LIMITS.bodyBytes) return json(413, { ok: false, error: 'Payload too large' }, origin)
 
+  let parsed
+  try {
+    parsed = JSON.parse(text)
+  } catch {
+    // The parser's own message quotes the body back; say what was expected instead
+    return json(400, { ok: false, error: 'Body must be JSON' }, origin)
+  }
   let payload
   try {
-    payload = sanitize(JSON.parse(text))
+    payload = sanitize(parsed)
   } catch (e) {
+    // sanitize's messages are written for the submitter
     return json(400, { ok: false, error: e.message }, origin)
   }
 

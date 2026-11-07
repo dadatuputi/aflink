@@ -113,6 +113,12 @@ test('rejects shapes the sync could not trust', async () => {
   }
 })
 
+test('a body that is not JSON gets a fixed message, not the parser\'s', async () => {
+  const res = await post('notjson')
+  assert.equal(res.status, 400)
+  assert.deepEqual(await res.json(), { ok: false, error: 'Body must be JSON' })
+})
+
 test('sanitize keeps only the fields the sync reads', () => {
   const dirty = payload({ ' Personnel ': [link('1', { type: 'application', url: true, lastModified: '2026-01-02', description: ' Plans moves. ', abstract: '<b>x</b>', contactInfo: { phone: '555' }, isDeleted: true, sources: ['x'] })] })
   const { links } = sanitize(dirty).pages[0]
