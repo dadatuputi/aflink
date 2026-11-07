@@ -125,9 +125,9 @@ adding a domain needs zone permission the Workers Builds token does not have,
 while a deploy that leaves an existing domain as it is needs none.
 `wrangler.jsonc` lists it so deploys keep it, and sets `workers_dev: true`,
 because a config with routes otherwise turns the workers.dev URL off. The site
-and `getlinks.js` now use `api.aflink.us`, but browsers that installed aflink
-as a search engine keep the suggestion URL they saw then, and people keep old
-copies of `getlinks.js`, so the workers.dev URL stays.
+and `getlinks.js` now use `api.aflink.us`; the workers.dev URL stays on only
+for a month while traffic moves over, and is to be turned off
+(`workers_dev: false`) after 2026-12-07.
 
 For a new listing, bump `version` in `server.json` and `SERVER_VERSION` in
 `src/mcp.js` together (a test checks they agree), merge, let the worker
