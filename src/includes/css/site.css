@@ -568,10 +568,7 @@ section[id] {
   color: inherit;
 }
 
-/* Search results: one ranked list while searching (search.js). Each row
-   carries its category as a small tag after the title, which only shows
-   here; unofficial rows get their own color so they never pass for
-   official ones. */
+/* Category tag on each row, shown only in the search results list */
 .result-cat {
   display: none;
 }

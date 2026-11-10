@@ -121,17 +121,14 @@ $(document).ready(function () {
     $a.html(html + escapeHtml(text.slice(pos)));
   }
 
-  // Remember pristine header, title and summary text: search decorates them
-  // with highlights or a description snippet, and matching must read the
-  // original text
+  // Remember pristine heading, title and summary text: search decorates them,
+  // and matching must read the original
   $('#list-heading, .main-link, .summary-text').each(function () {
     $(this).data('orig-text', $(this).text());
   });
 
-  // Every link row, in page order: official categories, then unofficial.
-  // While searching, matching rows move into #search-results in ranked order
-  // (the same order the address-bar suggestions use), each tagged with its
-  // category; clearing the search puts them back where they came from.
+  // Every link row in page order. While searching, matches move into
+  // #search-results in ranked order; clearing puts them back.
   var $results = $('#search-results');
   var rows = $('#link-list .link-container, #unofficial-list .link-container').map(function (i) {
     var $row = $(this);
@@ -146,8 +143,7 @@ $(document).ready(function () {
     return this;
   }).get();
 
-  // Search-results mode on or off. Off puts every row back in its category,
-  // in page order (each category's header stays first in its group).
+  // Search-results mode on or off; off restores every row to its category
   function showResults(on) {
     $results.prop('hidden', !on);
     $('#link-list').prop('hidden', on);
@@ -178,10 +174,8 @@ $(document).ready(function () {
       // Every whitespace-separated word must match; see search-match.js
       var words = parseQuery(value);
 
-      // Match every row against the title, the URL, the category, the
-      // summary or the description. Title matches are highlighted; a match
-      // found only in the summary or description shows the matched passage
-      // in place of the summary line.
+      // Highlight title matches; a text-only match shows the matched passage
+      // in place of the summary
       var hits = [];
       rows.forEach(function (row) {
         var $row = $(row);
@@ -204,7 +198,6 @@ $(document).ready(function () {
           : null;
         if (excerpt) highlight($summary, excerpt.text, excerpt.ranges);
         else $summary.text(summaryText);
-        // The category tag shows why a category match is listed
         var $tag = $row.find('.result-cat');
         var tagText = $tag.data('orig-text');
         var tagRanges = matchRanges(tagText, words);
@@ -219,8 +212,7 @@ $(document).ready(function () {
       if (!words.length) {
         showResults(false);
       } else {
-        // Rows that matched only in a summary or description fold behind a
-        // button when anything matched better; if nothing did, they show
+        // Text-only matches fold behind a button unless nothing else matched
         var strongMin = AflinkSearch.RANK.strongPerWord * words.length;
         var strong = hits.filter(function (h) { return h.score >= strongMin; });
         var weak = hits.filter(function (h) { return h.score < strongMin; });

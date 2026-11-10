@@ -48,10 +48,7 @@ function entry(link, cat) {
 }
 
 
-// Same rules and the same order as the page: every word has to match (see
-// search-match.js), and results sort by matchLink's score, best first, ties
-// in page order. The page lists rows in exactly this order while searching,
-// so the first suggestion is the row Enter would open there.
+// Same matching and order as the page: best score first, ties in page order
 function search(links, term, max = MAX_SUGGESTIONS) {
   const words = parseQuery(term)
   const hits = []

@@ -20,11 +20,7 @@
   // spaces dropped — so "e-mail" matches "eMail" and "af portal" matches
   // "AF Portal". Returns the normalized string plus a map from each normalized
   // character back to its index in the original, for match highlighting.
-  //
-  // starts[k] is true when normalized character k begins a word of the
-  // original (the first letter or digit after a space or punctuation), so
-  // ranking can tell "Military Pay Tables" from "myPay" and descriptions can
-  // refuse matches that straddle two words.
+  // starts[k] says whether normalized character k begins a word.
   function normalize(s) {
     var norm = "", map = [], starts = [], prev = false;
     s = s == null ? "" : String(s);
@@ -42,7 +38,7 @@
     return { norm: norm, map: map, starts: starts };
   }
 
-  // First index of t in n.norm where a word of the original begins, or -1
+  // First index of t in n.norm that begins a word, or -1
   function indexAtWordStart(n, t) {
     var p = -1;
     while ((p = n.norm.indexOf(t, p + 1)) > -1) {
@@ -51,9 +47,8 @@
     return -1;
   }
 
-  // How well a title position fits: the whole title (100), its start (90),
-  // the start of a later word (70), or inside a word (40). Takes the best of
-  // every place t occurs.
+  // Best title tier for t: whole title 100, title start 90, later word start
+  // 70, inside a word 40
   function titleTier(title, t) {
     if (title.norm === t) return 100;
     if (title.norm.indexOf(t) === 0) return 90;
@@ -84,17 +79,15 @@
   // URL (scheme stripped), the link's category name — "education" pulls up
   // the whole category, "unofficial" the whole unofficial section — or the
   // link's summary or description, so "deployment" finds LOGMOD. In the
-  // summary and description a word has to start where a word starts:
-  // otherwise "about: appointment" normalizes to "aboutappointment" and
-  // matches "utap".
+  // summary and description a match must start at a word, so "utap" doesn't
+  // match "about: appointment".
   //
   // link: { title, url, category, summary, description }. Returns
   // { matched, ranges, inText, score }: ranges are [start, end] index pairs
   // into the ORIGINAL title for highlighting; an empty ranges array on a
   // match means it matched only elsewhere. inText says whether some word
   // matched the summary or description, which is when the page shows a
-  // snippet. score ranks matches, higher first (see RANK below); it is 0
-  // when the link does not match.
+  // snippet. score ranks matches, higher first (see RANK).
   function matchLink(link, words) {
     var title = normalize(link.title);
     var url = normalize(String(link.url == null ? "" : link.url).replace(/^https?:\/\//, "")).norm;
@@ -105,8 +98,7 @@
     var inText = false;
     var score = 0;
 
-    // Where one string matches: the title (with its highlight range and
-    // tier), the URL or category, the text, or nowhere (null)
+    // Where t matches and its tier, or null
     function place(t) {
       var p = title.norm.indexOf(t);
       if (p > -1) return { tier: titleTier(title, t), range: [title.map[p], title.map[p + t.length - 1]] };
@@ -131,8 +123,7 @@
         return !!h;
       });
       if (!all) return false;
-      // A word found only in pieces ("e-mail" as "mail") ranks below the
-      // same place found whole, and as low as its weakest piece
+      // Found only in pieces: scored by the weakest piece, discounted
       var weakest = Infinity;
       hits.forEach(function (h) {
         if (h.range) ranges.push(h.range);
@@ -144,9 +135,7 @@
     });
 
     if (!matched) return { matched: false, ranges: ranges, inText: inText, score: 0 };
-    // Several words that appear together as a phrase in the title ("af
-    // portal" in "virtual Finance Page on AF Portal") outrank the same words
-    // scattered
+    // Bonus when the words appear together as a phrase in the title
     if (words.length > 1) {
       var phrase = words.map(function (w) { return w.whole; }).join("");
       if (title.norm.indexOf(phrase) > -1) score += RANK.phrase;
@@ -154,17 +143,14 @@
     return { matched: true, ranges: ranges, inText: inText, score: score };
   }
 
-  // Ranking: each query word scores where it best matched, and a link's
-  // score is the sum. Title tiers come from titleTier (100 whole title, 90
-  // title start, 70 a later word's start, 40 inside a word). Both the page
-  // and the worker sort by score, highest first, ties in page order.
+  // A link's score is the sum of each word's tier (title tiers: titleTier).
+  // Page and worker sort by it, ties in page order.
   var RANK = {
     urlOrCategory: 25,
     text: 15,
     partsFactor: 0.8,
     phrase: 50,
-    // A result at or above this per query word matched somewhere besides
-    // the summary or description; below it the page folds the row away
+    // Per word; below this a row matched only in text and the page folds it
     strongPerWord: 25
   };
 
