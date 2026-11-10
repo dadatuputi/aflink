@@ -189,7 +189,8 @@ $(document).ready(function () {
           url: $a.attr('href'),
           category: $row.data('category'),
           summary: summaryText,
-          description: description
+          description: description,
+          milOnly: $row.find('.mil-only').length > 0
         }, words);
         if (result.matched && result.ranges.length) highlight($a, text, result.ranges);
         else $a.text(text);

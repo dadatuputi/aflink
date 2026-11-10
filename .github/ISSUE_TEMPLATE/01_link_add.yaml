@@ -37,6 +37,17 @@ body:
     validations:
       required: false
   - type: dropdown
+    id: mil_only
+    attributes:
+      label: Only Opens on a .mil Network?
+      description: Choose Yes if the link opens only from a government (.mil) network. Marked links show an icon after the title.
+      options:
+        - "No"
+        - Yes, it only opens on a .mil network
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
     id: link_type
     attributes:
       label: Link Type

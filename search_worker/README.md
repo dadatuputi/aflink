@@ -98,7 +98,8 @@ listing, the site and the server are visibly one publisher.
 - **One tool, `search_links`:** takes a `query` (and an optional `limit`, 1–50,
   default 10) and returns matching links with title, URL, category and
   summary, title matches first. Links in the `UNOFFICIAL` category come back
-  with `official: false`.
+  with `official: false`, and links marked as opening only from a government
+  network with `milOnly: true`.
 - **Read-only:** the tool searches the link list bundled into the worker,
   the same list aflink.us publishes as `links.json`, and nothing else. It
   cannot add, change or request links; that still goes through the issue

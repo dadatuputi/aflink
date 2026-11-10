@@ -40,3 +40,14 @@ test('the edit form shows the current summary', { skip: !built && 'site not buil
     assert.equal(url.searchParams.get('current_summary'), summary ?? null)
   }
 })
+
+test('the edit form shows whether the link is marked .mil only', { skip: !built && 'site not built' }, () => {
+  const data = JSON.parse(fs.readFileSync(path.join(built, 'links.json'), 'utf8'))
+  const milOnly = new Map(data.links.flatMap(c => c.links).concat(data.unofficial).map(l => [l.contentId, !!l.milOnly]))
+  const edits = formLinks(fs.readFileSync(path.join(built, 'index.html'), 'utf8'))
+    .filter(u => u.searchParams.get('template') === '02_link_override.yaml')
+  assert.ok(edits.some(u => u.searchParams.get('current_mil_only') === 'Yes'))
+  for (const url of edits) {
+    assert.equal(url.searchParams.get('current_mil_only'), milOnly.get(url.searchParams.get('match')) ? 'Yes' : 'No')
+  }
+})

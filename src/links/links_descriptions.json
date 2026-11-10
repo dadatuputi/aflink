@@ -1,13 +1,15 @@
 {
-  "comment": "Hand-written, keyed by contentId. summary: one line, 90 characters at most, shown under the title and searched. description: optional plain text for the details dialog, used when the portal supplies none. A portal sync never touches this file; the Add a Link and Override forms write to it.",
+  "comment": "Hand-written, keyed by contentId. summary: one line, 90 characters at most, shown under the title and searched. description: optional plain text for the details dialog, used when the portal supplies none. milOnly: optional true or false, overriding a \".mil only\" marker in the title. A portal sync never touches this file; the Add a Link and Override forms write to it.",
   "descriptions": {
     "cAF17B3959F0573F0019F146E6F44000A": {
       "summary": "Training Business Area: unit training records, tasks and qualifications",
-      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields.",
+      "milOnly": true
     },
     "cC2DB2BB29F0573F8019F1469D6F0000C": {
       "summary": "Training Business Area: unit training records, tasks and qualifications",
-      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields.",
+      "milOnly": true
     },
     "cFE3B28A19CE21542019CE25A25F50001": {
       "summary": "GenAI.mil, the DoD's approved generative AI assistant",
@@ -67,7 +69,7 @@
     },
     "53a622a6-f6a7-4044-aef1-628de6a0c203": {
       "summary": "Recover old CAC encryption certificates to open older encrypted email",
-      "description": "The Automatic Key Recovery Agent restores private keys from previous CACs so email encrypted to them can still be read. .mil only."
+      "description": "The Automatic Key Recovery Agent restores private keys from previous CACs so email encrypted to them can still be read."
     },
     "3c28f7d2-96d7-46fb-b625-e3bec00bbea9": {
       "summary": "DAF365: Outlook, Teams, OneDrive and SharePoint in a browser",
@@ -91,11 +93,11 @@
     },
     "b53ca766-4357-4e93-b49a-4ca2605292f4": {
       "summary": "Required foreign travel briefings and reporting",
-      "description": "The Foreign Travel Briefs System delivers pre-travel briefings and records the travel reports security managers require. .mil only."
+      "description": "The Foreign Travel Briefs System delivers pre-travel briefings and records the travel reports security managers require."
     },
     "09f201d5-c92f-4d49-904b-10a9600933ef": {
       "summary": "Isolated personnel reports and personnel recovery data",
-      "description": "PRMS holds the ISOPREP and other records personnel recovery forces need to identify and recover isolated personnel. .mil only."
+      "description": "PRMS holds the ISOPREP and other records personnel recovery forces need to identify and recover isolated personnel."
     },
     "f34449ce-533e-4705-8c3e-937b7ce8aa60": {
       "summary": "Contract invoicing and payment through WAWF and other DoD procurement tools",
@@ -143,7 +145,7 @@
     },
     "fa167ae6-0af3-4969-b0d1-491eec80438d": {
       "summary": "Air National Guard manning and position reports",
-      "description": "STARS RAW pulls manning, position and personnel data for Air National Guard units. .mil only."
+      "description": "STARS RAW pulls manning, position and personnel data for Air National Guard units."
     },
     "765553eb-6b4b-41e1-8746-fd340782dfdc": {
       "summary": "Explosive ordnance disposal incident and equipment records",
@@ -167,7 +169,8 @@
     },
     "3a767706-5ddb-4398-ba51-a3664105c564": {
       "summary": "Reserve unit training assembly participation and pay (IDT)",
-      "description": "UTAPSWeb records attendance at unit training assemblies and inactive duty training for Air Force Reserve pay. .mil only."
+      "description": "UTAPSWeb records attendance at unit training assemblies and inactive duty training for Air Force Reserve pay.",
+      "milOnly": false
     },
     "5d93a849-1f5e-4d51-b2d3-16d9d19e1262": {
       "summary": "Unit readiness reporting and personnel availability",
@@ -175,7 +178,7 @@
     },
     "1f8511d5-88a4-4036-977c-822841b17392": {
       "summary": "Training Business Area: unit training records, tasks and qualifications",
-      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields. .mil network only."
+      "description": "TBA 2.0 is the Air Force system for managing training records, qualification tasks and on-the-job training for maintenance and other career fields."
     },
     "3c06433f-06b1-4ec4-999d-dab4d8bc1ece": {
       "summary": "Leave feedback on myFSS, myEval, TMIS and the A1 service desk",
@@ -550,7 +553,7 @@
       "summary": "UPS supply chain shipment tracking"
     },
     "c6925EC1B781F0FB5E044080020E329A9": {
-      "summary": "Education and training management for civilians (.mil)"
+      "summary": "Education and training management for civilians"
     },
     "c330D98A15BC6E686015C3685B4FD079A": {
       "summary": "Program management resources for acquisition programs"
@@ -574,7 +577,7 @@
       "summary": "Air Force Reserve orders: request, approve and print"
     },
     "cE9635A5D6FFAA197016FFBABB0AB0000": {
-      "summary": "Munitions accountability and reporting in theater (.mil)"
+      "summary": "Munitions accountability and reporting in theater"
     },
     "cE3494DD0489DB4490148D1D1C8B30712": {
       "summary": "Pay for civilian credentials and certifications with AF COOL"
@@ -631,7 +634,7 @@
       "summary": "BLADE Tableau dashboards (Advana)"
     },
     "c6925EC1B6E830FB5E044080020E329A9": {
-      "summary": "Volunteer for Reserve opportunities and tours (.mil)"
+      "summary": "Volunteer for Reserve opportunities and tours"
     },
     "c330D98A15EF785FE01607A0E72001C82": {
       "summary": "Virtual out-processing checklist in vMPF"
@@ -646,13 +649,13 @@
       "summary": "myLearning course: KDSS budget development tool"
     },
     "c330D98A15E3E4554015E3F306F060004": {
-      "summary": "Request, approve and track leave (.mil only)"
+      "summary": "Request, approve and track leave"
     },
     "cE3494DD0590D665D015948702B4405EE": {
       "summary": "Schedule field training detachment courses"
     },
     "c6925EC1BA2BC0FB5E044080020E329A9": {
-      "summary": "Look up Air Force people by name, email or unit (.mil)"
+      "summary": "Look up Air Force people by name, email or unit"
     },
     "cE3494DD0586426B30158B6E7D59E0AD5": {
       "summary": "Engineering drawings and technical data repository"
@@ -679,7 +682,7 @@
       "summary": "Aeromedical waiver tracking"
     },
     "c0ECF2BB8627C278D01628D72136300C0": {
-      "summary": "Small unmanned aircraft system registration and management (.mil)"
+      "summary": "Small unmanned aircraft system registration and management"
     },
     "c6925EC1B23D60FB5E044080020E329A9": {
       "summary": "Records disposition schedule and file plan management"
@@ -772,7 +775,7 @@
       "summary": "Automated logistics management and support site"
     },
     "cE3494DD05BC6DC2D015C36FBB37E09AC": {
-      "summary": "Defense property accountability system training and support (.mil)"
+      "summary": "Defense property accountability system training and support"
     },
     "c330D98A1533E3BE001539F2043A6009B": {
       "summary": "Senior leader career management dashboard"
@@ -1146,8 +1149,9 @@
       "description": "The mentoring feature in AFVEC matches Airmen with mentors and records mentoring relationships."
     },
     "c1326C1EE74A22CF20174A24CA80F0001": {
-      "summary": "Total Force training records and requirements (.mil)",
-      "description": "My Training shows Total Force members their training requirements and records. .mil network only."
+      "summary": "Total Force training records and requirements",
+      "description": "My Training shows Total Force members their training requirements and records.",
+      "milOnly": true
     },
     "c001A94037846B9B6017846E664520006": {
       "summary": "Required training courses and your training record (formerly ADLS)",

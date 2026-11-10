@@ -156,7 +156,11 @@ export function assembleLinks(files, { today, formatDay = d => d.toISOString().s
     const descriptions = files_.descriptions.descriptions
     const describe = (link, label) => {
         const written = descriptions[link.contentId] || {}
-        const described = { ...link }
+        const marked = milOnlyMarker(link.title)
+        const described = { ...link, title: marked.title }
+        // A hand-set milOnly (true or false) wins over the title's marker
+        const milOnly = typeof written.milOnly === 'boolean' ? written.milOnly : marked.milOnly
+        if (milOnly) described.milOnly = true
         if (written.summary) described.summary = written.summary
         const description = link.description || written.description
         if (description) described.description = description
@@ -172,6 +176,21 @@ export function assembleLinks(files, { today, formatDay = d => d.toISOString().s
     unofficial = unofficial.map(link => describe(link, 'Unofficial'))
 
     return { links, unofficial, overrideEvents, overrideCount, retiredCount }
+}
+
+// Titles say ".mil only" in many spellings: "(.mil only)", "[.mil]",
+// "- .mil only", "(Tool, .mil only)", "(mil only / note)". Returns the
+// title without the marker, and whether there was one. "[.mil/.com]" (works
+// off .mil too) is what an unmarked link means already, so it is just dropped.
+const MIL_BOTH = /\s*[[(]\s*\.mil\s*\/\s*\.com\s*[\])]\s*$/i
+const MIL_SUFFIX = /\s*(?:[-–]\s*\.?mil only|[[(]\s*\.?mil(?:\s+only\??)?(?:\s*\/\s*CAC Required)?\s*[\])])\s*$/i
+const MIL_INNER = /(?:,\s*\.?mil only\??(?=\s*\))|(?<=\()\s*\.?mil only\s*\/\s*)/i
+export function milOnlyMarker(title) {
+    title = String(title ?? '').replace(MIL_BOTH, '').trim()
+    for (const re of [MIL_SUFFIX, MIL_INNER]) {
+        if (re.test(title)) return { title: title.replace(re, '').trim(), milOnly: true }
+    }
+    return { title, milOnly: false }
 }
 
 // The links.json shape: the search worker's only view of the site, so
@@ -194,6 +213,7 @@ export function publishedLinks({ links, unofficial }, metadata = {}) {
             contentId: link.contentId,
             summary: link.summary,
             description: link.description,
+            ...(link.milOnly && { milOnly: true }),
         })),
     }
 }

@@ -25,7 +25,7 @@ jobs:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
         echo "Original issue: ${{ github.event.client_payload.original_issue }}"
-        node scripts/issue-fields.js TITLE="Link Title" URL="Link URL" LINK_TYPE="Link Type" SUMMARY="Summary" DESCRIPTION="Description"
+        node scripts/issue-fields.js TITLE="Link Title" URL="Link URL" LINK_TYPE="Link Type" SUMMARY="Summary" DESCRIPTION="Description" MIL_ONLY="Only Opens on a .mil Network?"
 
     - name: Validate
       run: |
@@ -84,8 +84,9 @@ jobs:
         jq -r --arg TITLE "$TITLE" --arg URL "$URL" --arg CONTENTID "$UUID" --arg KEY "$KEY" '.[$KEY] += [{"title": $TITLE, "link": $URL, "contentId": $CONTENTID}]' "$TARGET" | sponge "$TARGET"
         cat "$TARGET"
         # The summary and description live beside the link, keyed by its contentId
-        jq --arg ID "$UUID" --arg S "$SUMMARY" --arg D "$DESCRIPTION" \
-          '.descriptions[$ID] = ({summary: $S} + (if $D != "" then {description: $D} else {} end))' \
+        [[ "$MIL_ONLY" == Yes* ]] && M=true || M=false
+        jq --arg ID "$UUID" --arg S "$SUMMARY" --arg D "$DESCRIPTION" --argjson M "$M" \
+          '.descriptions[$ID] = ({summary: $S} + (if $D != "" then {description: $D} else {} end) + (if $M then {milOnly: true} else {} end))' \
           src/links/links_descriptions.json | sponge src/links/links_descriptions.json
 
     - name: Trust check
