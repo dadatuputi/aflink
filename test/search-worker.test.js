@@ -98,9 +98,7 @@ test('ranks like the page: title start before a later word before elsewhere', as
       { title: 'Pay Tables', link: 'https://c.mil' },
     ]},
   ] })
-  // "Pay Tables" starts with it (90), "Travel Pay Help" has it at a later
-  // word (70), "myPay" inside a word (40), BAH only in its description (15),
-  // whatever the page order
+  // 90, 70, 40, 15 regardless of page order
   assert.deepEqual((await suggest('pay', env)).map(s => s.title),
     ['Pay Tables', 'Travel Pay Help', 'myPay', 'BAH Calculator'])
 })

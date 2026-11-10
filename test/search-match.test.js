@@ -97,8 +97,7 @@ test('matchRanges highlights whichever words appear', () => {
 })
 
 test('summary and description matches start at a word', () => {
-  // normalizing drops spaces, so "about: appointment" reads "aboutappointment";
-  // without this rule MyBiz+ matched "utap"
+  // "about: appointment" normalizes to "aboutappointment"
   const link = { title: 'MyBiz+', url: 'https://mybiz.af.mil', category: 'PERSONNEL',
     summary: '', description: 'Use My Biz to view information about: appointment, position, salary' }
   assert.ok(!match(link, 'utap').matched)
