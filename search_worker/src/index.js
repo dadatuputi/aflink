@@ -42,9 +42,10 @@ function to_entries(linksData) {
 }
 
 // The page also searches each link's summary and description, so a
-// suggestion can come from them too; both ride along from links.json
+// suggestion can come from them too; both ride along from links.json, as
+// does milOnly, which the page searches as "mil only"
 function entry(link, cat) {
-  return { title: link.title, link: link.link, cat, summary: link.summary || '', description: link.description || '' }
+  return { title: link.title, link: link.link, cat, summary: link.summary || '', description: link.description || '', milOnly: !!link.milOnly }
 }
 
 
@@ -54,7 +55,7 @@ function search(links, term, max = MAX_SUGGESTIONS) {
   const hits = []
 
   links.forEach((link, i) => {
-    const { matched, score } = matchLink({ title: link.title, url: link.link, category: link.cat, summary: link.summary, description: link.description }, words)
+    const { matched, score } = matchLink({ title: link.title, url: link.link, category: link.cat, summary: link.summary, description: link.description, milOnly: link.milOnly }, words)
     if (matched) hits.push({ link, score, i })
   })
 

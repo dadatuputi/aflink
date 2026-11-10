@@ -78,11 +78,12 @@
   // Does this link match every query word? A word may match the title, the
   // URL (scheme stripped), the link's category name — "education" pulls up
   // the whole category, "unofficial" the whole unofficial section — or the
-  // link's summary or description, so "deployment" finds LOGMOD. In the
+  // link's summary or description, so "deployment" finds LOGMOD; "mil only"
+  // finds the links marked .mil only. In the
   // summary and description a match must start at a word, so "utap" doesn't
   // match "about: appointment".
   //
-  // link: { title, url, category, summary, description }. Returns
+  // link: { title, url, category, summary, description, milOnly }. Returns
   // { matched, ranges, inText, score }: ranges are [start, end] index pairs
   // into the ORIGINAL title for highlighting; an empty ranges array on a
   // match means it matched only elsewhere. inText says whether some word
@@ -92,6 +93,7 @@
     var title = normalize(link.title);
     var url = normalize(String(link.url == null ? "" : link.url).replace(/^https?:\/\//, "")).norm;
     var cat = normalize(link.category).norm;
+    var mil = link.milOnly ? MIL_TAG : null;
     var text = normalize(String(link.summary == null ? "" : link.summary) + " " +
       String(link.description == null ? "" : link.description));
     var ranges = [];
@@ -102,7 +104,7 @@
     function place(t) {
       var p = title.norm.indexOf(t);
       if (p > -1) return { tier: titleTier(title, t), range: [title.map[p], title.map[p + t.length - 1]] };
-      if (url.indexOf(t) > -1 || cat.indexOf(t) > -1) return { tier: RANK.urlOrCategory };
+      if (url.indexOf(t) > -1 || cat.indexOf(t) > -1 || (mil && indexAtWordStart(mil, t) > -1)) return { tier: RANK.urlOrCategory };
       if (indexAtWordStart(text, t) > -1) return { tier: RANK.text, inText: true };
       return null;
     }
@@ -142,6 +144,9 @@
     }
     return { matched: true, ranges: ranges, inText: inText, score: score };
   }
+
+  // The words a .mil-only link's icon stands for, searched like its category
+  var MIL_TAG = normalize("mil only");
 
   // A link's score is the sum of each word's tier (title tiers: titleTier).
   // Page and worker sort by it, ties in page order.
