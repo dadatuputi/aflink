@@ -6,6 +6,7 @@
 
 ## Changelog
 
+- **Nov 2026** — 🎯 Ranked search: results list best match first (exact title, then title start, then a word in the title), each tagged with its category, so Enter opens what you typed; description-only matches fold behind a button, and address-bar suggestions use the same order
 - **Nov 2026** — 🤖 Public, read-only [MCP server](search_worker/README.md#mcp-server-post-mcp): AI agents can search aflink's links with the site's own search rules at `api.aflink.us/mcp` (`us.aflink/search` in the MCP Registry, no login needed), discoverable from `aflink.us/.well-known/ai-catalog.json`
 - **Oct 2026** — 🛡️ Weekly malware & phishing scan of every link outside .mil/.gov, unofficial links included (Google Safe Browsing + VirusTotal); link requests get a ✅ safe / ⚠️ unsafe verdict on the issue as soon as they're opened
 - **Aug 2026** — ⌨️ Address-bar suggestions rebuilt on the page's own search rules: unofficial links are suggested, deleted ones no longer are, and picking a suggestion opens that exact link
