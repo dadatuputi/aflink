@@ -192,6 +192,7 @@ const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{
             correction.searchParams.append('match', link.contentId);
             correction.searchParams.append('current_title', link.title);
             correction.searchParams.append('current_url', link.link);
+            if (link.summary) correction.searchParams.append('current_summary', link.summary);
             link.correction = correction.toString();
 
             const deletion = new URL(githubIssueBase);
