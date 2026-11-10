@@ -431,11 +431,11 @@ ul {
   z-index: 2;
 }
 
-.override-link:nth-of-type(2) {
-  right: 2.5rem;
+.override-edit {
+  right: 2.75rem;
 }
 
-.override-link:nth-of-type(3) {
+.override-delete {
   right: 0.5rem;
 }
 
