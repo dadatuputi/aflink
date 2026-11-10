@@ -64,8 +64,8 @@ html.bg-spice-brown(lang='en')
                       .link-summary
                         span.summary-text= link.summary
                         button.summary-more(type="button" aria-label=("Full description of " + link.title) data-description=(link.description || '') data-meta=link.detailMeta) …
-                  a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
-                  a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
+                  a.override-link.override-edit(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
+                  a.override-link.override-delete(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
       p.alert-dark(hidden) No results for
         em
   if unofficial && unofficial.length > 0
@@ -84,8 +84,8 @@ html.bg-spice-brown(lang='en')
                   .link-summary
                     span.summary-text= link.summary
                     button.summary-more(type="button" aria-label=("Full description of " + link.title) data-description=(link.description || '') data-meta=link.detailMeta) …
-              a.override-link(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
-              a.override-link(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
+              a.override-link.override-edit(target="_blank" title=("Correct link ID " + link.contentId) href=link.correction) 📝
+              a.override-link.override-delete(target="_blank" title=("Delete link ID " + link.contentId) href=link.deletion) 🗑️
   section#about.bg-olive-drab.text-center
     .container
       h2 About
