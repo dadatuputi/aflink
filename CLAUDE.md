@@ -23,7 +23,10 @@ workflows in `.github/workflows/`, not by hand.
   the served set (`scripts/served-links.js`): domain allowlist on submission,
   and a malware/phishing reputation scan weekly (`link_reputation.yml`), on
   each link request as it is opened (`link_screen.yml`), and on approval
-- `test/` — `npm test` (node's test runner, no dependencies)
+- `test/` — `npm test` (node's test runner, no dependencies);
+  `test-browser/` — `npm run test:browser` (Playwright, Chromium and
+  Firefox): `getlinks.js` against a mock portal, and layout checks on the
+  built `_site/` (geometry, not screenshots)
 - `scripts/tutorial-screenshots/` — re-captures the browser screenshots in
   `src/tutorial.pug` (`src/includes/img/`, light and `-dark`) and the README's
   `.github/demo.gif` on a Windows runner; run the "Tutorial Screenshots"
