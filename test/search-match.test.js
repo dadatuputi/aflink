@@ -95,3 +95,42 @@ test('matchRanges highlights whichever words appear', () => {
   assert.equal(matchRanges('WEATHER & TIME', parseQuery('weather')).length, 1)
   assert.equal(matchRanges('SAFETY', parseQuery('weather')).length, 0)
 })
+
+test('summary and description matches start at a word', () => {
+  // "about: appointment" normalizes to "aboutappointment"
+  const link = { title: 'MyBiz+', url: 'https://mybiz.af.mil', category: 'PERSONNEL',
+    summary: '', description: 'Use My Biz to view information about: appointment, position, salary' }
+  assert.ok(!match(link, 'utap').matched)
+  assert.ok(match(link, 'appoint').matched)
+  assert.ok(match(link, 'salary').matched)
+  // titles, URLs and categories still match anywhere
+  assert.ok(match(link, 'biz').matched)
+  assert.ok(match({ title: 'Webmail', url: '', category: '' }, 'mail').matched)
+})
+
+test('score ranks whole title > title start > word start > inside a word > elsewhere', () => {
+  const score = (title, query, extra = {}) => match({ title, url: '', category: '', ...extra }, query).score
+  assert.equal(score('myPay', 'mypay'), 100)
+  assert.equal(score('UTAPS (Unit Training Assembly Processing System)', 'utap'), 90)
+  assert.equal(score('Military Pay Tables', 'pay'), 70)
+  assert.equal(score('myPay | Leave and Earnings Statements', 'pay'), 40)
+  assert.equal(score('Something', 'pay', { url: 'https://pay.mil' }), 25)
+  assert.equal(score('Something', 'pay', { description: 'Pay statements' }), 15)
+  assert.equal(score('Something', 'pay'), 0)
+  // each word adds; a multi-word phrase in the title adds a bonus
+  assert.ok(score('virtual Finance Page on AF Portal', 'af portal') > score('AFDS (Air Force Directory Services) portal', 'af portal'))
+  // a word found only in pieces ranks below finding it whole
+  assert.ok(score('E-mail', 'e-mail') > score('Mail and E things', 'e-mail'))
+})
+
+test('the reported case: exact and prefix title matches beat a description match', () => {
+  const words = parseQuery('utap')
+  const links = [
+    { title: 'MyBiz+ [.mil]', url: 'https://mybiz.af.mil', category: 'PERSONNEL', description: 'access the utap report' },
+    { title: 'UTAPS (Unit Training Assembly Processing System)', url: 'https://utaps.af.mil', category: 'PERSONNEL' },
+    { title: 'UTAPSWeb - Reserve Unit Training Assembly Participation System', url: 'https://utapsweb.afrc.af.mil', category: 'OTHER' },
+  ]
+  const ranked = links.map((l, i) => ({ l, i, s: matchLink(l, words).score }))
+    .sort((a, b) => b.s - a.s || a.i - b.i).map(x => x.l.title.split(' ')[0])
+  assert.deepEqual(ranked, ['UTAPS', 'UTAPSWeb', 'MyBiz+'])
+})

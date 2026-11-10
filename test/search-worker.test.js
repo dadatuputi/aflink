@@ -87,6 +87,22 @@ test('title matches come before url-only and category-only matches', async () =>
   assert.deepEqual((await suggest('travel', env)).map(s => s.title), ['Travel Voucher', 'Somewhere Else'])
 })
 
+test('ranks like the page: title start before a later word before elsewhere', async () => {
+  const env = environment({ links: [
+    { category: 'FINANCE', links: [
+      { title: 'Travel Pay Help', link: 'https://a.mil', description: 'Pay questions' },
+      { title: 'BAH Calculator', link: 'https://b.mil', description: 'Pay rates by zip code' },
+      { title: 'myPay', link: 'https://mypay.dfas.mil' },
+    ]},
+    { category: 'OTHER', links: [
+      { title: 'Pay Tables', link: 'https://c.mil' },
+    ]},
+  ] })
+  // 90, 70, 40, 15 regardless of page order
+  assert.deepEqual((await suggest('pay', env)).map(s => s.title),
+    ['Pay Tables', 'Travel Pay Help', 'myPay', 'BAH Calculator'])
+})
+
 test('caps the list a browser will never show all of', async () => {
   const many = Array.from({ length: 50 }, (_, i) => ({ title: `Travel Form ${i}`, link: 'https://dts.mil' }))
   const env = environment({ links: [{ category: 'OTHER', links: many }] })

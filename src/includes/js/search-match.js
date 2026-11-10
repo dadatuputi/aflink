@@ -20,8 +20,9 @@
   // spaces dropped — so "e-mail" matches "eMail" and "af portal" matches
   // "AF Portal". Returns the normalized string plus a map from each normalized
   // character back to its index in the original, for match highlighting.
+  // starts[k] says whether normalized character k begins a word.
   function normalize(s) {
-    var norm = "", map = [];
+    var norm = "", map = [], starts = [], prev = false;
     s = s == null ? "" : String(s);
     for (var i = 0; i < s.length; i++) {
       var c = s[i].toLowerCase().normalize("NFD")
@@ -30,9 +31,33 @@
       for (var j = 0; j < c.length; j++) {
         norm += c[j];
         map.push(i);
+        starts.push(!prev && j === 0);
       }
+      prev = c.length > 0;
     }
-    return { norm: norm, map: map };
+    return { norm: norm, map: map, starts: starts };
+  }
+
+  // First index of t in n.norm that begins a word, or -1
+  function indexAtWordStart(n, t) {
+    var p = -1;
+    while ((p = n.norm.indexOf(t, p + 1)) > -1) {
+      if (n.starts[p]) return p;
+    }
+    return -1;
+  }
+
+  // Best title tier for t: whole title 100, title start 90, later word start
+  // 70, inside a word 40
+  function titleTier(title, t) {
+    if (title.norm === t) return 100;
+    if (title.norm.indexOf(t) === 0) return 90;
+    var best = 0, p = -1;
+    while ((p = title.norm.indexOf(t, p + 1)) > -1) {
+      best = Math.max(best, title.starts[p] ? 70 : 40);
+      if (best === 70) break;
+    }
+    return best;
   }
 
   // Split a query into the words that must ALL match. A word matches on its
@@ -53,57 +78,81 @@
   // Does this link match every query word? A word may match the title, the
   // URL (scheme stripped), the link's category name — "education" pulls up
   // the whole category, "unofficial" the whole unofficial section — or the
-  // link's summary or description, so "deployment" finds LOGMOD.
+  // link's summary or description, so "deployment" finds LOGMOD. In the
+  // summary and description a match must start at a word, so "utap" doesn't
+  // match "about: appointment".
   //
   // link: { title, url, category, summary, description }. Returns
-  // { matched, ranges, inText }: ranges are [start, end] index pairs into the
-  // ORIGINAL title for highlighting; an empty ranges array on a match means
-  // it matched only elsewhere. inText says whether some word matched the
-  // summary or description, which is when the page shows a snippet.
+  // { matched, ranges, inText, score }: ranges are [start, end] index pairs
+  // into the ORIGINAL title for highlighting; an empty ranges array on a
+  // match means it matched only elsewhere. inText says whether some word
+  // matched the summary or description, which is when the page shows a
+  // snippet. score ranks matches, higher first (see RANK).
   function matchLink(link, words) {
     var title = normalize(link.title);
     var url = normalize(String(link.url == null ? "" : link.url).replace(/^https?:\/\//, "")).norm;
     var cat = normalize(link.category).norm;
     var text = normalize(String(link.summary == null ? "" : link.summary) + " " +
-      String(link.description == null ? "" : link.description)).norm;
+      String(link.description == null ? "" : link.description));
     var ranges = [];
     var inText = false;
+    var score = 0;
+
+    // Where t matches and its tier, or null
+    function place(t) {
+      var p = title.norm.indexOf(t);
+      if (p > -1) return { tier: titleTier(title, t), range: [title.map[p], title.map[p + t.length - 1]] };
+      if (url.indexOf(t) > -1 || cat.indexOf(t) > -1) return { tier: RANK.urlOrCategory };
+      if (indexAtWordStart(text, t) > -1) return { tier: RANK.text, inText: true };
+      return null;
+    }
+
     var matched = words.every(function (w) {
-      var p = title.norm.indexOf(w.whole);
-      if (p > -1) {
-        ranges.push([title.map[p], title.map[p + w.whole.length - 1]]);
-        return true;
-      }
-      if (url.indexOf(w.whole) > -1 || cat.indexOf(w.whole) > -1) return true;
-      if (text.indexOf(w.whole) > -1) {
-        inText = true;
+      var hit = place(w.whole);
+      if (hit) {
+        if (hit.range) ranges.push(hit.range);
+        if (hit.inText) inText = true;
+        score += hit.tier;
         return true;
       }
       if (!w.parts.length) return false;
-      var partRanges = [];
-      var partInText = false;
+      var hits = [];
       var all = w.parts.every(function (t) {
-        var q = title.norm.indexOf(t);
-        if (q > -1) {
-          partRanges.push([title.map[q], title.map[q + t.length - 1]]);
-          return true;
-        }
-        if (url.indexOf(t) > -1 || cat.indexOf(t) > -1) return true;
-        if (text.indexOf(t) > -1) {
-          partInText = true;
-          return true;
-        }
-        return false;
+        var h = place(t);
+        if (h) hits.push(h);
+        return !!h;
       });
-      if (all) {
-        ranges.push.apply(ranges, partRanges);
-        if (partInText) inText = true;
-        return true;
-      }
-      return false;
+      if (!all) return false;
+      // Found only in pieces: scored by the weakest piece, discounted
+      var weakest = Infinity;
+      hits.forEach(function (h) {
+        if (h.range) ranges.push(h.range);
+        if (h.inText) inText = true;
+        weakest = Math.min(weakest, h.tier);
+      });
+      score += Math.round(weakest * RANK.partsFactor);
+      return true;
     });
-    return { matched: matched, ranges: ranges, inText: inText };
+
+    if (!matched) return { matched: false, ranges: ranges, inText: inText, score: 0 };
+    // Bonus when the words appear together as a phrase in the title
+    if (words.length > 1) {
+      var phrase = words.map(function (w) { return w.whole; }).join("");
+      if (title.norm.indexOf(phrase) > -1) score += RANK.phrase;
+    }
+    return { matched: true, ranges: ranges, inText: inText, score: score };
   }
+
+  // A link's score is the sum of each word's tier (title tiers: titleTier).
+  // Page and worker sort by it, ties in page order.
+  var RANK = {
+    urlOrCategory: 25,
+    text: 15,
+    partsFactor: 0.8,
+    phrase: 50,
+    // Per word; below this a row matched only in text and the page folds it
+    strongPerWord: 25
+  };
 
   // A short excerpt of `text` around the first query word found in it, with
   // highlight ranges into the excerpt — what the page shows under a title
@@ -115,7 +164,7 @@
     var n = normalize(text), hit = null;
     words.some(function (w) {
       return [w.whole].concat(w.parts).some(function (t) {
-        var p = n.norm.indexOf(t);
+        var p = indexAtWordStart(n, t);
         if (p > -1) {
           hit = [n.map[p], n.map[p + t.length - 1]];
           return true;
@@ -171,6 +220,7 @@
     parseQuery: parseQuery,
     matchLink: matchLink,
     matchRanges: matchRanges,
+    RANK: RANK,
     snippet: snippet,
     // The page has no category header for unofficial rows and matches them as
     // "unofficial"; the worker labels their suggestions with this name.

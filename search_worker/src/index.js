@@ -48,23 +48,18 @@ function entry(link, cat) {
 }
 
 
-// Same rules as the page: every word has to match the title, the URL or the
-// category. Links that matched on their title come first — a suggestion list
-// showing titles that do not contain what was typed reads as noise, even
-// though the page would list those rows too.
+// Same matching and order as the page: best score first, ties in page order
 function search(links, term, max = MAX_SUGGESTIONS) {
   const words = parseQuery(term)
-  const titled = [], others = []
+  const hits = []
 
-  for (const link of links) {
-    const { matched, ranges } = matchLink({ title: link.title, url: link.link, category: link.cat, summary: link.summary, description: link.description }, words)
-    if (!matched) continue
-    const bucket = ranges.length ? titled : others
-    bucket.push(link)
-    if (titled.length >= max) break
-  }
+  links.forEach((link, i) => {
+    const { matched, score } = matchLink({ title: link.title, url: link.link, category: link.cat, summary: link.summary, description: link.description }, words)
+    if (matched) hits.push({ link, score, i })
+  })
 
-  return titled.concat(others).slice(0, max)
+  hits.sort((a, b) => b.score - a.score || a.i - b.i)
+  return hits.slice(0, max).map(h => h.link)
 }
 
 async function handleRequest(request, env, links) {
