@@ -48,11 +48,10 @@ $(document).ready(function () {
     // Record which link was used so the analytics page can rank resources.
     // Anonymous event; gtag delivers via sendBeacon so navigation isn't delayed.
     if (typeof gtag === 'function') {
-      var $cat = $(this).closest('.link-container').siblings('.category');
       gtag('event', 'link_click', {
-        link_title: $(this).text(),
+        link_title: $(this).data('orig-text') || $(this).text(),
         link_url: this.href,
-        link_category: $cat.length ? ($cat.data('orig-text') || $cat.text()) : 'UNOFFICIAL'
+        link_category: $(this).closest('.link-container').data('category')
       });
     }
 
@@ -69,7 +68,7 @@ $(document).ready(function () {
   // Link details: the "…" after a summary opens a dialog with the full
   // description, filled from the row it sits in
   const detail_modal = new bootstrap.Modal(document.getElementById('detail-modal'));
-  $('#link-list, #unofficial-list').on('click', '.summary-more', function () {
+  $('#link-list, #unofficial-list, #search-results').on('click', '.summary-more', function () {
     var $row = $(this).closest('.link-container');
     var $a = $row.find('a.main-link');
     var title = $a.data('orig-text') || $a.text();
@@ -123,10 +122,51 @@ $(document).ready(function () {
   }
 
   // Remember pristine header, title and summary text: search decorates them
-  // with highlights, a CATEGORY MATCH pill or a description snippet, and
-  // matching must read the original text
-  $('#link-list .category, #unofficial h2, .main-link, .summary-text').each(function () {
+  // with highlights or a description snippet, and matching must read the
+  // original text
+  $('#list-heading, .main-link, .summary-text').each(function () {
     $(this).data('orig-text', $(this).text());
+  });
+
+  // Every link row, in page order: official categories, then unofficial.
+  // While searching, matching rows move into #search-results in ranked order
+  // (the same order the address-bar suggestions use), each tagged with its
+  // category; clearing the search puts them back where they came from.
+  var $results = $('#search-results');
+  var rows = $('#link-list .link-container, #unofficial-list .link-container').map(function (i) {
+    var $row = $(this);
+    var $cat = $row.siblings('.category');
+    var unofficial = !$cat.length;
+    var category = unofficial ? AflinkSearch.UNOFFICIAL_CATEGORY : $cat.text();
+    var label = unofficial ? 'Unofficial' : category;
+    var $tag = $('<span class="result-cat"></span>').text(label).toggleClass('unofficial', unofficial);
+    $tag.data('orig-text', label);
+    $row.find('.link-title').append($tag);
+    $row.data({ order: i, home: this.parentNode, category: category });
+    return this;
+  }).get();
+
+  // Search-results mode on or off. Off puts every row back in its category,
+  // in page order (each category's header stays first in its group).
+  function showResults(on) {
+    $results.prop('hidden', !on);
+    $('#link-list').prop('hidden', on);
+    $('#unofficial').prop('hidden', on);
+    var $h = $('#list-heading');
+    $h.text(on ? 'Search results' : $h.data('orig-text'));
+    if (!on) {
+      $results.children('.more-results').remove();
+      rows.forEach(function (row) {
+        $(row).removeClass('folded').prop('hidden', false);
+        $(row).data('home').appendChild(row);
+      });
+    }
+  }
+
+  // Description-only matches sit behind this button when better ones exist
+  $results.on('click', '.more-results', function () {
+    $results.children('.folded').removeClass('folded').prop('hidden', false);
+    $(this).remove();
   });
 
   // Filter links based on search query
@@ -138,27 +178,22 @@ $(document).ready(function () {
       // Every whitespace-separated word must match; see search-match.js
       var words = parseQuery(value);
 
-      // Hide everything
-      $('#link-list .category, #link-list .link-container, #unofficial-list .link-container').toggle(false);
-
-      // Show links where every word matches the title, the URL, the category,
-      // the summary or the description. Title matches are highlighted; a
-      // match found only in the summary or description shows the matched
-      // passage in place of the summary line.
-      var links = $('#link-list .link-container, #unofficial-list .link-container').filter(function(){
-        var $a = $(this).find('a.main-link');
+      // Match every row against the title, the URL, the category, the
+      // summary or the description. Title matches are highlighted; a match
+      // found only in the summary or description shows the matched passage
+      // in place of the summary line.
+      var hits = [];
+      rows.forEach(function (row) {
+        var $row = $(row);
+        var $a = $row.find('a.main-link');
         var text = $a.data('orig-text');
-        var $summary = $(this).find('.summary-text');
+        var $summary = $row.find('.summary-text');
         var summaryText = $summary.data('orig-text') || '';
-        var description = $(this).find('.summary-more').data('description') || '';
-        // Words can also match the row's category name ("education" shows the
-        // whole category); unofficial rows have no .category sibling and match
-        // as "unofficial"
-        var $cat = $(this).siblings('.category');
+        var description = $row.find('.summary-more').data('description') || '';
         var result = matchLink({
           title: text,
           url: $a.attr('href'),
-          category: $cat.length ? $cat.data('orig-text') : "unofficial",
+          category: $row.data('category'),
           summary: summaryText,
           description: description
         }, words);
@@ -169,67 +204,76 @@ $(document).ready(function () {
           : null;
         if (excerpt) highlight($summary, excerpt.text, excerpt.ranges);
         else $summary.text(summaryText);
-        return result.matched;
-      })
+        // The category tag shows why a category match is listed
+        var $tag = $row.find('.result-cat');
+        var tagText = $tag.data('orig-text');
+        var tagRanges = matchRanges(tagText, words);
+        if (tagRanges.length) highlight($tag, tagText, tagRanges);
+        else $tag.text(tagText);
+        if (result.matched) hits.push({ row: row, score: result.score, order: $row.data('order') });
+      });
+
+      // Best first; ties keep page order, as the worker's suggestions do
+      hits.sort(function (x, y) { return y.score - x.score || x.order - y.order; });
+
+      if (!words.length) {
+        showResults(false);
+      } else {
+        // Rows that matched only in a summary or description fold behind a
+        // button when anything matched better; if nothing did, they show
+        var strongMin = AflinkSearch.RANK.strongPerWord * words.length;
+        var strong = hits.filter(function (h) { return h.score >= strongMin; });
+        var weak = hits.filter(function (h) { return h.score < strongMin; });
+        if (!strong.length) { strong = weak; weak = []; }
+        $results.children('.more-results').remove();
+        $results.children('.link-container').detach();
+        strong.forEach(function (h) { $(h.row).removeClass('folded').prop('hidden', false).appendTo($results); });
+        if (weak.length) {
+          $('<button type="button" class="list-group-item list-group-item-action more-results"></button>')
+            .text(weak.length + ' more mention “' + $(this).val().trim() + '” in ' +
+              (weak.length === 1 ? 'its description' : 'their descriptions'))
+            .appendTo($results);
+          weak.forEach(function (h) { $(h.row).addClass('folded').prop('hidden', true).appendTo($results); });
+        }
+        showResults(hits.length > 0);
+        // Nothing matched: hide both lists under the "No results" note
+        if (!hits.length) $('#link-list, #unofficial').prop('hidden', true);
+      }
 
       // Follow the suggestion the user actually chose: the row whose title and
-      // category match it, falling back to the first result when the suggestion
+      // category match it, falling back to the top result when the suggestion
       // came from somewhere else (an older worker, a bookmarked ?q= URL)
       if (autocompleted) {
         autocompleted = false;
-        if (links.length) {
-          var exact = links.filter(function () {
-            var $a = $(this).find('a.main-link');
-            if (!sameText($a.data('orig-text'), picked.title)) return false;
-            if (!picked.category) return true;
-            var $c = $(this).siblings('.category');
-            return sameText($c.length ? $c.data('orig-text') : AflinkSearch.UNOFFICIAL_CATEGORY, picked.category);
+        if (hits.length) {
+          var exact = hits.filter(function (h) {
+            var $row = $(h.row);
+            if (!sameText($row.find('a.main-link').data('orig-text'), picked.title)) return false;
+            return !picked.category || sameText($row.data('category'), picked.category);
           });
-          $(exact[0] || links[0]).find('a.main-link')[0].click();
+          $((exact[0] || hits[0]).row).find('a.main-link')[0].click();
         }
       }
-      links.toggle(true);
-
-      // Show link category
-      links.siblings('.category').toggle(true);
-
-      // Decorate headers whose name matched a query word: highlight the
-      // matched text and append a CATEGORY MATCH pill
-      $('#link-list .category, #unofficial h2').each(function () {
-        var $h = $(this);
-        var htext = $h.data('orig-text');
-        var hranges = matchRanges(htext, words);
-        if (hranges.length) {
-          highlight($h, htext, hranges);
-          $h.append('<span class="category-match-pill">Category match</span>');
-        } else {
-          $h.text(htext);
-        }
-      });
-
-      // Hide the unofficial section entirely when none of its links match.
-      // Count matches from the filter result, not :visible — rows inside the
-      // hidden section always measure invisible, which would latch it hidden.
-      $('#unofficial').toggle(links.filter('#unofficial-list .link-container').length > 0);
 
       // Update URL with new search params
       updateSearchParams($(this).val())
 
-      // If no links displayed, show alert
-      if (!$("#link-list a:visible, #unofficial-list a:visible")[0]) {
+      // If nothing matched, say so
+      if (words.length && !hits.length) {
         $("#list p").removeAttr('hidden');
         $("#list p em").text(value);
       } else {
         $("#list p").attr('hidden','hidden');
       }
 
-      // On enter keypress, follow first link (official list first in DOM order)
+      // On enter keypress, follow the top result
       if (
         value &&
         event.type === "keyup" &&
         event.originalEvent.key === "Enter"
       ) {
-        var first = $("#link-list a:visible, #unofficial-list a:visible")[0];
+        var first = words.length ? (hits[0] && $(hits[0].row).find('a.main-link')[0])
+          : $("#link-list a.main-link")[0];
         if (first) {
           first.click();
         }

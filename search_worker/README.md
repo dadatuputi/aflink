@@ -27,8 +27,10 @@ Two things keep the two ends together, and both are load-bearing:
 - **Matching rules** live in
   [`src/includes/js/search-match.js`](../src/includes/js/search-match.js).
   The page inlines that file; this worker imports it. There is one
-  implementation, so normalization, multi-word matching and title/URL/category
-  matching cannot drift. Change matching there and both ends move together.
+  implementation, so normalization, multi-word matching, title/URL/category
+  matching and the ranking score cannot drift. Change matching there and both
+  ends move together. While searching, the page lists its rows in score
+  order, ties in page order, which is the order this worker suggests them in.
 - **The link list** is assembled from `src/links/` by
   [`scripts/assemble-links.js`](../scripts/assemble-links.js), which both
   builds run: `updater.js` for the site and its `links.json`, and
@@ -72,7 +74,7 @@ health commit bounds that to a week.
 
 | Change on the site | What the worker needs |
 | --- | --- |
-| How search matches (normalizing, word splitting, what fields count) | Nothing, if the change is made in `search-match.js`; the worker imports it |
+| How search matches or ranks (normalizing, word splitting, what fields count, `score`) | Nothing, if the change is made in `search-match.js`; the worker imports it |
 | A new field or source of links (another section, another JSON file) | Add it in `assemble-links.js` (both builds pick it up); `publishedLinks()`, `build-links.js`'s `slim()` and `to_entries()` must carry it, and a new file needs a watch path |
 | A link becoming hidden on the page (a new flag like `isDeleted`) | `to_entries()` must filter it out too |
 | Renaming or restructuring `links.json` | `to_entries()` reads the new shape |

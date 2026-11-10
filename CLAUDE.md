@@ -40,9 +40,9 @@ at the wrong row.
 
 Two seams hold them together:
 
-- `src/includes/js/search-match.js` — the matching rules, shared: the page
-  inlines it, the worker imports it. Change matching **here**, never in one
-  copy.
+- `src/includes/js/search-match.js` — the matching rules and the ranking
+  score, shared: the page inlines it, the worker imports it. Change matching
+  or ranking **here**, never in one copy.
 - `scripts/assemble-links.js` — the link list, assembled from `src/links/`
   for both `updater.js` (the site and `links.json`) and
   `search_worker/build-links.js` (bundled into the worker when Workers Builds
