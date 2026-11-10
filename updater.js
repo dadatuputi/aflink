@@ -208,6 +208,7 @@ const formatDay = seconds => sugar_date.Date.format(new Date(seconds * 1000), '{
 
         // pug filter for base64-encoding images
         let options = {}
+        options.siteDescription = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'package.json'))).description
         options.filters = {
             'base64me': function (text, options) {
                 if (options.filename) {
