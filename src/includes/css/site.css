@@ -568,6 +568,46 @@ section[id] {
   color: inherit;
 }
 
+/* Category tag on each row, shown only in the search results list */
+.result-cat {
+  display: none;
+}
+
+#search-results .result-cat {
+  display: inline-block;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 4px;
+  background-color: var(--cat-bg);
+  color: var(--cat-ink);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  max-width: 11rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#search-results .result-cat.unofficial {
+  background-color: var(--pill-bg);
+  color: var(--pill-ink);
+}
+
+.result-cat mark {
+  padding: 0;
+  background-color: var(--mark-bg);
+  color: inherit;
+}
+
+#search-results .more-results {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
 /* CATEGORY MATCH pill: signals that the category name, not the link titles,
    is why these rows are showing */
 .category-match-pill {

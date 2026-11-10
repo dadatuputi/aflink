@@ -43,8 +43,10 @@ html.bg-spice-brown(lang='en')
   section#list.bg-sage.text-center
     .container
       .offcenter
-        h2 Official Links
+        h2#list-heading Official Links
         em.d-none.d-md-block(title=sync_tooltip) Synced #{sync_display}
+      //- Ranked results while searching (search.js)
+      div#search-results.list-group(hidden)
       div#link-list.list-group
         //- Links json is expanded here
         each category in links
