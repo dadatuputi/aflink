@@ -25,10 +25,15 @@ jobs:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
         echo "Original issue: ${{ github.event.client_payload.original_issue }}"
-        node scripts/issue-fields.js LINK_ID="Link ID" NEW_TITLE="New Link Title" NEW_LINK="New Link URL" NEW_SUMMARY="New Summary" CHANGE_TYPE="What are you updating?"
+        node scripts/issue-fields.js LINK_ID="Link ID" NEW_TITLE="New Link Title" NEW_LINK="New Link URL" NEW_SUMMARY="New Summary" CHANGE_TYPE="What are you updating?" MIL_ONLY="Only Opens on a .mil Network?"
 
     - name: Validate
       run: |
+        # "Yes, ..." / "No, ..." set the flag; "No change" or no answer leaves it
+        case "$MIL_ONLY" in
+          Yes*) echo "SET_MIL_ONLY=true" >> $GITHUB_ENV; SET_MIL_ONLY=true ;;
+          "No,"*) echo "SET_MIL_ONLY=false" >> $GITHUB_ENV; SET_MIL_ONLY=false ;;
+        esac
         if [[ -z "$LINK_ID" ]]; then
           echo "VALIDATION_ERROR=Missing link id" >> $GITHUB_ENV
           exit 0
@@ -41,10 +46,12 @@ jobs:
           echo "VALIDATION_ERROR=the change type includes the URL, but no New Link URL was provided" >> $GITHUB_ENV
         elif [[ "$CHANGE_TYPE" == "Summary" && -z "$NEW_SUMMARY" ]]; then
           echo "VALIDATION_ERROR=the change type is the summary, but no New Summary was provided" >> $GITHUB_ENV
+        elif [[ "$CHANGE_TYPE" == ".mil only" && -z "$SET_MIL_ONLY" ]]; then
+          echo "VALIDATION_ERROR=the change type is .mil only, but Only Opens on a .mil Network? is No change" >> $GITHUB_ENV
         elif (( ${#NEW_SUMMARY} > 90 )); then
           echo "VALIDATION_ERROR=the New Summary is ${#NEW_SUMMARY} characters; keep it to 90 or fewer" >> $GITHUB_ENV
-        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" && -z "$NEW_SUMMARY" ]]; then
-          echo "VALIDATION_ERROR=no New Link Title, New Link URL or New Summary was provided" >> $GITHUB_ENV
+        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" && -z "$NEW_SUMMARY" && -z "$SET_MIL_ONLY" ]]; then
+          echo "VALIDATION_ERROR=no New Link Title, New Link URL, New Summary or .mil only change was provided" >> $GITHUB_ENV
         fi
 
     - name: Install jq & sponge
@@ -113,6 +120,16 @@ jobs:
           '.descriptions[$ID] = ((.descriptions[$ID] // {}) + {summary: $S})' \
           src/links/links_descriptions.json | sponge src/links/links_descriptions.json
         echo "✅ Summary updated for LINK_ID '$LINK_ID'"
+
+    - name: "Case: .mil only (any link)"
+      if: env.SET_MIL_ONLY != ''
+      run: |
+        set -o pipefail
+        # Set either way, so "No" also overrides a .mil only marker in the title
+        jq --arg ID "$LINK_ID" --argjson M "$SET_MIL_ONLY" \
+          '.descriptions[$ID] = ((.descriptions[$ID] // {}) + {milOnly: $M})' \
+          src/links/links_descriptions.json | sponge src/links/links_descriptions.json
+        echo "✅ milOnly set to $SET_MIL_ONLY for LINK_ID '$LINK_ID'"
 
     - name: "Case: Editing a link in place (OTHER or UNOFFICIAL)"
       if: env.ACTION == 'edit_direct' && (env.NEW_TITLE != '' || env.NEW_LINK != '')
@@ -241,6 +258,7 @@ jobs:
         NEW_TITLE: ${{ env.NEW_TITLE }}
         NEW_LINK: ${{ env.NEW_LINK }}
         NEW_SUMMARY: ${{ env.NEW_SUMMARY }}
+        SET_MIL_ONLY: ${{ env.SET_MIL_ONLY }}
       with:
         script: |
           const e = process.env;
@@ -254,5 +272,6 @@ jobs:
               '- Link ID: ' + e.LINK_ID + '\n' +
               '- New Title: ' + e.NEW_TITLE + '\n' +
               '- New URL: ' + e.NEW_LINK + '\n' +
-              '- New Summary: ' + e.NEW_SUMMARY
+              '- New Summary: ' + e.NEW_SUMMARY +
+              (e.SET_MIL_ONLY ? '\n- .mil only: ' + (e.SET_MIL_ONLY === 'true' ? 'Yes' : 'No') : '')
           })
