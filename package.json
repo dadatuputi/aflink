@@ -2,7 +2,7 @@
   "name": "aflinkupdater",
   "private": "true",
   "version": "1.0.0",
-  "description": "Unofficial, searchable directory of 400+ U.S. Air Force and DoD websites mirrored from the AF Portal. Find myPay, vMPF, LeaveWeb and more without the portal login.",
+  "description": "Unofficial, searchable directory of U.S. Air Force and DoD websites mirrored from the AF Portal. Find myPay, vMPF, LeaveWeb and more without the portal login.",
   "main": "updater.js",
   "author": "hattmo",
   "license": "MIT",
