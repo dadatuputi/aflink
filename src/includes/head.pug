@@ -1,8 +1,15 @@
 head
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-    meta(name='description' content='')
-    meta(name='author' content='')
+    //- What search engines show under the title, and link previews in chat
+    //- apps and social sites. Keep it under ~160 characters so it isn't cut off.
+    - var siteDescription = 'Unofficial, searchable mirror of the Air Force portal quick links. Find vMPF, myFSS, DTS, LeaveWeb and 400+ other USAF and DoD sites from your address bar.'
+    meta(name='description' content=siteDescription)
+    meta(property='og:type' content='website')
+    meta(property='og:site_name' content='aflink')
+    meta(property='og:title' content='USAF Links')
+    meta(property='og:description' content=siteDescription)
+    meta(name='twitter:card' content='summary')
     title USAF Links
 
     //- SVG favicon for modern browsers
