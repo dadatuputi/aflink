@@ -1,5 +1,12 @@
 doctype html
 
+//- Marks a link that opens only from a government network; the tooltip is
+//- CSS (site.css .mil-only), so it also opens on tap and keyboard focus
+mixin milOnly
+  - var tip = 'Marked .mil only: may open only from a government (.mil) network. Not checked by aflink.'
+  span.mil-only(tabindex='0' role='img' aria-label=tip data-tip=tip)
+    span.mil-only-icon
+
 html.bg-spice-brown(lang='en')
 
   include includes/head.pug
@@ -61,6 +68,8 @@ html.bg-spice-brown(lang='en')
                   .link-main
                     .link-title
                       a.main-link(href=link.link class={'overridden': link.isOverridden, 'dead': link.isDead} data-content-id=(link.contentId) title=(link.isDead ? link.statusNote : link.isOverridden ? 'Overridden ' + link.overriddenTimestamp + '; Original: ' + link.overridden : link.title)) #{link.title}
+                      if link.milOnly
+                        +milOnly
                     //- One-line summary; the "…" opens the full description (search.js)
                     if link.summary
                       .link-summary
@@ -82,6 +91,8 @@ html.bg-spice-brown(lang='en')
               .link-main
                 .link-title
                   a.main-link(href=link.link class={'dead': link.isDead} data-content-id=(link.contentId) title=(link.isDead ? link.statusNote : link.title)) #{link.title}
+                  if link.milOnly
+                    +milOnly
                 if link.summary
                   .link-summary
                     span.summary-text= link.summary

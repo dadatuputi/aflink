@@ -7,6 +7,7 @@
 ## Changelog
 
 - **Nov 2026**
+    - 🖥️ Links that open only from a government network carry a "mil" monitor icon with an explanation on hover or tap, in place of the old "(.mil only)" title text; search "mil only" to list them, and mark or unmark a link from the edit form
     - 🎯 Ranked search: best match first, each result tagged with its category; address-bar suggestions use the same order
     - 🤖 Public, read-only [MCP server](search_worker/README.md#mcp-server-post-mcp): AI agents can search aflink's links with the site's own search rules at `api.aflink.us/mcp` (`us.aflink/search` in the MCP Registry, no login needed), discoverable from `aflink.us/.well-known/ai-catalog.json`
 - **Oct 2026** — 🛡️ Weekly malware & phishing scan of every link outside .mil/.gov, unofficial links included (Google Safe Browsing + VirusTotal); link requests get a ✅ safe / ⚠️ unsafe verdict on the issue as soon as they're opened

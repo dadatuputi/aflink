@@ -43,7 +43,8 @@ const SEARCH_TOOL = {
     'Search aflink.us for Air Force and DoD websites by name, acronym, URL, category or purpose ' +
     '(for example "mypay", "travel voucher", "leave"). Every word must match. Returns each link\'s ' +
     'title, URL and category, best matches (title matches) first. Links in the UNOFFICIAL category ' +
-    'are third-party sites, not run by the Air Force.',
+    'are third-party sites, not run by the Air Force. milOnly marks a link said to open only from a ' +
+    'government (.mil) network.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -77,6 +78,7 @@ const SEARCH_TOOL = {
             category: { type: 'string' },
             official: { type: 'boolean', description: 'false for links in the UNOFFICIAL (third-party) section' },
             summary: { type: 'string' },
+            milOnly: { type: 'boolean', description: 'true when the link is marked as opening only from a government (.mil) network; unverified' },
           },
           required: ['title', 'url', 'category', 'official'],
         },
@@ -274,10 +276,11 @@ async function callTool(id, params, { search, links }) {
     category: link.cat,
     official: link.cat !== UNOFFICIAL_CATEGORY,
     ...(link.summary ? { summary: link.summary } : {}),
+    ...(link.milOnly ? { milOnly: true } : {}),
   }))
 
   const text = results.length
-    ? results.map(r => `${r.title} [${r.category}]\n${r.url}${r.summary ? '\n' + r.summary : ''}`).join('\n\n')
+    ? results.map(r => `${r.title} [${r.category}]${r.milOnly ? ' (.mil network only)' : ''}\n${r.url}${r.summary ? '\n' + r.summary : ''}`).join('\n\n')
     : `No aflink.us links match "${query}". Try fewer or different words, or an acronym.`
 
   return json({
