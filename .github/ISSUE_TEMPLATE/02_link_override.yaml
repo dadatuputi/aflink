@@ -27,6 +27,13 @@ body:
       description: "Auto-filled for reference. Edits to this field are ignored."
     validations:
       required: false
+  - type: input
+    id: current_summary
+    attributes:
+      label: 🔒 Current Summary
+      description: "Auto-filled for reference. Edits to this field are ignored."
+    validations:
+      required: false
   - type: dropdown
     id: change_type
     attributes:
