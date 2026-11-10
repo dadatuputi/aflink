@@ -180,12 +180,13 @@ export function assembleLinks(files, { today, formatDay = d => d.toISOString().s
 
 // Titles say ".mil only" in many spellings: "(.mil only)", "[.mil]",
 // "- .mil only", "(Tool, .mil only)", "(mil only / note)". Returns the
-// title without the marker, and whether there was one. "[.mil/.com]" means
-// the opposite (works off .mil too) and is left alone.
+// title without the marker, and whether there was one. "[.mil/.com]" (works
+// off .mil too) is what an unmarked link means already, so it is just dropped.
+const MIL_BOTH = /\s*[[(]\s*\.mil\s*\/\s*\.com\s*[\])]\s*$/i
 const MIL_SUFFIX = /\s*(?:[-–]\s*\.?mil only|[[(]\s*\.?mil(?:\s+only\??)?(?:\s*\/\s*CAC Required)?\s*[\])])\s*$/i
 const MIL_INNER = /(?:,\s*\.?mil only\??(?=\s*\))|(?<=\()\s*\.?mil only\s*\/\s*)/i
 export function milOnlyMarker(title) {
-    title = String(title ?? '')
+    title = String(title ?? '').replace(MIL_BOTH, '').trim()
     for (const re of [MIL_SUFFIX, MIL_INNER]) {
         if (re.test(title)) return { title: title.replace(re, '').trim(), milOnly: true }
     }

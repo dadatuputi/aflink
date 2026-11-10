@@ -32,9 +32,15 @@ test('every title spelling of .mil only is recognized and stripped', () => {
 })
 
 test('titles without a .mil only marker are left alone', () => {
-  for (const title of ['DHL [.mil/.com]', 'milConnect', 'Military OneSource', 'NIPRGPT', 'Tinker Cognos [.mil/.com]']) {
+  for (const title of ['milConnect', 'Military OneSource', 'NIPRGPT']) {
     assert.deepEqual(milOnlyMarker(title), { title, milOnly: false }, title)
   }
+})
+
+test('"[.mil/.com]" is dropped from titles without marking the link', () => {
+  assert.deepEqual(milOnlyMarker('DHL [.mil/.com]'), { title: 'DHL', milOnly: false })
+  assert.deepEqual(milOnlyMarker('AMMO & AMST - Global Ammunition Control Point (GACP)  [.mil/.com]'),
+    { title: 'AMMO & AMST - Global Ammunition Control Point (GACP)', milOnly: false })
 })
 
 const files = descriptions => ({
@@ -89,6 +95,6 @@ const built = ['_site', 'docs'].map(d => path.resolve(process.cwd(), d)).find(d 
 test('the built site shows no .mil only marker left in a title', { skip: !built && 'site not built' }, () => {
   const data = JSON.parse(fs.readFileSync(path.join(built, 'links.json'), 'utf8'))
   const listed = data.links.flatMap(c => c.links.filter(l => !l.isDeleted)).concat(data.unofficial)
-  assert.deepEqual(listed.filter(l => milOnlyMarker(l.title).milOnly).map(l => l.title), [])
+  assert.deepEqual(listed.filter(l => milOnlyMarker(l.title).milOnly || /\.mil\/\.com/.test(l.title)).map(l => l.title), [])
   assert.ok(listed.some(l => l.milOnly))
 })
