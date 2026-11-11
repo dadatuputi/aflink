@@ -82,6 +82,8 @@ jobs:
 
   # Deploy site to GH Pages
   deploy:
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -91,3 +93,61 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Tell each link request that its change is live. Bot commits carry their
+  # request as an "Issue: #N" trailer (scripts/commit-message.sh); every such
+  # commit since the last successful deploy went out with this one. That also
+  # covers a request whose own build was skipped because this one superseded
+  # it in the "pages" queue.
+  notify:
+    name: Comment on deployed requests
+    runs-on: ubuntu-latest
+    needs: deploy
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Comment on each request in this deploy
+        uses: actions/github-script@v9
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        with:
+          script: |
+            const { execFileSync } = require('child_process');
+            const git = (...args) => execFileSync('git', args, { encoding: 'utf8' });
+            const head = git('rev-parse', 'HEAD').trim();
+
+            // The commit the last successful deploy built; this run is still
+            // in progress, so it is not in the list
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build.yml',
+              status: 'success',
+              per_page: 20,
+            });
+            const isAncestor = sha => {
+              try { git('merge-base', '--is-ancestor', sha, head); return true; } catch { return false; }
+            };
+            const prev = data.workflow_runs.map(r => r.head_sha).find(sha => sha !== head && isAncestor(sha));
+            // No earlier deploy to compare with: only this commit's request
+            const range = prev ? `${prev}..${head}` : `${head}^!`;
+
+            const issues = new Set(git('log', range, '--format=%(trailers:key=Issue,valueonly)')
+              .split('\n').map(l => l.trim().replace(/^#/, '')).filter(n => /^\d+$/.test(n)));
+            core.notice(`Deployed ${range}: ${issues.size ? [...issues].map(n => '#' + n).join(', ') : 'no link requests'}`);
+
+            const site = process.env.PAGE_URL || 'https://aflink.us/';
+            for (const n of issues) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: Number(n),
+                body: '🚀 **Now live.** This change is deployed to ' + site,
+              });
+            }
