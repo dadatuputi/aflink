@@ -173,5 +173,5 @@ jobs:
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '✅ **Link deleted successfully!**\n\nThe link has been deleted and will be removed on the next site deployment.'
+            body: '✅ **Link deleted successfully!**\n\nThe link has been deleted. We\'re deploying it to the site now, and will comment here again once it\'s live.'
           })
