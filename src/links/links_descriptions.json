@@ -167,11 +167,6 @@
       "summary": "Emergency management command and control for unit control centers",
       "description": "C2IMERA connects installation emergency operations centers with unit control centers for accountability, reporting and tasking."
     },
-    "3a767706-5ddb-4398-ba51-a3664105c564": {
-      "summary": "Reserve unit training assembly participation and pay (IDT)",
-      "description": "UTAPSWeb records attendance at unit training assemblies and inactive duty training for Air Force Reserve pay.",
-      "milOnly": false
-    },
     "5d93a849-1f5e-4d51-b2d3-16d9d19e1262": {
       "summary": "Unit readiness reporting and personnel availability",
       "description": "ARIS collects readiness data for deployable units: personnel, equipment and training status."
