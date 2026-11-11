@@ -267,11 +267,12 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: '✅ **Link updated successfully!**\n\n' +
-              'The link "' + e.LINK_ID + '" has been updated and will be active on the next site deployment.\n\n' +
+              'The link "' + e.LINK_ID + '" has been updated. We\'re deploying it to the site now, and will comment here again once it\'s live.\n\n' +
               '**Update Details:**\n' +
-              '- Link ID: ' + e.LINK_ID + '\n' +
-              '- New Title: ' + e.NEW_TITLE + '\n' +
-              '- New URL: ' + e.NEW_LINK + '\n' +
-              '- New Summary: ' + e.NEW_SUMMARY +
-              (e.SET_MIL_ONLY ? '\n- .mil only: ' + (e.SET_MIL_ONLY === 'true' ? 'Yes' : 'No') : '')
+              ['- Link ID: ' + e.LINK_ID,
+               e.NEW_TITLE && '- New Title: ' + e.NEW_TITLE,
+               e.NEW_LINK && '- New URL: ' + e.NEW_LINK,
+               e.NEW_SUMMARY && '- New Summary: ' + e.NEW_SUMMARY,
+               e.SET_MIL_ONLY && '- .mil only: ' + (e.SET_MIL_ONLY === 'true' ? 'Yes' : 'No'),
+              ].filter(Boolean).join('\n')
           })

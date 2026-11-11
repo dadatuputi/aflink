@@ -171,5 +171,5 @@ jobs:
             issue_number: context.payload.client_payload.original_issue,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '✅ **Link added successfully!**\n\nThe link has been added and will be active on the next site deployment.'
+            body: '✅ **Link added successfully!**\n\nThe link has been added. We\'re deploying it to the site now, and will comment here again once it\'s live.'
           })
