@@ -25,7 +25,7 @@ jobs:
         BODY: ${{ github.event.client_payload.issue_body }}
       run: |
         echo "Original issue: ${{ github.event.client_payload.original_issue }}"
-        node scripts/issue-fields.js LINK_ID="Link ID" NEW_TITLE="New Link Title" NEW_LINK="New Link URL" NEW_SUMMARY="New Summary" CHANGE_TYPE="What are you updating?" MIL_ONLY="Only Opens on a .mil Network?"
+        node scripts/issue-fields.js LINK_ID="Link ID" NEW_TITLE="New Link Title" NEW_LINK="New Link URL" NEW_SUMMARY="New Summary" MIL_ONLY="Only Opens on a .mil Network?"
 
     - name: Validate
       run: |
@@ -38,20 +38,13 @@ jobs:
           echo "VALIDATION_ERROR=Missing link id" >> $GITHUB_ENV
           exit 0
         fi
-        # The selected change type dictates which new-value fields must be present;
-        # a later step comments the error back on the issue and fails the job.
-        if [[ "$CHANGE_TYPE" == *"Title"* && -z "$NEW_TITLE" ]]; then
-          echo "VALIDATION_ERROR=the change type includes the title, but no New Link Title was provided" >> $GITHUB_ENV
-        elif [[ "$CHANGE_TYPE" == *"URL"* && -z "$NEW_LINK" ]]; then
-          echo "VALIDATION_ERROR=the change type includes the URL, but no New Link URL was provided" >> $GITHUB_ENV
-        elif [[ "$CHANGE_TYPE" == "Summary" && -z "$NEW_SUMMARY" ]]; then
-          echo "VALIDATION_ERROR=the change type is the summary, but no New Summary was provided" >> $GITHUB_ENV
-        elif [[ "$CHANGE_TYPE" == ".mil only" && -z "$SET_MIL_ONLY" ]]; then
-          echo "VALIDATION_ERROR=the change type is .mil only, but Only Opens on a .mil Network? is No change" >> $GITHUB_ENV
+        # Only the fields that were filled in change; a blank field, or "No
+        # change" for .mil only, keeps the current value. A later step comments
+        # any error back on the issue and fails the job.
+        if [[ -z "$NEW_TITLE" && -z "$NEW_LINK" && -z "$NEW_SUMMARY" && -z "$SET_MIL_ONLY" ]]; then
+          echo "VALIDATION_ERROR=nothing to change: fill in a New Link Title, New Link URL or New Summary, or answer Only Opens on a .mil Network?" >> $GITHUB_ENV
         elif (( ${#NEW_SUMMARY} > 90 )); then
           echo "VALIDATION_ERROR=the New Summary is ${#NEW_SUMMARY} characters; keep it to 90 or fewer" >> $GITHUB_ENV
-        elif [[ -z "$NEW_TITLE" && -z "$NEW_LINK" && -z "$NEW_SUMMARY" && -z "$SET_MIL_ONLY" ]]; then
-          echo "VALIDATION_ERROR=no New Link Title, New Link URL, New Summary or .mil only change was provided" >> $GITHUB_ENV
         fi
 
     - name: Install jq & sponge
@@ -221,13 +214,20 @@ jobs:
         # The link's title as it was before this change, from whichever list holds it
         TITLE=$(for f in other af unofficial; do git show HEAD:src/links/links_$f.json; done \
           | jq -rn --arg id "$LINK_ID" '[inputs | .. | objects | select(.contentId? == $id) | .title | strings] | first // empty')
+        # What changed, from the fields that were filled in: "title, URL"
+        CHANGED=()
+        [[ -n "$NEW_TITLE" ]] && CHANGED+=(title)
+        [[ -n "$NEW_LINK" ]] && CHANGED+=(URL)
+        [[ -n "$NEW_SUMMARY" ]] && CHANGED+=(summary)
+        [[ -n "$SET_MIL_ONLY" ]] && CHANGED+=(".mil only")
+        CHANGE=$(IFS=,; echo "${CHANGED[*]}" | sed 's/,/, /g')
         # Subject for people, git trailers for scripts (scripts/commit-message.sh)
         {
           echo 'COMMIT_MESSAGE<<COMMIT_EOF'
           scripts/commit-message.sh "Update link: ${TITLE:-$LINK_ID}" \
             Issue="${ISSUE:+#$ISSUE}" \
             Content-Id="$LINK_ID" \
-            Change="$CHANGE_TYPE" \
+            Change="$CHANGE" \
             Run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           echo 'COMMIT_EOF'
         } >> $GITHUB_ENV
