@@ -20,6 +20,31 @@ if (!creds.client_email || !creds.private_key || !property) {
 }
 
 const RANGES = [30, 90, 365];
+
+// Google's APIs answer the odd request with a 5xx or 429 ("please try again in
+// 30 seconds"), sometimes after hanging for a minute. Retry those, and network
+// errors and timeouts, with backoff; anything else (a 400 or 403) fails at once.
+const RETRY_DELAYS_MS = [10_000, 30_000, 60_000];
+const REQUEST_TIMEOUT_MS = 90_000;
+const retryable = status => status === 429 || status >= 500;
+
+async function fetchWithRetry(label, url, options) {
+    for (let attempt = 0; ; attempt++) {
+        let reason;
+        try {
+            const res = await fetch(url, { ...options, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+            if (res.ok || !retryable(res.status) || attempt >= RETRY_DELAYS_MS.length) return res;
+            reason = `HTTP ${res.status}`;
+            await res.body?.cancel();
+        } catch (e) {
+            if (attempt >= RETRY_DELAYS_MS.length) throw new Error(`${label} failed: ${e.message}`);
+            reason = e.name === 'TimeoutError' ? `no answer in ${REQUEST_TIMEOUT_MS / 1000}s` : e.message;
+        }
+        const delay = RETRY_DELAYS_MS[attempt];
+        console.log(`⚠️  ${label}: ${reason}, retrying in ${delay / 1000}s (attempt ${attempt + 2} of ${RETRY_DELAYS_MS.length + 1})`);
+        await new Promise(r => setTimeout(r, delay));
+    }
+}
 const b64url = s => Buffer.from(s).toString('base64url');
 
 async function getAccessToken() {
@@ -36,7 +61,7 @@ async function getAccessToken() {
     signer.update(`${header}.${claims}`);
     const jwt = `${header}.${claims}.${signer.sign(creds.private_key).toString('base64url')}`;
 
-    const res = await fetch('https://oauth2.googleapis.com/token', {
+    const res = await fetchWithRetry('token exchange', 'https://oauth2.googleapis.com/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -49,7 +74,8 @@ async function getAccessToken() {
 }
 
 async function runReport(token, body) {
-    const res = await fetch(
+    const res = await fetchWithRetry(
+        'runReport',
         `https://analyticsdata.googleapis.com/v1beta/properties/${property}:runReport`,
         {
             method: 'POST',
