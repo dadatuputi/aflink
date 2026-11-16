@@ -10,6 +10,8 @@
 // Nothing here changes the site; the workflow's pull request still needs a
 // human to merge it.
 
+import { stripContactInfo } from './contact-info.js'
+
 export const ORIGINS = ['https://www.my.af.mil', 'https://my.af.mil']
 // Portal pages the sync accepts. A new page is added here (and in the Update
 // AF Links issue form) once someone has looked at it.
@@ -99,7 +101,11 @@ export function sanitize(body) {
       if (typeof item.renderedAsFile === 'boolean') clean.renderedAsFile = item.renderedAsFile
       if (typeof item.lastModified === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(item.lastModified)) clean.lastModified = item.lastModified
       // Plain text only: the page renders it as text, but keep markup out of the data
-      if (typeof item.description === 'string' && item.description.trim() && item.description.length <= LIMITS.description && !/[<>]/.test(item.description)) clean.description = item.description.trim()
+      // and no contact info
+      if (typeof item.description === 'string' && item.description.trim() && item.description.length <= LIMITS.description && !/[<>]/.test(item.description)) {
+        const description = stripContactInfo(item.description)
+        if (description) clean.description = description
+      }
       return clean
     })
   }

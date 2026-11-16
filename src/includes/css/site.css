@@ -647,6 +647,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Match <html>'s band: iOS Safari tints its toolbar from the body */
+body {
+  background-color: var(--band-spice);
+}
+
 section[id] {
   scroll-margin-top: 4rem;
 }
