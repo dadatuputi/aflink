@@ -63,12 +63,12 @@ const fetchText = async (url) => {
 
 // The portal's description of an app is HTML; the site shows it as plain text
 // in the link's details, without the access and help-desk boilerplate many
-// of them end with.
+// of them end with (the worker strips the rest: search_worker/src/contact-info.js).
 const plainDescription = (html) => {
   const box = document.createElement('div');
   box.innerHTML = html || '';
   let text = box.textContent.replace(/\s+/g, ' ').trim();
-  text = text.replace(/\s*(To gain access to this application|To address any inquir|For (support|problems|assistance)|Users? (requiring assistance|should contact)|Contact (the|your)|Please contact|If you (do not have|need)|Hours of [Oo]peration)[\s\S]*$/, '').trim();
+  text = text.replace(/\s*(To gain access to this application|To address any inquir|For (support|problems|assistance)|Users? (requiring assistance|should contact)|Contact (the|your)|Please contact|If you (do not have|need)|Hours of operation)[\s\S]*$/i, '').trim();
   return text.slice(0, 2000);
 };
 

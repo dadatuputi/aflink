@@ -12,6 +12,7 @@
 // has removed: its links lose that source as if it were submitted empty.
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { stripContactInfo } from '../search_worker/src/contact-info.js';
 
 // The old Quick Links category everything before the 2026 portal redesign came
 // from. Links with no `sources` predate source tracking and belong to it.
@@ -56,7 +57,14 @@ export function applySource(current, source, incomingLinks, today) {
     const seen = new Set();
     for (const [group, items] of Object.entries(incomingLinks)) {
         const category = isIndex ? categoryName(group) : QUICK_LINKS_CATEGORY;
-        for (const incoming of items) {
+        for (let incoming of items) {
+            // No contact info is stored; a contact-only description is removed
+            let contactOnly = false;
+            if (typeof incoming.description === 'string') {
+                const description = stripContactInfo(incoming.description) || undefined;
+                contactOnly = !description;
+                incoming = { ...incoming, description };
+            }
             seen.add(incoming.contentId);
             const entry = byId.get(incoming.contentId);
             if (!entry) {
@@ -70,6 +78,7 @@ export function applySource(current, source, incomingLinks, today) {
                 if (f === 'exitLinkReferrer' && keepReferrer(entry.link[f], incoming[f])) continue;
                 entry.link[f] = incoming[f];
             }
+            if (contactOnly) delete entry.link.description;
             if (!entry.link.sources.includes(source)) entry.link.sources.push(source);
             delete entry.link.deprecatedSince;
             if (isIndex) entry.category = category;
