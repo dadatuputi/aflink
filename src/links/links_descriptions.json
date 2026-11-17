@@ -99,10 +99,6 @@
       "summary": "Contract invoicing and payment through WAWF and other DoD procurement tools",
       "description": "PIEE is the DoD's procurement portal, home to Wide Area Workflow invoicing, SPRS and related contracting applications."
     },
-    "df6e266b-d836-4687-9656-602d214cd4e2": {
-      "summary": "Air Force Reserve orders: request, approve and print",
-      "description": "AROWS-R writes and routes orders for Air Force Reserve members, from annual tour to active duty orders."
-    },
     "e72a0cd4-2411-4c0a-b4c1-a4277edb646e": {
       "summary": "Sign-in hub for personnel apps: vMPF, PRDA, AMS, MyVector and more",
       "description": "The Air Force Okta portal is the single sign-on page for A1 personnel applications. Log in once, then open the app tiles."
